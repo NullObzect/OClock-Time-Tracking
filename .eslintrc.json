@@ -1,0 +1,11 @@
+{
+    "env": {
+        "es6": true, // to enable es6 support
+        "browser": true, // to enable browsers variable support - document, localStorage etc.
+        "node": true // to enable nodejs support
+    },
+    "extends": "airbnb-base", // to use airbnb-base as eslint config
+    "rules": {
+        "semi": "off" // to turn off the semicolon lint
+    }
+}
