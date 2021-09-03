@@ -43,6 +43,8 @@ body, input{
   width: 50%;
   display: grid;
   grid-template-columns: 1fr;
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
   z-index: 5;
 }
 form{
@@ -222,8 +224,4 @@ form{
     left: 50%;
   }
 
-  .container.sign-up-mode:before {
-    bottom: 28%;
-    left: 50%;
-  }
 }
