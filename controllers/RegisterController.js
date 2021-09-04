@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt');
+const { validationResult } = require('express-validator')
 const RegisterModel = require('../models/RegisterModel');
 
 const RegisterController = {
@@ -7,18 +9,34 @@ const RegisterController = {
   },
   // insert user
   registerController: async (req, res) => {
-    console.log('user', req.body);
+    console.log('=====>user', req.body);
     const {
       userName, userPhone, userRole, userMail, userPass,
     } = req.body;
+    // check validation
+    const errors = validationResult(req).formatWith((error) => error.msg)
+    if (!errors.isEmpty()) {
+      return res.render('pages/register', {
+        error: errors.mapped(),
+        value: {
+          userName,
+          userPhone,
+          userRole,
+          userMail,
+          userPass,
+        },
+      });
+    }
 
     try {
+      // hashing password
+      const hashPass = await bcrypt.hash(userPass, 10);
       const insertedData = await RegisterModel.registerModel(
         userName,
         userPhone,
         userRole,
         userMail,
-        userPass,
+        hashPass,
       );
       if (insertedData.errno) {
         res.send('ERROR');
