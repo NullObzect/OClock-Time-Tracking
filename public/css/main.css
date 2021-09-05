@@ -286,3 +286,7 @@ body{
   color: black;
 }
 
+/* error class for register form  */
+.error{
+  outline: 1px solid red;
+}

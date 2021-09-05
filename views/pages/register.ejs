@@ -7,14 +7,14 @@
                 <div>
                     <label class="" for="Name">Name<label>
                             <input type="text" name="userName" placeholder="Name"
-                                class=" <%= error.userName ? ' bg-red-200': '' %> w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600" value="<%= value.userName ? value.userName : '' %>">
+                                class=" <%= error.userName ? 'error border': '' %> w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600" value="<%= value.userName ? value.userName : '' %>">
                                 <p class="text-red-500 text-sm p-1"><%= error.userName  %></p>
                                 
                 </div>
                 <div class="mt-2">
                     <label  for="Phone">Phone Number<label>
                             <input type="number" name="userPhone" placeholder="Phone Number"
-                                class="<%= error.userPhone ? 'bg-red-200': '' %> w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600" value="<%= value.userPhone ? value.userPhone : '' %>">
+                                class="<%= error.userPhone ? 'error border': '' %> w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600" value="<%= value.userPhone ? value.userPhone : '' %>">
                                                                 <p class="text-red-500 text-sm p-1"><%= error.userPhone  %></p>
 
                 </div>
@@ -35,14 +35,14 @@
                 <div class="mt-2">
                     <label  for="email">Email<label>
                             <input type="email" name="userMail" placeholder="Email"
-                                class="<%= error.userMail ? 'bg-red-200' : '' %>  w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600" value="<%= value.userMail ? value.userMail : ''%>">
+                                class="<%= error.userMail ? 'error border' : '' %>  w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600" value="<%= value.userMail ? value.userMail : ''%>">
                                                                 <p class="text-red-500 text-sm p-1"><%= error.userMail  %></p>
 
                 </div>
                 <div class="mt-2">
                     <label>Password<label>
                             <input type="password" name="userPass" placeholder="Password"
-                                class="<%= error.userPass ? 'bg-red-200' : '' %> w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600" value="<%= value.userPass ? value.userPass : '' %>">
+                                class="<%= error.userPass ? 'error border' : '' %> w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600" value="<%= value.userPass ? value.userPass : '' %>">
                                 <p class="text-red-500 text-sm p-1"><%= error.userPass  %></p>
 
                 </div>
