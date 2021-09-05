@@ -1,35 +1,19 @@
-const RegisterModel = require('./RegisterModel');
+const dbConnect = require('../config/database');
 
-const RegisterController = {
-  // render page
-  register: (req, res) => {
-    res.render('pages/register');
-  },
-  // insert user
-  registerController: async (req, res) => {
-    console.log('user', req.body);
-    const {
-      userName, userPhone, userRole, userMail, userPass,
-    } = req.body;
-
+const RegisterModel = {
+  registerModel: async (userName, userPhone, userRole, userMail, userPass) => {
     try {
-      const insertedData = await RegisterModel.registerModel(
-        userName,
-        userPhone,
-        userRole,
-        userMail,
-        userPass,
-      );
-      if (insertedData.errno) {
-        res.send('ERROR');
-      } else {
-        res.send('SUCCESS');
-      }
+      const registerQuery = 'INSERT INTO `users`( `user_name`, `user_phone`, `user_roll`, `user_mail`, `user_pass`) VALUES (?,?,?,?,?)';
+
+      const values = [userName, userPhone, userRole, userMail, userPass];
+
+      const [rows] = await dbConnect.promise().execute(registerQuery, values);
+      return rows;
     } catch (err) {
-      console.log('Error form RegisterController', err);
+      console.log('error fomr RegisterModel', err);
       return err;
     }
   },
 };
 
-module.exports = RegisterController;
+module.exports = RegisterModel;
