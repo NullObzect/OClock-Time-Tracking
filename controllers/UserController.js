@@ -1,8 +1,8 @@
 const bcrypt = require('bcrypt');
 const { validationResult } = require('express-validator')
-const RegisterModel = require('../models/RegisterModel');
+const UserModel = require('../models/UserModel');
 
-const RegisterController = {
+const UserController = {
   // render page
   getUser: (req, res) => {
     res.render('pages/register');
@@ -30,7 +30,7 @@ const RegisterController = {
     try {
       // hashing password
       const hashPass = await bcrypt.hash(userPass, 10);
-      const insertedData = await RegisterModel.registerModel(
+      const insertedData = await UserModel.registerModel(
         userName,
         userPhone,
         userRole,
@@ -48,4 +48,4 @@ const RegisterController = {
   },
 };
 
-module.exports = RegisterController;
+module.exports = UserController;
