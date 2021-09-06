@@ -242,6 +242,9 @@ form{
 
 }
 /* error class for login form  */
+.error-msg{
+  color: red;
+}
 .error{
-  outline: 1px solid red;
+  color:  red;
 }

@@ -4,11 +4,11 @@ const RegisterModel = require('../models/RegisterModel');
 
 const RegisterController = {
   // render page
-  register: (req, res) => {
+  getUser: (req, res) => {
     res.render('pages/register');
   },
   // insert user
-  registerController: async (req, res) => {
+  addUser: async (req, res) => {
     const {
       userName, userPhone, userRole, userMail, userPass,
     } = req.body;

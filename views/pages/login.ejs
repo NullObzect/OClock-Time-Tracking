@@ -20,15 +20,14 @@
         <form action="/" class="singin-form"  method="POST">
           <h2 class="title">Sign in</h2>
           <div class="input-field">
-            <i class="fas fa-user" ></i>
-            <input type="text" name="userMail" placeholder="Email or Username" class="<%= error.userMail ? 'error' : '' %>" value="<%= value.userMail ? value.userMail : '' %>">
-            <p class="text-red-500 text-sm p-1"><%= error.userMail %></p>
+            <i class="fas fa-user error" ></i>
+            <input type="text" class="error-input" name="userMail" placeholder="Email or Username">          
             </div>
             <div class="input-field">
               <i class="fas fa-lock" ></i>
-              <input type="password" name="userPass" placeholder="Password" class="<%= error.userPass ? 'error' : '' %>" value="<%= value.userPass ? value.userPass : '' %>">
-              <p class="text-red-500 text-sm p-1"><%= error.userPass %> </p>
+              <input type="password" class="error-input" name="userPass" placeholder="Password" >
             </div>
+            <p class="error-msg">invalid authentication</p>
             <input type="submit" value="Login" class="btn solid">
           </div>
         </form>
