@@ -3,6 +3,8 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken');
 const LoginModel = require('../models/LoginModel');
 
+const maxAge = 5 * 24 * 60 * 60 * 1000;
+
 const LoginController = {
   getLogin: (req, res) => {
     res.render('pages/login')
@@ -18,13 +20,28 @@ const LoginController = {
     try {
       const user = await LoginModel.getUserMail(userMail)
       console.log({ user })
-      const userMailDB = user[0].user_mail;
+      const userMailFormDB = user[0].user_mail;
       const userID = user[0].id;
       const userName = user[0].user_name;
-      const userPassDB = user[0].user_pass;
+      const userPassFormDB = user[0].user_pass;
       if (user) {
-        const isValidPass = await bcrypt.compare(userPass, userPassDB)
+        const isValidPass = await bcrypt.compare(userPass, userPassFormDB)
         console.log({ isValidPass });
+        if (isValidPass) {
+          const token = jwt.sign({
+            userID,
+            userName,
+            userMailFormDB,
+
+          },
+          process.env.JWT_SECRET, { expiresIn: maxAge })
+          res.cookie('jwt', token, { maxAge })
+          res.send('Login success')
+        } else {
+          res.send('Login failed')
+        }
+      } else {
+        res.send('Mail not found')
       }
     } catch (err) {
       console.log('====> Error form loginController', err);
