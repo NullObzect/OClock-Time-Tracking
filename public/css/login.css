@@ -84,6 +84,22 @@ form{
   font-size :1.1rem;
   color: #333;
 }
+.input-field input::-webkit-input-placeholder{
+  color: #aaa;
+  font-weight: 500;
+}
+.input-field input::-moz-placeholder{
+  color: #aaa;
+  font-weight: 500;
+}
+.input-field input:-ms-input-placeholder{
+  color: #aaa;
+  font-weight: 500;
+}
+.input-field input::-ms-input-placeholder{
+  color: #aaa;
+  font-weight: 500;
+}
 .input-field input::placeholder{
   color: #aaa;
   font-weight: 500;
@@ -224,4 +240,8 @@ form{
     left: 50%;
   }
 
+}
+/* error class for login form  */
+.error{
+  outline: 1px solid red;
 }
