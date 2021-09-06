@@ -9,7 +9,6 @@ const RegisterController = {
   },
   // insert user
   registerController: async (req, res) => {
-    console.log('=====>user', req.body);
     const {
       userName, userPhone, userRole, userMail, userPass,
     } = req.body;
@@ -44,7 +43,6 @@ const RegisterController = {
         res.send('SUCCESS');
       }
     } catch (err) {
-      console.log('Error form RegisterController', err);
       return err;
     }
   },
