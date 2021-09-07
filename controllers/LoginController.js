@@ -20,6 +20,7 @@ const LoginController = {
     try {
       const user = await LoginModel.getUserMail(userMail)
       console.log({ user })
+
       const userMailFormDB = user[0].user_mail;
       const userID = user[0].id;
       const userName = user[0].user_name;
@@ -36,9 +37,11 @@ const LoginController = {
           },
           process.env.JWT_SECRET, { expiresIn: maxAge })
           res.cookie('jwt', token, { maxAge })
-          res.send('Login success')
+          // res.send('Login success')
+          res.render('pages/home')
         } else {
-          res.send('Login failed')
+          return res.render('pages/login', { auth: true })
+          // res.send('Login failed')
         }
       } else {
         res.send('Mail not found')
@@ -48,6 +51,7 @@ const LoginController = {
       return err;
     }
   },
+
 
 }
 

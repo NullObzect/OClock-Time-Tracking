@@ -2,7 +2,7 @@
 <div class="flex items-center justify-center min-h-screen ">
     <div class="px-8 py-6 mx-4 mt-2 text-left bg-gray-100 shadow-lg md:w-1/3 lg:w-5/12 sm:w-1/3 rounded-lg">
         <h3 class="text-2xl font-bold text-center ">Register</h3>
-        <form action="/register" method="POST">
+        <form action="/user" method="POST">
             <div class="mt-2">
                 <div>
                     <label class="" for="Name">Name<label>
@@ -15,9 +15,8 @@
                     <label  for="Phone">Phone Number<label>
                             <input type="number" name="userPhone" placeholder="Phone Number"
                                 class="<%= error.userPhone ? 'error border': '' %> w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600" value="<%= value.userPhone ? value.userPhone : '' %>">
-                                                                <p class="text-red-500 text-sm p-1"><%= error.userPhone  %></p>
+                                                 <p class="text-red-500 text-sm p-1"><%= error.userPhone  %></p>
 
-                </div>
               <div class="mt-2">
                 <label>User Role</label>
                 <div class="mt-2">

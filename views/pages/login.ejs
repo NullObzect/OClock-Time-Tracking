@@ -21,13 +21,13 @@
           <h2 class="title">Sign in</h2>
           <div class="input-field">
             <i class="fas fa-user error" ></i>
-            <input type="text" class="error-input" name="userMail" placeholder="Email or Username">          
+            <input type="text" class="error-input" name="userMail" placeholder="Email or Username" value="<%= value.userMail ? value.userMail : '' %>">          
             </div>
             <div class="input-field">
               <i class="fas fa-lock" ></i>
-              <input type="password" class="error-input" name="userPass" placeholder="Password" >
+              <input type="password" class="error-input" name="userPass" placeholder="Password" value="<%= value.userPass ? value.userPss : ''  %>" >
             </div>
-            <p class="error-msg">invalid authentication</p>
+            <p class="error-msg"><%= error.userMail || error.userPass %> </p>
             <input type="submit" value="Login" class="btn solid">
           </div>
         </form>
@@ -47,3 +47,17 @@
   </div>
 </body>
 </html>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script >
+  let auth =  '<%= auth %>';
+  console.log(auth)
+  if(auth==="true"){
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Authentication failed',
+      footer: '<a href="/register">Don\'t have an account?</a>'
+    })
+  }
+</script>

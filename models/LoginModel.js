@@ -5,7 +5,7 @@ const LoginModel = {
     try {
       const getUserByMailQuery = 'SELECT * FROM users WHERE user_mail = ?'
 
-      const value = userMail
+      const value = [userMail]
       const [row] = await dbConnect.promise().execute(getUserByMailQuery, value)
       return row;
     } catch (err) {
