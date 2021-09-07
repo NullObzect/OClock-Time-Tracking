@@ -22,5 +22,6 @@ app.use((req, res) => {
 });
 // server
 app.listen(process.env.PORT, () => {
+  // eslint-disable-next-line no-console
   console.log(`Server Running ${process.env.PORT}`);
 });

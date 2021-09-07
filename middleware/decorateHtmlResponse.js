@@ -6,6 +6,7 @@ function decorateHtmlResponse(pageTitle) {
     res.locals.error = {};
     res.locals.value = {};
     res.locals.auth = false
+    res.locals.alert = {}
     res.locals.registerFail = false;
     next();
   };

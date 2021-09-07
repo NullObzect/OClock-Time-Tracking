@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 const bcrypt = require('bcrypt');
 const { validationResult } = require('express-validator')
 const UserModel = require('../models/UserModel');
@@ -5,7 +6,7 @@ const UserModel = require('../models/UserModel');
 const UserController = {
   // render page
   getUser: (req, res) => {
-    res.render('pages/register');
+    res.render('pages/addUser');
   },
   // insert user
   addUser: async (req, res) => {
@@ -15,7 +16,7 @@ const UserController = {
     // check validation
     const errors = validationResult(req).formatWith((error) => error.msg)
     if (!errors.isEmpty()) {
-      return res.render('pages/register', {
+      return res.render('pages/addUser', {
         error: errors.mapped(),
         value: {
           userName,
