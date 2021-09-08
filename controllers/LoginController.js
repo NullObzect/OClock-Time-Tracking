@@ -48,11 +48,19 @@ const LoginController = {
           // res.send('Login failed')
         }
       } else {
-        console.log('ccyjcacucucaucavuca')
         res.send('Mail not found')
       }
     } catch (err) {
-      console.log('====> Error form loginController', err);
+      res.render('pages/login', {
+        data: {
+          username: req.body.username,
+        },
+        errors: {
+          common: {
+            msg: err.message,
+          },
+        },
+      })
     }
   },
 }
