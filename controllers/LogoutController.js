@@ -1,5 +1,5 @@
 const LogoutController = {
-  logout: async (req,res) => {
+  logout: async (req, res) => {
     try {
       res.cookie('jwt', '', { maxAge: 1 })
       res.redirect('/')

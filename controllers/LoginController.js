@@ -28,7 +28,7 @@ const LoginController = {
       const userID = user[0].id;
       const userName = user[0].user_name;
       const userPassFormDB = user[0].user_pass;
-      console.log(!!user)
+
       if (user) {
         const isValidPass = await bcrypt.compare(userPass, userPassFormDB)
         console.log({ isValidPass });
@@ -47,7 +47,7 @@ const LoginController = {
           return res.render('pages/login', { auth: true })
           // res.send('Login failed')
         }
-      } else if (Object.keys(user).length == 0) {
+      } else {
         console.log('ccyjcacucucaucavuca')
         res.send('Mail not found')
       }

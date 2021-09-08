@@ -2,7 +2,8 @@ const express = require('express');
 const cookieParser = require('cookie-parser')
 const env = require('dotenv')
 const router = require('./routers/routes');
-const { checkUser } = require('./middleware/AuthMiddleware');
+const { checkUser } = require('./middleware/common/AuthMiddleware');
+const { notFoundHandler, errorHandler } = require('./middleware/common/errorHandler')
 
 env.config()
 const app = express();
@@ -16,10 +17,13 @@ app.use(express.json());
 app.use('*', checkUser)
 
 app.use(router);
-// 404 page
-app.use((req, res) => {
-  res.send("<h1 class='text-center'> 404 not found 🎂</h1>");
-});
+
+// 404 not found
+app.use(notFoundHandler)
+
+// error handling
+app.use(errorHandler)
+
 // server
 app.listen(process.env.PORT, () => {
   // eslint-disable-next-line no-console

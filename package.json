@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon app.js",
+    "start": "NODE_ENV=development nodemon app.js",
+    "production": "NODE_ENV=production node app.js",
     "build": "postcss ./src/styles.css -o ./public/css/styles.css -w",
     "prod": "NODE_ENV=production postcss ./src/styles.css -o ./public/css/styles.css"
   },
@@ -18,6 +19,7 @@
     "ejs": "^3.1.5",
     "express": "^4.17.1",
     "express-validator": "^6.12.1",
+    "http-errors": "^1.8.0",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.2.5",
     "nodemon": "^2.0.7",
