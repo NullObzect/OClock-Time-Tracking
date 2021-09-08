@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const LogoutController = require('../controllers/LogoutController');
-const decorateHtmlResponse = require('../middleware/decorateHtmlResponse');
+const decorateHtmlResponse = require('../middleware/common/decorateHtmlResponse');
 
 router.get('/logout', decorateHtmlResponse('Logout'), LogoutController.logout)
 

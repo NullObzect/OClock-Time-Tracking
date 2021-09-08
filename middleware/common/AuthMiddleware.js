@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 const dotenv = require('dotenv')
-const LoginModel = require('../models/LoginModel')
+const LoginModel = require('../../models/LoginModel')
 
 dotenv.config()
 
