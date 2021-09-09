@@ -1,37 +1,46 @@
 <%- include("../partials/header"); -%>
-    <div class="start">
-      <div class="search-bar">
-        <input class="search" placeholder="What are you working on?" type="text">
-      </div>
-      <div class="add-project"> <a href="#open-modal"> <span class="add-icon"><ion-icon name="add-circle-outline"></ion-icon></span> Project</a></div>
-      <div class="time">
-        00:00:00
-      </div>
-      <button class="btn-start">start</button>
-    </div>
+<div class="start">
+  <div class="search-bar">
+    <input class="search" placeholder="What are you working on?" type="text" />
+  </div>
+  <div class="add-project">
+    <a href="#open-modal">
+      <span class="add-icon"
+        ><ion-icon name="add-circle-outline"></ion-icon
+      ></span>
+      Project</a
+    >
+  </div>
+  <div class="time">00:00:00</div>
+  <button class="btn-start">start</button>
+</div>
 
-    <!-- ProJect Modal Start -->
-    <div id="open-modal" class="modal-window">
-      <div>
-        <a href="#" title="Close" class="modal-close">Close</a>
-        <h1>Create Project</h1>
-        <div><input placeholder="Project Name" type="text"></div>
-        <div><small><a href=""><button>Submit</button></a></small></div>
-      </div>
+<!-- ProJect Modal Start -->
+<div id="open-modal" class="modal-window">
+  <div>
+    <a href="#" title="Close" class="modal-close">Close</a>
+    <h1>Create Project</h1>
+    <div><input placeholder="Project Name" type="text" /></div>
+    <div>
+      <small
+        ><a href=""><button>Submit</button></a></small
+      >
     </div>
-    <!-- ProJect Modal End -->
+  </div>
+</div>
+<!-- ProJect Modal End -->
 
-    <div class="history">
-      <div class="date-bar">
-          <div class="date">01 sep 2021</div>
-          <div class="total-work-time">02:00:00</div>
-      </div>
-      <div class="details">
-        <div class="title">hello</div>
-        <div class="project-name">hello world</div>
-        <div class="start-time">12:00</div>
-        <end class="time">14:00</end>
-        <div class="work-time">02:00:00</div>
-      </div>
-    </div>
-    <%- include("../partials/footer.ejs"); -%>
+<div class="history">
+  <div class="date-bar">
+    <div class="date">01 sep 2021</div>
+    <div class="total-work-time">02:00:00</div>
+  </div>
+  <div class="details">
+    <div class="title">hello</div>
+    <div class="project-name">hello world</div>
+    <div class="start-time">12:00</div>
+    <end class="time">14:00</end>
+    <div class="work-time">02:00:00</div>
+  </div>
+</div>
+<%- include("../partials/footer.ejs"); -%>

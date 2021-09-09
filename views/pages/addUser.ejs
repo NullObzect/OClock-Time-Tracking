@@ -57,5 +57,22 @@
     </div>
 </div>
 
+
+
+
 <%- include("../partials/footer"); -%>
 
+<script>
+  
+  const successAddedUser = Toastify({
+    text : "Added user successfully!",
+    duration: 3000,
+  })       
+  if("<%= addUser %>" === "true"){
+    successAddedUser.showToast()
+    setTimeout(()=>{
+    location.href = "/add-user"
+   },2000)
+  }
+
+</script>

@@ -1,34 +1,8 @@
 const jwt = require('jsonwebtoken')
 const dotenv = require('dotenv')
 const createError = require('http-errors')
-const LoginModel = require('../../models/LoginModel')
 
 dotenv.config()
-
-const checkUser = (req, res, next) => {
-  const token = req.cookies.jwt
-  if (token) {
-    jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
-      if (err) {
-        res.locals.user = null;
-        next()
-      } else {
-        console.log('=====>mail', req.body.userMailFormDB);
-
-        const user = await LoginModel.getUserMail(decodedToken.userMailFormDB)
-        console.log('=====> usre', user);
-
-        res.locals.user = user;
-        next()
-      }
-    })
-  } else {
-    res.locals.user = null;
-    // res.redirect('/')
-
-    next()
-  }
-}
 
 const checkLogin = (req, res, next) => {
   const cookies = Object.keys(req.signedCookies).length > 0 ? req.signedCookies : null
@@ -69,11 +43,8 @@ const checkLogin = (req, res, next) => {
 
 const checkCurrentLogin = (req, res, next) => {
   const token = req.cookies.jwt;
-
   if (token) {
     res.redirect('/');
-
-    // res.send("yes ace")
   }
   next()
 }
@@ -107,5 +78,5 @@ function requireRole(role) {
 }
 
 module.exports = {
-  checkLogin, checkUser, checkCurrentLogin, redirectLoggedIn, requireRole,
+  checkLogin, checkCurrentLogin, redirectLoggedIn, requireRole,
 }
