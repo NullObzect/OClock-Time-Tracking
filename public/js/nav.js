@@ -1,11 +1,13 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-plusplus */
-// let menuToggle = document.querySelector(".toggle")
-// let navigation = document.querySelector(".navigation")
-// menuToggle.onclick = function(){
-//   menuToggle.classList.toggle("active")
-//   navigation.classList.toggle("active")
-// }
+const menuToggle = document.querySelector('.toggle')
+const navigation = document.querySelector('.navigation')
+const container = document.querySelector('.container')
+menuToggle.onclick = function () {
+  menuToggle.classList.toggle('active')
+  navigation.classList.toggle('active')
+  container.classList.toggle('active')
+}
 const nav = document.querySelector('.navigation')
 const list = document.querySelectorAll('.list')
 const currentLocation = location.href

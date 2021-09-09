@@ -1,7 +1,7 @@
 const LogoutController = {
   logout: async (req, res) => {
     try {
-      res.cookie('jwt', '', { maxAge: 1 })
+      res.clearCookie(process.env.COOKIE_NAME)
       res.redirect('/')
     } catch (err) {
       console.log('=====> Error form LogoutController', err);

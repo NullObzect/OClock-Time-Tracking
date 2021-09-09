@@ -23,13 +23,20 @@
           <h2 class="title">Sign in</h2>
           <div class="input-field">
             <i class="fas fa-user error" ></i>
-            <input type="text" class="error-input" name="userMail" placeholder="Email or Username" value="<%= value.userMail ? value.userMail : '' %>">          
+            <input type="text" class="error-input" name="userMail" placeholder="Email or Username" value="<%= data.username %>">          
             </div>
             <div class="input-field">
               <i class="fas fa-lock" ></i>
-              <input type="password" class="error-input" name="userPass" placeholder="Password" value="<%= value.userPass ? value.userPss : ''  %>" >
+              <input type="password" class="error-input" name="userPass" placeholder="Password" >
             </div>
-            <p class="error-msg"><%= error.userMail || error.userPass %> </p>
+            <% if(errors.userMail){%>
+            <p class="error-msg"><%= errors.userMail.msg  %></p>
+            <% }else if(errors.userPass){ %>    
+              <p class="error-msg"><%= errors.userPass.msg  %></p>
+              <% } %> 
+              <% if(errors.common) { %>
+                <p class="error-msg"> <%= errors.common.msg  %>  </p>
+              <% } %>  
             <input type="submit" value="Login" class="btn solid">
           </div>
         </form>
@@ -53,13 +60,26 @@
 
 <script >
   let auth =  '<%= auth %>';
+  let signIn =  '<%= signIn %>';
+  let logout =  '<%= logout %>';
   console.log(auth)
+  console.log(signIn)
+  console.log(logout)
+  const authFailToast = Toastify({
+            text : "authentication failed!",
+            duration: 3000
+          })
+  const successToast = Toastify({
+            text : "Signin successfully!",
+            duration: 2000
+          })
   if(auth==="true"){
-    Swal.fire({
-      icon: 'error',
-      title: 'Oops...',
-      text: 'Authentication failed',
-      footer: '<a href="/register">Don\'t have an account?</a>'
-    })
+    authFailToast.showToast()
+  }
+  if(signIn==="true"){
+    successToast.showToast()
+   setTimeout(()=>{
+    location.href = "/dashboard"
+   },2000)
   }
 </script>

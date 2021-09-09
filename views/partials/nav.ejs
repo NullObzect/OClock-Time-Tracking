@@ -1,5 +1,7 @@
+
 <div class="navigation">
   <ul>
+    <% if( loggedInUser.userRole ==='user') {%> 
     <li class="list">
       <b></b>
       <b></b>
@@ -34,17 +36,59 @@
         <span class="title">Projects</span>
       </a>
     </li>
-
-    <li class="list">
-      <b></b>
-      <b></b>
-      <a href="/add-user">
-        <span class="icon"><ion-icon name="code-outline"></ion-icon></span>
-        <span class="title">Add User</span>
-      </a>
-    </li>
+    <% } else { %>
+      <li class="list">
+        <b></b>
+        <b></b>
+        <a href="/dashboard">
+          <span class="icon"><ion-icon name="grid-outline"></ion-icon></span>
+          <span class="title">Dashboard</span>
+        </a>
+      </li>
+      <li class="list">
+        <b></b>
+        <b></b>
+        <a href="#">
+          <span class="icon"><ion-icon name="time-outline"></ion-icon></span>
+          <span class="title">Time Tracker</span>
+        </a>
+      </li>
+      <li class="list">
+        <b></b>
+        <b></b>
+        <a href="#">
+          <span class="icon"
+            ><ion-icon name="calendar-number-outline"></ion-icon
+          ></span>
+          <span class="title">Calender</span>
+        </a>
+      </li>
+      <li class="list">
+        <b></b>
+        <b></b>
+        <a href="#">
+          <span class="icon"><ion-icon name="code-outline"></ion-icon></span>
+          <span class="title">Projects</span>
+        </a>
+      </li>
+      <li class="list">
+        <b></b>
+        <b></b>
+        <a href="/add-user">
+          <span class="icon"><ion-icon name="code-outline"></ion-icon></span>
+          <span class="title">Add User</span>
+        </a>
+      </li>
+   <% } %> 
   </ul>
 </div>
-<!-- <div class="toggle">
-  <ion-icon name="menu-outline" class="open"></ion-icon>
-</div> -->
+  <div class="head">
+    <div class="toggle">
+      <ion-icon name="menu-outline" class="open"></ion-icon>
+    </div>
+    <ul>
+      <li class="btn-logout"><a href="/logout">logout</a></li>
+      <li><a href=""><%=loggedInUser.userName %></a></li>
+      <li><%=loggedInUser.userRole %></li>
+    </ul>
+  </div>
