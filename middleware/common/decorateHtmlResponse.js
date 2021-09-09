@@ -4,10 +4,13 @@ function decorateHtmlResponse(pageTitle) {
     res.locals.title = `${pageTitle} | OClock - Time Tracking`;
     res.locals.errors = {};
     res.locals.error = {};
+    res.locals.data = {};
     res.locals.value = {};
     res.locals.auth = false
     res.locals.alert = {}
     res.locals.registerFail = false;
+    res.locals.loggedInUser = {}
+    res.locals.signIn = false
     next();
   };
 }
