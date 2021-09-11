@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=development nodemon app.js",
+    "build-dev": "webpack --mode development",
+    "start": "NODE_ENV=development nodemon  app.js",
     "production": "NODE_ENV=production node app.js",
     "build": "postcss ./src/styles.css -o ./public/css/styles.css -w",
     "prod": "NODE_ENV=production postcss ./src/styles.css -o ./public/css/styles.css"
@@ -28,8 +29,14 @@
     "win-node-env": "^0.4.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.15.5",
+    "@babel/preset-env": "^7.15.4",
+    "babel-loader": "^8.2.2",
+    "cssnano": "^5.0.8",
     "eslint": "^7.2.0",
     "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-plugin-import": "^2.22.1"
+    "eslint-plugin-import": "^2.22.1",
+    "webpack": "^5.52.0",
+    "webpack-cli": "^4.8.0"
   }
 }

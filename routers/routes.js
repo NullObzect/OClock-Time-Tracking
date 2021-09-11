@@ -6,7 +6,7 @@ const logoutRoute = require('./logoutRoute')
 const registerRoute = require('./userRoute')
 
 // all routers use
-router.use(dashboardRoute, loginRoute, logoutRoute, registerRoute)
+router.use(dashboardRoute, registerRoute, loginRoute, logoutRoute)
 
 // exports route
 module.exports = router;

@@ -41,7 +41,7 @@ const UserController = {
       if (insertedData.errno) {
         res.send('ERROR');
       } else {
-        res.send('SUCCESS');
+        res.render('pages/addUser', { addUser: true });
       }
     } catch (err) {
       return err;

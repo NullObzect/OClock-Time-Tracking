@@ -8,9 +8,9 @@ function decorateHtmlResponse(pageTitle) {
     res.locals.value = {};
     res.locals.auth = false
     res.locals.alert = {}
-    res.locals.registerFail = false;
     res.locals.loggedInUser = {}
     res.locals.signIn = false
+    res.locals.addUser = false
     next();
   };
 }

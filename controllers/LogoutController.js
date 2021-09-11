@@ -5,7 +5,6 @@ const LogoutController = {
       res.redirect('/')
     } catch (err) {
       console.log('=====> Error form LogoutController', err);
-      return err;
     }
   },
 }
