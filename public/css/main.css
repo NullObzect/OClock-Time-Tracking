@@ -7,7 +7,6 @@
   font-family: 'Poppins', sans-serif;
 }
 input:focus, textarea:focus, select:focus{
-  outline: none;
 }
 body{
   min-height: 100vh;

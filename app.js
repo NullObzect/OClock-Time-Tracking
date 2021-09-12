@@ -21,10 +21,7 @@ app.use(notFoundHandler)
 
 // error handling
 app.use(errorHandler)
-//
-// app.use('*', decorateHtmlResponse('404'), (req, res) => {
-//   res.render('pages/404')
-// })
+
 // server
 app.listen(process.env.PORT, () => {
   // eslint-disable-next-line no-console

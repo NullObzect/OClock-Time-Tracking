@@ -10,7 +10,6 @@ const UserModel = {
       const [rows] = await dbConnect.promise().execute(registerQuery, values);
       return rows;
     } catch (err) {
-      console.log('error fomr RegisterModel', err);
       return err;
     }
   },

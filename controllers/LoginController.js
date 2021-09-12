@@ -14,22 +14,21 @@ const LoginController = {
   },
   // handle loging user
   login: async (req, res) => {
-    console.log('====> login data', req.body);
-    const { userMail, userPass } = req.body;
     try {
+      const { userMail, userPass } = req.body;
       /* user form database  */
       const user = await LoginModel.getUserMail(userMail)
-      const userMailFormDB = user[0].user_mail;
-      const userID = user[0].id;
-      const userName = user[0].user_name;
-      const userPassFormDB = user[0].user_pass;
-      const userRole = user[0].user_role;
-      const userObject = {
-        userID, userName, userMailFormDB, userRole,
-      }
-
+      console.log(user)
       // check valid user
-      if (user) {
+      if (user && user.length) {
+        const userMailFormDB = user[0].user_mail;
+        const userID = user[0].id;
+        const userName = user[0].user_name;
+        const userPassFormDB = user[0].user_pass;
+        const userRole = user[0].user_role;
+        const userObject = {
+          userID, userName, userMailFormDB, userRole,
+        }
         const isValidPass = await bcrypt.compare(userPass, userPassFormDB)
         console.log({ isValidPass });
         if (isValidPass) {
@@ -53,7 +52,7 @@ const LoginController = {
       } else {
         console.log('=====> invalid mail');
 
-        throw createError('Mail Not Found')
+        throw createError('User Not Found')
       }
     } catch (err) {
       console.log('catch', err)

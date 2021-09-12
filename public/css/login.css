@@ -115,6 +115,7 @@ form{
   margin: 10px 0;
   transition: .5s;
   color: #fff;
+  cursor: pointer;
 }
 .btn:hover{
   background-color: #4d5bf9;

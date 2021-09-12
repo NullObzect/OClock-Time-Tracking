@@ -7,9 +7,9 @@ const LoginModel = {
 
       const value = [userMail]
       const [row] = await dbConnect.promise().execute(getUserByMailQuery, value)
+      console.log(row)
       return row;
     } catch (err) {
-      console.log('error fomr LoginModel', err);
       return err;
     }
   },
