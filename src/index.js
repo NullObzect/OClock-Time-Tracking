@@ -19,3 +19,4 @@ for (let i = 0; i < menuItem.length; i++) {
     list[i].className = 'list active'
   }
 }
+
