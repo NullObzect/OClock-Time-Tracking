@@ -2,7 +2,7 @@ const { check, validationResult } = require('express-validator')
 
 const loginValidator = [
   check('userMail').isLength({ min: 1 }).withMessage('Email is required!'),
-  check('userPass').isLength({ min: 1 }).withMessage('Password   is required!'),
+  check('userPass').isLength({ min:  1}).withMessage('Password   is required!'),
 ]
 const loginValidationHandler = (req, res, next) => {
   const error = validationResult(req)

@@ -25,5 +25,5 @@ app.use(errorHandler)
 // server
 app.listen(process.env.PORT, () => {
   // eslint-disable-next-line no-console
-  console.log(`Server Running ${process.env.PORT}`);
+  console.log(`Server Running http://localhost:${process.env.PORT}`);
 });
