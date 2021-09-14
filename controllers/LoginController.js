@@ -25,18 +25,15 @@ const LoginController = {
         const userName = user.user_name;
         const userPassFormDB = user.user_pass;
         const userRole = user.user_role;
-        const userObject = {
-          userID, userName, userMailFormDB, userRole,
-        }
         const isValidPass = await bcrypt.compare(userPass, userPassFormDB)
         console.log({ isValidPass });
         if (isValidPass) {
+          const userObject = {
+            userID, userName, userMailFormDB, userRole,
+          }
           const token = jwt.sign({
             // set user info in token //
-            userID,
-            userName,
-            userMailFormDB,
-            userRole,
+            userObject,
 
           },
           process.env.JWT_SECRET, { expiresIn: maxAge })

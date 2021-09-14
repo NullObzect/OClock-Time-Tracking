@@ -15,7 +15,17 @@
   \**********************/
 /***/ (() => {
 
-eval("/* eslint-disable no-restricted-globals */\n\n/* eslint-disable no-plusplus */\nvar navBar = localStorage.getItem('navbar');\nvar menuToggle = document.querySelector('.toggle');\nvar navigation = document.querySelector('.navigation');\nvar container = document.querySelector('.container');\n\nmenuToggle.onclick = function () {\n  menuToggle.classList.toggle('active');\n  navigation.classList.toggle('active');\n  container.classList.toggle('active');\n  localStorage.setItem('navbar', 'short');\n};\n\nvar nav = document.querySelector('.navigation');\nvar list = document.querySelectorAll('.list');\nvar currentLocation = location.href;\nvar menuItem = nav.querySelectorAll('a');\n\nfor (var i = 0; i < menuItem.length; i++) {\n  if (menuItem[i].href === currentLocation) {\n    list[i].className = 'list active';\n  }\n}\n\nconsole.log(nabBar);\n\n//# sourceURL=webpack://mvc/./src/index.js?");
+eval("/* eslint-disable no-restricted-globals */\n\n/* eslint-disable no-plusplus */\nvar menuToggle = document.querySelector('.toggle');\nvar navigation = document.querySelector('.navigation');\nvar container = document.querySelector('.container');\n\nmenuToggle.onclick = function () {\n  menuToggle.classList.toggle('active');\n  navigation.classList.toggle('active');\n  container.classList.toggle('active');\n};\n\nvar nav = document.querySelector('.navigation');\nvar list = document.querySelectorAll('.list');\nvar currentLocation = location.href;\nvar menuItem = nav.querySelectorAll('a');\n\nfor (var i = 0; i < menuItem.length; i++) {\n  if (menuItem[i].href === currentLocation) {\n    list[i].className = 'list active';\n  }\n}\n\n//# sourceURL=webpack://mvc/./src/index.js?");
+
+/***/ }),
+
+/***/ "./src/loginValidation.js":
+/*!********************************!*\
+  !*** ./src/loginValidation.js ***!
+  \********************************/
+/***/ (() => {
+
+eval("\n\n//# sourceURL=webpack://mvc/./src/loginValidation.js?");
 
 /***/ })
 
@@ -25,8 +35,9 @@ eval("/* eslint-disable no-restricted-globals */\n\n/* eslint-disable no-plusplu
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module can't be inlined because the eval devtool is used.
-/******/ 	var __webpack_exports__ = {};
 /******/ 	__webpack_modules__["./src/index.js"]();
+/******/ 	var __webpack_exports__ = {};
+/******/ 	__webpack_modules__["./src/loginValidation.js"]();
 /******/ 	
 /******/ })()
 ;
