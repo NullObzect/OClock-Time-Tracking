@@ -304,12 +304,12 @@ body {
 .error input {
   border-color: #e74c3c;
 }
-small {
+#add-user small {
   color: #e74c3c;
 
   visibility: hidden;
 }
-.error small {
+#add-user .error small {
   visibility: visible;
 }
 /* CSS style for all users, admin, users pages  Table */
@@ -334,4 +334,12 @@ tr th:nth-child(n + 6) {
 tr td:nth-child(1),
 tr th:nth-child(1) {
   border-radius: 0.625rem 0 0 0.625rem;
+}
+#user-card {
+  display: none;  
+}
+.user-card-center{
+  display: block !important;
+  display: flex !important;
+  justify-content: center !important;
 }

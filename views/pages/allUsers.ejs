@@ -5,15 +5,94 @@
   href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
   rel="stylesheet"
 />
-<div class="flex items-center justify-center min-h-screen bg-white">
+
+<!-- Markup for user profile card -->
+
+<div class="flex justify-center" id="user-card">
+  <!-- CARD -->
+  <div
+    class="
+      mt-5
+      bg-blue-500
+      h-55
+      w-96
+      rounded-3xl
+      shadow-lg
+      relative
+      flex
+      justify-between
+      md:p-5
+    "
+  >
+    <!-- IMG PROFILE -->
+
+    <img
+      class="
+        rounded-full
+        w-16
+        h-16
+        shadow-sm
+        absolute
+        -top-8
+        transform
+        md:scale-110
+        duration-700
+      "
+      src="https://img.icons8.com/color/50/000000/circled-user-male-skin-type-7--v2.png"
+    />
+    <button
+      id="user-x"
+      class="
+        absolute
+        top-0
+        right-0
+        h-8
+        w-8
+        bg-red-400
+        rounded-full
+        text-2xl text-white
+        font-medium
+        shadow-lg
+      "
+    >
+      x
+    </button>
+
+    <!-- user details -->
+
+    <div id="user-details">
+      <!-- <div class="flex text-white font-medium">
+        <div class="flex-1">
+          <h4 class="md:text-2xl font-semibold text-gray-200 mt-4">
+            Alice Porter
+          </h4>
+          <small class="text-xs">2rd dadfasd </small>
+        </div>
+        <div class="flex-1 mt-4">
+          <p>Role :</p>
+          <p>Phone :</p>
+          <p>Mail :</p>
+        </div>
+        <div class="flex-1 text-right mt-4">
+          <p>Admin</p>
+          <p>6651651565</p>
+        </div>
+      </div> -->
+    </div>
+  </div>
+</div>
+<!-- End profile card -->
+<!--  Markup User Table  -->
+<div class="flex mt-4 justify-center min-h-screen bg-white">
   <div class="col-span-12">
     <div class="overflow-auto lg:overflow-visible">
       <div class="flex lg:justify-between border-b-2 border-fuchsia-900 pb-1">
         <h2 class="text-2xl text-gray-500 font-bold">All Users</h2>
         <div class="text-center flex-auto">
           <input
+            oninput="getSearchUser(event)"
             type="text"
-            name="name"
+            name="userName"
             placeholder="Search..."
             class="
               w-1/3
@@ -41,7 +120,7 @@
               All
             </button>
           </a>
-          <a href="/admin-list">
+          <a href="#">
             <button
               class="
                 bg-blue-500
@@ -52,11 +131,13 @@
                 sm
                 rounded-full
               "
+              onclick="getAdmin(event)"
+              value="admin"
             >
               Admin
             </button>
           </a>
-          <a href="/users-list">
+          <a href="#">
             <button
               class="
                 bg-blue-500
@@ -67,6 +148,8 @@
                 sm
                 rounded-full
               "
+              onclick="getUsers(event)"
+              value="user"
             >
               User
             </button></a
@@ -85,7 +168,7 @@
             <th class="p-3 text-left">Action</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="user-list">
           <% users.map(user => { %>
           <tr class="bg-blue-200 lg:text-black">
             <td class="p-3 font-medium capitalize"><%= user.user_name %></td>
@@ -100,7 +183,12 @@
             </td>
             <td class="p-3">
               <a href="#" class="text-gray-500 hover:text-gray-100 mr-2">
-                <i class="material-icons-outlined text-base">visibility</i>
+                <i
+                  class="material-icons-outlined text-base"
+                  onclick="getUserView(event)"
+                  data-id="<%= user.id %>"
+                  >visibility</i
+                >
               </a>
               <a href="#" class="text-yellow-400 hover:text-gray-100 mx-2">
                 <i class="material-icons-outlined text-base">edit</i>
@@ -120,5 +208,212 @@
     </div>
   </div>
 </div>
+
+<script>
+  // event for  user profile
+  // base URL
+  const baseUrl = "http://localhost:8077";
+  const userCard = document.querySelector("#user-card");
+  const userDetails = document.querySelector("#user-details");
+  const userCancle = document.querySelector("#user-x");
+  const getUserView = (event) => {
+    const userId = event.target.dataset.id;
+    userId ? userCard.classList.add("user-card-center") : "";
+
+    fetch(`${baseUrl}/user/view?userId=${userId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        userDetails.innerHTML = data
+          .map(
+            (user, idx) =>
+              `
+              <div class="flex justify-between">
+                  <h4 class="md:text-2xl font-semibold text-gray-200 mt-4">${user.user_name}</h4>
+                <div class="text-white text-right ml-8  mt-5"><small class="text-xs">${user.date}</small></div>
+              </div>
+          <div class="flex justify-between text-white font-medium">
+              
+              <div class="flex-1 mt-2">
+                <p>Role:</p>
+                <p>Phone : </p>
+                <p>Mail :</p>
+              </div>
+              <div class="flex-1 mt-2">
+                <p>${user.user_role}</p>
+                <p> ${user.user_phone}</p>
+                <p>${user.user_mail}</p>
+              </div>
+
+          </div>
+          `
+          )
+          .join("");
+      });
+
+    userCancle.addEventListener("click", () => {
+      userCancle.parentElement.remove();
+      location.reload();
+    });
+  };
+
+  // event for user search
+  const userList = document.querySelector("#user-list");
+  console.log("=====>", userList);
+
+  const getSearchUser = (event) => {
+    const userName = event.target.value;
+
+    console.log({ userName });
+
+    fetch(`${baseUrl}/search/user?userName=${userName}`)
+      .then((res) => res.json())
+      .then((data) => {
+        userList.innerHTML = data
+          .map(
+            (user, idx) =>
+              `
+              <tr class="bg-blue-200 lg:text-black">
+            <td class="p-3 font-medium capitalize">${user.user_name}</td>
+            <td class="p-3">${user.user_mail}</td>
+            <td class="p-3">${user.user_phone}</td>
+            <td class="p-3 uppercase">${user.user_role}</td>
+
+            <td class="p-3">
+              <span class="bg-green-400 text-gray-50 rounded-md px-2"
+                >ACTIVE</span
+              >
+            </td>
+            <td class="p-3">
+              <a href="#" class="text-gray-500 hover:text-gray-100 mr-2">
+                <i
+                  class="material-icons-outlined text-base"
+                  onclick="getUserView(event)"
+                  data-id="${user.id}"
+                  >visibility</i
+                >
+              </a>
+              <a href="#" class="text-yellow-400 hover:text-gray-100 mx-2">
+                <i class="material-icons-outlined text-base">edit</i>
+              </a>
+              <a
+                onclick="return confirm('Are you Sure?')"
+                href="/delete/user/${user.id}"
+                class="text-red-400 hover:text-gray-100 ml-2"
+              >
+                <i class="material-icons-round text-base">delete_outline</i>
+              </a>
+            </td>
+          </tr>
+            
+            `
+          )
+          .join("");
+      });
+  };
+  // End user search event
+  // show users onclick user button
+  const getUsers = (event) => {
+    const user = event.target.value;
+    console.log({ user });
+
+    fetch(`${baseUrl}/users-list?user=${user}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log({ data });
+        userList.innerHTML = data
+          .map(
+            (user, idx) =>
+              `
+              <tr class="bg-blue-200 lg:text-black">
+            <td class="p-3 font-medium capitalize">${user.user_name}</td>
+            <td class="p-3">${user.user_mail}</td>
+            <td class="p-3">${user.user_phone}</td>
+            <td class="p-3 uppercase">${user.user_role}</td>
+
+            <td class="p-3">
+              <span class="bg-green-400 text-gray-50 rounded-md px-2"
+                >ACTIVE</span
+              >
+            </td>
+            <td class="p-3">
+              <a href="#" class="text-gray-500 hover:text-gray-100 mr-2">
+                <i
+                  class="material-icons-outlined text-base"
+                  onclick="getUserView(event)"
+                  data-id="${user.id}"
+                  >visibility</i
+                >
+              </a>
+              <a href="#" class="text-yellow-400 hover:text-gray-100 mx-2">
+                <i class="material-icons-outlined text-base">edit</i>
+              </a>
+              <a
+                onclick="return confirm('Are you Sure?')"
+                href="/delete/user/${user.id}"
+                class="text-red-400 hover:text-gray-100 ml-2"
+              >
+                <i class="material-icons-round text-base">delete_outline</i>
+              </a>
+            </td>
+          </tr>
+            
+            `
+          )
+          .join("");
+      });
+  };
+
+  // show admin onclick admin button
+  const getAdmin = (event) => {
+    const admin = event.target.value;
+    console.log({ admin });
+
+    fetch(`${baseUrl}/admin-list?admin=${admin}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log({ data });
+        userList.innerHTML = data
+          .map(
+            (user, idx) =>
+              `
+              <tr class="bg-blue-200 lg:text-black">
+            <td class="p-3 font-medium capitalize">${user.user_name}</td>
+            <td class="p-3">${user.user_mail}</td>
+            <td class="p-3">${user.user_phone}</td>
+            <td class="p-3 uppercase">${user.user_role}</td>
+
+            <td class="p-3">
+              <span class="bg-green-400 text-gray-50 rounded-md px-2"
+                >ACTIVE</span
+              >
+            </td>
+            <td class="p-3">
+              <a href="#" class="text-gray-500 hover:text-gray-100 mr-2">
+                <i
+                  class="material-icons-outlined text-base"
+                  onclick="getUserView(event)"
+                  data-id="${user.id}"
+                  >visibility</i
+                >
+              </a>
+              <a href="#" class="text-yellow-400 hover:text-gray-100 mx-2">
+                <i class="material-icons-outlined text-base">edit</i>
+              </a>
+              <a
+                onclick="return confirm('Are you Sure?')"
+                href="/delete/user/${user.id}"
+                class="text-red-400 hover:text-gray-100 ml-2"
+              >
+                <i class="material-icons-round text-base">delete_outline</i>
+              </a>
+            </td>
+          </tr>
+            
+            `
+          )
+          .join("");
+      });
+  };
+</script>
 
 <%- include("../partials/footer"); -%>
