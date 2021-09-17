@@ -9,10 +9,10 @@ const checkLogin = (req, res, next) => {
   if (cookies) {
     try {
       const token = cookies[process.env.COOKIE_NAME]
-      const decoded = jwt.verify(token, process.env.JWT_SECRET)
-      req.user = decoded
+      const { userObject } = jwt.verify(token, process.env.JWT_SECRET)
+      req.user = userObject
       if (res.locals.html) {
-        res.locals.loggedInUser = decoded
+        res.locals.loggedInUser = userObject
       }
       next()
     } catch (err) {
@@ -63,6 +63,8 @@ function requireRole(role) {
     console.log(req.user)
     if (req.user.userRole && role.includes(req.user.userRole)) {
       next();
+    } else if (req.user.userRole && req.user.userRole === 'user') {
+      next(createError(404, 'Page not found!'));
     } else if (res.locals.html) {
       next(createError(401, 'You are not authorized to access this page!'));
     } else {
