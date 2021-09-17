@@ -17,15 +17,15 @@ const LoginController = {
     try {
       const { userMail, userPass } = req.body;
       /* user form database  */
-      const user = await LoginModel.getUserMail(userMail)
+      const [user] = await LoginModel.getUserMail(userMail)
       console.log(user)
       // check valid user
-      if (user && user.length) {
-        const userMailFormDB = user[0].user_mail;
-        const userID = user[0].id;
-        const userName = user[0].user_name;
-        const userPassFormDB = user[0].user_pass;
-        const userRole = user[0].user_role;
+      if (user && user.id) {
+        const userMailFormDB = user.user_mail;
+        const userID = user.id;
+        const userName = user.user_name;
+        const userPassFormDB = user.user_pass;
+        const userRole = user.user_role;
         const userObject = {
           userID, userName, userMailFormDB, userRole,
         }
@@ -34,11 +34,7 @@ const LoginController = {
         if (isValidPass) {
           const token = jwt.sign({
             // set user info in token //
-            userID,
-            userName,
-            userMailFormDB,
-            userRole,
-
+            userObject,
           },
           process.env.JWT_SECRET, { expiresIn: maxAge })
           res.cookie(process.env.COOKIE_NAME, token, { maxAge, httpOnly: true, signed: true })
