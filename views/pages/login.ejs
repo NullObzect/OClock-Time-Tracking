@@ -7,9 +7,10 @@
   <script
   src="https://kit.fontawesome.com/64d58efce2.js"
   crossorigin="anonymous"
-></script>
-<link rel="stylesheet" href="css/login.css">
-<link rel="stylesheet" href="css/vendors/toastify.css">
+  ></script>
+  <link rel="stylesheet" href="css/login.css">
+  <link rel="stylesheet" href="css/vendors/toastify.css">
+  <script defer src="js/loginValidation.js"></script>
 <script src="js/vendors/toastify.js"></script>
 
 
@@ -23,11 +24,11 @@
           <h2 class="title">Sign in</h2>
           <div class="input-field">
             <i class="fas fa-user error" ></i>
-            <input type="text" class="error-input" name="userMail" placeholder="Email or Username" value="<%= data.username %>">          
+            <input type="text" id="userName" name="userMail" placeholder="Email or Username" value="<%= data.username %>">          
             </div>
             <div class="input-field">
               <i class="fas fa-lock" ></i>
-              <input type="password" class="error-input" name="userPass" placeholder="Password" >
+              <input type="password" id="userPass" name="userPass" placeholder="Password" >
             </div>
             <% if(errors.userMail){%>
             <p class="error-msg"><%= errors.userMail.msg  %></p>
@@ -37,6 +38,7 @@
               <% if(errors.common) { %>
                 <p class="error-msg"> <%= errors.common.msg  %>  </p>
               <% } %>  
+              <p id="error-msg"  class="error-msg"></p>
             <input type="submit" value="Login" class="btn solid">
           </div>
         </form>
@@ -55,7 +57,7 @@
     </div>
   </div>
 
-<script src="js/bundle.js"></script>
+
 
 <script >
   const input = document.querySelectorAll('.input-field input')
