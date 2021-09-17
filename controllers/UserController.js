@@ -47,6 +47,69 @@ const UserController = {
       return err;
     }
   },
+  // show all users list
+  allUsersList: async (req, res) => {
+    const users = await UserModel.getAllUsersList()
+
+    res.render('pages/allUsers', { users })
+  },
+  // show user list
+  usersList: async (req, res) => {
+    const { user } = req.query
+    console.log({ user });
+
+    const users = await UserModel.getUsersList(user)
+    return res.json(users)
+    // res.render('pages/usersList', { users })
+  },
+  // show admin list
+  adminList: async (req, res) => {
+    try {
+      const {admin} = req.query
+      const admins = await UserModel.getAdminList(admin)
+     return res.json(admins)
+    } catch (err) {
+      console.log('====>Error form Admin list controller', err);
+    }
+  },
+  // Delete a user
+  deleteUser: async (req, res) => {
+    try {
+      const userId = req.params.id
+      const isUserDelete = await UserModel.getDeleteUser(userId)
+      if (isUserDelete.errno) {
+        res.send('Error')
+      } else {
+        res.render('pages/allUsers')
+      }
+    } catch (err) {
+      console.log('====>Error form Delet controller', err);
+      return err;
+    }
+  },
+  // User view
+  userView: async (req, res) => {
+    try {
+      const { userId } = req.query;
+      const isUserView = await UserModel.getViewUser(userId)
+      return res.json(isUserView)
+    } catch (err) {
+      console.log('====>Error form', err);
+    }
+  },
+  // search user
+  searchUser: async (req, res) => {
+    try {
+      const { userName } = req.query;
+      const isSearchUser = await UserModel.getSearchUser([userName])
+      console.log({ userName });
+      return res.json(isSearchUser)
+    } catch (err) {
+      console.log('====>Error form  search user Controller', err);
+      return err;
+    }
+  },
+
 };
 
 module.exports = UserController;

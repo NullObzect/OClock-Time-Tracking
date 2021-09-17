@@ -1,27 +1,47 @@
 <%- include("../partials/header"); -%>
-<div class="flex items-center justify-center min-h-screen ">
+<div class="flex items-center justify-center min-h-screen" id="add-user">
     <div class="px-8 py-6 mx-4 mt-2 text-left bg-gray-100 shadow-lg md:w-1/3 lg:w-5/12 sm:w-1/3 rounded-lg">
         <h3 class="text-2xl font-bold text-center ">Add User</h3>
-        <form action="/add-user" method="POST">
+        <form id="createUser"  action="/add-user" method="POST">
+
+          <!-- Image upload -->
+
+          <!-- component -->
+<div class=" mt-2 flex justify-center">
+  <div class="bg-white  py-4 rounded-lg shadow-lg text-center w-40">
+    <div class="mb-2">
+     
+      <img class="w-auto mx-auto rounded-full  object-cover object-center"  src="https://img.icons8.com/color/96/000000/person-skin-type-7.png"/>
+    </div>
+    <label class="cursor-pointer">
+      <span class="mt-2 text-base leading-normal px-4 py-2 bg-blue-500 text-white text-sm rounded-full" >Select Image</span>
+      <input type='file' class="hidden"  :accept="accept" />
+    </label>
+  </div>
+</div>
+          <!-- End image upload-->
             <div class="mt-2">
-                <div>
+                <div >
                     <label class="" for="Name">Name<label>
-                            <input type="text" name="userName" placeholder="Name"
+                            <input id="userName" type="text" name="userName" placeholder="Name"
                                 class=" <%= error.userName ? 'error border': '' %> w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600" value="<%= value.userName ? value.userName : '' %>">
+                                <small>Error message</small>
+
                                 <p class="text-red-500 text-sm p-1"><%= error.userName  %></p>
                                 
                 </div>
-                <div class="mt-2">
+                <div>
                     <label  for="Phone">Phone Number<label>
-                            <input type="number" name="userPhone" placeholder="Phone Number"
-                                class="<%= error.userPhone ? 'error border': '' %> w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600" value="<%= value.userPhone ? value.userPhone : '' %>">
+                            <input id="userPhone" type="number" name="userPhone" placeholder="Phone Number"
+                                class="<%= error.userPhone ? 'error border': '' %> w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600" value="<%= value.userPhone ? value.userPhone : '' %>">          <small>Error message</small>
+
                                                  <p class="text-red-500 text-sm p-1"><%= error.userPhone  %></p>
 
-              <div class="mt-2">
+              <div class="">
                 <label>User Role</label>
                 <div class="mt-2">
                   <label class="inline-flex items-center">
-                    <input type="radio" class="form-radio " name="userRole" value="admin">
+                    <input type="radio" class="form-radio "  name="userRole" value="admin">
                     <span class="ml-2">Admin</span>
                   </label>
                   <label class="inline-flex items-center ml-6">
@@ -31,23 +51,27 @@
                 </div>
               </div>
 
-                <div class="mt-2">
+                <div class="">
                     <label  for="email">Email<label>
-                            <input type="email" name="userMail" placeholder="Email"
+                            <input id="userMail" type="email" name="userMail" placeholder="Email"
                                 class="<%= error.userMail ? 'error border' : '' %>  w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600" value="<%= value.userMail ? value.userMail : ''%>">
+                                <small>Error message</small>
+
                                                                 <p class="text-red-500 text-sm p-1"><%= error.userMail  %></p>
 
                 </div>
-                <div class="mt-2">
+                <div class="">
                     <label>Password<label>
-                            <input type="password" name="userPass" placeholder="Password"
+                            <input id="userPass" type="password" name="userPass" placeholder="Password"
                                 class="<%= error.userPass ? 'error border' : '' %> w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600" value="<%= value.userPass ? value.userPass : '' %>">
+                                <small>Error message</small>
+
                                 <p class="text-red-500 text-sm p-1"><%= error.userPass  %></p>
 
                 </div>
                 
                 <div class="flex">
-                    <button type="submit" class="w-full px-6 py-2 mt-4 text-white bg-blue-600 rounded-lg hover:bg-blue-600">Create
+                    <button id="userSubmitBtn" type="submit" class="w-full px-6 py-2 mt-2 text-white bg-blue-600 rounded-lg hover:bg-blue-600">Create
                         User</button>
                 </div>
                
@@ -74,5 +98,92 @@
     location.href = "/add-user"
    },2000)
   }
+
+
+  // Form validation for add user form
+
+const userName = document.getElementById('userName')
+const userPhone = document.getElementById('userPhone')
+const userMail = document.getElementById('userMail')
+const userPass = document.getElementById('userPass')
+const createUser = document.getElementById('createUser')
+const userSubmitBtn = document.getElementById('userSubmitBtn')
+console.log('=====>', userSubmitBtn);
+
+// show input error message
+function showError(input, message){
+  const formControl = input.parentElement
+  formControl.className = 'error';
+  const small = formControl.querySelector('small')
+  small.innerText = message;
+}
+// Show success outline
+function showSuccess(input) {
+  const formControl = input.parentElement;
+  formControl.className = "success";
+}
+
+
+
+// Check email is valid
+function checkEmail(input) {
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  if (re.test(input.value.trim())) {
+    showSuccess(input);
+  } else {
+    showError(input, "Email is not valid");
+  }
+}
+
+// check required fields 
+function checkRequired(inputArr){
+  inputArr.forEach(input =>{
+    if(input.value.trim() === ''){
+      showError(input, `${getFieldName(input)} is required`)
+    }else{
+      showSuccess(input)
+    }
+  })
+}
+
+// check input length
+function checkLength(input,min,max){
+  if (input.value.length < min) {
+    showError(
+      input,
+      `${getFieldName(input)} must be at least ${min} characters`
+    );
+  } else if (input.value.length > max) {
+    showError(
+      input,
+      `${getFieldName(input)} must be less than ${max} characters`
+    );
+  } else {
+    showSuccess(input);
+  }
+}
+
+// Get fieldname
+function getFieldName(input) {
+  return input.id.charAt(0).toUpperCase() + input.id.slice(1);
+}
+
+// Event listeners
+createUser.addEventListener('submit', (e) => {
+  //console.log('=====>dd', e.preventDefault());
+  e.preventDefault()
+  
+  
+  if(!userName.value || !userPhone.value || !userMail.value || userPass.value < 6){
+    checkRequired([userName,userMail,userPhone,userPass])
+    checkLength(userName, 4, 15)
+    checkLength(userPass, 6, 25)
+    checkEmail(userMail)
+      
+  }else{
+    
+    createUser.submit()
+  }
+})
 
 </script>

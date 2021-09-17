@@ -1,7 +1,7 @@
 const path = require('path');
 
 const config = {
-  entry: ['./src/index.js', './src/loginValidation.js'],
+  entry: ['./src/index.js'],
   output: {
     path: path.resolve(__dirname, 'public/js/'),
     filename: 'bundle.js',
