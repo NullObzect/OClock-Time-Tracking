@@ -10,6 +10,8 @@ const UserController = {
   },
   // insert user
   addUser: async (req, res) => {
+    console.log(req.body)
+    console.log(req.files)
     const {
       userName, userPhone, userRole, userMail, userPass,
     } = req.body;
@@ -31,13 +33,17 @@ const UserController = {
     try {
       // hashing password
       const hashPass = await bcrypt.hash(userPass, 10);
+      const avatar = req.files[0].filename
+      console.log({ avatar })
       const insertedData = await UserModel.registerModel(
         userName,
         userPhone,
         userRole,
         userMail,
         hashPass,
+        avatar,
       );
+      console.log({ insertedData })
       if (insertedData.errno) {
         res.send('ERROR');
       } else {
@@ -65,9 +71,9 @@ const UserController = {
   // show admin list
   adminList: async (req, res) => {
     try {
-      const {admin} = req.query
+      const { admin } = req.query
       const admins = await UserModel.getAdminList(admin)
-     return res.json(admins)
+      return res.json(admins)
     } catch (err) {
       console.log('====>Error form Admin list controller', err);
     }
