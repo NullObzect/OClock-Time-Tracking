@@ -3,9 +3,10 @@ const UserController = require('../controllers/UserController');
 const decorateHtmlResponse = require('../middleware/common/decorateHtmlResponse');
 const { checkLogin, requireRole } = require('../middleware/common/AuthMiddleware')
 const { userValidator } = require('../middleware/user/userValidator');
+const avatarUpload = require('../middleware/user/avatarUpload')
 
 router.get('/add-user', decorateHtmlResponse('Add User'), checkLogin, requireRole(['admin']), UserController.getUser);
-router.post('/add-user', decorateHtmlResponse('Add User'), userValidator, UserController.addUser);
+router.post('/add-user', decorateHtmlResponse('Add User'), avatarUpload, userValidator, UserController.addUser);
 router.get('/all-users', decorateHtmlResponse('All User'), checkLogin, requireRole(['admin']), UserController.allUsersList)
 router.get('/users-list', checkLogin, requireRole(['admin']), UserController.usersList)
 router.get('/admin-list', checkLogin, requireRole(['admin']), UserController.adminList)
