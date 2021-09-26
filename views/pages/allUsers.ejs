@@ -1,5 +1,12 @@
 <%- include("../partials/header"); -%>
 
+<style>
+  .dropdown:focus-within .dropdown-menu {
+    opacity: 1;
+    transform: translate(0) scale(1);
+    visibility: visible;
+  }
+</style>
 <!-- component -->
 <link
   href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
@@ -103,23 +110,9 @@
             "
           />
         </div>
+        <!-- find user bttons -->
 
-        <div>
-          <a href="/all-users">
-            <button
-              class="
-                bg-blue-500
-                hover:bg-blue-700
-                text-white
-                py-1
-                px-3
-                sm
-                rounded-full
-              "
-            >
-              All
-            </button>
-          </a>
+        <!-- <div>
           <a href="#">
             <button
               class="
@@ -131,8 +124,6 @@
                 sm
                 rounded-full
               "
-              onclick="getAdmin(event)"
-              value="admin"
             >
               Admin
             </button>
@@ -154,6 +145,154 @@
               User
             </button></a
           >
+        </div> -->
+
+        <!-- dropdwon-->
+
+        <div class="bg-white">
+          <div class="flex items-center justify-center">
+            <div class="relative inline-block text-left dropdown">
+              <span class="rounded-md shadow-sm"
+                ><button
+                  id="dropdown-btn"
+                  class="
+                    inline-flex
+                    justify-center
+                    w-full
+                    px-4
+                    py-2
+                    text-sm
+                    font-medium
+                    leading-5
+                    text-gray-700
+                    transition
+                    duration-150
+                    ease-in-out
+                    bg-white
+                    border border-blue-500
+                    rounded-md
+                    hover:text-gray-500
+                    focus:outline-none
+                    focus:border-blue-300
+                    focus:shadow-outline-blue
+                    active:bg-gray-50 active:text-gray-800
+                  "
+                  type="button"
+                  aria-haspopup="true"
+                  aria-expanded="true"
+                  aria-controls="headlessui-menu-items-117"
+                >
+                  <span>Options</span>
+                  <svg
+                    class="w-5 h-5 ml-2 -mr-1"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg></button
+              ></span>
+              <div
+                class="
+                  opacity-0
+                  invisible
+                  dropdown-menu
+                  transition-all
+                  duration-300
+                  transform
+                  origin-top-right
+                  -translate-y-2
+                  scale-95
+                "
+              >
+                <div
+                  class="
+                    absolute
+                    right-0
+                    w-56
+                    mt-2
+                    origin-top-right
+                    bg-white
+                    border border-gray-200
+                    divide-y divide-gray-100
+                    rounded-md
+                    shadow-lg
+                    outline-none
+                  "
+                  aria-labelledby="headlessui-menu-button-1"
+                  id="headlessui-menu-items-117"
+                  role="menu"
+                >
+                  <div class="px-3 py-2">
+                    <div class="text-sm">
+                      <a href="/all-users">
+                        <button
+                          class="
+                            text-left
+                            w-full
+                            px-3
+                            py-2
+                            border-b-2 border-fuchsia-600
+                            cursor-pointer
+                          "
+                        >
+                          All Users
+                        </button>
+                      </a>
+
+                      <button
+                        class="
+                          w-full
+                          text-left
+                          px-3
+                          py-2
+                          border-b-2 border-fuchsia-600
+                        "
+                        cursor-pointer
+                        onclick="getAdmin(event)"
+                        value="admin"
+                      >
+                        Admin
+                      </button>
+
+                      <button
+                        class="
+                          w-full
+                          text-left
+                          px-3
+                          py-2
+                          border-b-2 border-fuchsia-600
+                          cursor-pointer
+                        "
+                        onclick="getUsers(event)"
+                        value="user"
+                      >
+                        Users
+                      </button>
+
+                      <button
+                        class="
+                          w-full
+                          text-left
+                          px-3
+                          py-2
+                          border-b-2 border-fuchsia-600
+                        "
+                      >
+                        Sort By A -> Z
+                      </button>
+                      <button class="w-full text-left px-3 py-2">
+                        Sort By Z -> A
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <table class="table text-gray-400 border-separate space-y-6 text-sm">
