@@ -28,7 +28,7 @@ const UserModel = {
   // show  users list
   getUsersList: async (user) => {
     try {
-      const getUserListQuery = `SELECT u.id,u.user_name,u.user_mail,u.user_phone,u.user_role  FROM users AS u WHERE u.user_role = '${user}'`;
+      const getUserListQuery = `SELECT u.id,u.user_name,u.user_mail,u.user_phone,u.user_role, u.avatar   FROM users AS u WHERE u.user_role = '${user}'`;
       const [rows] = await dbConnect.promise().execute(getUserListQuery)
       return rows;
     } catch (err) {
@@ -39,7 +39,7 @@ const UserModel = {
   // show  admin list
   getAdminList: async (admin) => {
     try {
-      const getAdminListQuery = `SELECT u.id,u.user_name,u.user_mail,u.user_phone,u.user_role  FROM users AS u WHERE u.user_role = '${admin}'`;
+      const getAdminListQuery = `SELECT u.id,u.user_name,u.user_mail,u.user_phone,u.user_role, u.avatar   FROM users AS u WHERE u.user_role = '${admin}'`;
       const [rows] = await dbConnect.promise().execute(getAdminListQuery)
       return rows;
     } catch (err) {
@@ -62,7 +62,7 @@ const UserModel = {
   // get a view user
   getViewUser: async (id) => {
     try {
-      const userViewQuery = "SELECT u.id,u.user_name,u.user_mail,u.user_phone,u.user_role, DATE_FORMAT(create_at, '%D %M %Y') AS date FROM users AS u WHERE u.id = ?";
+      const userViewQuery = "SELECT u.id,u.user_name,u.user_mail,u.user_phone,u.user_role, u.avatar,  DATE_FORMAT(create_at, '%D %M %Y') AS date FROM users AS u WHERE u.id = ?";
       const value = [id]
       const [row] = await dbConnect.promise().execute(userViewQuery, value)
       return row;
@@ -73,7 +73,7 @@ const UserModel = {
   },
   getSearchUser: async (userName) => {
     try {
-      const searchUser = `SELECT u.id,u.user_name,u.user_mail,u.user_phone,u.user_role  FROM users AS u WHERE u.user_name LIKE '%${userName}%'`
+      const searchUser = `SELECT u.id,u.user_name,u.user_mail,u.user_phone,u.user_role, u.avatar  FROM users AS u WHERE u.user_name LIKE '%${userName}%'`
       const [rows] = await dbConnect.promise().execute(searchUser)
       return rows
     } catch (err) {

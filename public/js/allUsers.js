@@ -6,6 +6,7 @@ const userDetails = document.querySelector('#user-details');
 const userCancle = document.querySelector('#user-x');
 const getUserView = (event) => {
   const userId = event.target.dataset.id;
+  // eslint-disable-next-line no-unused-expressions
   userId ? userCard.classList.add('user-card-center') : '';
 
   fetch(`${baseUrl}/user/view?userId=${userId}`)
@@ -58,40 +59,51 @@ const getSearchUser = (event) => {
       userList.innerHTML = data
         .map(
           (user, idx) => `
-              <tr class="bg-blue-200 lg:text-black">
-            <td class="p-3 font-medium capitalize">${user.user_name}</td>
-            <td class="p-3">${user.user_mail}</td>
-            <td class="p-3">${user.user_phone}</td>
-            <td class="p-3 uppercase">${user.user_role}</td>
+            <tr class="bg-blue-200 lg:text-black">  
+            <td class="p-2">
+            <div class="flex align-items-center">
+             
+              <img
+                class="rounded-full h-12 w-12 object-cover"
+                src="uploads/avatars/${user.avatar || 'demo_profile.png'}"/>
+              
+              <div class="ml-3">
+                <div class="">${user.user_name}</div>
+                <div class="text-gray-500">${user.user_mail}</div>
+              </div>
+            </div>
+            </td>
+          <td class="p-2">${user.user_phone}</td>
+          <td class="p-2 uppercase">${user.user_role}</td>
 
-            <td class="p-3">
-              <span class="bg-green-400 text-gray-50 rounded-md px-2"
-                >ACTIVE</span
+          <td class="p-2">
+            <span class="bg-green-400 text-gray-50 rounded-md px-2"
+              >ACTIVE</span
+            >
+          </td>
+          <td class="p-2">
+            <a href="#" class="text-gray-500 hover:text-gray-100 mr-2">
+              <i
+                class="material-icons-outlined text-base"
+                onclick="getUserView(event)"
+                data-id="${user.id}"
+                >visibility</i
               >
-            </td>
-            <td class="p-3">
-              <a href="#" class="text-gray-500 hover:text-gray-100 mr-2">
-                <i
-                  class="material-icons-outlined text-base"
-                  onclick="getUserView(event)"
-                  data-id="${user.id}"
-                  >visibility</i
-                >
-              </a>
-              <a href="#" class="text-yellow-400 hover:text-gray-100 mx-2">
-                <i class="material-icons-outlined text-base">edit</i>
-              </a>
-              <a
-                onclick="return confirm('Are you Sure?')"
-                href="/delete/user/${user.id}"
-                class="text-red-400 hover:text-gray-100 ml-2"
-              >
-                <i class="material-icons-round text-base">delete_outline</i>
-              </a>
-            </td>
-          </tr>
-            
-            `,
+            </a>
+            <a href="#" class="text-yellow-400 hover:text-gray-100 mx-2">
+              <i class="material-icons-outlined text-base">edit</i>
+            </a>
+            <a
+              onclick="return confirm('Are you Sure?')"
+              href="/delete/user/${user.id}"
+              class="text-red-400 hover:text-gray-100 ml-2"
+            >
+              <i class="material-icons-round text-base">delete_outline</i>
+            </a>
+          </td>
+        </tr>
+          
+          `,
         )
         .join('');
     });
@@ -109,40 +121,51 @@ const getUsers = (event) => {
       userList.innerHTML = data
         .map(
           (user, idx) => `
-              <tr class="bg-blue-200 lg:text-black">
-            <td class="p-3 font-medium capitalize">${user.user_name}</td>
-            <td class="p-3">${user.user_mail}</td>
-            <td class="p-3">${user.user_phone}</td>
-            <td class="p-3 uppercase">${user.user_role}</td>
+            <tr class="bg-blue-200 lg:text-black">  
+            <td class="p-2">
+            <div class="flex align-items-center">
+             
+              <img
+                class="rounded-full h-12 w-12 object-cover"
+                src="uploads/avatars/${user.avatar || 'demo_profile.png'}"/>
+              
+              <div class="ml-3">
+                <div class="">${user.user_name}</div>
+                <div class="text-gray-500">${user.user_mail}</div>
+              </div>
+            </div>
+            </td>
+          <td class="p-2">${user.user_phone}</td>
+          <td class="p-2 uppercase">${user.user_role}</td>
 
-            <td class="p-3">
-              <span class="bg-green-400 text-gray-50 rounded-md px-2"
-                >ACTIVE</span
+          <td class="p-2">
+            <span class="bg-green-400 text-gray-50 rounded-md px-2"
+              >ACTIVE</span
+            >
+          </td>
+          <td class="p-2">
+            <a href="#" class="text-gray-500 hover:text-gray-100 mr-2">
+              <i
+                class="material-icons-outlined text-base"
+                onclick="getUserView(event)"
+                data-id="${user.id}"
+                >visibility</i
               >
-            </td>
-            <td class="p-3">
-              <a href="#" class="text-gray-500 hover:text-gray-100 mr-2">
-                <i
-                  class="material-icons-outlined text-base"
-                  onclick="getUserView(event)"
-                  data-id="${user.id}"
-                  >visibility</i
-                >
-              </a>
-              <a href="#" class="text-yellow-400 hover:text-gray-100 mx-2">
-                <i class="material-icons-outlined text-base">edit</i>
-              </a>
-              <a
-                onclick="return confirm('Are you Sure?')"
-                href="/delete/user/${user.id}"
-                class="text-red-400 hover:text-gray-100 ml-2"
-              >
-                <i class="material-icons-round text-base">delete_outline</i>
-              </a>
-            </td>
-          </tr>
-            
-            `,
+            </a>
+            <a href="#" class="text-yellow-400 hover:text-gray-100 mx-2">
+              <i class="material-icons-outlined text-base">edit</i>
+            </a>
+            <a
+              onclick="return confirm('Are you Sure?')"
+              href="/delete/user/${user.id}"
+              class="text-red-400 hover:text-gray-100 ml-2"
+            >
+              <i class="material-icons-round text-base">delete_outline</i>
+            </a>
+          </td>
+        </tr>
+          
+          `,
         )
         .join('');
     });
@@ -160,40 +183,51 @@ const getAdmin = (event) => {
       userList.innerHTML = data
         .map(
           (user, idx) => `
-              <tr class="bg-blue-200 lg:text-black">
-            <td class="p-3 font-medium capitalize">${user.user_name}</td>
-            <td class="p-3">${user.user_mail}</td>
-            <td class="p-3">${user.user_phone}</td>
-            <td class="p-3 uppercase">${user.user_role}</td>
+            <tr class="bg-blue-200 lg:text-black">  
+            <td class="p-2">
+            <div class="flex align-items-center">
+             
+              <img
+                class="rounded-full h-12 w-12 object-cover"
+                src="uploads/avatars/${user.avatar || 'demo_profile.png'}"/>
+              
+              <div class="ml-3">
+                <div class="">${user.user_name}</div>
+                <div class="text-gray-500">${user.user_mail}</div>
+              </div>
+            </div>
+            </td>
+          <td class="p-2">${user.user_phone}</td>
+          <td class="p-2 uppercase">${user.user_role}</td>
 
-            <td class="p-3">
-              <span class="bg-green-400 text-gray-50 rounded-md px-2"
-                >ACTIVE</span
+          <td class="p-2">
+            <span class="bg-green-400 text-gray-50 rounded-md px-2"
+              >ACTIVE</span
+            >
+          </td>
+          <td class="p-2">
+            <a href="#" class="text-gray-500 hover:text-gray-100 mr-2">
+              <i
+                class="material-icons-outlined text-base"
+                onclick="getUserView(event)"
+                data-id="${user.id}"
+                >visibility</i
               >
-            </td>
-            <td class="p-3">
-              <a href="#" class="text-gray-500 hover:text-gray-100 mr-2">
-                <i
-                  class="material-icons-outlined text-base"
-                  onclick="getUserView(event)"
-                  data-id="${user.id}"
-                  >visibility</i
-                >
-              </a>
-              <a href="#" class="text-yellow-400 hover:text-gray-100 mx-2">
-                <i class="material-icons-outlined text-base">edit</i>
-              </a>
-              <a
-                onclick="return confirm('Are you Sure?')"
-                href="/delete/user/${user.id}"
-                class="text-red-400 hover:text-gray-100 ml-2"
-              >
-                <i class="material-icons-round text-base">delete_outline</i>
-              </a>
-            </td>
-          </tr>
-            
-            `,
+            </a>
+            <a href="#" class="text-yellow-400 hover:text-gray-100 mx-2">
+              <i class="material-icons-outlined text-base">edit</i>
+            </a>
+            <a
+              onclick="return confirm('Are you Sure?')"
+              href="/delete/user/${user.id}"
+              class="text-red-400 hover:text-gray-100 ml-2"
+            >
+              <i class="material-icons-round text-base">delete_outline</i>
+            </a>
+          </td>
+        </tr>
+          
+          `,
         )
         .join('');
     });
@@ -212,42 +246,53 @@ const getUsersSortByASC = (event) => {
       userList.innerHTML = data
         .map(
           (user, idx) => `
-              <tr class="bg-blue-200 lg:text-black">
-            <td class="p-3 font-medium capitalize">${user.user_name}</td>
-            <td class="p-3">${user.user_mail}</td>
-            <td class="p-3">${user.user_phone}</td>
-            <td class="p-3 uppercase">${user.user_role}</td>
+            <tr class="bg-blue-200 lg:text-black">  
+            <td class="p-2">
+            <div class="flex align-items-center">
+             
+              <img
+                class="rounded-full h-12 w-12 object-cover"
+                src="uploads/avatars/${user.avatar || 'demo_profile.png'}"/>
+              
+              <div class="ml-3">
+                <div class="">${user.user_name}</div>
+                <div class="text-gray-500">${user.user_mail}</div>
+              </div>
+            </div>
+            </td>
+          <td class="p-2">${user.user_phone}</td>
+          <td class="p-2 uppercase">${user.user_role}</td>
 
-            <td class="p-3">
-              <span class="bg-green-400 text-gray-50 rounded-md px-2"
-                >ACTIVE</span
+          <td class="p-2">
+            <span class="bg-green-400 text-gray-50 rounded-md px-2"
+              >ACTIVE</span
+            >
+          </td>
+          <td class="p-2">
+            <a href="#" class="text-gray-500 hover:text-gray-100 mr-2">
+              <i
+                class="material-icons-outlined text-base"
+                onclick="getUserView(event)"
+                data-id="${user.id}"
+                >visibility</i
               >
-            </td>
-            <td class="p-3">
-              <a href="#" class="text-gray-500 hover:text-gray-100 mr-2">
-                <i
-                  class="material-icons-outlined text-base"
-                  onclick="getUserView(event)"
-                  data-id="${user.id}"
-                  >visibility</i
-                >
-              </a>
-              <a href="#" class="text-yellow-400 hover:text-gray-100 mx-2">
-                <i class="material-icons-outlined text-base">edit</i>
-              </a>
-              <a
-                onclick="return confirm('Are you Sure?')"
-                href="/delete/user/${user.id}"
-                class="text-red-400 hover:text-gray-100 ml-2"
-              >
-                <i class="material-icons-round text-base">delete_outline</i>
-              </a>
-            </td>
-          </tr>
-            
-            `,
-        )
-        .join('');
+            </a>
+            <a href="#" class="text-yellow-400 hover:text-gray-100 mx-2">
+              <i class="material-icons-outlined text-base">edit</i>
+            </a>
+            <a
+              onclick="return confirm('Are you Sure?')"
+              href="/delete/user/${user.id}"
+              class="text-red-400 hover:text-gray-100 ml-2"
+            >
+              <i class="material-icons-round text-base">delete_outline</i>
+            </a>
+          </td>
+        </tr>
+          
+          `,
+
+        ).join('')
     });
 };
 
@@ -262,18 +307,29 @@ const getUsersSortByDESC = (event) => {
       userList.innerHTML = data
         .map(
           (user, idx) => `
-              <tr class="bg-blue-200 lg:text-black">
-            <td class="p-3 font-medium capitalize">${user.user_name}</td>
-            <td class="p-3">${user.user_mail}</td>
-            <td class="p-3">${user.user_phone}</td>
-            <td class="p-3 uppercase">${user.user_role}</td>
+              <tr class="bg-blue-200 lg:text-black">  
+              <td class="p-2">
+              <div class="flex align-items-center">
+               
+                <img
+                  class="rounded-full h-12 w-12 object-cover"
+                  src="uploads/avatars/${user.avatar || 'demo_profile.png'}"/>
+                
+                <div class="ml-3">
+                  <div class="">${user.user_name}</div>
+                  <div class="text-gray-500">${user.user_mail}</div>
+                </div>
+              </div>
+              </td>
+            <td class="p-2">${user.user_phone}</td>
+            <td class="p-2 uppercase">${user.user_role}</td>
 
-            <td class="p-3">
+            <td class="p-2">
               <span class="bg-green-400 text-gray-50 rounded-md px-2"
                 >ACTIVE</span
               >
             </td>
-            <td class="p-3">
+            <td class="p-2">
               <a href="#" class="text-gray-500 hover:text-gray-100 mr-2">
                 <i
                   class="material-icons-outlined text-base"

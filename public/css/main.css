@@ -326,8 +326,8 @@ i {
   border-radius: 20px;
 }
 
-tr td:nth-child(n + 6),
-tr th:nth-child(n + 6) {
+tr td:nth-child(n + 5),
+tr th:nth-child(n + 5) {
   border-radius: 0 0.625rem 0.625rem 0;
 }
 
@@ -336,10 +336,14 @@ tr th:nth-child(1) {
   border-radius: 0.625rem 0 0 0.625rem;
 }
 #user-card {
-  display: none;  
+  display: none;
 }
-.user-card-center{
+.user-card-center {
   display: block !important;
   display: flex !important;
   justify-content: center !important;
+}
+/* style for users table */
+#users-table {
+  width: 700px;
 }

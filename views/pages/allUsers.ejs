@@ -91,7 +91,7 @@
 <!-- End profile card -->
 <!--  Markup User Table  -->
 <div class="flex mt-4 justify-center min-h-screen bg-white">
-  <div class="col-span-12">
+  <div class="">
     <div class="overflow-auto lg:overflow-visible">
       <div class="flex lg:justify-between border-b-2 border-fuchsia-900 pb-1">
         <h2 class="text-2xl text-gray-500 font-bold">All Users</h2>
@@ -303,11 +303,14 @@
       </div>
       <!-- End options dropdown -->
       <!-- Markup for Users table  -->
-      <table class="table w-full text-gray-400 border-separate text-sm">
+      <table
+        id="users-table"
+        class="table text-gray-400 border-separate text-sm"
+      >
         <thead class="bg-blue-500 text-white">
           <tr class="">
-            <th class="p-3">Name</th>
-            <th class="p-3 text-left">Mail</th>
+            <th class="p-3 text-left">Name</th>
+            <!-- <th class="p-3 text-left">Mail</th> -->
             <th class="p-3 text-left">Phone</th>
             <th class="p-3 text-left">Role</th>
 
@@ -318,17 +321,29 @@
         <tbody id="user-list">
           <% users.map(user => { %>
           <tr class="bg-blue-200 lg:text-black">
-            <td class="p-3 font-medium capitalize"><%= user.user_name %></td>
-            <td class="p-3"><%= user.user_mail %></td>
-            <td class="p-3"><%= user.user_phone %></td>
-            <td class="p-3 uppercase"><%= user.user_role %></td>
+            <td class="p-2">
+              <div class="flex align-items-center">
+                <img
+                  class="rounded-full h-12 w-12 object-cover"
+                  src="uploads/avatars/<%= user.avatar || 'demo_profile.png' %>"
+                />
 
-            <td class="p-3">
+                <div class="ml-3">
+                  <div class=""><%= user.user_name %></div>
+                  <div class="text-gray-500"><%= user.user_mail %></div>
+                </div>
+              </div>
+            </td>
+            <!-- <td class="p-3"><%# user.user_mail %></td> -->
+            <td class="p-2"><%= user.user_phone %></td>
+            <td class="p-2 uppercase"><%= user.user_role %></td>
+
+            <td class="p-2">
               <span class="bg-green-400 text-gray-50 rounded-md px-2"
                 >ACTIVE</span
               >
             </td>
-            <td class="p-3">
+            <td class="p-2">
               <a href="#" class="text-gray-500 hover:text-gray-100 mr-2">
                 <i
                   class="material-icons-outlined text-base"
