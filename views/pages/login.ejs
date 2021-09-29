@@ -24,11 +24,11 @@
           <h2 class="title">Sign in</h2>
           <div class="input-field">
             <i class="fas fa-user error" ></i>
-            <input type="text" id="userName" name="userMail" placeholder="Email or Username" value="<%= data.username %>">          
+            <input required type="text" id="userName" name="userMail" placeholder="Email or Username" value="<%= data.username %>">          
             </div>
             <div class="input-field">
               <i class="fas fa-lock" ></i>
-              <input type="password" id="userPass" name="userPass" placeholder="Password" >
+              <input required type="password" id="userPass" name="userPass" placeholder="Password" >
             </div>
             <% if(errors.userMail){%>
             <p class="error-msg"><%= errors.userMail.msg  %></p>
