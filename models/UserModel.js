@@ -16,7 +16,7 @@ const UserModel = {
   // show all users list
   getAllUsersList: async () => {
     try {
-      const getUsersListQuery = 'SELECT u.id,u.user_name,u.user_mail,u.user_phone,u.user_role  FROM users AS u';
+      const getUsersListQuery = 'SELECT u.id,u.user_name,u.user_mail,u.user_phone,u.user_role, u.avatar  FROM users AS u';
 
       const [rows] = await dbConnect.promise().execute(getUsersListQuery)
       return rows;
@@ -81,6 +81,28 @@ const UserModel = {
       return err;
     }
   },
+  // sort by asecending order
+  getUserSortByAscendingOrder: async (userName) => {
+    try {
+      const ascendingOrderQuery = `SELECT u.id,u.user_name,u.user_phone, u.user_role, u.user_mail, u.avatar  FROM users  AS u ORDER BY ${userName} ASC`;
+      const [rows] = await dbConnect.promise().execute(ascendingOrderQuery)
+      return rows;
+    } catch (err) {
+      console.log('====>Error form getUserSortByAscendingOrder Model', err);
+      return err;
+    }
+  },
 
+  // sort by asecending order
+  getUserSortByDescendingOrder: async (userName) => {
+    try {
+      const descendingOrderQuery = `SELECT u.id,u.user_name,u.user_phone, u.user_role, u.user_mail, u.avatar  FROM users  AS u ORDER BY ${userName} DESC`;
+      const [rows] = await dbConnect.promise().execute(descendingOrderQuery)
+      return rows;
+    } catch (err) {
+      console.log('====>Error form getUserSortByDescendingOrder Model', err);
+      return err;
+    }
+  },
 }
 module.exports = UserModel;

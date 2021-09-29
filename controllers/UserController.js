@@ -62,7 +62,7 @@ const UserController = {
   // show user list
   usersList: async (req, res) => {
     const { user } = req.query
-    console.log({ user });
+    // console.log({ user });
 
     const users = await UserModel.getUsersList(user)
     return res.json(users)
@@ -108,11 +108,37 @@ const UserController = {
     try {
       const { userName } = req.query;
       const isSearchUser = await UserModel.getSearchUser([userName])
-      console.log({ userName });
+      // console.log({ userName });
       return res.json(isSearchUser)
     } catch (err) {
       console.log('====>Error form  search user Controller', err);
       return err;
+    }
+  },
+  // sort by asecending order
+  userSortByAscendingOrder: async (req, res) => {
+    try {
+      const { userName } = req.query
+      const isUserSort = await UserModel.getUserSortByAscendingOrder([userName]);
+      // console.log({ userName });
+      // console.log({ isUserSort });
+      return res.json(isUserSort)
+    } catch (err) {
+      console.log('====>Error form userSortByAscendingOrder Controller', err);
+    }
+  },
+
+  // sort by Descending order
+  userSortByDescendingOrder: async (req, res) => {
+    try {
+      const { userName } = req.query
+      const isUserSortByDesc = await UserModel.getUserSortByDescendingOrder([userName]);
+      // console.log({ userName });
+      // console.log({ isUserSortByDesc });
+
+      return res.json(isUserSortByDesc)
+    } catch (err) {
+      console.log('====>Error form userSortByDescendingOrder  Controller', err);
     }
   },
 

@@ -1,5 +1,12 @@
 <%- include("../partials/header"); -%>
 
+<style>
+  .dropdown:focus-within .dropdown-menu {
+    opacity: 1;
+    transform: translate(0) scale(1);
+    visibility: visible;
+  }
+</style>
 <!-- component -->
 <link
   href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
@@ -95,7 +102,7 @@
             name="userName"
             placeholder="Search..."
             class="
-              w-1/3
+              w-1/2
               py-2
               border-b-2 border-blue-600
               outline-none
@@ -103,23 +110,9 @@
             "
           />
         </div>
+        <!-- find user bttons -->
 
-        <div>
-          <a href="/all-users">
-            <button
-              class="
-                bg-blue-500
-                hover:bg-blue-700
-                text-white
-                py-1
-                px-3
-                sm
-                rounded-full
-              "
-            >
-              All
-            </button>
-          </a>
+        <!-- <div>
           <a href="#">
             <button
               class="
@@ -131,8 +124,6 @@
                 sm
                 rounded-full
               "
-              onclick="getAdmin(event)"
-              value="admin"
             >
               Admin
             </button>
@@ -154,11 +145,167 @@
               User
             </button></a
           >
+        </div> -->
+
+        <!-- Markup for options  dropdwon-->
+
+        <div class="bg-white">
+          <div class="flex items-center justify-center">
+            <div class="relative inline-block text-left dropdown">
+              <span class="rounded-md shadow-sm"
+                ><button
+                  id="dropdown-btn"
+                  class="
+                    inline-flex
+                    justify-center
+                    w-full
+                    px-4
+                    py-2
+                    text-sm
+                    font-medium
+                    leading-5
+                    text-gray-700
+                    transition
+                    duration-150
+                    ease-in-out
+                    bg-white
+                    border border-blue-500
+                    rounded-md
+                    hover:text-gray-500
+                    focus:outline-none
+                    focus:border-blue-300
+                    focus:shadow-outline-blue
+                    active:bg-gray-50 active:text-gray-800
+                  "
+                  type="button"
+                  aria-haspopup="true"
+                  aria-expanded="true"
+                  aria-controls="headlessui-menu-items-117"
+                >
+                  <span>Options</span>
+                  <svg
+                    class="w-5 h-5 ml-2 -mr-1"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg></button
+              ></span>
+              <div
+                class="
+                  opacity-0
+                  invisible
+                  dropdown-menu
+                  transition-all
+                  duration-300
+                  transform
+                  origin-top-right
+                  -translate-y-2
+                  scale-95
+                "
+              >
+                <div
+                  class="
+                    absolute
+                    right-0
+                    w-56
+                    mt-2
+                    origin-top-right
+                    bg-white
+                    border border-gray-200
+                    divide-y divide-gray-100
+                    rounded-md
+                    shadow-lg
+                    outline-none
+                  "
+                  aria-labelledby="headlessui-menu-button-1"
+                  id="headlessui-menu-items-117"
+                  role="menu"
+                >
+                  <div class="px-3 py-2">
+                    <div class="text-sm">
+                      <a href="/all-users">
+                        <button
+                          class="
+                            text-left
+                            w-full
+                            px-3
+                            py-2
+                            border-b-2 border-fuchsia-600
+                            cursor-pointer
+                          "
+                        >
+                          All Users
+                        </button>
+                      </a>
+
+                      <button
+                        class="
+                          w-full
+                          text-left
+                          px-3
+                          py-2
+                          border-b-2 border-fuchsia-600
+                        "
+                        cursor-pointer
+                        onclick="getAdmin(event)"
+                        value="admin"
+                      >
+                        Admin
+                      </button>
+
+                      <button
+                        class="
+                          w-full
+                          text-left
+                          px-3
+                          py-2
+                          border-b-2 border-fuchsia-600
+                          cursor-pointer
+                        "
+                        onclick="getUsers(event)"
+                        value="user"
+                      >
+                        Users
+                      </button>
+
+                      <button
+                        class="
+                          w-full
+                          text-left
+                          px-3
+                          py-2
+                          border-b-2 border-fuchsia-600
+                        "
+                        onclick="getUsersSortByASC(event)"
+                        value="user_name"
+                      >
+                        Sort By [ A -> Z ]
+                      </button>
+                      <button
+                        class="w-full text-left px-3 py-2"
+                        onclick="getUsersSortByDESC(event)"
+                        value="user_name"
+                      >
+                        Sort By [ Z -> A ]
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <table class="table text-gray-400 border-separate space-y-6 text-sm">
+      <!-- End options dropdown -->
+      <!-- Markup for Users table  -->
+      <table class="table w-full text-gray-400 border-separate text-sm">
         <thead class="bg-blue-500 text-white">
-          <tr>
+          <tr class="">
             <th class="p-3">Name</th>
             <th class="p-3 text-left">Mail</th>
             <th class="p-3 text-left">Phone</th>
@@ -209,211 +356,5 @@
   </div>
 </div>
 
-<script>
-  // event for  user profile
-  // base URL
-  const baseUrl = "http://localhost:8077";
-  const userCard = document.querySelector("#user-card");
-  const userDetails = document.querySelector("#user-details");
-  const userCancle = document.querySelector("#user-x");
-  const getUserView = (event) => {
-    const userId = event.target.dataset.id;
-    userId ? userCard.classList.add("user-card-center") : "";
-
-    fetch(`${baseUrl}/user/view?userId=${userId}`)
-      .then((res) => res.json())
-      .then((data) => {
-        userDetails.innerHTML = data
-          .map(
-            (user, idx) =>
-              `
-              <div class="flex justify-between">
-                  <h4 class="md:text-2xl font-semibold text-gray-200 mt-4">${user.user_name}</h4>
-                <div class="text-white text-right ml-8  mt-5"><small class="text-xs">${user.date}</small></div>
-              </div>
-          <div class="flex justify-between text-white font-medium">
-              
-              <div class="flex-1 mt-2">
-                <p>Role:</p>
-                <p>Phone : </p>
-                <p>Mail :</p>
-              </div>
-              <div class="flex-1 mt-2">
-                <p>${user.user_role}</p>
-                <p> ${user.user_phone}</p>
-                <p>${user.user_mail}</p>
-              </div>
-
-          </div>
-          `
-          )
-          .join("");
-      });
-
-    userCancle.addEventListener("click", () => {
-      userCancle.parentElement.remove();
-      location.reload();
-    });
-  };
-
-  // event for user search
-  const userList = document.querySelector("#user-list");
-  console.log("=====>", userList);
-
-  const getSearchUser = (event) => {
-    const userName = event.target.value;
-
-    console.log({ userName });
-
-    fetch(`${baseUrl}/search/user?userName=${userName}`)
-      .then((res) => res.json())
-      .then((data) => {
-        userList.innerHTML = data
-          .map(
-            (user, idx) =>
-              `
-              <tr class="bg-blue-200 lg:text-black">
-            <td class="p-3 font-medium capitalize">${user.user_name}</td>
-            <td class="p-3">${user.user_mail}</td>
-            <td class="p-3">${user.user_phone}</td>
-            <td class="p-3 uppercase">${user.user_role}</td>
-
-            <td class="p-3">
-              <span class="bg-green-400 text-gray-50 rounded-md px-2"
-                >ACTIVE</span
-              >
-            </td>
-            <td class="p-3">
-              <a href="#" class="text-gray-500 hover:text-gray-100 mr-2">
-                <i
-                  class="material-icons-outlined text-base"
-                  onclick="getUserView(event)"
-                  data-id="${user.id}"
-                  >visibility</i
-                >
-              </a>
-              <a href="#" class="text-yellow-400 hover:text-gray-100 mx-2">
-                <i class="material-icons-outlined text-base">edit</i>
-              </a>
-              <a
-                onclick="return confirm('Are you Sure?')"
-                href="/delete/user/${user.id}"
-                class="text-red-400 hover:text-gray-100 ml-2"
-              >
-                <i class="material-icons-round text-base">delete_outline</i>
-              </a>
-            </td>
-          </tr>
-            
-            `
-          )
-          .join("");
-      });
-  };
-  // End user search event
-  // show users onclick user button
-  const getUsers = (event) => {
-    const user = event.target.value;
-    console.log({ user });
-
-    fetch(`${baseUrl}/users-list?user=${user}`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log({ data });
-        userList.innerHTML = data
-          .map(
-            (user, idx) =>
-              `
-              <tr class="bg-blue-200 lg:text-black">
-            <td class="p-3 font-medium capitalize">${user.user_name}</td>
-            <td class="p-3">${user.user_mail}</td>
-            <td class="p-3">${user.user_phone}</td>
-            <td class="p-3 uppercase">${user.user_role}</td>
-
-            <td class="p-3">
-              <span class="bg-green-400 text-gray-50 rounded-md px-2"
-                >ACTIVE</span
-              >
-            </td>
-            <td class="p-3">
-              <a href="#" class="text-gray-500 hover:text-gray-100 mr-2">
-                <i
-                  class="material-icons-outlined text-base"
-                  onclick="getUserView(event)"
-                  data-id="${user.id}"
-                  >visibility</i
-                >
-              </a>
-              <a href="#" class="text-yellow-400 hover:text-gray-100 mx-2">
-                <i class="material-icons-outlined text-base">edit</i>
-              </a>
-              <a
-                onclick="return confirm('Are you Sure?')"
-                href="/delete/user/${user.id}"
-                class="text-red-400 hover:text-gray-100 ml-2"
-              >
-                <i class="material-icons-round text-base">delete_outline</i>
-              </a>
-            </td>
-          </tr>
-            
-            `
-          )
-          .join("");
-      });
-  };
-
-  // show admin onclick admin button
-  const getAdmin = (event) => {
-    const admin = event.target.value;
-    console.log({ admin });
-
-    fetch(`${baseUrl}/admin-list?admin=${admin}`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log({ data });
-        userList.innerHTML = data
-          .map(
-            (user, idx) =>
-              `
-              <tr class="bg-blue-200 lg:text-black">
-            <td class="p-3 font-medium capitalize">${user.user_name}</td>
-            <td class="p-3">${user.user_mail}</td>
-            <td class="p-3">${user.user_phone}</td>
-            <td class="p-3 uppercase">${user.user_role}</td>
-
-            <td class="p-3">
-              <span class="bg-green-400 text-gray-50 rounded-md px-2"
-                >ACTIVE</span
-              >
-            </td>
-            <td class="p-3">
-              <a href="#" class="text-gray-500 hover:text-gray-100 mr-2">
-                <i
-                  class="material-icons-outlined text-base"
-                  onclick="getUserView(event)"
-                  data-id="${user.id}"
-                  >visibility</i
-                >
-              </a>
-              <a href="#" class="text-yellow-400 hover:text-gray-100 mx-2">
-                <i class="material-icons-outlined text-base">edit</i>
-              </a>
-              <a
-                onclick="return confirm('Are you Sure?')"
-                href="/delete/user/${user.id}"
-                class="text-red-400 hover:text-gray-100 ml-2"
-              >
-                <i class="material-icons-round text-base">delete_outline</i>
-              </a>
-            </td>
-          </tr>
-            
-            `
-          )
-          .join("");
-      });
-  };
-</script>
-
+<script src="/js/allUsers.js"></script>
 <%- include("../partials/footer"); -%>

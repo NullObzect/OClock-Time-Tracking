@@ -12,6 +12,9 @@ router.get('/users-list', checkLogin, requireRole(['admin']), UserController.use
 router.get('/admin-list', checkLogin, requireRole(['admin']), UserController.adminList)
 router.get('/delete/user/:id', decorateHtmlResponse('Delete'), checkLogin, requireRole(['admin']), UserController.deleteUser)
 
+// users sorting  ASC & DCS order
+router.get('/async/users/list', checkLogin, requireRole(['admin']), UserController.userSortByAscendingOrder)
+router.get('/desc/users/list', checkLogin, requireRole(['admin']), UserController.userSortByDescendingOrder)
 // Router for user view
 router.get('/user/view', UserController.userView)
 // Router for search user
