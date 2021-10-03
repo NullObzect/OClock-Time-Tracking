@@ -142,6 +142,14 @@ const UserController = {
     }
   },
 
+  userProfile: async (req, res) => {
+    try {
+      res.render('pages/userProfile')
+    } catch (err) {
+      console.log('====>Error form userProfile Controller', err);
+    }
+  },
+
 };
 
 module.exports = UserController;

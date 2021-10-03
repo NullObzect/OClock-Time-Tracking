@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Profile</title>
+    <link rel="stylesheet" href="http://localhost:8077/css/styles.css" />
+  </head>
+  <body>
+    <div class="container mx-auto md:mt-6">
+      <div class="grid sm:grid-cols-12">
+        <div class="sm:col-span-3 xs:col-span-12 justify-center items-center">
+          <ul>
+            <li class="p-3 font-bold text-uppercase">Public profile</li>
+            <li class="p-3 font-bold text-uppercase">Account settings</li>
+            <li class="p-3 font-bold text-uppercase">Claim</li>
+            <li class="p-3 font-bold text-uppercase">Notifications</li>
+          </ul>
+        </div>
+        <div class="sm:col-span-9 xs:col-span-12">
+          <div class="">
+            <div class="px-4 py-2 rounded-md relative">
+              <img
+                class=""
+                src="https://img.icons8.com/color/96/000000/circled-user-male-skin-type-7--v2.png"
+              />
+              <label class="absolute top-12 left-40">
+                <input class="hidden" type="file" />
+                <small
+                  class="
+                    text-sm
+                    font-medium
+                    cursor-pointer
+                    rounded-full
+                    px-4
+                    py-2
+                    bg-gray-200
+                  "
+                >
+                  Change
+                </small>
+              </label>
+              <div>
+                <h5 class="text-sm mb-1">Sync a profile picture with</h5>
+
+                <button
+                  class="
+                    px-3
+                    py-1
+                    rounded-full
+                    text-sm
+                    font-medium
+                    text-white
+                    bg-blue-400
+                  "
+                >
+                  facebook
+                </button>
+                <button
+                  class="
+                    px-3
+                    py-1
+                    rounded-full
+                    text-sm
+                    font-medium
+                    text-white
+                    bg-blue-400
+                  "
+                >
+                  google
+                </button>
+                <button
+                  class="
+                    px-3
+                    py-1
+                    rounded-full
+                    text-sm
+                    font-medium
+                    text-white
+                    bg-blue-400
+                  "
+                >
+                  twitter
+                </button>
+              </div>
+
+              <div class="mt-3">
+                <h5 class="text-sm mb-1">Connect with</h5>
+
+                <button
+                  class="
+                    px-3
+                    py-1
+                    rounded-full
+                    text-sm
+                    font-medium
+                    text-white
+                    bg-blue-400
+                  "
+                >
+                  facebook
+                </button>
+                <button
+                  class="
+                    px-3
+                    py-1
+                    rounded-full
+                    text-sm
+                    font-medium
+                    text-white
+                    bg-blue-400
+                  "
+                >
+                  google
+                </button>
+                <button
+                  class="
+                    px-3
+                    py-1
+                    rounded-full
+                    text-sm
+                    font-medium
+                    text-white
+                    bg-blue-400
+                  "
+                >
+                  twitter
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- Markup for Edit user data-->
+
+          <div
+            class="
+              mt-3
+              w-full
+              max-w-2xl
+              px-6
+              py-4
+              bg-white
+              rounded-md
+              shadow-md
+              dark:bg-gray-800
+            "
+          >
+            <div class="mt-2">
+              <div class="items-center -mx-2 md:flex">
+                <div class="w-full mx-2">
+                  <label
+                    class="
+                      block
+                      mb-2
+                      text-sm
+                      font-medium
+                      text-gray-600
+                      dark:text-gray-200
+                    "
+                    >Name</label
+                  >
+
+                  <input
+                    class="
+                      block
+                      w-full
+                      px-4
+                      py-2
+                      text-gray-700
+                      bg-white
+                      border border-gray-300
+                      rounded-md
+                      dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600
+                      focus:border-blue-500
+                      dark:focus:border-blue-500
+                      focus:outline-none focus:ring
+                    "
+                    type="text"
+                    value="Gazi Rahad"
+                  />
+                </div>
+
+                <div class="w-full mx-2 mt-4 md:mt-0">
+                  <label
+                    class="
+                      block
+                      mb-2
+                      text-sm
+                      font-medium
+                      text-gray-600
+                      dark:text-gray-200
+                    "
+                    >Phone Number</label
+                  >
+
+                  <input
+                    class="
+                      block
+                      w-full
+                      px-4
+                      py-2
+                      text-gray-700
+                      bg-white
+                      border border-gray-300
+                      rounded-md
+                      dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600
+                      focus:border-blue-500
+                      dark:focus:border-blue-500
+                      focus:outline-none focus:ring
+                    "
+                    type="number"
+                    value="01648349009"
+                  />
+                </div>
+              </div>
+
+              <div class="w-full mt-4">
+                <label
+                  class="
+                    block
+                    mb-2
+                    text-sm
+                    font-medium
+                    text-gray-600
+                    dark:text-gray-200
+                  "
+                  >Short bio</label
+                >
+
+                <textarea
+                  class="
+                    block
+                    w-full
+                    h-40
+                    px-4
+                    py-2
+                    text-gray-700
+                    bg-white
+                    border border-gray-300
+                    rounded-md
+                    dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600
+                    focus:border-blue-500
+                    dark:focus:border-blue-500
+                    focus:outline-none focus:ring
+                  "
+                  placeholder="Describe yourself"
+                ></textarea>
+              </div>
+
+              <div class="flex justify-center gap-4 mt-5">
+                <button
+                  class="
+                    px-4
+                    py-2
+                    text-white
+                    transition-colors
+                    duration-200
+                    transform
+                    bg-gray-400
+                    rounded-md
+                    hover:bg-gray-600
+                    focus:outline-none focus:bg-gray-600
+                  "
+                >
+                  Reset
+                </button>
+                <button
+                  class="
+                    px-4
+                    py-2
+                    text-white
+                    transition-colors
+                    duration-200
+                    transform
+                    bg-gray-400
+                    rounded-md
+                    hover:bg-gray-600
+                    focus:outline-none focus:bg-gray-600
+                  "
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

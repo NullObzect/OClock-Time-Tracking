@@ -1,9 +1,10 @@
 const router = require('express').Router();
+const { Router } = require('express');
 const UserController = require('../controllers/UserController');
 const decorateHtmlResponse = require('../middleware/common/decorateHtmlResponse');
 const { checkLogin, requireRole } = require('../middleware/common/AuthMiddleware')
 const { userValidator } = require('../middleware/user/userValidator');
-const avatarUpload = require('../middleware/user/avatarUpload')
+const avatarUpload = require('../middleware/user/avatarUpload');
 
 router.get('/add-user', decorateHtmlResponse('Add User'), checkLogin, requireRole(['admin']), UserController.getUser);
 router.post('/add-user', decorateHtmlResponse('Add User'), avatarUpload, userValidator, UserController.addUser);
@@ -19,5 +20,7 @@ router.get('/desc/users/list', checkLogin, requireRole(['admin']), UserControlle
 router.get('/user/view', UserController.userView)
 // Router for search user
 router.get('/search/user', checkLogin, requireRole(['admin']), UserController.searchUser)
+// Router for user profile page
+router.get('/user/profile', UserController.userProfile)
 
 module.exports = router;
