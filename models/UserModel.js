@@ -104,5 +104,22 @@ const UserModel = {
       return err;
     }
   },
+  findUserByEmail: async (email) => {
+    try {
+      const findUserQuery = 'SELECT * FROM `users` WHERE user_mail = ?'
+      const value = [email]
+      const [rows] = await dbConnect.promise().execute(findUserQuery, value)
+      return rows;
+    } catch (err) {
+      console.log(err)
+      return err;
+    }
+  },
+  UpdatePassword: async (email, password) => {
+    const UpdatePasswordQuery = 'UPDATE `users` SET user_pass = ? WHERE user_mail = ?'
+    const value = [password, email]
+    const [row] = await dbConnect.promise().execute(UpdatePasswordQuery, value)
+    return row
+  },
 }
 module.exports = UserModel;

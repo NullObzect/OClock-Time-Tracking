@@ -1,6 +1,8 @@
 const express = require('express');
 const cookieParser = require('cookie-parser')
 const env = require('dotenv')
+const session = require('express-session')
+const flash = require('connect-flash')
 const router = require('./routers/routes');
 const { notFoundHandler, errorHandler } = require('./middleware/common/errorHandler');
 
@@ -13,7 +15,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // cookie parser
 app.use(cookieParser(process.env.COOKIE_SECRET))
-
+app.use(session({
+  secret: process.env.COOKIE_SECRET,
+  resave: false,
+  saveUninitialized: false,
+}))
+app.use(flash())
 app.use(router);
 
 // 404 not found
