@@ -1,7 +1,9 @@
 /* eslint-disable consistent-return */
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken')
 const { validationResult } = require('express-validator')
 const UserModel = require('../models/UserModel');
+const sendMail = require('../utilities/sendMail')
 
 const UserController = {
   // render page
@@ -52,6 +54,82 @@ const UserController = {
     } catch (err) {
       return err;
     }
+  },
+  // Find User
+  getFindUser: async (req, res) => {
+    // req.flash('key', 'hello')
+    // const message = req.flash()
+    // console.log(message)
+    res.render('pages/find-user')
+  },
+  postFindUser: async (req, res) => {
+    const { email } = req.body
+    const [user] = await UserModel.findUserByEmail(email)
+    if (!user) {
+      res.send('user not find')
+    }
+    res.render('pages/forgot-password', { email })
+  },
+  recoverUser: async (req, res) => {
+    const userMail = req.body.email
+    try {
+      const [user] = await UserModel.findUserByEmail(userMail)
+      if (user) {
+        const { id } = user
+        const email = user.user_mail
+
+        const token = jwt.sign({
+          id,
+          email,
+        }, process.env.JWT_SECRET, { expiresIn: '15m' })
+        const link = `${process.env.BASE_URL}/recover/${token}`
+        const subject = 'Oclock reset password ,Link expire in 15 minutes'
+        const textMessage = 'Oclock reset password ,'
+        const htmlMessage = `<h1>Oclock reset password</h1>
+        <div>
+          <h4> Link expire in 15 minutes</h4>
+          <h5>${link}</h5>
+          <a href="${link}"> Click Here</a>
+        </div>`
+        await sendMail(email, subject, textMessage, htmlMessage)
+        res.send(`mail send in ${email} <a href='/'>Go back</a>`)
+      } else {
+        res.send('user not find')
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  },
+  recoverUserVerify: async (req, res) => {
+    const { token } = req.params
+    try {
+      const isVerified = jwt.verify(token, process.env.COOKIE_SECRET)
+      if (isVerified) {
+        const { email } = isVerified
+        console.log('usermail', email)
+        const [user] = await UserModel.findUserByEmail(email)
+        if (user) {
+          res.render('pages/new-password', { email })
+        }
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  },
+  userUpdatePassword: async (req, res) => {
+    const { email, password } = req.body
+    try {
+      const hashPass = await bcrypt.hash(password, 10);
+      UserModel.UpdatePassword(email, hashPass)
+      res.redirect('/')
+    } catch (err) {
+      console.log(err)
+    }
+  },
+
+  // Reset password
+  getResetPassword: async (req, res) => {
+    res.render('pages/reset-password')
   },
   // show all users list
   allUsersList: async (req, res) => {

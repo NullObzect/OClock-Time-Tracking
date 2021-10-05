@@ -23,4 +23,16 @@ router.get('/search/user', checkLogin, requireRole(['admin']), UserController.se
 // Router for user profile page
 router.get('/user/profile', UserController.userProfile)
 
+router.get('/find-user', decorateHtmlResponse('Find-user'), UserController.getFindUser)
+router.post('/find-user', decorateHtmlResponse('Find-user'), UserController.postFindUser)
+router.post('/recover', decorateHtmlResponse('Recover'), UserController.recoverUser)
+router.get('/recover/:token', decorateHtmlResponse('Recover'), UserController.recoverUserVerify)
+
+// update password
+router.post('/update-password', UserController.userUpdatePassword)
+
+// Forget user
+// router.get('/forgot-password', UserController.getUserForgotPassword)
+// router.post('/forgot-password', UserController.userForgotPassword)
+
 module.exports = router;
