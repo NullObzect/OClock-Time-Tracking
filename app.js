@@ -2,6 +2,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser')
 const env = require('dotenv')
 const session = require('express-session')
+const passport = require('passport')
 const flash = require('connect-flash')
 const router = require('./routers/routes');
 const { notFoundHandler, errorHandler } = require('./middleware/common/errorHandler');
@@ -19,7 +20,10 @@ app.use(session({
   secret: process.env.COOKIE_SECRET,
   resave: false,
   saveUninitialized: false,
+  cookie: { secure: true },
 }))
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(flash())
 app.use(router);
 
