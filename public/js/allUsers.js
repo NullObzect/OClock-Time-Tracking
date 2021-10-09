@@ -1,6 +1,5 @@
 // event for  user profile
 // base URL
-const baseUrl = 'http://localhost:8078';
 const userCard = document.querySelector('#user-card');
 const userDetails = document.querySelector('#user-details');
 const userCancle = document.querySelector('#user-x');

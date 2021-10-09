@@ -5,6 +5,8 @@ const createError = require('http-errors')
 dotenv.config()
 
 const checkLogin = (req, res, next) => {
+  console.log('signed Cokkie', req.signedCookies)
+  console.log('signed Cokkie', req.cookie)
   const cookies = Object.keys(req.signedCookies).length > 0 ? req.signedCookies : null
   if (cookies) {
     try {

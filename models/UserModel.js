@@ -115,6 +115,12 @@ const UserModel = {
       return err;
     }
   },
+  findId: async (id) => {
+    const insertSQL = 'SELECT * FROM `users` WHERE id = ?'
+    const value = [id]
+    const [row] = await dbConnect.promise().execute(insertSQL, value)
+    return row
+  },
   UpdatePassword: async (email, password) => {
     const UpdatePasswordQuery = 'UPDATE `users` SET user_pass = ? WHERE user_mail = ?'
     const value = [password, email]

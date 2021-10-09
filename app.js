@@ -2,8 +2,8 @@ const express = require('express');
 const cookieParser = require('cookie-parser')
 const env = require('dotenv')
 const session = require('express-session')
-const flash = require('connect-flash')
 const passport = require('passport')
+const flash = require('connect-flash')
 const router = require('./routers/routes');
 // for passport facebook congif/passportFB
 require('./config/passportFB')(passport)
@@ -23,17 +23,10 @@ app.use(session({
   secret: process.env.COOKIE_SECRET,
   resave: false,
   saveUninitialized: false,
-  cookie: {
-    secure: true,
-
-  },
+  cookie: { secure: true },
 }))
-
-// for passport facebook
-app.use(session({ resave: false, saveUninitialized: true, secret: 'thisissecretkey' }))
 app.use(passport.initialize());
 app.use(passport.session());
-// End passport facebook
 app.use(flash())
 app.use(router);
 
