@@ -21,7 +21,7 @@ router.get('/user/view', UserController.userView)
 // Router for search user
 router.get('/search/user', checkLogin, requireRole(['admin']), UserController.searchUser)
 // Router for user profile page
-router.get('/user/profile', UserController.userProfile)
+router.get('/user/profile', decorateHtmlResponse('User Profile'), checkLogin, UserController.userProfile)
 
 router.get('/find-user', decorateHtmlResponse('Find-user'), UserController.getFindUser)
 router.post('/find-user', decorateHtmlResponse('Find-user'), UserController.postFindUser)

@@ -121,5 +121,12 @@ const UserModel = {
     const [row] = await dbConnect.promise().execute(UpdatePasswordQuery, value)
     return row
   },
+
+  findId: async (id) => {
+    const insertSQL = 'SELECT * FROM `users` WHERE id = ?'
+    const value = [id]
+    const [row] = await dbConnect.promise().execute(insertSQL, value)
+    return row
+  },
 }
 module.exports = UserModel;

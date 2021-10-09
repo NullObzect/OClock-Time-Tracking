@@ -1,51 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script
-  src="https://kit.fontawesome.com/64d58efce2.js"
-  crossorigin="anonymous"
-  ></script>
-  <link rel="stylesheet" href="css/login.css">
-  <link rel="stylesheet" href="css/vendors/toastify.css">
-  <script defer src="js/loginValidation.js"></script>
-<script src="js/vendors/toastify.js"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://kit.fontawesome.com/64d58efce2.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="css/login.css" />
+    <link rel="stylesheet" href="css/vendors/toastify.css" />
+    <script defer src="js/loginValidation.js"></script>
+    <script src="js/vendors/toastify.js"></script>
 
-
-  <title><%= title %> </title>
-</head>
-<body>
-  <div class="container">
-     <div class="forms-container">
-      <div class="signin">
-        <form action="/" class="singin-form"  method="POST">
-          <h2 class="title">Sign in</h2>
-          <div class="input-field">
-            <i class="fas fa-user error" ></i>
-            <input required type="text" id="userName" name="userMail" placeholder="Email or Username" value="<%= data.username %>">          
+    <title><%= title %></title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="forms-container">
+        <div class="signin">
+          <form action="/" class="singin-form" method="POST">
+            <h2 class="title">Sign in</h2>
+            <div class="input-field">
+              <i class="fas fa-user error"></i>
+              <input
+                required
+                type="text"
+                id="userName"
+                name="userMail"
+                placeholder="Email or Username"
+                value="<%= data.username %>"
+              />
             </div>
             <div class="input-field">
-              <i class="fas fa-lock" ></i>
-              <input required type="password" id="userPass" name="userPass" placeholder="Password" >
+              <i class="fas fa-lock"></i>
+              <input
+                required
+                type="password"
+                id="userPass"
+                name="userPass"
+                placeholder="Password"
+              />
             </div>
             <% if(errors.userMail){%>
-            <p class="error-msg"><%= errors.userMail.msg  %></p>
-            <% }else if(errors.userPass){ %>    
-              <p class="error-msg"><%= errors.userPass.msg  %></p>
-              <% } %> 
-              <% if(errors.common) { %>
-                <p class="error-msg"> <%= errors.common.msg  %>  </p>
-              <% } %>  
-              <p id="error-msg"  class="error-msg"></p>
-            <input type="submit" value="Login" class="btn solid">
+            <p class="error-msg"><%= errors.userMail.msg %></p>
+            <% }else if(errors.userPass){ %>
+            <p class="error-msg"><%= errors.userPass.msg %></p>
+            <% } %> <% if(errors.common) { %>
+            <p class="error-msg"><%= errors.common.msg %></p>
+            <% } %>
+            <p id="error-msg" class="error-msg"></p>
+            <input type="submit" value="Login" class="btn solid" />
             <p>
-              <a href="/find-user" style="text-decoration: none; color: black;" onMouseOut="this.style.color='black'"  onMouseOver="this.style.color='blue'" >Forgotten Password</a>
+              <a
+                href="/find-user"
+                style="text-decoration: none; color: black"
+                onMouseOut="this.style.color='black'"
+                onMouseOver="this.style.color='blue'"
+                >Forgotten Password</a
+              >
             </p>
             <p class="social-text">Or Sign in with social platforms</p>
             <div class="social-media">
-              <a href="#" class="social-icon">
+              <a href="/auth/facebook" class="social-icon">
                 <i class="fab fa-facebook-f"></i>
               </a>
               <a href="#" class="social-icon">
@@ -57,61 +74,62 @@
               <a href="#" class="social-icon">
                 <i class="fab fa-linkedin-in"></i>
               </a>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <div class="panels-container">
-      <div class="panel left-panel">
-        <div class="content">
-          <h2>Welcome to</h2>
-          <h1>OClock-Time Tracking</h1>
-          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Odit cum illo </p>
+            </div>
+          </form>
         </div>
-        <img src="../../img/time.svg" class="image" alt="">
+      </div>
+
+      <div class="panels-container">
+        <div class="panel left-panel">
+          <div class="content">
+            <h2>Welcome to</h2>
+            <h1>OClock-Time Tracking</h1>
+            <p>
+              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Odit cum
+              illo
+            </p>
+          </div>
+          <img src="../../img/time.svg" class="image" alt="" />
+        </div>
       </div>
     </div>
-  </div>
 
-
-
-<script >
-  const input = document.querySelectorAll('.input-field input')
-  for(var x=0;x<input.length;x++){
-    input[x].addEventListener('keyup',function (e){
-        if(e.keyCode ===9){
-          e.target.style.outline ='2px solid black'
-        }
-    })
-    input[x].addEventListener('keydown',function (e){
-        if(e.keyCode ===9){
-          e.target.style.outline =''
-        }
-    })
-  }
-  function mOverImg(e) {                
-    e.target.querySelector("img").style.ou="1";                
-}
-  let auth =  '<%= auth %>';
-  let signIn =  '<%= signIn %>';
-  const authFailToast = Toastify({
-            text : "authentication failed!",
-            duration: 3000
-          })
-  const successToast = Toastify({
-            text : "Signin successfully!",
-            duration: 2000
-          })
-  if(auth==="true"){
-    authFailToast.showToast()
-  }
-  if(signIn==="true"){
-    successToast.showToast()
-   setTimeout(()=>{
-    location.href = "/dashboard"
-   },2000)
-  }
-</script>
-</body>
+    <script>
+      const input = document.querySelectorAll(".input-field input");
+      for (var x = 0; x < input.length; x++) {
+        input[x].addEventListener("keyup", function (e) {
+          if (e.keyCode === 9) {
+            e.target.style.outline = "2px solid black";
+          }
+        });
+        input[x].addEventListener("keydown", function (e) {
+          if (e.keyCode === 9) {
+            e.target.style.outline = "";
+          }
+        });
+      }
+      function mOverImg(e) {
+        e.target.querySelector("img").style.ou = "1";
+      }
+      let auth = "<%= auth %>";
+      let signIn = "<%= signIn %>";
+      const authFailToast = Toastify({
+        text: "authentication failed!",
+        duration: 3000,
+      });
+      const successToast = Toastify({
+        text: "Signin successfully!",
+        duration: 2000,
+      });
+      if (auth === "true") {
+        authFailToast.showToast();
+      }
+      if (signIn === "true") {
+        successToast.showToast();
+        setTimeout(() => {
+          location.href = "/dashboard";
+        }, 2000);
+      }
+    </script>
+  </body>
 </html>

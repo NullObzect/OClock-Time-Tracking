@@ -41,16 +41,18 @@ const checkLogin = (req, res, next) => {
   }
 }
 
-const checkCurrentLogin = (req, res, next) => {
-  const token = req.cookies.jwt;
-  if (token) {
-    res.redirect('/');
-  }
-  next()
-}
+// const checkCurrentLogin = (req, res, next) => {
+//   const token = req.cookies.jwt;
+//   if (token) {
+//     res.redirect('/');
+//   }
+//   next()
+// }
 
 const redirectLoggedIn = (req, res, next) => {
   const cookie = Object.keys(req.signedCookies).length > 0 ? req.signedCookies : null
+  console.log({ cookie });
+
   if (!cookie) {
     next()
   } else {
@@ -80,5 +82,5 @@ function requireRole(role) {
 }
 
 module.exports = {
-  checkLogin, checkCurrentLogin, redirectLoggedIn, requireRole,
+  checkLogin, redirectLoggedIn, requireRole,
 }
