@@ -3,7 +3,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 const { validationResult } = require('express-validator')
 const UserModel = require('../models/UserModel');
-const sendMail = require('../utilities/sendMail')
+const sendMail = require('../utilities/sendMail');
+const ProfileModel = require('../models/ProfileModel');
 
 const UserController = {
   // render page
@@ -222,7 +223,17 @@ const UserController = {
 
   userProfile: async (req, res) => {
     try {
-      res.render('pages/userProfile')
+      const token = req.signedCookies.Oclock;
+      console.log({ token });
+      const verifyPlatformUser = jwt.verify(token, process.env.JWT_SECRET)
+      const { userObject } = verifyPlatformUser
+      const { userMailFormDB } = userObject
+      console.log({ userMailFormDB });
+
+      const [platformUser] = await ProfileModel.userConnectionDetailsUniqueInfo(userMailFormDB)
+      console.log({ platformUser });
+
+      res.render('pages/userProfile', { platformUser })
     } catch (err) {
       console.log('====>Error form userProfile Controller', err);
     }
