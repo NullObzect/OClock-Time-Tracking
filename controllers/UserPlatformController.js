@@ -4,7 +4,8 @@
 require('dotenv').config()
 const jwt = require('jsonwebtoken')
 const UserPlatformModel = require('../models/userPlatformModels')
-const UserModel = require('../models/UserModel')
+const UserModel = require('../models/UserModel');
+const userPlatformModel = require('../models/userPlatformModels');
 
 const maxAge = 5 * 24 * 60 * 60 * 1000;
 const UserPlatformController = {
@@ -30,9 +31,9 @@ const UserPlatformController = {
       if (isVerify) {
         const { user_id } = isVerify
         const [user] = await UserModel.findId(user_id)
+        await userPlatformModel.googleUserUpdate(userName, userPic, userMail)
         if (user) {
           const userMailFormDB = user.user_mail;
-
           const userName = user.user_name;
           const userRole = user.user_role;
           const userObject = {
@@ -40,7 +41,7 @@ const UserPlatformController = {
           }
           const token = jwt.sign({
             userObject,
-          }, process.env.JWT_SECRET, { expiresIn: '4h' })
+          }, process.env.JWT_SECRET, { expiresIn: maxAge })
           res.cookie(process.env.COOKIE_NAME, token, { maxAge, httpOnly: true, signed: true });
           res.redirect('/dashboard')
         }
@@ -52,10 +53,15 @@ const UserPlatformController = {
     }
   },
   googleUserDelete: async (req, res) => {
-    const { user_mail } = req.user
-    const [user] = await UserModel.findUser(user_mail)
-    await UserPlatformModel.googlePlatformRemove(user.user_id)
-    res.redirect('/profile')
+    const token = req.signedCookies.Oclock;
+    const verify = jwt.verify(token, process.env.JWT_SECRET)
+    const { userObject } = verify
+    console.log(userObject)
+    const email = userObject.userMailFormDB
+    console.log(email)
+    const [user] = await UserModel.findUserByEmail(email)
+    await UserPlatformModel.googlePlatformRemove(user.id)
+    res.redirect('/user/profile')
   },
 
 }

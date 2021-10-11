@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const jwt = require('jsonwebtoken');
 
 const maxAge = 5 * 24 * 60 * 60 * 1000;
