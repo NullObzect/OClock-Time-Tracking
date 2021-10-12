@@ -6,7 +6,7 @@ const passport = require('passport')
 const flash = require('connect-flash')
 const router = require('./routers/routes');
 // for passport facebook congif/passportFB
-require('./config/passportFB')(passport)
+require('./utilities/passportFB')(passport)
 //
 const { notFoundHandler, errorHandler } = require('./middleware/common/errorHandler');
 

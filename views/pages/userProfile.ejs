@@ -10,6 +10,8 @@
   <body>
     <div class="container mx-auto md:mt-6">
       <div class="grid sm:grid-cols-12">
+
+        <!-- User side navbar -->
         <div class="sm:col-span-3 xs:col-span-12 justify-center items-center">
           <div class="justify-center items-center mb-3">
             <img
@@ -17,7 +19,7 @@
               src="https://img.icons8.com/color/96/000000/circled-user-male-skin-type-7--v2.png"
             />
             <div>
-              <% console.log('user name', loggedInUser.userName) %>
+              <% console.log('user name', loggedInUser.userMailFormDB) %>
               <h4 class="text-xl font-medium"><%= loggedInUser.userName %></h4>
               <small class="font-medium"
                 ><%= loggedInUser.userMailFormDB %>
@@ -25,9 +27,13 @@
               <button class="px-3 py-0 text-sm bg-green-300 rounded-full">
                 <small class="font-medium text-white">verified</small>
               </button>
+              <button class="px-3 py-0 text-sm bg-yellow-300 rounded-full">
+                <small class="font-medium text-white">Unverfied</small>
+              </button>
             </div>
           </div>
           <ul>
+            <a href="/"><li class="p-3 font-bold text-uppercase">Home</li> </a>
             <li class="p-3 font-bold text-uppercase">Public profile</li>
             <li class="p-3 font-bold text-uppercase">Account settings</li>
             <li class="p-3 font-bold text-uppercase">Claim</li>
@@ -104,6 +110,8 @@
               <div class="mt-3">
                 <h5 class="text-sm mb-1">Connect with</h5>
 
+                <% if(!platformUser) {%>
+
                 <a href="/auth/facebook">
                   <button
                     title="Connect"
@@ -115,26 +123,83 @@
                       font-medium
                       text-white
                       bg-blue-600
-                      hover:bg-red-500
                     "
                   >
                     facebook
                   </button>
                 </a>
+                <% } else{ %>
+
                 <button
                   title="Remove"
                   class="
+                    btn-hover
                     px-3
                     py-1
                     rounded-full
                     text-sm
                     font-medium
                     text-white
-                    bg-red-400
+                    bg-blue-600
                   "
                 >
-                  Gazi
+                  <%= platformUser.user_name %>
                 </button>
+                <% } %> <% if(!platformUser) {%>
+
+                <a href="/auth/google">
+                  <button
+                    title="Connect"
+                    class="
+                      px-3
+                      py-1
+                      rounded-full
+                      text-sm
+                      font-medium
+                      text-white
+                      bg-blue-600
+                    "
+                  >
+                    google
+                  </button>
+                </a>
+                <% } else if(platformUser.platform === 'google') { %>
+
+                <button
+                  title="Remove"
+                  class="
+                    btn-hover
+                    px-3
+                    py-1
+                    rounded-full
+                    text-sm
+                    font-medium
+                    text-white
+                    bg-red-600
+                  "
+                >
+                  <%= platformUser.user_name %>
+                </button>
+                <% } else{%>
+
+                <a href="/auth/google">
+                  <button
+                    title="Connect"
+                    class="
+                      px-3
+                      py-1
+                      rounded-full
+                      text-sm
+                      font-medium
+                      text-white
+                      bg-red-400
+                    "
+                  >
+                    google
+                  </button>
+                </a>
+                <% } %>
+
                 <button
                   class="
                     px-3
@@ -151,9 +216,7 @@
               </div>
             </div>
           </div>
-          <a href="/remove/facebook"
-            ><button class="bg-red-600 px-4 py-2">Remove Facebook</button>
-          </a>
+
           <!-- Markup for Edit user data-->
 
           <div
@@ -309,5 +372,18 @@
         </div>
       </div>
     </div>
+    <!-- <button class="btn-hover bg-blue-500 px-4">hover</button> -->
+    <script>
+      const hoverBtn = document.getElementsByClassName("btn-hover")[0];
+      const hoverBtnText = hoverBtn.textContent;
+
+      hoverBtn.addEventListener("mouseenter", () => {
+        //alert("ok");
+        hoverBtn.innerHTML = `<a href="/remove/facebook">Remove</a>`;
+      });
+      hoverBtn.addEventListener("mouseleave", () => {
+        hoverBtn.innerHTML = hoverBtnText;
+      });
+    </script>
   </body>
 </html>

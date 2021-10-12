@@ -50,14 +50,14 @@ const FbUserModels = {
   },
   //
   getFacebookUserUniqueInfoFromUserConnection: async (uniqueInfo) => {
-    const sql = 'SELECT user_id FROM users_connection_details WHERE unique_info = ?'
+    const sql = 'SELECT id, user_id FROM users_connection_details WHERE unique_info = ?'
     const value = [uniqueInfo]
     const [rows] = await dbConnect.promise().execute(sql, value)
     return rows;
   },
   // delete facebook user
   facebookPlatformRemove: async (id) => {
-    const sql = 'DELETE FROM `users_connection_details` WHERE platform = "facebook" AND user_id = ?'
+    const sql = 'DELETE FROM `users_connection_details` WHERE platform = "facebook" AND unique_info = ?'
     const value = [id]
     const [rows] = await dbConnect.promise().execute(sql, value)
     return rows

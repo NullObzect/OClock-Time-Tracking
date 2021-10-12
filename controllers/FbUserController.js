@@ -60,12 +60,13 @@ const FbUserController = {
             const userObject = {
               userName, userMailFormDB, userRole,
             }
+            console.log(userObject);
 
             const tokenTwo = jwt.sign({
               userObject,
-            }, process.env.JWT_SECRET, { expiresIn: '4h' })
+            }, process.env.JWT_SECRET, { expiresIn: maxAge })
             res.cookie(process.env.COOKIE_NAME, tokenTwo, { maxAge, httpOnly: true, signed: true });
-            res.redirect('/dashboard')
+            res.redirect('/user/profile')
           } else {
             res.redirect('/')
           }
@@ -84,13 +85,21 @@ const FbUserController = {
   },
   // remove facebook user
   facebookUserDelete: async (req, res) => {
-    const token = req.signedCookies.Oclock;
-    console.log({ token });
-    console.log('req.usr form fb delete ', req.user)
-    const { user_mail } = req.user;
-    const [user] = await FbUserModel.facebookUserUniqueId(user_mail)
-    await FbUserModel.facebookPlatformRemove(user.user_id)
-    res.redirect('/')
+    try {
+      const token = req.signedCookies.Oclock;
+      console.log({ token });
+      const verifyPlatformUser = jwt.verify(token, process.env.JWT_SECRET)
+      const { userObject } = verifyPlatformUser
+      const { userMailFormDB } = userObject
+      console.log({ userMailFormDB });
+
+      // const [user] = await FbUserModel.facebookUserUniqueId(user_mail)
+      await FbUserModel.facebookPlatformRemove(userMailFormDB)
+
+      res.redirect('/user/profile')
+    } catch (err) {
+      console.log('====>Error form FbUserController/ facebbookUserDelete', err);
+    }
   },
 
 }
