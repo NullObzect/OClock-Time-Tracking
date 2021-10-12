@@ -13,13 +13,13 @@ const FbUserController = {
       // res.redirect('/profile')
 
       const { id } = req.user
-      const userNname = req.user.displayName
-      let fbUserMail = req.user.emails[0].value
+      const userName = req.user.displayName
+      // let fbUserMail = req.user.emails[0].value
       // let fbUserMail = 'xyz@gmail.com';
       const picture = req.user.photos[0].value
-      if (fbUserMail === null) {
-        fbUserMail = id;
-      }
+      // if (fbUserMail === null) {
+      //   fbUserMail = id;
+      // }
 
       const token = req.signedCookies.Oclock;
       console.log({ token });
@@ -37,19 +37,21 @@ const FbUserController = {
           const [user] = await FbUserModel.facebookUserUniqueId(email)
           if (user) {
             await FbUserModel.addUserConnectionDetails(
-              user.id, platform, fbUserMail, userNname, picture,
+              user.id, platform, id, userName, picture,
             )
           }
           res.redirect('/')
         }
       } else if (!token) {
-        const [verify] = await FbUserModel.getFacebookUserUniqueInfoFromUserConnection(fbUserMail);
+        const [verify] = await FbUserModel.getFacebookUserUniqueInfoFromUserConnection(id);
         console.log('verify', verify);
 
         if (verify) {
           const { user_id } = verify;
 
           const [user] = await UserModel.findId(user_id)
+          await FbUserModel.facebookUserUpdate(userName, picture, id)
+
           console.log({ user });
 
           if (user) {
@@ -92,10 +94,8 @@ const FbUserController = {
       const { userObject } = verifyPlatformUser
       const { userMailFormDB } = userObject
       console.log({ userMailFormDB });
-
-      // const [user] = await FbUserModel.facebookUserUniqueId(user_mail)
-      await FbUserModel.facebookPlatformRemove(userMailFormDB)
-
+      const [user] = await UserModel.findUserByEmail(userMailFormDB)
+      await FbUserModel.facebookPlatformRemove(user.id)
       res.redirect('/user/profile')
     } catch (err) {
       console.log('====>Error form FbUserController/ facebbookUserDelete', err);
