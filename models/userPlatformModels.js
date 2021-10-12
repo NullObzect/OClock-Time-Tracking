@@ -2,7 +2,7 @@ const dbConnect = require('../config/database')
 
 const userPlatformModel = {
   googlePlatformSet: async (id, platform, uniqueId, name, avatar) => {
-    const userConnectionQuery = 'INSERT INTO users_connection_details ( user_id, platform, unique_info,user_username,user_avatar) VALUES (?,?,?,?,?)'
+    const userConnectionQuery = 'INSERT INTO users_connection_details ( user_id, platform, unique_info,user_name,user_avatar) VALUES (?,?,?,?,?)'
     const value = [id, platform, uniqueId, name, avatar]
     const [rows] = await dbConnect.promise().execute(userConnectionQuery, value)
     return rows
@@ -26,7 +26,7 @@ const userPlatformModel = {
     return rows
   },
   googleUserUpdate: async (userName, pic, id) => {
-    const updateUserSql = 'UPDATE `users_connection_details` SET user_username=?,user_avatar = ? WHERE   unique_info =? AND platform = "google"'
+    const updateUserSql = 'UPDATE `users_connection_details` SET user_name=?,user_avatar = ? WHERE   unique_info =? AND platform = "google"'
     const value = [userName, pic, id]
     const [rows] = await dbConnect.promise().execute(updateUserSql, value)
     return rows
