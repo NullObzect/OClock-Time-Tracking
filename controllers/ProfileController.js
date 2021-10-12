@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const ProfileModel = require('../models/ProfileModel')
+const UserModel = require('../models/UserModel');
 
 const ProfileController = {
 
@@ -11,8 +12,10 @@ const ProfileController = {
       const { userObject } = verifyPlatformUser
       const { userMailFormDB } = userObject
       console.log({ userMailFormDB });
+      const [findIdFormUser] = await UserModel.findUserByEmail(userMailFormDB)
+      const { id } = findIdFormUser
 
-      const [platformUser] = await ProfileModel.userConnectionDetailsUniqueInfo(userMailFormDB)
+      const [platformUser] = await ProfileModel.userConnectionDetailsUniqueInfo(id)
       console.log({ platformUser });
 
       res.render('pages/userProfile', { platformUser })
