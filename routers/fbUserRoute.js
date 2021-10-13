@@ -4,7 +4,7 @@ const FbUserController = require('../controllers/FbUserController');
 
 require('../utilities/passportFB')(passport)
 
-router.get('/profile', FbUserController.profile)
+router.get('facebook/profile', FbUserController.profile)
 // router.get('/profile', (req, res) => { res.send('This is profile page ') })
 router.get('/error', FbUserController.error)
 

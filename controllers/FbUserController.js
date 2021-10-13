@@ -68,7 +68,7 @@ const FbUserController = {
               userObject,
             }, process.env.JWT_SECRET, { expiresIn: maxAge })
             res.cookie(process.env.COOKIE_NAME, tokenTwo, { maxAge, httpOnly: true, signed: true });
-            res.redirect('/user/profile')
+            res.redirect('/profile')
           } else {
             res.redirect('/')
           }
@@ -96,7 +96,7 @@ const FbUserController = {
       console.log({ userMailFormDB });
       const [user] = await UserModel.findUserByEmail(userMailFormDB)
       await FbUserModel.facebookPlatformRemove(user.id)
-      res.redirect('/user/profile')
+      res.redirect('/profile')
     } catch (err) {
       console.log('====>Error form FbUserController/ facebbookUserDelete', err);
     }

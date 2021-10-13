@@ -18,13 +18,17 @@ const ProfileController = {
       const { userMailFormDB } = cookieVerifier(token)
       // console.log({ userMailFormDB });
       const [findIdFormUser] = await UserModel.findUserByEmail(userMailFormDB)
-      const { id, status, avatar } = findIdFormUser
+      const {
+        id, user_name, user_phone, status, avatar,
+      } = findIdFormUser
       // console.log({ status, avatar })
 
       const platformUser = await ProfileModel.userConnectionDetailsUniqueInfo(id)
       // console.log({ platformUser });
 
-      res.render('pages/userProfile', { platformUser, status, avatar })
+      res.render('pages/userProfile', {
+        platformUser, user_name, user_phone, status, avatar,
+      })
     } catch (err) {
       console.log('====>Error form userProfile Controller', err);
     }
@@ -46,7 +50,7 @@ const ProfileController = {
       if (updateProfile.errno) {
         res.send('error')
       } else {
-        res.redirect('/user/profile')
+        res.redirect('/profile')
       }
 
       console.log(user_avatar);

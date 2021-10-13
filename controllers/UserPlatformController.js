@@ -24,7 +24,7 @@ const UserPlatformController = {
         if (user) {
           await UserPlatformModel.googlePlatformSet(user.id, platform, userMail, userName, userPic)
         }
-        res.redirect('/user/profile')
+        res.redirect('/profile')
       }
     } else if (!token) {
       const [isVerify] = await UserPlatformModel.getGoogleUserByMail(userMail)
@@ -61,7 +61,7 @@ const UserPlatformController = {
     console.log(email)
     const [user] = await UserModel.findUserByEmail(email)
     await UserPlatformModel.googlePlatformRemove(user.id)
-    res.redirect('/user/profile')
+    res.redirect('/profile')
   },
 
 }

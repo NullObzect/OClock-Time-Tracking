@@ -62,7 +62,7 @@
               class="rounded-full h-20 w-20 object-cover"
               src="/uploads/avatars/<%= avatar %>"
             />
-            <% } else{%>
+            <% } else {%>
             <img
               class="rounded-full h-20 w-20 object-cover"
               src="<%= avatar %>"
@@ -78,12 +78,14 @@
               <% if(status === 2) {%>
               <button class="px-3 py-0 text-sm bg-yellow-300 rounded-full">
                 <a href="#"
-                  ><small class="font-medium text-white">Unverfied</small></a
+                  ><small class="font-medium text-white shadow-lg"
+                    >Unverfied</small
+                  ></a
                 >
               </button>
               <% } else{ %>
               <button class="px-3 py-0 text-sm bg-green-300 rounded-full">
-                <small class="font-medium text-white">verified</small>
+                <small class="font-medium text-white shadow-lg">verified</small>
               </button>
               <% } %>
             </div>
@@ -133,7 +135,7 @@
                 <img class="" src="<%# el.user_avatar %>" />
 
                 <%# }) %> -->
-                <h5 class="text-sm mb-1">Connect with</h5>
+                <h5 class="text-md font-medium mb-1">Connect with</h5>
 
                 <% if(platformUser.find(connection => connection.platform ===
                 'facebook')) {%>
@@ -272,7 +274,7 @@
                       focus:outline-none focus:ring
                     "
                     type="text"
-                    value="Gazi Rahad"
+                    value="<%= user_name %>"
                   />
                 </div>
 
@@ -305,7 +307,7 @@
                       focus:outline-none focus:ring
                     "
                     type="number"
-                    value="01648349009"
+                    value="<%= user_phone %>"
                   />
                 </div>
               </div>
@@ -471,7 +473,9 @@
                 <div class="flex justify-between mt-3 items-center">
                   <div>
                     <% let facebookProfile = platformUser.find(connection =>
-                    connection.platform === 'facebook') %>
+                    connection.platform === 'facebook') %> <%
+                    if(facebookProfile){ %>
+
                     <img
                       class="h-16 w-16 ml-2 mb-2 rounded-full"
                       src="<%= facebookProfile.user_avatar %>"
@@ -492,16 +496,36 @@
                         facebook
                       </button>
                     </a>
+                    <% } else{%>
+
+                    <a href="/auth/facebook">
+                      <button
+                        class="
+                          px-3
+                          py-1
+                          rounded-full
+                          text-sm
+                          font-medium
+                          text-white
+                          bg-blue-600
+                        "
+                      >
+                        Add Facebook
+                      </button>
+                    </a>
+
+                    <% } %>
                   </div>
 
                   <div>
                     <% let googleProfile = platformUser.find(connection =>
-                    connection.platform === 'google') %>
+                    connection.platform === 'google') %> <% if(googleProfile){
+                    %>
                     <img
                       class="h-16 w-16 mb-2 ml-1 rounded-full"
                       src="<%= googleProfile.user_avatar %>"
                     />
-                    <a href="/profile/picture/<%= googleProfile.id %>">
+                    <a href="/profile/picture/<%= googleProfile.id  %>">
                       <button
                         class="
                           px-3
@@ -516,6 +540,24 @@
                         google
                       </button>
                     </a>
+                    <% } else{ %>
+
+                    <a href="/auth/google">
+                      <button
+                        class="
+                          px-3
+                          py-1
+                          rounded-full
+                          text-sm
+                          font-medium
+                          text-white
+                          bg-red-400
+                        "
+                      >
+                        Add Google
+                      </button>
+                    </a>
+                    <% } %>
                   </div>
 
                   <div>
@@ -579,34 +621,6 @@
     </div>
     <!-- <button class="btn-hover bg-blue-500 px-4">hover</button> -->
     <script>
-      // for facebook
-      const hoverBtn = document.getElementsByClassName("btn-hover")[0];
-      const hoverBtnText = hoverBtn.textContent;
-      hoverBtn.addEventListener("mouseenter", () => {
-        //alert("ok");
-        hoverBtn.innerHTML = `<a href="/remove/facebook">Remove</a>`;
-      });
-      setTimeout(() => {
-        hoverBtn.addEventListener("mouseleave", () => {
-          hoverBtn.innerHTML = hoverBtnText;
-        });
-      }, 2000);
-
-      // for google
-      const googleHoverBtn =
-        document.getElementsByClassName("btn-hover-google")[0];
-      const googleHoverBtnText = googleHoverBtn.textContent;
-
-      googleHoverBtn.addEventListener("mouseenter", () => {
-        //alert("ok");
-        googleHoverBtn.innerHTML = `<a href="/remove/google">Remove</a>`;
-      });
-      setTimeout(() => {
-        googleHoverBtn.addEventListener("mouseleave", () => {
-          googleHoverBtn.innerHTML = googleHoverBtnText;
-        });
-      }, 2000);
-
       //modal
       const modal = document.querySelector(".main-modal");
       const closeButton = document.querySelectorAll(".modal-close");
@@ -636,6 +650,36 @@
           if (event.target == modal) modalClose();
         };
       }
+      // for facebook
+      const hoverBtn = document.getElementsByClassName("btn-hover")[0];
+      console.log(hoverBtn.textContent);
+      console.log(hoverBtn.textContent);
+      const hoverBtnText = hoverBtn.innerText;
+      hoverBtn.addEventListener("mouseenter", () => {
+        //alert("ok");
+        hoverBtn.innerHTML = `<a href="/remove/facebook">Remove</a>`;
+      });
+      setTimeout(() => {
+        hoverBtn.addEventListener("mouseleave", () => {
+          hoverBtn.innerHTML = hoverBtnText;
+        });
+      }, 2000);
+
+      // for google
+      const googleHoverBtn =
+        document.getElementsByClassName("btn-hover-google")[0];
+
+      const googleHoverBtnText = googleHoverBtn.innerText;
+
+      googleHoverBtn.addEventListener("mouseenter", () => {
+        //alert("ok");
+        googleHoverBtn.innerHTML = `<a href="/remove/google">Remove</a>`;
+      });
+      setTimeout(() => {
+        googleHoverBtn.addEventListener("mouseleave", () => {
+          googleHoverBtn.innerHTML = googleHoverBtnText;
+        });
+      }, 2000);
     </script>
   </body>
 </html>
