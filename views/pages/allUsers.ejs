@@ -319,15 +319,23 @@
           </tr>
         </thead>
         <tbody id="user-list">
-          <% users.map(user => { %>
+          <% users.map(user => { %> <% let profileUrl = user.avatar %>
+          <%console.log(profileUrl.search('https://') === -1) %>
           <tr class="bg-blue-200 lg:text-black">
             <td class="p-2">
               <div class="flex align-items-center">
+                <% if(profileUrl.search('https://') === -1) {%>
                 <img
                   class="rounded-full h-12 w-12 object-cover"
-                  src="uploads/avatars/<%= user.avatar || 'demo_profile.png' %>"
+                  src="uploads/avatars/<%= user.avatar%>"
                 />
 
+                <% } else{ %>
+                <img
+                  class="rounded-full h-12 w-12 object-cover"
+                  src="<%= user.avatar%>"
+                />
+                <% } %>
                 <div class="ml-3">
                   <div class=""><%= user.user_name %></div>
                   <div class="text-gray-500"><%= user.user_mail %></div>

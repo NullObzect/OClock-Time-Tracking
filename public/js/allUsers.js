@@ -1,8 +1,12 @@
 // event for  user profile
 // base URL
+
 const userCard = document.querySelector('#user-card');
 const userDetails = document.querySelector('#user-details');
 const userCancle = document.querySelector('#user-x');
+const baseUrl = 'http://localhost:5000'
+const imgFilePath = 'uploads/avatars/'
+console.log({ baseUrl })
 const getUserView = (event) => {
   const userId = event.target.dataset.id;
   // eslint-disable-next-line no-unused-expressions
@@ -64,7 +68,7 @@ const getSearchUser = (event) => {
              
               <img
                 class="rounded-full h-12 w-12 object-cover"
-                src="uploads/avatars/${user.avatar || 'demo_profile.png'}"/>
+                src="uploads/avatars/${user.avatar}"/>
               
               <div class="ml-3">
                 <div class="">${user.user_name}</div>

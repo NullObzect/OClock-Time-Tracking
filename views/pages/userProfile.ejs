@@ -468,7 +468,7 @@
               <div>
                 <h5 class="text-sm mb-1">Sync a profile picture with</h5>
 
-                <div class="flex justify-between mt-3 items-center">
+                <div class="flex justify-around mt-3 items-center">
                   <div>
                     <% let facebookProfile = platformUser.find(connection =>
                     connection.platform === 'facebook') %> <%
@@ -558,6 +558,7 @@
                     <% } %>
                   </div>
 
+                  <!--
                   <div>
                     <img
                       class="h-16 w-16 mb-2 rounded-full"
@@ -578,7 +579,7 @@
                       twitter
                     </button>
                   </div>
-                </div>
+                --></div>
               </div>
               <!--End change profile-->
             </div>
