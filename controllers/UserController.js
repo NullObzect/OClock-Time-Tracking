@@ -228,9 +228,9 @@ const UserController = {
       user_mail,
     }, process.env.JWT_SECRET, { expiresIn: '15m' })
     const link = `${process.env.BASE_URL}/user-verify/${token}`
-    const subject = 'Oclock reset password ,Link expire in 15 minutes'
-    const textMessage = 'Oclock reset password ,'
-    const htmlMessage = `<h1>Oclock reset password</h1>
+    const subject = 'Oclock Account Verify ,Link expire in 15 minutes'
+    const textMessage = 'Oclock Account Verify ,'
+    const htmlMessage = `<h1>Oclock Account Verify</h1>
     <div>
       <h4> Link expire in 15 minutes</h4>
       <h5>${link}</h5>
