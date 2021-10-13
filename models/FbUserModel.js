@@ -25,17 +25,6 @@ const FbUserModels = {
       return err;
     }
   },
-  userId: async (id) => {
-    try {
-      const getId = 'SELECT * FROM `facebook_users` WHERE id = ?';
-      const value = [id];
-      const [row] = await dbConnect.promise().execute(getId, value);
-      return row;
-    } catch (err) {
-      console.log('====>Error form UserId Model', err);
-      return err;
-    }
-  },
   // add user details
   addUserConnectionDetails: async (primaryKey, platform, uniqueInfo, userName, picture) => {
     try {
@@ -55,9 +44,15 @@ const FbUserModels = {
     const [rows] = await dbConnect.promise().execute(sql, value)
     return rows;
   },
+  facebookUserUpdate: async (userName, pic, id) => {
+    const updateUserSql = 'UPDATE `users_connection_details` SET user_name=?,user_avatar = ? WHERE   unique_info =? AND platform = "facebook"'
+    const value = [userName, pic, id]
+    const [rows] = await dbConnect.promise().execute(updateUserSql, value)
+    return rows
+  },
   // delete facebook user
   facebookPlatformRemove: async (id) => {
-    const sql = 'DELETE FROM `users_connection_details` WHERE platform = "facebook" AND unique_info = ?'
+    const sql = 'DELETE FROM `users_connection_details` WHERE platform = "facebook" AND user_id = ?'
     const value = [id]
     const [rows] = await dbConnect.promise().execute(sql, value)
     return rows
