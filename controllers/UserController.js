@@ -251,7 +251,7 @@ const UserController = {
         if (user) {
           console.log(user)
           await UserModel.userVerify(user.id)
-          res.redirect('/user/profile')
+          res.redirect('/profile')
         }
       }
     } catch (err) {
