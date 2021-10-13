@@ -59,6 +59,12 @@ const UserModel = {
       return err;
     }
   },
+  userVerify: async (id) => {
+    const setStatusQuery = ' UPDATE `users` SET status = 1 WHERE id= ? '
+    const value = [id]
+    const [row] = await dbConnect.promise().execute(setStatusQuery, value)
+    return row;
+  },
   // get a view user
   getViewUser: async (id) => {
     try {
@@ -106,7 +112,7 @@ const UserModel = {
   },
   findUserByEmail: async (email) => {
     try {
-      const findUserQuery = 'SELECT * FROM `users` WHERE user_mail = ?'
+      const findUserQuery = 'SELECT id,user_name,user_phone,user_mail,user_role,user_pass,avatar,status FROM `users` WHERE user_mail = ?'
       const value = [email]
       const [rows] = await dbConnect.promise().execute(findUserQuery, value)
       return rows;

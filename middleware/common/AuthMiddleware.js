@@ -1,19 +1,17 @@
 const jwt = require('jsonwebtoken')
 const dotenv = require('dotenv')
 const createError = require('http-errors')
+const UserModel = require('../../models/UserModel')
 
 dotenv.config()
 
 const checkLogin = (req, res, next) => {
-  console.log('signed Cokkie', req.signedCookies)
-  console.log('signed Cokkie', req.cookie)
   const cookies = Object.keys(req.signedCookies).length > 0 ? req.signedCookies : null
   if (cookies) {
     try {
       const token = cookies[process.env.COOKIE_NAME]
       const { userObject } = jwt.verify(token, process.env.JWT_SECRET)
-      console.log(userObject)
-      req.user = userObject
+      // req.user = userObject
       if (res.locals.html) {
         res.locals.loggedInUser = userObject
       }
@@ -44,18 +42,28 @@ const checkLogin = (req, res, next) => {
   }
 }
 
-// const checkCurrentLogin = (req, res, next) => {
-//   const token = req.cookies.jwt;
-//   if (token) {
-//     res.redirect('/');
-//   }
-//   next()
-// }
+const checkUser = (req, res, next) => {
+  const token = req.signedCookies[process.env.COOKIE_NAME];
+  if (token) {
+    jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
+      if (err) {
+        req.user = null;
+        next();
+      } else {
+        const { userObject } = decodedToken
+        const [user] = await UserModel.findUserByEmail(userObject.userMailFormDB);
+        req.user = user
+        next();
+      }
+    });
+  } else {
+    req.user = null;
+    next();
+  }
+}
 
 const redirectLoggedIn = (req, res, next) => {
   const cookie = Object.keys(req.signedCookies).length > 0 ? req.signedCookies : null
-  console.log({ cookie });
-
   if (!cookie) {
     next()
   } else {
@@ -65,7 +73,6 @@ const redirectLoggedIn = (req, res, next) => {
 
 function requireRole(role) {
   return function (req, res, next) {
-    console.log(req.user)
     if (req.user.userRole && role.includes(req.user.userRole)) {
       next();
     } else if (req.user.userRole && req.user.userRole === 'user') {
@@ -85,5 +92,5 @@ function requireRole(role) {
 }
 
 module.exports = {
-  checkLogin, redirectLoggedIn, requireRole,
+  checkLogin, redirectLoggedIn, requireRole, checkUser,
 }
