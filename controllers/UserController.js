@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable consistent-return */
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
@@ -217,6 +218,44 @@ const UserController = {
       return res.json(isUserSortByDesc)
     } catch (err) {
       console.log('====>Error form userSortByDescendingOrder  Controller', err);
+    }
+  },
+  userVerify: async (req, res) => {
+    const { id, user_mail } = req.user
+    console.log(id, user_mail)
+    const token = jwt.sign({
+      id,
+      user_mail,
+    }, process.env.JWT_SECRET, { expiresIn: '15m' })
+    const link = `${process.env.BASE_URL}/user-verify/${token}`
+    const subject = 'Oclock reset password ,Link expire in 15 minutes'
+    const textMessage = 'Oclock reset password ,'
+    const htmlMessage = `<h1>Oclock reset password</h1>
+    <div>
+      <h4> Link expire in 15 minutes</h4>
+      <h5>${link}</h5>
+      <a href="${link}"> Click Here</a>
+    </div>`
+    console.log(link)
+    await sendMail(user_mail, subject, textMessage, htmlMessage)
+    res.send(`mail send in ${user_mail} <a href='/'>Go back</a>`)
+  },
+  userVerifySet: async (req, res) => {
+    const { token } = req.params
+    try {
+      const isVerified = jwt.verify(token, process.env.COOKIE_SECRET)
+      console.log('verify', isVerified)
+      if (isVerified) {
+        const { user_mail } = isVerified
+        const [user] = await UserModel.findUserByEmail(user_mail)
+        if (user) {
+          console.log(user)
+          await UserModel.userVerify(user.id)
+          res.redirect('/user/profile')
+        }
+      }
+    } catch (err) {
+      console.log(err)
     }
   },
 

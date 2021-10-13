@@ -4,7 +4,7 @@
 const nodemailer = require('nodemailer')
 const { google } = require('googleapis')
 
-const REFRESH_TOKEN = '1//04gUJrqMRyKdqCgYIARAAGAQSNwF-L9IrvhMJERPanWJihEF2WzrGolm25gC7IO0S3Xg1VG52hhOyc7xjlSSu5K6G5OKhdcxWvfs'
+const REFRESH_TOKEN = '1//04DyhM1M3yCp6CgYIARAAGAQSNwF-L9Ir3SnMXU37hzjOe08cr1-r_51-iWh9HQEP3EPRlhVOPodemUroae4UOyijth9Yh25bCmk'
 
 const oAuth2Client = new google.auth.OAuth2(process.env.CLIENT_ID, process.env.CLIENT_SECRET, process.env.REDIRECT_LINK)
 oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN })
@@ -22,10 +22,13 @@ async function sendMail(toMail, subject, textMessage, htmlMessage) {
         refreshToken: REFRESH_TOKEN,
         accessToken: accessTokens,
       },
+      tls: {
+        rejectUnauthorized: false,
+      },
     });
 
     const results = await transport.sendMail({
-      from: 'Oclock ✉️ <ebwork005@mail.com>',
+      from: 'Oclock ✉️ <ebwork005@gmail.com>',
       to: toMail,
       subject,
       text: textMessage,

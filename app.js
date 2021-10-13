@@ -9,6 +9,7 @@ const router = require('./routers/routes');
 require('./utilities/passportFB')(passport)
 //
 const { notFoundHandler, errorHandler } = require('./middleware/common/errorHandler');
+const { checkUser } = require('./middleware/common/AuthMiddleware')
 
 env.config()
 const app = express();
@@ -28,8 +29,11 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash())
-app.use(router);
 
+// Check User
+app.use(checkUser)
+
+app.use(router);
 // 404 not found
 app.use(notFoundHandler)
 

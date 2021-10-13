@@ -20,7 +20,6 @@ router.get('/user/view', UserController.userView)
 // Router for search user
 router.get('/search/user', checkLogin, requireRole(['admin']), UserController.searchUser)
 
-
 router.get('/find-user', decorateHtmlResponse('Find-user'), UserController.getFindUser)
 router.post('/find-user', decorateHtmlResponse('Find-user'), UserController.postFindUser)
 router.post('/recover', decorateHtmlResponse('Recover'), UserController.recoverUser)
@@ -28,6 +27,11 @@ router.get('/recover/:token', decorateHtmlResponse('Recover'), UserController.re
 
 // update password
 router.post('/update-password', UserController.userUpdatePassword)
+
+// Verify User
+
+router.get('/user-verify', UserController.userVerify)
+router.get('/user-verify/:token', UserController.userVerifySet)
 
 // Forget user
 // router.get('/forgot-password', UserController.getUserForgotPassword)
