@@ -11,7 +11,7 @@ const checkLogin = (req, res, next) => {
     try {
       const token = cookies[process.env.COOKIE_NAME]
       const { userObject } = jwt.verify(token, process.env.JWT_SECRET)
-      // req.user = userObject
+      req.user = userObject
       if (res.locals.html) {
         res.locals.loggedInUser = userObject
       }
