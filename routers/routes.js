@@ -7,6 +7,7 @@ const registerRoute = require('./userRoute')
 const userPlatformRoute = require('./userPlatformRoute')
 const fbUserRoute = require('./fbUserRoute')
 const profileRoute = require('./profileRoute')
+const attendanceRoute = require('./attendanceRoute')
 
 // all routers use
 router.use(
@@ -17,6 +18,8 @@ router.use(
   userPlatformRoute,
   fbUserRoute,
   profileRoute,
+  attendanceRoute,
+
 )
 
 // exports route

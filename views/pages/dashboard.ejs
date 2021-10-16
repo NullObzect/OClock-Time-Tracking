@@ -1,4 +1,5 @@
 <%- include("../partials/header"); -%>
+
 <div class="start">
   <div class="search-bar">
     <input class="search" placeholder="What are you working on?" type="text" />
@@ -12,7 +13,16 @@
     >
   </div>
   <div class="time">00:00:00</div>
-  <button class="btn-start">start</button>
+  <form action="/attendance-start" method="POST">
+    <input type="hidden" name="startTime" id="startTime" />
+    <button type="submit" class="btn-start" id='start-btn'>start</button>
+  </form>
+
+  <form action="/attendance-end" method="POST">
+    <input type="hidden" name="endTime" id="endTime" />
+
+    <button type="submit" class="btn-start" id='end-btn'>End</button>
+  </form>
 </div>
 
 <!-- ProJect Modal Start -->
@@ -43,4 +53,5 @@
     <div class="work-time">02:00:00</div>
   </div>
 </div>
+<script src="/js/timeTracking.js"></script>
 <%- include("../partials/footer.ejs"); -%>
