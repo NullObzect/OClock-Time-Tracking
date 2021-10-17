@@ -43,14 +43,14 @@ const endTime = document.getElementById('endTime')
 startTime.value = dateTimeFormate(getDay);
 endTime.value = dateTimeFormate(getDay);
 
-const startBtn = document.getElementById('start-btn')
-const endBtn = document.getElementById('end-btn')
-startBtn.addEventListener('click', () => {
-  startBtn.style.display = 'none';
-  endBtn.style.display = 'block';
-})
+// const startBtn = document.getElementById('start-btn')
+// const endBtn = document.getElementById('end-btn')
+// startBtn.addEventListener('click', () => {
+//   startBtn.style.display = 'none';
+//   endBtn.style.display = 'block';
+// })
 
-endBtn.addEventListener('click', () => {
-  startBtn.style.display = 'block';
-  endBtn.style.display = 'none';
-})
+// endBtn.addEventListener('click', () => {
+//   startBtn.style.display = 'block';
+//   endBtn.style.display = 'none';
+// })
