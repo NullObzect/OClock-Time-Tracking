@@ -31,10 +31,10 @@ const AttendanceModel = {
     const [rows] = await dbConnect.promise().execute(getStartSql, value);
     return rows;
   },
-  getHistory: async (userId) => {
-    const getHistory = 'SELECT Date(create_at) as Dates ,Time(start) as start , Time(end) as end, timediff(end,start ) as total FROM attendance WHERE user_id = ? and status = 0'
+  getWeekHistory: async (userId) => {
+    const getWeekHistory = 'SELECT Date(create_at) as Dates ,Time(start) as start , Time(end) as end, timediff(end,start ) as total FROM attendance WHERE user_id = ?  and date(create_at) BETWEEN date( CURRENT_DATE - INTERVAL 8 day) and date(CURRENT_DATE - INTERVAL 1 day )'
     const value = [userId]
-    const [rows] = await dbConnect.promise().execute(getHistory, value);
+    const [rows] = await dbConnect.promise().execute(getWeekHistory, value);
     return rows;
   },
   getToday: async (userId) => {
@@ -43,15 +43,18 @@ const AttendanceModel = {
     const [rows] = await dbConnect.promise().execute(getTodaySql, value);
     return rows;
   },
-  getTodayTotal: async (userId) => {
-    const todayTotalSql = 'SELECT TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(end)))), SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(start))))) as grandTotal FROM  attendance WHERE user_id = ? and status = 0 and Date(create_at)= Date(CURRENT_DATE)'
+  todayTotal: async (userId) => {
+    const todayTotalSql = 'SELECT TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(end)))), SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(start))))) as todayTotal FROM  attendance WHERE user_id = ? and status = 0 and Date(create_at)= Date(CURRENT_DATE)'
     const value = [userId]
     const [rows] = await dbConnect.promise().execute(todayTotalSql, value);
     return rows;
   },
+  weekTotal: async (userId) => {
+    const weekTotalSql = 'SELECT TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(end)))), SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(start))))) as weekTotal FROM attendance WHERE user_id = ? and status = 0 and Date(create_at) BETWEEN date( CURRENT_DATE - INTERVAL 8 day) and date(CURRENT_DATE - INTERVAL 1 day )'
+    const value = [userId]
+    const [rows] = await dbConnect.promise().execute(weekTotalSql, value);
+    return rows;
+  },
 }
 
-// sql query for  attendance
-
-// SELECT	TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(end_time)))),  SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(start_time))))) AS total_time  FROM attendance WHERE user_id = 9 AND DATE(create_at) = '2021-10-16'
 module.exports = AttendanceModel;
