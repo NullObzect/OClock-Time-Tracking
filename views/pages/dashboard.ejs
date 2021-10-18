@@ -43,7 +43,7 @@
 <div class="history">
   <div class="date-bar">
     <div class="date">Today</div>
-    <div class="total-work-time"><%=grandTotal[0].grandTotal || "00:00:00" %></div>
+    <div class="total-work-time"><%=todayTotal[0].todayTotal || "00:00:00" %></div>
   </div>
   <%today.map(t=>{%>
   <div class="details">
@@ -57,10 +57,10 @@
 </div>
 <div class="history">
   <div class="date-bar">
-    <div class="date">01 sep 2021</div>
-    <div class="total-work-time">02:00:00</div>
+    <div class="date">This Week</div>
+    <div class="total-work-time"><%=weekTotal[0].weekTotal || "00:00:00" %></div>
   </div>
-  <%history.map(h=>{%>
+  <%weekHistory.map(h=>{%>
   <div class="details">
     <div class="title">hello</div>
     <div class="project-name">hello world</div>
