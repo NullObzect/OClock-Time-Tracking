@@ -186,6 +186,16 @@ body {
   color: #fff;
   cursor: pointer;
 }
+.start .btn-end {
+  padding: 10px 20px;
+  font-size: 20px;
+  margin: 0 10px;
+  background: #f33d46;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+}
 .history {
   border: 1px solid #d3d3d3;
   margin: 30px 10px;
