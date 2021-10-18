@@ -6,19 +6,19 @@ const DashboardController = {
     console.log(req.user)
     const [user] = await UserModel.findUserByEmail(req.user.userMailFormDB)
     const [startData] = await AttendanceModel.getStartData(user.id)
-    const history = await AttendanceModel.getHistory(user.id)
+    const weekHistory = await AttendanceModel.getWeekHistory(user.id)
     const today = await AttendanceModel.getToday(user.id)
-    const grandTotal = await AttendanceModel.getTodayTotal(user.id)
-    console.log(grandTotal)
-    console.log(history)
+    const todayTotal = await AttendanceModel.todayTotal(user.id)
+    const weekTotal = await AttendanceModel.weekTotal(user.id)
+    console.log(todayTotal)
     if (startData) {
       const { start } = startData
       res.render('pages/dashboard', {
-        start, history, today, grandTotal,
+        start, weekHistory, today, todayTotal, weekTotal,
       })
     } else {
       res.render('pages/dashboard', {
-        start: 0, history, today, grandTotal,
+        start: 0, weekHistory, today, todayTotal, weekTotal,
       })
     }
   },
