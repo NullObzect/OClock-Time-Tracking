@@ -32,7 +32,7 @@ const AttendanceModel = {
     return rows;
   },
   getWeekHistory: async (userId) => {
-    const getWeekHistory = 'SELECT DATE_FORMAT(Date(create_at),"%d %b %y") as date ,Time(start) as start , Time(end) as end, timediff(end,start ) as total FROM attendance WHERE user_id = ?  and date(create_at) BETWEEN date( CURRENT_DATE - INTERVAL 8 day) and date(CURRENT_DATE - INTERVAL 1 day )'
+    const getWeekHistory = 'SELECT DATE_FORMAT(Date(create_at),"%d %b %y") as date ,Time_format(Time(start),"%H:%i")as start,Time_format(Time(end),"%H:%i") as end, Time_format(timediff(end,start ),"%H:%i:%s") as total FROM attendance WHERE user_id = ?  and date(create_at) BETWEEN date( CURRENT_DATE - INTERVAL 8 day) and date(CURRENT_DATE - INTERVAL 1 day )'
     const value = [userId]
     const [rows] = await dbConnect.promise().execute(getWeekHistory, value);
     return rows;
