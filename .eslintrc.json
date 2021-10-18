@@ -5,7 +5,7 @@
     "node": true // to enable nodejs support
   },
   "extends": "airbnb-base", // to use airbnb-base as eslint config
-  "ignorePatterns": ["**/vendors/*.js", "bundle.js"],
+  "ignorePatterns": ["**/vendors/*.js", "bundle.js","timeTracking.js"],
 
   "rules": {
     "semi": "off" // to turn off the semicolon lint
