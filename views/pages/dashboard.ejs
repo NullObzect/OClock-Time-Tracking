@@ -12,17 +12,17 @@
       Project</a
     >
   </div>
-  <div class="time">00:00:00</div>
+  <div class="time" id="elapsedTime">00:00:00</div>
+
+<% if(start==0){ %>
   <form action="/attendance-start" method="POST">
-    <input type="hidden" name="startTime" id="startTime" />
-    <button type="submit" class="btn-start" id='start-btn'>start</button>
+    <button type="submit" class="btn-start" id="start-btn">start</button>
   </form>
-
+<% }else{ %> 
   <form action="/attendance-end" method="POST">
-    <input type="hidden" name="endTime" id="endTime" />
-
-    <button type="submit" class="btn-start" id='end-btn'>End</button>
+    <button type="submit" class="btn-end" id="end-btn">End</button>
   </form>
+  <% } %>  
 </div>
 
 <!-- ProJect Modal Start -->
@@ -42,16 +42,37 @@
 
 <div class="history">
   <div class="date-bar">
-    <div class="date">01 sep 2021</div>
-    <div class="total-work-time">02:00:00</div>
+    <div class="date">Today</div>
+    <div class="total-work-time"><%=grandTotal[0].grandTotal || "00:00:00" %></div>
   </div>
+  <%today.map(t=>{%>
   <div class="details">
     <div class="title">hello</div>
     <div class="project-name">hello world</div>
-    <div class="start-time">12:00</div>
-    <end class="time">14:00</end>
-    <div class="work-time">02:00:00</div>
+    <div class="start-time"><%= t.start  %> </div>
+    <end class="time"><%= t.end  %> </end>
+    <div class="total-work-time"><%= t.total  %> </div>
   </div>
+  <% })%>
 </div>
+<div class="history">
+  <div class="date-bar">
+    <div class="date">01 sep 2021</div>
+    <div class="total-work-time">02:00:00</div>
+  </div>
+  <%history.map(h=>{%>
+  <div class="details">
+    <div class="title">hello</div>
+    <div class="project-name">hello world</div>
+    <div class="start-time"><%=h.start %></div>
+    <end class="time"><%=h.end %></end>
+    <div class="work-time"><%=h.total %></div>
+  </div>
+  <% })%>
+</div>
+
+<script>
+    let startTimeShow = "<%=start %>"
+</script>
 <script src="/js/timeTracking.js"></script>
 <%- include("../partials/footer.ejs"); -%>
