@@ -12,7 +12,7 @@ const AttendanceController = {
       if (insertedAttendanceStart.errno) {
         res.send('Error')
       } else {
-        res.send('success ')
+        res.redirect('/dashboard')
       }
     } catch (err) {
       console.log('====>Error form AttendanceController/userAttendance', err);
@@ -30,7 +30,7 @@ const AttendanceController = {
       if (insertedAttendanceEnd.errno) {
         res.send('Error')
       } else {
-        res.send('success ')
+        res.redirect('/dashboard')
       }
     } catch (err) {
       console.log('====>Error form AttendanceController/userAttendance', err);
