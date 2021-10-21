@@ -55,6 +55,14 @@ const AttendanceModel = {
     const [rows] = await dbConnect.promise().execute(weekTotalSql, value);
     return rows;
   },
+
+  // employee average working time Model
+  averageWeekWorkTime: async (userId) => {
+    const avgWeekTotal = 'SELECT TIME(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(end)))), SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(start))))) / 7) as week_avg FROM attendance WHERE user_id = ?';
+    const value = [userId]
+    const [rows] = await dbConnect.promise().execute(avgWeekTotal, value)
+    return rows;
+  },
 }
 
 module.exports = AttendanceModel;
