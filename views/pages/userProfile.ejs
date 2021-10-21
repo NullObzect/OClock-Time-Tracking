@@ -58,7 +58,15 @@
     <div class="container mx-auto md:mt-6">
       <div class="grid sm:grid-cols-12">
         <!-- User side navbar -->
-        <div class="sm:col-span-3 xs:col-span-12 justify-center items-center">
+        <div
+          class="
+            sm:col-span-3
+            xs:col-span-12
+            justify-center
+            items-center
+            border-r-2 border-gray-200
+          "
+        >
           <div class="justify-center items-center mb-3">
             <% let url = avatar %> <% if(url.search('https://') === -1){ %>
             <img
@@ -114,7 +122,7 @@
           </ul>
         </div>
         <!-- Main container -->
-        <div class="sm:col-span-9 xs:col-span-12">
+        <div class="sm:col-span-9 xs:col-span-12 ml-2">
           <!-- profile part-->
           <div id="public-profile">
             <div class="">
