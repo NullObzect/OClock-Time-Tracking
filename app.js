@@ -1,4 +1,6 @@
 const express = require('express');
+
+const app = express();
 const cookieParser = require('cookie-parser')
 const env = require('dotenv')
 const session = require('express-session')
@@ -12,8 +14,6 @@ const { notFoundHandler, errorHandler } = require('./middleware/common/errorHand
 const { checkUser } = require('./middleware/common/AuthMiddleware')
 
 env.config()
-const app = express();
-
 app.set('view engine', 'ejs');
 app.use(express.static(`${__dirname}/public`));
 app.use(express.urlencoded({ extended: true }));
