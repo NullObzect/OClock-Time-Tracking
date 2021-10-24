@@ -11,5 +11,6 @@ router.post('/attendance-end', AttendanceController.attendanceEnd)
 
 // report router
 router.get('/report', decorateHtmlResponse('Report'), ReportController.userReport)
+router.get('/report/between/two-date', ReportController.reportBetweenTwoDate)
 
 module.exports = router;

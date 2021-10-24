@@ -1,5 +1,6 @@
 <%- include("../partials/header"); -%>
 
+<!-- Markup top  card for employee activits -->
 <div class="">
   <div class="flex justify-between gap-4">
     <div
@@ -40,5 +41,103 @@
     </div>
   </div>
 </div>
+
+<!-- Markup Date range for employee-->
+
+<div class="mt-5 flex justify-between">
+  <div>
+    <h4 class="text-xl font-bold">Report</h4>
+  </div>
+  <div>
+    <input
+      type="date"
+      class="p-2 bg-blue-100 rounded-md"
+      onchange="selectStartDate(event)"
+    />
+    <small class="p-2 text-md font-bold">To</small>
+    <input
+      type="date"
+      class="p-2 bg-blue-100 rounded-md"
+      onchange="selectEndDate(event)"
+    />
+  </div>
+</div>
+<!-- Markup report table for employee-->
+<div class="bg-white flex justify-center mt-4">
+  <div class="col-span-12">
+    <div class="overflow-auto lg:overflow-visible">
+      <table
+        class="table-report text-gray-400 border-separate space-y-6 text-sm"
+      >
+        <thead class="bg-blue-500 text-white">
+          <tr>
+            <th class="p-3">DATE</th>
+            <th class="p-3 text-left">IN</th>
+            <th class="p-3 text-left">OUT</th>
+            <th class="p-3 text-left">Working Hours</th>
+            <th class="p-3 text-left">Working Time</th>
+            <th class="p-3 text-left">Less / Extra</th>
+          </tr>
+        </thead>
+        <tbody id="an-user-report">
+          <% console.log( userReport ) %> <% userReport.map(el => {%>
+          <tr class="bg-blue-200 lg:text-black">
+            <td class="p-3 font-medium capitalize"><%= el.create_date %></td>
+            <td class="p-3"><%= el.start %></td>
+            <td class="p-3"><%= el.end %></td>
+            <td class="p-3">6</td>
+            <td class="p-3"><%= el.working_time %></td>
+            <td class="p-3"><%= el.time_count %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<script>
+  const baseUrl = "http://localhost:5000";
+  const anUserReportTable = document.getElementById("an-user-report");
+
+  // get start date
+  let startDate;
+
+  const selectStartDate = (event) => {
+    //console.log(event.target.value);
+    let getDate = event.target.value;
+    console.log("start date", getDate);
+
+    startDate = getDate;
+    //
+  };
+  //end date
+  const selectEndDate = async (event) => {
+    console.log(startDate);
+
+    const endDate = event.target.value;
+    console.log("end date", endDate);
+    let data = await fetch(
+      `${baseUrl}/report/between/two-date?startDate=${startDate}&endDate=${endDate}`
+    );
+    let jsonData = await data.json();
+    jsonData.map((el) => console.log(el.create_date));
+    console.log(jsonData);
+    anUserReportTable.innerHTML = jsonData
+      .map(
+        (el) =>
+          `
+        <tr class="bg-blue-200 lg:text-black">
+            <td class="p-3 font-medium capitalize">${el.create_date}</td>
+            <td class="p-3">${el.start}</td>
+            <td class="p-3">${el.end}</td>
+            <td class="p-3">6</td>
+            <td class="p-3">${el.working_time}</td>
+            <td class="p-3">${el.time_count}</td>
+          </tr>
+        `
+      )
+      .join("");
+  };
+</script>
 
 <%- include("../partials/footer"); -%>
