@@ -1,4 +1,3 @@
-const { json } = require('express');
 const dbConnect = require('../config/database');
 
 const AttendanceModel = {
@@ -56,6 +55,12 @@ const AttendanceModel = {
     const [rows] = await dbConnect.promise().execute(weekTotalSql, value);
     return rows;
   },
+  thisMonthTotal: async (userId) => {
+    const monthTotalSql = 'SELECT TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(end)))), SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(start))))) as monthTotal FROM attendance WHERE user_id = ? and end IS NOT NULL and Date(create_at) BETWEEN date( CURRENT_DATE - INTERVAL  day(CURRENT_DATE) day) and date(CURRENT_DATE - INTERVAL 1 day )'
+    const value = [userId]
+    const [rows] = await dbConnect.promise().execute(monthTotalSql, value);
+    return rows;
+  },
 
   // employee average working time Model
   averageWeekWorkTime: async (userId) => {
@@ -83,6 +88,26 @@ const AttendanceModel = {
     } catch (err) {
       console.log('====>Error form AttendanceModel/aEmployeeRportBetweenTwoDate', err);
       return err;
+    }
+  },
+  avgStartTime: async (id) => {
+    try {
+      const avgStartTimeSQL = 'SELECT TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(StartTime))),"%h:%i %p") AS avgStartTime FROM (SELECT min(time(start)) as StartTime FROM attendance WHERE user_id = ? GROUP BY date(create_at)) attendance'
+      const value = [id]
+      const [rows] = await dbConnect.promise().execute(avgStartTimeSQL, value);
+      return rows;
+    } catch (error) {
+      console.log(error)
+    }
+  },
+  avgEndTime: async (id) => {
+    try {
+      const avgEndTimeSQL = 'SELECT TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(EndTime))),"%h:%i %p") AS avgEndTime FROM (SELECT MAX(time(end)) as EndTime FROM attendance WHERE user_id = ? GROUP BY date(create_at)) attendance'
+      const value = [id]
+      const [rows] = await dbConnect.promise().execute(avgEndTimeSQL, value);
+      return rows;
+    } catch (error) {
+      console.log(error)
     }
   },
 }

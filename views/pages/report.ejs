@@ -13,7 +13,8 @@
         shadow-lg
       "
     >
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati, optio?
+      <h3>Avarage Work Start Time</h3>
+      <h4><b><%= avgStartTime || '00:00' %> </b> </h4>
     </div>
     <div
       class="
@@ -25,7 +26,8 @@
         shadow-lg
       "
     >
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati, optio?
+    <h3>Avarage Work End Time</h3>
+    <h4><b><%= avgEndTime || '00:00' %> </b> </h4>
     </div>
     <div
       class="
@@ -37,8 +39,22 @@
         shadow-lg
       "
     >
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati, optio?
+    <h3>This Week Total Work Hours</h3>
+    <h4><b><%= weekHr %> </b> </h4>
     </div>
+    <div
+    class="
+      px-4
+      py-6
+      rounded-md
+      bg-yellow-400
+      border-l-4 border-blue-600
+      shadow-lg
+    "
+  >
+  <h3>This Month Total Work Hours</h3>
+  <h4><b><%= monthHr %> </b> </h4>
+  </div>
   </div>
 </div>
 
