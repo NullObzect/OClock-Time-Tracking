@@ -9,7 +9,7 @@
         py-6
         rounded-md
         bg-pink-200
-        border-l-4 border-blue-600
+        border-l-4 border-blue-400
         shadow-lg
       "
     >
@@ -22,7 +22,7 @@
         py-6
         rounded-md
         bg-yellow-200
-        border-l-4 border-green-600
+        border-l-4 border-green-400
         shadow-lg
       "
     >
@@ -48,7 +48,7 @@
         py-6
         rounded-md
         bg-yellow-400
-        border-l-4 border-pink-600
+        border-l-4 border-pink-400
         shadow-lg
       "
     >
@@ -67,13 +67,13 @@
   <div>
     <input
       type="date"
-      class="p-2 bg-blue-200 rounded-md shadow-md"
+      class="p-2 bg-blue-200 rounded-md cursor-pointer shadow-md"
       onchange="selectStartDate(event)"
     />
     <small class="p-2 text-md font-bold">To</small>
     <input
       type="date"
-      class="p-2 bg-blue-200 rounded-md shadow-md"
+      class="p-2 bg-blue-200 rounded-md cursor-pointer shadow-md"
       onchange="selectEndDate(event)"
     />
   </div>
@@ -102,8 +102,19 @@
             <td class="p-3"><%= el.start %></td>
             <td class="p-3"><%= el.end %></td>
             <td class="p-3">6</td>
+            <!-- check working time less or extra -->
+            <% let fixedTime = 21600 %> <% let totalWorkingTime =
+            el.working_time.split(':') %> <% let timeToSeconds =
+            (+totalWorkingTime[0]) * 60 * 60 + (+totalWorkingTime[1]) * 60 +
+            (+totalWorkingTime[2]) %> <%# console.log(timeToSeconds) %>
+
             <td class="p-3"><%= el.working_time %></td>
-            <td class="p-3"><%= el.time_count %></td>
+            <% if(fixedTime > timeToSeconds){ %>
+            <td class="p-3 text-red-600"><%= "-" + el.time_count %></td>
+
+            <% } else if(fixedTime < timeToSeconds){ %>
+            <td class="p-3 text-green-600"><%= "+" + el.time_count %></td>
+            <% } %>
           </tr>
           <% }) %>
         </tbody>
@@ -113,6 +124,9 @@
 </div>
 <script>
   const baseUrl = "http://localhost:5000";
+  let fixedTime = 21600;
+  console.log("xxx", fixedTime);
+
   const anUserReportTable = document.getElementById("an-user-report");
 
   // get start date
