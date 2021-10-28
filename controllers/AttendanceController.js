@@ -24,10 +24,11 @@ const AttendanceController = {
       const insertedAttendanceEnd = await AttendanceModel.setAttendanceEnd(id)
       const getTodayData = await AttendanceModel.getToday(id)
       const [todayTotalData] = await AttendanceModel.todayTotal(id)
+      const [weekTotalData] = await AttendanceModel.weekTotal(id)
       if (insertedAttendanceEnd.errno) {
         return res.send('Error')
       }
-      return res.json({ getTodayData, todayTotalData })
+      return res.json({ getTodayData, todayTotalData, weekTotalData })
     } catch (err) {
       console.log('====>Error form AttendanceController/userAttendance', err);
       return err;
