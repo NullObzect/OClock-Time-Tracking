@@ -106,8 +106,9 @@ const AttendanceModel = {
       const value = [id]
       const [rows] = await dbConnect.promise().execute(avgEndTimeSQL, value);
       return rows;
-    } catch (error) {
-      console.log(error)
+    } catch (err) {
+      console.log(err)
+      return err;
     }
   },
 }
