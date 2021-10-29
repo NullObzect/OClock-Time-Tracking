@@ -336,8 +336,8 @@ i {
   border-radius: 20px;
 }
 
-.table tr td:nth-child(n + 5), .table
-tr th:nth-child(n + 5) {
+.table tr td:nth-child(n + 5),
+.table tr th:nth-child(n + 5) {
   border-radius: 0 0.625rem 0.625rem 0;
 }
 
@@ -354,27 +354,26 @@ tr th:nth-child(1) {
   justify-content: center !important;
 }
 /* style for users table */
-#users-table, .table-report {
+#users-table,
+.table-report {
   width: 700px;
 }
 /* style for  an users report */
 
 .table-report {
-    border-spacing: 0 15px;
-  }
+  border-spacing: 0 15px;
+}
 
- 
- .table-report tr {
-    border-radius: 20px;
-  }
+.table-report tr {
+  border-radius: 20px;
+}
 
- .table-report tr td:nth-child(n + 6),
- .table-report
-  tr th:nth-child(n + 6) {
-    border-radius: 0 0.625rem 0.625rem 0;
-  }
+.table-report tr td:nth-child(n + 7),
+.table-report tr th:nth-child(n + 7) {
+  border-radius: 0 0.625rem 0.625rem 0;
+}
 
-.table-report  tr td:nth-child(1),
-  tr th:nth-child(1) {
-    border-radius: 0.625rem 0 0 0.625rem;
-  }
+.table-report tr td:nth-child(1),
+tr th:nth-child(1) {
+  border-radius: 0.625rem 0 0 0.625rem;
+}

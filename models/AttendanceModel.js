@@ -72,7 +72,7 @@ const AttendanceModel = {
 
   // an employee report last 7 days
   anEmployeeReportLastSavenDays: async (userId) => {
-    const lastSeventDaysSql = 'SELECT TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(end)))), SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(start))))) AS working_time ,DATE_FORMAT(Date(create_at),"%d %b %y") AS create_date, TIME_FORMAT(MIN(TIME(start)),"%h:%i% %p") AS start, TIME_FORMAT(MAX(TIME(end)),"%h:%i% %p") AS end, CASE WHEN  (TIME("06:00:00") > TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(end)))), SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(start)))))) THEN SUBTIME(TIME("06:00:00"), TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(end)))), SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(start)))))) WHEN  (TIME("06:00:00") < TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(end)))), SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(start))))))  THEN SUBTIME( TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(end)))), SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(start))))), TIME("06:00:00")) WHEN  (TIME("06:00:00") = TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(end)))), SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(start))))))  THEN "Equle" END AS time_count FROM attendance WHERE user_id = ? AND create_at >  now() - INTERVAL 7 day GROUP BY DATE_FORMAT(Date(create_at),"%d %b %y")';
+    const lastSeventDaysSql = "SELECT DAYNAME(create_at) AS day, DATE_FORMAT(DATE(create_at),'%d %b %y') AS date, TIME_FORMAT(TIME(MIN(start)),'%h:%i %p') AS start, TIME_FORMAT(TIME(MAX(end)),'%h:%i %p') AS end, TIMEDIFF(MAX(end), MIN(start)) as working_time, SUBTIME(TIMEDIFF(MAX(end), MIN(start)), TIME('06:00:00')) AS time_count FROM attendance WHERE user_id = ? AND create_at >  now() - INTERVAL 7 day GROUP BY DATE(create_at)";
     const value = [userId];
     const [rows] = await dbConnect.promise().execute(lastSeventDaysSql, value);
     return rows;
@@ -80,7 +80,7 @@ const AttendanceModel = {
   // an employee repot berween to date
   anEmployeeReportBetweenTwoDate: async (userId, startDate, endDate) => {
     try {
-      const betweenTowDateSql = "SELECT  TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(end)))), SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(start)))))  AS working_time ,DATE_FORMAT(Date(create_at),'%d %b %y') AS create_date, TIME_FORMAT(MIN(TIME(start)),'%h:%i% %p') AS start, TIME_FORMAT(MAX(TIME(end)),'%h:%i% %p') AS end, CASE WHEN  (TIME('06:00:00') > TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(end)))), SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(start)))))) THEN SUBTIME(TIME('06:00:00'), TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(end)))), SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(start)))))) WHEN  (TIME('06:00:00') < TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(end)))), SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(start))))))  THEN SUBTIME( TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(end)))), SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(start))))), TIME('06:00:00')) WHEN  (TIME('06:00:00') = TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(end)))), SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(start))))))  THEN 'Equle' END AS time_count FROM attendance WHERE user_id = ? AND  DATE(create_at) BETWEEN ? AND  ? GROUP BY DATE_FORMAT(Date(create_at),'%d %b %y')";
+      const betweenTowDateSql = "SELECT DAYNAME(create_at) AS day, DATE_FORMAT(DATE(create_at),'%d %b %y') AS date, TIME_FORMAT(TIME(MIN(start)),'%h:%i %p') AS start, TIME_FORMAT(TIME(MAX(end)),'%h:%i %p') AS end, TIMEDIFF(MAX(end), MIN(start)) as working_time, SUBTIME(TIMEDIFF(MAX(end), MIN(start)), TIME('06:00:00')) AS time_count FROM attendance WHERE user_id = ? AND  DATE(create_at) BETWEEN ? AND ? GROUP BY DATE(create_at)";
 
       const values = [userId, startDate, endDate];
       const [rows] = await dbConnect.promise().execute(betweenTowDateSql, values);
@@ -98,6 +98,7 @@ const AttendanceModel = {
       return rows;
     } catch (error) {
       console.log(error)
+      return error;
     }
   },
   avgEndTime: async (id) => {

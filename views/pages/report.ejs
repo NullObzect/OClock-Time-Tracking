@@ -88,6 +88,8 @@
         <thead class="bg-blue-500 text-white">
           <tr>
             <th class="p-3">DATE</th>
+            <th class="p-3">Day</th>
+
             <th class="p-3 text-left">IN</th>
             <th class="p-3 text-left">OUT</th>
             <th class="p-3 text-left">Fixed Time</th>
@@ -98,23 +100,14 @@
         <tbody id="an-user-report">
           <% console.log( userReport ) %> <% userReport.map(el => {%>
           <tr class="bg-blue-200 lg:text-black">
-            <td class="p-3 font-medium capitalize"><%= el.create_date %></td>
+            <td class="p-3 font-medium capitalize"><%= el.date %></td>
+            <td class="p-3"><%= el.day %></td>
             <td class="p-3"><%= el.start %></td>
+
             <td class="p-3"><%= el.end %></td>
             <td class="p-3">6</td>
-            <!-- check working time less or extra -->
-            <% let fixedTime = 21600 %> <% let totalWorkingTime =
-            el.working_time.split(':') %> <% let timeToSeconds =
-            (+totalWorkingTime[0]) * 60 * 60 + (+totalWorkingTime[1]) * 60 +
-            (+totalWorkingTime[2]) %> <%# console.log(timeToSeconds) %>
-
             <td class="p-3"><%= el.working_time %></td>
-            <% if(fixedTime > timeToSeconds){ %>
-            <td class="p-3 text-red-600"><%= "-" + el.time_count %></td>
-
-            <% } else if(fixedTime < timeToSeconds){ %>
-            <td class="p-3 text-green-600"><%= "+" + el.time_count %></td>
-            <% } %>
+            <td class="p-3"><%= el.time_count %></td>
           </tr>
           <% }) %>
         </tbody>
@@ -124,7 +117,24 @@
 </div>
 <script>
   const baseUrl = "http://localhost:5000";
+
   let fixedTime = 21600;
+  function timeToSeconds(time) {
+    let a = time.split(":");
+    let seconds = +a[0] * 60 * 60 + +a[1] * 60 + +a[2];
+    console.log(
+      "seconds",
+      time,
+      fixedTime,
+      seconds,
+      fixedTime > seconds
+        ? "-" + time
+        : fixedTime < seconds
+        ? "+" + time
+        : "Equal"
+    );
+    return seconds;
+  }
   console.log("xxx", fixedTime);
 
   const anUserReportTable = document.getElementById("an-user-report");
@@ -140,6 +150,7 @@
     startDate = getDate;
     //
   };
+
   //end date
   const selectEndDate = async (event) => {
     console.log(startDate);
@@ -156,15 +167,16 @@
       .map(
         (el) =>
           `
-        <tr class="bg-blue-200 lg:text-black">
-            <td class="p-3 font-medium capitalize">${el.create_date}</td>
+          <tr class="bg-blue-200 lg:text-black">
+            <td class="p-3 font-medium capitalize">${el.date}</td>
+            <td class="p-3">${el.day}</td>
             <td class="p-3">${el.start}</td>
             <td class="p-3">${el.end}</td>
             <td class="p-3">6</td>
             <td class="p-3">${el.working_time}</td>
             <td class="p-3">${el.time_count}</td>
           </tr>
-        `
+          `
       )
       .join("");
   };
