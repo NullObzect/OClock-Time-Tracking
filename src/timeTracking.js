@@ -1,4 +1,5 @@
 // user time tracking
+
 // Select Start & End button
 const startBtn = document.querySelector('#start-btn')
 const endBtn = document.querySelector('#end-btn')
@@ -31,11 +32,14 @@ endBtn.addEventListener('click',async(event)=>{
   startBtn.style.display ="inline"
   endBtn.style.display ="none"
   // Destructuring data
-  const {getTodayData,todayTotalData,weekTotalData} = data
+  const {getTodayData,todayTotalData, weekTotalData,getWeekData} = data
+  console
   // Last index data
   lastData = getTodayData[getTodayData.length-1]
+  weekData = getWeekData[getWeekData.length-1]
   // Update today history table
   todayHistory(lastData.start,lastData.end,lastData.total)
+  weekHistory(weekData.date,weekData.start,weekData.end,weekData.total)
   const {todayTotal} = todayTotalData
   const {weekTotal} = weekTotalData
   // Set today total data 
@@ -59,6 +63,41 @@ function todayHistory(start,end,total){
     "div");
     details.className = "details"
     details.innerHTML ="hello"
+    let title = document.createElement(
+      "div")
+      title.className ="title"
+      title.className ="hello world"
+    let projectName =  document.createElement(
+      "div")
+      projectName.className = "project-name" 
+      projectName.innerHTML ="hello world"
+    let startTime =  document.createElement(
+        "div")
+        startTime.className = "start-time" 
+        startTime.innerHTML =`${start}`
+    let endTime =  document.createElement(
+        "div")
+        endTime.className = "end-time" 
+        endTime.innerHTML =`${end}`
+    let totals =  document.createElement(
+      "div")
+      totals.className = "total-work-time" 
+      totals.innerHTML =`${total}`
+    
+    todayDetails.appendChild(details)
+    details.appendChild(projectName)
+    details.appendChild(startTime)
+    details.appendChild(endTime)
+    details.appendChild(totals)
+}
+
+function weekHistory(tdate,start,end,total){
+  const todayDetails = document.querySelector('#week-details')
+  todayDetails.lastElementChild.remove()
+  let details = document.createElement(
+    "div");
+    details.className = "details"
+    details.innerHTML =`${tdate}`
     let title = document.createElement(
       "div")
       title.className ="title"
