@@ -1,17 +1,25 @@
 const path = require('path');
 
 const config = {
-  entry: ['./src/index.js'],
+  entry: {
+    index: './src/index.js',
+    timeTracking: ['@babel/polyfill', './src/timeTracking.js'],
+  },
   output: {
     path: path.resolve(__dirname, 'public/js/'),
-    filename: 'bundle.js',
+    filename: '[name].js',
   },
+  mode: 'development',
   module: {
     rules: [
       {
         test: /\.js$/,
-        use: 'babel-loader',
-        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env'],
+          },
+        },
       },
     ],
   },
