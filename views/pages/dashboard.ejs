@@ -15,7 +15,7 @@
   <div class="time" id="elapsedTime">00:00:00</div>
   <button class="btn-start" id="start-btn">start</button>
 
-      <button style="display: none;" class="btn-end" id="end-btn">End</button>
+  <button style="display: none" class="btn-end" id="end-btn">End</button>
 </div>
 
 <!-- ProJect Modal Start -->
@@ -40,35 +40,38 @@
   </div>
   <div id="today-details">
     <%today.map(t=>{%>
-      <div class="details">
+    <div class="details">
       <div class="title">hello</div>
       <div class="project-name">hello world</div>
-      <div class="start-time"><%= t.start  %> </div>
-      <end class="time"><%= t.end  %> </end>
-      <div class="total-work-time"><%= t.total  %> </div>
+      <div class="start-time"><%= t.start %></div>
+      <end class="time"><%= t.end %> </end>
+      <div class="total-work-time"><%= t.total %></div>
     </div>
-      <% })%>
+    <% })%>
   </div>
 </div>
 <div class="history">
   <div class="date-bar">
     <div class="date">This Week</div>
-    <div class="total-work-time"><%= weekTotal || "00:00:00" %></div>
+    <div id="total-week-work-time"><%= weekTotal || "00:00:00" %></div>
   </div>
-  <%weekHistory.map(h=>{%>
-  <div class="details">
-    <div class="title"><%= h.date  %>  </div>
-    <div class="project-name">hello world</div>
-    <div class="start-time"><%=h.start %></div>
-    <end class="end-time"><%=h.end %></end>
-    <div class="work-time"><%=h.total %></div>
+  <div id="week-details">
+    <%weekHistory.map(h=>{%>
+    <div class="details">
+      <div class="title"><%= h.date %></div>
+      <div class="project-name">hello world</div>
+      <div class="start-time"><%=h.start %></div>
+      <end class="end-time"><%=h.end %></end>
+      <div class="work-time"><%=h.total %></div>
+    </div>
+    <% })%>
   </div>
-  <% })%>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script>
-    let startTimeShow = "<%=start %>"
-</script>
-<script src="/js/timeTracking.js"></script>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    let startTimeShow = "<%=start %>";
+  </script>
+  <script src="/js/timeTracking.js"></script>
 
-<%- include("../partials/footer.ejs"); -%>
+  <%- include("../partials/footer.ejs"); -%>
+</div>
