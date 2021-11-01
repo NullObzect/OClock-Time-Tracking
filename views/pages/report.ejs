@@ -89,7 +89,6 @@
           <tr>
             <th class="p-3">DATE</th>
             <th class="p-3">Day</th>
-
             <th class="p-3 text-left">IN</th>
             <th class="p-3 text-left">OUT</th>
             <th class="p-3 text-left">Fixed Time</th>
@@ -98,16 +97,33 @@
           </tr>
         </thead>
         <tbody id="an-user-report">
-          <% console.log( userReport ) %> <% userReport.map(el => {%>
-          <tr class="bg-blue-200 lg:text-black">
+          <%# console.log( userReport ) %> <%#console.log( holidaysDate ) %> <%
+          userReport.map(el => {%>
+          <tr
+            class="
+              <%=
+              el.day===
+              "Friday"
+              ?
+              "bg-red-200":
+              "bg-blue-200"
+              
+              %>
+              lg:text-black
+            "
+          >
             <td class="p-3 font-medium capitalize"><%= el.date %></td>
             <td class="p-3"><%= el.day %></td>
-            <td class="p-3"><%= el.start %></td>
-
-            <td class="p-3"><%= el.end %></td>
-            <td class="p-3">6</td>
+            <td class="p-3">
+              <%= el.day === 'Friday' ? 'Off day' : el.start %>
+            </td>
+          
+            <td class="p-3"><%= el.day === 'Friday' ? 'Off day' : el.end %></td>
+            <td class="p-3"><%= el.day === 'Friday' ? '0' : '6' %></td>
             <td class="p-3"><%= el.working_time %></td>
-            <td class="p-3"><%= el.time_count %></td>
+            <td class="p-3">
+              <%= el.day === 'Friday' ? el.working_time : el.time_count %>
+            </td>
           </tr>
           <% }) %>
         </tbody>
@@ -167,14 +183,14 @@
       .map(
         (el) =>
           `
-          <tr class="bg-blue-200 lg:text-black">
+          <tr class="${el.day===  "Friday" ? "bg-red-200": "bg-blue-200"} lg:text-black">
             <td class="p-3 font-medium capitalize">${el.date}</td>
-            <td class="p-3">${el.day}</td>
-            <td class="p-3">${el.start}</td>
-            <td class="p-3">${el.end}</td>
-            <td class="p-3">6</td>
+            <td class="p-3">${ el.day}</td>
+            <td class="p-3">${el.day === 'Friday' ? 'Off day' : el.start}</td>
+            <td class="p-3">${el.day === 'Friday' ? 'Off day' : el.end}</td>
+            <td class="p-3">${el.day === 'Friday' ? '0' : '6'}</td>
             <td class="p-3">${el.working_time}</td>
-            <td class="p-3">${el.time_count}</td>
+            <td class="p-3">${el.day === 'Friday' ?  el.working_time : el.time_count}</td>
           </tr>
           `
       )

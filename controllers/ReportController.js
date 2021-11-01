@@ -1,5 +1,5 @@
 const AttendanceModel = require('../models/AttendanceModel');
-const { timeToHour } = require('../utilities/formater')
+const { timeToHour } = require('../utilities/formater');
 
 const ReportController = {
 
@@ -13,23 +13,24 @@ const ReportController = {
       const [{ monthTotal }] = await AttendanceModel.thisMonthTotal(userId)
       const weekHr = timeToHour(weekTotal)
       const monthHr = timeToHour(monthTotal)
+      // for holidays
+      const holidaysDate = await AttendanceModel.holidaysDate(userId);
+      console.log(holidaysDate);
+
       res.render('pages/report', {
-        userReport, avgStartTime, avgEndTime, weekHr, monthHr,
+        userReport, avgStartTime, avgEndTime, weekHr, monthHr, holidaysDate,
       });
     } catch (err) {
       console.log('====>Error form ReportController/ userReport', err);
+      return err;
     }
   },
+  // return data AJAX
   reportBetweenTwoDate: async (req, res) => {
     try {
       const userId = req.user.id;
-      console.log({ userId })
-
       const { startDate, endDate } = req.query;
-      console.log('xxxx', startDate, endDate);
-
       const getData = await AttendanceModel.anEmployeeReportBetweenTwoDate(userId, startDate, endDate);
-      console.log('data', getData)
       return res.json(getData);
     } catch (err) {
       console.log('====>Error form ReportController/reportBetweenTwoDate', err);
