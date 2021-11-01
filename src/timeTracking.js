@@ -1,17 +1,28 @@
 // user time tracking
 
+const axios = require('axios')
 // Select Start & End button
 const startBtn = document.querySelector('#start-btn')
 const endBtn = document.querySelector('#end-btn')
 // Set Interval ID
-let intervalId 
-
-if (startTimeShow != 0) {
-  const startNow = startTimeShow
-  startCounting (startNow)
-  startBtn.style.display ="none"
-  endBtn.style.display ="inline"
-}
+let intervalId ;
+// let startRuntTime ;
+(async function () {
+  let {data} = await axios.get('/get-start-data')
+  startRuntTime = data
+  if (startRuntTime != 0) {
+    const startNow = startRuntTime
+    startCounting (startNow)
+    startBtn.style.display ="none"
+    endBtn.style.display ="inline"
+  }
+})()
+// if (startRuntTime != 0) {
+//   const startNow = startRuntTime
+//   startCounting (startNow)
+//   startBtn.style.display ="none"
+//   endBtn.style.display ="inline"
+// }
 // Start button click event function
 startBtn.addEventListener('click',async(event)=>{
   event.preventDefault()
@@ -91,17 +102,37 @@ function todayHistory(start,end,total){
     details.appendChild(totals)
 }
 
-function weekHistory(tdate,start,end,total){
-  const todayDetails = document.querySelector('#week-details')
-  todayDetails.lastElementChild.remove()
+// let d = new Date();
+// let ye = new Intl.DateTimeFormat('en', { year: '2-digit' }).format(d);
+// let mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(d);
+// let da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+// console.log(`${da} ${mo} ${ye}`);
+
+function toDayPrint(){
+  let d = new Date();
+let ye = new Intl.DateTimeFormat('en', { year: '2-digit' }).format(d);
+let mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(d);
+let da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+  return `${da} ${mo} ${ye}`
+}
+// const todayDetails = document.querySelector('#week-details')
+//   console.log(todayDetails.lastElementChild.firstElementChild.innerHTML)
+
+function weekHistory(todayDate,start,end,total){
+  const weekDetails = document.querySelector('#week-details')
+  let detailsElement= weekDetails.lastElementChild
+   let titleElement=   detailsElement.getElementsByClassName('title')[0].innerHTML
+  if(titleElement==todayDate){
+    weekDetails.lastElementChild.remove()
+  }
+    // todayDetails.lastElementChild.remove()
   let details = document.createElement(
     "div");
     details.className = "details"
-    details.innerHTML =`${tdate}`
     let title = document.createElement(
       "div")
       title.className ="title"
-      title.className ="hello world"
+      title.innerHTML =`${todayDate}`
     let projectName =  document.createElement(
       "div")
       projectName.className = "project-name" 
@@ -119,7 +150,8 @@ function weekHistory(tdate,start,end,total){
       totals.className = "total-work-time" 
       totals.innerHTML =`${total}`
     
-    todayDetails.appendChild(details)
+      weekDetails.append(details)
+    details.appendChild(title)
     details.appendChild(projectName)
     details.appendChild(startTime)
     details.appendChild(endTime)

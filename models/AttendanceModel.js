@@ -25,14 +25,14 @@ const AttendanceModel = {
       return err;
     }
   },
-  getStartData: async (userId) => {
-    const getStartSql = 'SELECT start FROM `attendance` WHERE user_id =? and end IS NULL'
+  getRunStartData: async (userId) => {
+    const getRunStartSql = 'SELECT start FROM `attendance` WHERE user_id =? and end IS NULL'
     const value = [userId]
-    const [rows] = await dbConnect.promise().execute(getStartSql, value);
+    const [rows] = await dbConnect.promise().execute(getRunStartSql, value);
     return rows;
   },
   getWeekHistory: async (userId) => {
-    const getWeekHistory = 'SELECT date_format((create_at),"%d %b %y") as date, TIME_FORMAT(SEC_TO_TIME(min(TIME_TO_SEC(start))),"%h:%i% %p") as start ,TIME_FORMAT(SEC_TO_TIME(max(TIME_TO_SEC(end))),"%h:%i% %p") as end ,TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(end)))), SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(start))))) as total FROM attendance WHERE user_id = ? AND end IS NOT NULL and date(create_at) BETWEEN date( CURRENT_DATE - INTERVAL 7 day) and date(CURRENT_DATE) GROUP BY date_format((create_at),"%d %b %y")'
+    const getWeekHistory = 'SELECT date_format((create_at),"%d %b %y") as date, TIME_FORMAT(SEC_TO_TIME(min(TIME_TO_SEC(start))),"%h:%i% %p") as start ,TIME_FORMAT(SEC_TO_TIME(max(TIME_TO_SEC(end))),"%h:%i% %p") as end ,TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(end)))), SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(start))))) as total FROM attendance WHERE user_id = ? AND end IS NOT NULL and date(create_at) BETWEEN date( CURRENT_DATE - INTERVAL 7 day) and date(CURRENT_DATE) GROUP BY date_format((create_at),"%d %b %y") ORDER BY date(create_at) ASC'
     const value = [userId]
     const [rows] = await dbConnect.promise().execute(getWeekHistory, value);
     return rows;

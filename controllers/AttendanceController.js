@@ -6,7 +6,7 @@ const AttendanceController = {
     try {
       const { id } = req.user
       const insertedAttendanceStart = await AttendanceModel.setAttendanceStart(id)
-      const [result] = await AttendanceModel.getStartData(id)
+      const [result] = await AttendanceModel.getRunStartData(id)
       const { start } = result
       if (insertedAttendanceStart.errno) {
         return res.send('Error')
