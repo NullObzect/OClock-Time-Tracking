@@ -72,7 +72,7 @@ const AttendanceModel = {
 
   // an employee report last 7 days
   anEmployeeReportLastSavenDays: async (userId) => {
-    const lastSeventDaysSql = "SELECT DAYNAME(create_at) AS day, DATE_FORMAT(create_at,'%d %b %y') AS date,  DATE_FORMAT(create_at, '%d-%m-%y') AS date_for_holiday, TIME_FORMAT(MIN(start),'%h:%i %p') AS start, TIME_FORMAT(MAX(end),'%h:%i %p') AS end, TIMEDIFF(MAX(end), MIN(start)) as working_time, SUBTIME(TIMEDIFF(MAX(end), MIN(start)), TIME('06:00:00')) AS time_count FROM attendance WHERE user_id = ? AND create_at >  now() - INTERVAL 7 day GROUP BY DATE(create_at)";
+    const lastSeventDaysSql = "SELECT DAYNAME(create_at) AS day, DATE_FORMAT(create_at,'%d %b %y') AS date,  DATE_FORMAT(create_at, '%Y-%m-%d') AS date_for_holiday, TIME_FORMAT(MIN(start),'%h:%i %p') AS start, TIME_FORMAT(MAX(end),'%h:%i %p') AS end, TIMEDIFF(MAX(end), MIN(start)) as working_time, SUBTIME(TIMEDIFF(MAX(end), MIN(start)), TIME('06:00:00')) AS time_count, 6 AS fixed_time, 'regular' AS type FROM attendance WHERE user_id = ? AND create_at >  now() - INTERVAL 7 day GROUP BY DATE(create_at) ";
     const value = [userId];
     const [rows] = await dbConnect.promise().execute(lastSeventDaysSql, value);
     return rows;
@@ -80,7 +80,7 @@ const AttendanceModel = {
   // an employee repot berween to date
   anEmployeeReportBetweenTwoDate: async (userId, startDate, endDate) => {
     try {
-      const betweenTowDateSql = "SELECT DAYNAME(create_at) AS day, DATE_FORMAT(DATE(create_at),'%d %b %y') AS date, TIME_FORMAT(TIME(MIN(start)),'%h:%i %p') AS start, TIME_FORMAT(TIME(MAX(end)),'%h:%i %p') AS end, TIMEDIFF(MAX(end), MIN(start)) as working_time, SUBTIME(TIMEDIFF(MAX(end), MIN(start)), TIME('06:00:00')) AS time_count FROM attendance WHERE user_id = ? AND  DATE(create_at) BETWEEN ? AND ? GROUP BY DATE(create_at)";
+      const betweenTowDateSql = "SELECT DAYNAME(create_at) AS day, DATE_FORMAT(create_at, '%Y-%m-%d') AS date_for_holiday, DATE_FORMAT(DATE(create_at),'%d %b %y') AS date, TIME_FORMAT(TIME(MIN(start)),'%h:%i %p') AS start, TIME_FORMAT(TIME(MAX(end)),'%h:%i %p') AS end, TIMEDIFF(MAX(end), MIN(start)) as working_time, SUBTIME(TIMEDIFF(MAX(end), MIN(start)), TIME('06:00:00')) AS time_count, 6 AS fixed_time, 'regular' AS type FROM attendance WHERE user_id = ? AND  DATE(create_at) BETWEEN ? AND ? GROUP BY DATE(create_at)";
 
       const values = [userId, startDate, endDate];
       const [rows] = await dbConnect.promise().execute(betweenTowDateSql, values);
@@ -113,14 +113,25 @@ const AttendanceModel = {
     }
   },
   // get holiday date
-  holidaysDate: async (id) => {
+  holidaysDate: async () => {
     try {
-      const getHolidayDatSql = "SELECT DATE_FORMAT(create_at, '%d-%m-%y')AS date FROM `attendance` AS a WHERE DATE(a.create_at) IN (SELECT  h.value AS h_date FROM holidays AS h  WHERE DATE(h.value) = DATE(a.create_at)) AND user_id = ?";
-      const value = [id];
-      const [rows] = await dbConnect.promise().execute(getHolidayDatSql, value);
+      const getHolidayDatSql = "SELECT DATE_FORMAT(start,'%Y-%m-%d') AS holiday_start, DATEDIFF(end,start) + 1 count_holiday, h.title AS title FROM holidays AS h";
+      const [rows] = await dbConnect.promise().execute(getHolidayDatSql);
       return rows;
     } catch (err) {
       console.log('====>Error form AttendanceModel/ getHolidayDatSql', err);
+      return err;
+    }
+  },
+  // get holiday date
+  employeeLeaveDates: async (id) => {
+    try {
+      const getLeaveDateSql = "SELECT DATE_FORMAT(start, '%Y-%m-%d') AS leave_start, DATEDIFF(end,start) + 1 AS count_leave_day, el.reason AS leave_reason  FROM `employee_leaves` AS el WHERE user_id  = ?";
+      const value = [id]
+      const [rows] = await dbConnect.promise().execute(getLeaveDateSql, value);
+      return rows;
+    } catch (err) {
+      console.log('====>Error form AttendanceModel/ employeeLeaveDates ', err);
       return err;
     }
   },

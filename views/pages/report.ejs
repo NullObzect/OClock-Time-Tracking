@@ -1,5 +1,6 @@
 <%- include("../partials/header"); -%>
 
+
 <!-- Markup top  card for employee activits -->
 <div class="">
   <div class="flex justify-between gap-4">
@@ -91,35 +92,44 @@
             <th class="p-3">Day</th>
             <th class="p-3 text-left">IN</th>
             <th class="p-3 text-left">OUT</th>
+            <th class="p-3 text-left">Type</th>
+
             <th class="p-3 text-left">Fixed Time</th>
             <th class="p-3 text-left">Working Time</th>
             <th class="p-3 text-left">Less / Extra</th>
           </tr>
         </thead>
         <tbody id="an-user-report">
-          <%# console.log( userReport ) %> <%#console.log( holidaysDate ) %> <%
-          userReport.map(el => {%>
+        
+          
+          <% userReport.map(el => {%>
+            <%# console.log('holiday',el.date_for_holiday) %> 
+            <%#console.log('day',el.day) %> 
           <tr
             class="
               <%=
               el.day===
               "Friday"
               ?
-              "bg-red-200":
-              "bg-blue-200"
+              "bg-red-200": el.type === "holiday"
+             
+              ? "bg-yellow-200" : el.type === "leave" ? "bg-red-400"  :  "bg-blue-200"
+              
               
               %>
               lg:text-black
             "
           >
-            <td class="p-3 font-medium capitalize"><%= el.date %></td>
+            <td class="p-3 font-medium capitalize"><%= el.date  %></td>
             <td class="p-3"><%= el.day %></td>
             <td class="p-3">
-              <%= el.day === 'Friday' ? 'Off day' : el.start %>
+              <%=  el.start  %>
             </td>
           
-            <td class="p-3"><%= el.day === 'Friday' ? 'Off day' : el.end %></td>
-            <td class="p-3"><%= el.day === 'Friday' ? '0' : '6' %></td>
+            <td class="p-3"><%=  el.end %></td>
+            <td class="p-3 font-medium"><%= el.day === 'Friday' ? 'Off day' : el.type %></td>
+
+            <td class="p-3"><%= el.day === 'Friday' ? '0' : el.fixed_time  %></td>
             <td class="p-3"><%= el.working_time %></td>
             <td class="p-3">
               <%= el.day === 'Friday' ? el.working_time : el.time_count %>
@@ -134,25 +144,7 @@
 <script>
   const baseUrl = "http://localhost:5000";
 
-  let fixedTime = 21600;
-  function timeToSeconds(time) {
-    let a = time.split(":");
-    let seconds = +a[0] * 60 * 60 + +a[1] * 60 + +a[2];
-    console.log(
-      "seconds",
-      time,
-      fixedTime,
-      seconds,
-      fixedTime > seconds
-        ? "-" + time
-        : fixedTime < seconds
-        ? "+" + time
-        : "Equal"
-    );
-    return seconds;
-  }
-  console.log("xxx", fixedTime);
-
+ 
   const anUserReportTable = document.getElementById("an-user-report");
 
   // get start date
@@ -183,11 +175,14 @@
       .map(
         (el) =>
           `
-          <tr class="${el.day===  "Friday" ? "bg-red-200": "bg-blue-200"} lg:text-black">
+          <tr class="${el.day ===  "Friday" ? "bg-red-200" : 
+          el.type === "holiday" ? "bg-yellow-200" : el.type === "leave" ?"bg-red-400" : "bg-blue-200"} lg:text-black">
             <td class="p-3 font-medium capitalize">${el.date}</td>
             <td class="p-3">${ el.day}</td>
-            <td class="p-3">${el.day === 'Friday' ? 'Off day' : el.start}</td>
-            <td class="p-3">${el.day === 'Friday' ? 'Off day' : el.end}</td>
+            <td class="p-3">${ el.start}</td>
+            <td class="p-3">${ el.end}</td>
+            <td class="p-3 font-medium">${ el.day === 'Friday' ? 'Off day' : el.type }</td>
+
             <td class="p-3">${el.day === 'Friday' ? '0' : '6'}</td>
             <td class="p-3">${el.working_time}</td>
             <td class="p-3">${el.day === 'Friday' ?  el.working_time : el.time_count}</td>

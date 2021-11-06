@@ -356,8 +356,9 @@ tr th:nth-child(1) {
 /* style for users table */
 #users-table,
 .table-report {
-  width: 700px;
+  width: 800px;
 }
+
 /* style for  an users report */
 
 .table-report {
@@ -368,8 +369,8 @@ tr th:nth-child(1) {
   border-radius: 20px;
 }
 
-.table-report tr td:nth-child(n + 7),
-.table-report tr th:nth-child(n + 7) {
+.table-report tr td:nth-child(n + 8),
+.table-report tr th:nth-child(n + 8) {
   border-radius: 0 0.625rem 0.625rem 0;
 }
 
