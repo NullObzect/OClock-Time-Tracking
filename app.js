@@ -7,6 +7,7 @@ const session = require('express-session')
 const passport = require('passport')
 const flash = require('connect-flash')
 const router = require('./routers/routes');
+const dbConnect = require('./config/database')
 // for passport facebook congif/passportFB
 require('./utilities/passportFB')(passport)
 //
@@ -28,12 +29,11 @@ app.use(session({
 }))
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(flash())
-
 // Check User
 app.use(checkUser)
 
 app.use(router);
+
 // 404 not found
 app.use(notFoundHandler)
 
@@ -43,5 +43,7 @@ app.use(errorHandler)
 // server
 app.listen(process.env.PORT, () => {
   // eslint-disable-next-line no-console
+  const onlyGroupbyNull = 'SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,"ONLY_FULL_GROUP_BY",""))'
+  dbConnect.promise().execute(onlyGroupbyNull)
   console.log(`Server Running http://localhost:${process.env.PORT}`);
 });
