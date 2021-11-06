@@ -13,7 +13,6 @@ function decorateHtmlResponse(pageTitle) {
     res.locals.addUser = false
     res.locals.message = {}
     res.locals.baseUrl = process.env.BASE_URL
-    res.locals.start = {}
     next();
   };
 }

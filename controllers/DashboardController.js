@@ -5,7 +5,6 @@ const DashboardController = {
   // Get today , this week history & today, this week total value from database
   getDashboard: async (req, res) => {
     const [user] = await UserModel.findUserByEmail(req.user.userMailFormDB)
-    const [startData] = await AttendanceModel.getStartData(user.id)
     const weekHistory = await AttendanceModel.getWeekHistory(user.id)
     const today = await AttendanceModel.getToday(user.id)
     const [tTotal] = await AttendanceModel.todayTotal(user.id)
@@ -13,16 +12,13 @@ const DashboardController = {
     const { todayTotal } = tTotal
     const { weekTotal } = wTotal
 
-    if (startData) {
-      const { start } = startData
-      res.render('pages/dashboard', {
-        start, weekHistory, today, todayTotal, weekTotal,
-      })
-    } else {
-      res.render('pages/dashboard', {
-        start: 0, weekHistory, today, todayTotal, weekTotal,
-      })
-    }
+    res.render('pages/dashboard', {
+      weekHistory, today, todayTotal, weekTotal,
+    })
+  },
+  getRunStartData: async (req, res) => {
+    const [{ start }] = await AttendanceModel.getRunStartData(req.user.id)
+    res.json(start)
   },
 }
 module.exports = DashboardController
