@@ -16,6 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
+    "@themesberg/flowbite": "^1.1.1",
     "autoprefixer": "^10.3.3",
     "axios": "^0.23.0",
     "bcrypt": "^5.0.1",
