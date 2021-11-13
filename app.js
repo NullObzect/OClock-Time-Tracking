@@ -43,7 +43,7 @@ app.use(errorHandler)
 // server
 app.listen(process.env.PORT, () => {
   // eslint-disable-next-line no-console
-  const onlyGroupbyNull = 'SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,"ONLY_FULL_GROUP_BY",""))'
+  const onlyGroupbyNull = 'SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,"ONLY_FULL_GROUP_BY",""))';
   dbConnect.promise().execute(onlyGroupbyNull)
   console.log(`Server Running http://localhost:${process.env.PORT}`);
 });

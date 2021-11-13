@@ -135,6 +135,20 @@ const AttendanceModel = {
       return err;
     }
   },
-}
 
+  // last seven days total
+  reportLastSevendaysTotalForEmployee: async (id) => {
+    try {
+      const getSevendaysTotalSql = 'SELECT TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(start))),"%h:%i %p") AS avgStartTime, TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(end))),"%h:%i %p") AS avgEndTime,  TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) AS weekTotal FROM attendance WHERE user_id = ? AND END IS NOT NULL AND create_at > now() - INTERVAL 7  day'
+      const value = [id]
+
+      const [rows] = await dbConnect.promise().execute(getSevendaysTotalSql, value)
+      return rows;
+    } catch (err) {
+      console.log('====>Error form AttendanceModel/reportLastSevendaysTotalForEmployee', err);
+      return err;
+    }
+  },
+}
+// SELECT TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(start))),"%h:%i %p") AS avgStartTime, TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(end))),"%h:%i %p") AS avgEndTime,  TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) AS weekTotal FROM attendance WHERE user_id = 18 AND END IS NOT NULL AND create_at > now() - INTERVAL 7  day AND create_at
 module.exports = AttendanceModel;

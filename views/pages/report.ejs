@@ -88,8 +88,8 @@
       >
         <thead class="bg-blue-500 text-white">
           <tr>
-            <th class="p-3">DATE</th>
             <th class="p-3">Day</th>
+            <th class="p-3">DATE</th>
             <th class="p-3 text-left">IN</th>
             <th class="p-3 text-left">OUT</th>
             <th class="p-3 text-left">Type</th>
@@ -117,11 +117,11 @@
               
               
               %>
-              lg:text-black
+              text-black
             "
           >
+          <td class="p-3"><%= el.day %></td>
             <td class="p-3 font-medium capitalize"><%= el.date  %></td>
-            <td class="p-3"><%= el.day %></td>
             <td class="p-3">
               <%=  el.start  %>
             </td>
@@ -134,9 +134,25 @@
             <td class="p-3">
               <%= el.day === 'Friday' ? el.working_time : el.time_count %>
             </td>
+            
           </tr>
           <% }) %>
         </tbody>
+
+        <tfoot id="last-seven-days-total" >
+          <% employeeLastSevendaysReportTotal.map(el => {%> 
+
+          <tr class="bg-blue-500 text-center text-white font-bold">
+            <td colspan="2">Total = </td>
+          <td class="p-3"><%= el.avgStartTime  || '00' %> </td>
+          <td class="p-3"><%= el.avgEndTime  || '00'%> </td>
+          <td class="p-3"></td>
+          <td class="p-3"></td>
+          <td class="p-3"><%= el.weekTotal || '00' %> </td>
+          <td class="p-3"></td>
+          </tr>
+        <% })  %> 
+        </tfoot>
       </table>
     </div>
   </div>
@@ -177,8 +193,8 @@
           `
           <tr class="${el.day ===  "Friday" ? "bg-red-200" : 
           el.type === "holiday" ? "bg-yellow-200" : el.type === "leave" ?"bg-red-400" : "bg-blue-200"} lg:text-black">
-            <td class="p-3 font-medium capitalize">${el.date}</td>
-            <td class="p-3">${ el.day}</td>
+          <td class="p-3">${ el.day}</td>
+          <td class="p-3 font-medium capitalize">${el.date}</td>
             <td class="p-3">${ el.start}</td>
             <td class="p-3">${ el.end}</td>
             <td class="p-3 font-medium">${ el.day === 'Friday' ? 'Off day' : el.type }</td>

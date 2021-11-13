@@ -8,6 +8,8 @@ const userPlatformRoute = require('./userPlatformRoute')
 const fbUserRoute = require('./fbUserRoute')
 const profileRoute = require('./profileRoute')
 const attendanceRoute = require('./attendanceRoute')
+const holidayRouter = require('./holidayRoute')
+const leavedayRoute = require('./leavedayRoute')
 
 // all routers use
 router.use(
@@ -19,6 +21,8 @@ router.use(
   fbUserRoute,
   profileRoute,
   attendanceRoute,
+  holidayRouter,
+  leavedayRoute,
 
 )
 
