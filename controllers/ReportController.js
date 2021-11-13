@@ -5,11 +5,10 @@ const { timeToHour } = require('../utilities/formater');
 const holidaysArray = [];
 const leaveDaysArray = [];
 global.holidayAndLeavedaysDateRange = []
-//
 
+//  function for date formater
 function dateFormate(dateTime) {
-  const today = dateTime
-
+  const today = new Date(dateTime)
   const month = today.getMonth() + 1
   const year = today.getFullYear()
   const day = today.getDate() < 10 ? `0${today.getDate()}` : today.getDate()
@@ -17,18 +16,22 @@ function dateFormate(dateTime) {
 
   return getDate;
 }
-// holiday dates
+// holiday dates function
 function multipleDate(numOfDay, date) {
   const myDate = new Date(date);
+  const gotDate = new Date(myDate.setDate(myDate.getDate() - 1))
+
   for (let i = 1; i <= numOfDay; i += 1) {
-    holidaysArray.push(dateFormate(new Date(myDate.setDate(myDate.getDate() + 1))))
+    holidaysArray.push(dateFormate(gotDate.setDate(gotDate.getDate() + 1)))
   }
 }
-// leave dates
+// leave dates funciton
 function multipleLeaveDates(numOfDay, date) {
   const myDate = new Date(date);
+  const gotDate = new Date(myDate.setDate(myDate.getDate() - 1))
+
   for (let i = 1; i <= numOfDay; i += 1) {
-    leaveDaysArray.push(dateFormate(new Date(myDate.setDate(myDate.getDate() + 1))))
+    leaveDaysArray.push(dateFormate(gotDate.setDate(gotDate.getDate() + 1)))
   }
 }
 
@@ -57,7 +60,7 @@ const ReportController = {
       reportStringify.forEach((el) => {
         lastSevenDaysReportDates.push(el.date_for_holiday)
       })
-
+      // check employee work in holiday
       const employeeWorkInHoliday = holidaysArray.filter((el) => lastSevenDaysReportDates.includes(el))
       // console.log({ employeeWorkInHoliday })
       const holidayObject = [];
@@ -73,15 +76,20 @@ const ReportController = {
       })
 
       const employeeWorkInLeaveDay = leaveDaysArray.filter((el) => lastSevenDaysReportDates.includes(el))
+      console.log({ employeeWorkInLeaveDay });
+
       const leaveDayObject = [];
       employeeWorkInLeaveDay.forEach((el) => {
         leaveDayObject.push({ l_date: el, type: 'leave', fixed_time: '0' })
       })
-
+      // marge holiday and leave days array of object
       const margeHolidaysAndLeaveDays = [...holidayObject, ...leaveDayObject]
-      holidayAndLeavedaysDateRange = margeHolidaysAndLeaveDays;
+      // console.log({ margeHolidaysAndLeaveDays });
+      // console.log({ leaveDayObject });
 
-      console.log(margeHolidaysAndLeaveDays)
+      //
+      // holidayAndLeavedaysDateRange = margeHolidaysAndLeaveDays;
+
       // chek holiday and leave day then change type
       for (let i = 0; i < reportStringify.length; i += 1) {
         for (let j = 0; j < margeHolidaysAndLeaveDays.length; j += 1) {
@@ -98,29 +106,37 @@ const ReportController = {
           }
         }
       }
+
+      // last seven days total report pore employee
+      const employeeLastSevendaysReportTotal = await AttendanceModel.reportLastSevendaysTotalForEmployee(userId)
       // console.log({ reportStringify })
-      console.log(holidaysArray, leaveDaysArray);
+      //  console.log(holidaysArray, leaveDaysArray);
 
       const userReport = [...reportStringify]
+      // userReport.sort((a, b) => {
+      //   const c = new Date(a)
+      //   const d = new Date(b)
+      //   return c - d;
+      // })
+      console.log({ userReport });
 
       res.render('pages/report', {
-        userReport, avgStartTime, avgEndTime, weekHr, monthHr,
+        userReport, avgStartTime, avgEndTime, weekHr, monthHr, employeeLastSevendaysReportTotal,
       });
     } catch (err) {
       console.log('====>Error form ReportController/ userReport', err);
       return err;
     }
   },
-  // return data AJAX
+  // return data AJAX for date range input
   reportBetweenTwoDate: async (req, res) => {
     try {
       const userId = req.user.id;
       const { startDate, endDate } = req.query;
       const getData = await AttendanceModel.anEmployeeReportBetweenTwoDate(userId, startDate, endDate);
-
       const dataToJson = JSON.parse(JSON.stringify(getData))
       // console.log({ dataToJson });
-      // console.log({ holidayAndLeavedaysArrayForBetweenToDate });
+      console.log({ holidayAndLeavedaysDateRange });
 
       for (let i = 0; i < dataToJson.length; i += 1) {
         // eslint-disable-next-line no-undef
@@ -139,7 +155,7 @@ const ReportController = {
         }
       }
 
-      console.log({ dataToJson });
+      // console.log({ dataToJson });
 
       return res.json(dataToJson);
     } catch (err) {
