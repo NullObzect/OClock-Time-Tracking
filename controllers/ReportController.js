@@ -87,8 +87,8 @@ const ReportController = {
       // console.log({ margeHolidaysAndLeaveDays });
       // console.log({ leaveDayObject });
 
-      //
-      // holidayAndLeavedaysDateRange = margeHolidaysAndLeaveDays;
+    
+      holidayAndLeavedaysDateRange = margeHolidaysAndLeaveDays;
 
       // chek holiday and leave day then change type
       for (let i = 0; i < reportStringify.length; i += 1) {
@@ -113,11 +113,7 @@ const ReportController = {
       //  console.log(holidaysArray, leaveDaysArray);
 
       const userReport = [...reportStringify]
-      // userReport.sort((a, b) => {
-      //   const c = new Date(a)
-      //   const d = new Date(b)
-      //   return c - d;
-      // })
+
       console.log({ userReport });
 
       res.render('pages/report', {
@@ -133,9 +129,11 @@ const ReportController = {
     try {
       const userId = req.user.id;
       const { startDate, endDate } = req.query;
-      const getData = await AttendanceModel.anEmployeeReportBetweenTwoDate(userId, startDate, endDate);
+      const getData = await AttendanceModel.anEmployeeReportBetweenTwoDate(
+        userId, startDate, endDate,
+      );
       const dataToJson = JSON.parse(JSON.stringify(getData))
-      // console.log({ dataToJson });
+      console.log({ dataToJson });
       console.log({ holidayAndLeavedaysDateRange });
 
       for (let i = 0; i < dataToJson.length; i += 1) {
