@@ -6,8 +6,8 @@ const env = require('dotenv')
 const session = require('express-session')
 const passport = require('passport')
 const flash = require('connect-flash')
-const router = require('./routers/routes');
 const dbConnect = require('./config/database')
+const router = require('./routers/routes');
 // for passport facebook congif/passportFB
 require('./utilities/passportFB')(passport)
 //
@@ -31,7 +31,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 // Check User
 app.use(checkUser)
-
+app.use(flash())
 app.use(router);
 
 // 404 not found

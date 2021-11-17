@@ -17,8 +17,12 @@ const DashboardController = {
     })
   },
   getRunStartData: async (req, res) => {
-    const [{ start }] = await AttendanceModel.getRunStartData(req.user.id)
-    res.json(start)
+    try {
+      const [{ start }] = await AttendanceModel.getRunStartData(req.user.id)
+      res.json(start)
+    } catch (err) {
+      res.json(0)
+    }
   },
 }
 module.exports = DashboardController
