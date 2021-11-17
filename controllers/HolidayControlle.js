@@ -1,5 +1,8 @@
 const HolidayModel = require('../models/HolidayModel');
 
+const helperJs = require('../public/js/halper')
+// console.log(helperJs)
+
 const HolidayController = {
 
   getAddHolidayPage: async (req, res) => {
@@ -8,10 +11,11 @@ const HolidayController = {
   addHoliday: async (req, res) => {
     try {
       const { title, start, end } = req.body
+
       const inserted = await HolidayModel.addHoliday(
         title,
-        start,
-        end,
+        helperJs.getDateFormat(start),
+        helperJs.getDateFormat(end),
       )
       if (inserted.errno) {
         res.send('Error')

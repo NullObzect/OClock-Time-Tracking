@@ -90,6 +90,11 @@
 </div>
 <!-- End profile card -->
 <!--  Markup User Table  -->
+<a href="/add-user"
+  ><button class="p-2 bg-blue-500 rounded-lg text-white font-medium ml-4">
+    Add User
+  </button>
+</a>
 <div class="flex mt-4 justify-center min-h-screen bg-white">
   <div class="">
     <div class="overflow-auto lg:overflow-visible">
@@ -360,7 +365,10 @@
                   >visibility</i
                 >
               </a>
-              <a href="#" class="text-yellow-400 hover:text-gray-100 mx-2">
+              <a
+                href="/update-user/<%= user.id %>"
+                class="text-yellow-400 hover:text-gray-100 mx-2"
+              >
                 <i class="material-icons-outlined text-base">edit</i>
               </a>
               <a

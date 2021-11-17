@@ -165,7 +165,7 @@ const UserController = {
       if (isUserDelete.errno) {
         res.send('Error')
       } else {
-        res.render('pages/allUsers')
+        res.redirect('/all-users')
       }
     } catch (err) {
       console.log('====>Error form Delet controller', err);
@@ -257,6 +257,21 @@ const UserController = {
     } catch (err) {
       console.log(err)
     }
+  },
+
+  // update user
+  updateUser: async (req, res) => {
+    // console.log(req.params.id);
+
+    const userInfo = await UserModel.getUpdateUserInfo(req.params.id)
+    // const [xx] = userInfo;
+    // const z = xx.user_pass
+    // const aa = '123456'
+    // const yy = await bcrypt.compare(aa, z)
+
+    // console.log(yy);
+
+    res.render('pages/updateUser', { userInfo })
   },
 
 };

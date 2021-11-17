@@ -16,9 +16,9 @@ const DashboardController = {
       weekHistory, today, todayTotal, weekTotal,
     })
   },
-  getRunStartData: async (req, res) => {
-    const [{ start }] = await AttendanceModel.getRunStartData(req.user.id)
-    res.json(start)
-  },
+  // getRunStartData: async (req, res) => {
+  //   const [{ start }] = await AttendanceModel.getRunStartData(req.user.id)
+  //   res.json(start)
+  // },
 }
 module.exports = DashboardController

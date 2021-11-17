@@ -134,5 +134,13 @@ const UserModel = {
     return row
   },
 
+  // update user info
+  getUpdateUserInfo: async (id) => {
+    const getUser = 'SELECT * FROM `users` WHERE id = ?'
+    const value = [id]
+    const [rows] = await dbConnect.promise().execute(getUser, value)
+    return rows;
+  },
+
 }
 module.exports = UserModel;

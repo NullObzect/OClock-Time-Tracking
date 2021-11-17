@@ -37,4 +37,7 @@ router.get('/user-verify/:token', UserController.userVerifySet)
 // router.get('/forgot-password', UserController.getUserForgotPassword)
 // router.post('/forgot-password', UserController.userForgotPassword)
 
+// update user
+router.get('/update-user/:id', decorateHtmlResponse('Update User'), UserController.updateUser)
+
 module.exports = router;
