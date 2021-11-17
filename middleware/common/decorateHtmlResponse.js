@@ -11,7 +11,6 @@ function decorateHtmlResponse(pageTitle) {
     res.locals.loggedInUser = {}
     res.locals.signIn = false
     res.locals.addUser = false
-    res.locals.message = {}
     res.locals.baseUrl = process.env.BASE_URL
     next();
   };
