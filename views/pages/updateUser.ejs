@@ -1,0 +1,82 @@
+<%- include("../partials/header"); -%>
+<% userInfo.map(user => { %> 
+<div class="flex items-center justify-center min-h-screen" id="add-user">
+    <div class="px-8 py-6 mx-4 mt-2 text-left bg-gray-100 shadow-lg md:w-1/3 lg:w-5/12 sm:w-1/3 rounded-lg">
+        <h3 class="text-2xl font-bold text-center ">Update User</h3>
+        <form id="createUser" enctype="multipart/form-data"  action="/add-user" method="POST">
+
+          <!-- Image upload -->
+
+          <!-- component -->
+<div class=" mt-2 flex justify-center">
+  <div class="bg-white  py-4 rounded-lg shadow-lg text-center w-40">
+    <div class="mb-2">
+     
+      <img id="img" class="w-auto mx-auto rounded-full  object-cover object-center"  src="https://img.icons8.com/color/96/000000/person-skin-type-7.png"/>
+    </div>
+    <label class="cursor-pointer">
+      <span class="mt-2 text-base leading-normal px-4 py-2 bg-blue-500 text-white text-sm rounded-full" >Select Image</span>
+      <input type='file' name="avatar"  class="hidden" />
+    </label>
+  </div>
+</div>
+          <!-- End image upload-->
+            <div class="mt-2">
+                <div >
+                    <label class="" for="Name">Name<label>
+                            <input id="userName" type="text" name="userName" placeholder="Name"
+                                class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600" value="<%= user.user_name %>">
+
+                                
+                </div>
+                <div>
+                    <label  for="Phone">Phone Number<label>
+                            <input id="userPhone" type="number" name="userPhone" placeholder="Phone Number"
+                                class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600" value="<%= user.user_phone %>">        
+
+                                      
+              <div class="">
+                <label>User Role</label>
+                <div class="mt-2">
+                  <label class="inline-flex items-center">
+                    <input type="radio" class="form-radio "  name="userRole"
+                     value="admin" <%= user.user_role === 'admin' ? 'checked' : '' %> >
+                    <span class="ml-2">Admin</span>
+                  </label>
+                  <label class="inline-flex items-center ml-6">
+                    <input type="radio" class="form-radio" name="userRole" value="user"
+                    <%= user.user_role === 'user' ? 'checked' : '' %> >
+                    <span class="ml-2">User</span>
+                  </label>
+                </div>
+              </div>
+
+                <div class="">
+                    <label  for="email">Email<label>
+                            <input id="userMail" type="email" name="userMail" placeholder="Email"
+                                class=" w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600" value="<%= user.user_mail %> ">
+
+                                                    
+                </div>
+                <div class="">
+                    <label>Password<label>
+                            <input id="userPass" type="password" name="userPass" placeholder="Password"
+                                class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600" value="">
+                                
+
+                </div>
+                
+                <div class="flex">
+                    <button id="userSubmitBtn" type="submit" class="w-full px-6 py-2 mt-2 text-white bg-blue-600 rounded-lg hover:bg-blue-600">Create
+                        User</button>
+                </div>
+               
+            </div>
+            
+        </form>
+    </div>
+</div>
+
+<% }) %> 
+
+<%- include("../partials/footer"); -%>
