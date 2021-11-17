@@ -63,7 +63,7 @@
 
 <div class="mt-5 flex justify-between">
   <div>
-    <h4 class="text-xl font-bold">Report</h4>
+    <h4 class="text-xl font-bold">Reports</h4>
   </div>
   <div>
     <input
@@ -78,8 +78,37 @@
       onchange="selectEndDate(event)"
     />
   </div>
+</div> 
+
+<!-- 
+<div class="mt-5 flex justify-between">
+  <div>
+    <h4 class="text-xl font-bold">Reports</h4>
+  </div>
+
+<div date-rangepicker class="flex items-center">
+  <div class="relative">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
+        </div>
+        <input  type="text"  onblur="selectStartDate(event)" name="start"  
+        class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 datepicker-input" placeholder="Select date start"  >
+    </div>
+  <span class="mx-4 text-gray-500">to</span>
+  <div class="relative">
+    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+        <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
+    </div>
+    <input name="end" type="text"  onchange="selectEndDate(event)"
+    class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 datepicker-input" placeholder="Select date end">
 </div>
-<!-- Markup report table for employee-->
+</div>
+
+</div>   -->
+
+
+
+<!-- Markup report table for employee -->
 <div class="bg-white flex justify-center mt-4">
   <div class="col-span-12">
     <div class="overflow-auto lg:overflow-visible">
@@ -157,95 +186,6 @@
     </div>
   </div>
 </div>
-<script>
-  const baseUrl = "http://localhost:5000";
-
- 
-  const anUserReportTable = document.getElementById("an-user-report");
-
-  // get start date
-  let startDate;
-
-  const selectStartDate = async(event) => {
-    //console.log(event.target.value);
-    let getDate = event.target.value;
-    console.log("start date", getDate);
-
-    startDate = getDate;
-
-    // get current date 
-function getCurrentDate(){
-    let today = new Date();
-    let dd = String(today.getDate()).padStart(2, '0');
-    let mm = String(today.getMonth() + 1).padStart(2, '0'); 
-    let yyyy = today.getFullYear();
-    today = `${yyyy}-${mm}-${dd}`;
-
-    return today;
-
-}
-
-
-      let data = await fetch(
-      `${baseUrl}/report/between/two-date?startDate=${startDate}&endDate=${getCurrentDate()}`
-    );
-    let jsonData = await data.json();
-    jsonData.map((el) => console.log(el.create_date));
-    console.log(jsonData);
-    anUserReportTable.innerHTML = jsonData
-      .map(
-        (el) =>
-          `
-          <tr class="${el.day ===  "Friday" ? "bg-red-200" : 
-          el.type === "holiday" ? "bg-yellow-200" : el.type === "leave" ?"bg-red-400" : "bg-blue-200"} lg:text-black">
-          <td class="p-3">${ el.day}</td>
-          <td class="p-3 font-medium capitalize">${el.date}</td>
-            <td class="p-3">${el.start}</td>
-            <td class="p-3">${el.end}</td>
-            <td class="p-3 font-medium">${ el.day === 'Friday' ? 'Off day' : el.type }</td>
-            <td class="p-3">${el.day === 'Friday' ? '0' : '6'}</td>
-            <td class="p-3">${el.working_time}</td>
-            <td class="p-3">${el.day === 'Friday' ?  el.working_time : el.time_count}</td>
-          </tr>
-          `
-      )
-      .join("");
-
-    //
-  };
-
-  //end date
-  const selectEndDate = async (event) => {
-
-    
-    const endDate = event.target.value;
-   
-    console.log("end date", endDate);
-    let data = await fetch(
-      `${baseUrl}/report/between/two-date?startDate=${startDate}&endDate=${endDate}`
-    );
-    let jsonData = await data.json();
-    jsonData.map((el) => console.log(el.create_date));
-    console.log(jsonData);
-    anUserReportTable.innerHTML = jsonData
-      .map(
-        (el) =>
-          `
-          <tr class="${el.day ===  "Friday" ? "bg-red-200" : 
-          el.type === "holiday" ? "bg-yellow-200" : el.type === "leave" ?"bg-red-400" : "bg-blue-200"} lg:text-black">
-          <td class="p-3">${ el.day}</td>
-          <td class="p-3 font-medium capitalize">${el.date}</td>
-            <td class="p-3">${el.start}</td>
-            <td class="p-3">${el.end}</td>
-            <td class="p-3 font-medium">${ el.day === 'Friday' ? 'Off day' : el.type }</td>
-            <td class="p-3">${el.day === 'Friday' ? '0' : '6'}</td>
-            <td class="p-3">${el.working_time}</td>
-            <td class="p-3">${el.day === 'Friday' ?  el.working_time : el.time_count}</td>
-          </tr>
-          `
-      )
-      .join("");
-  };
-</script>
-
+<script src="https://unpkg.com/@themesberg/flowbite@1.1.1/dist/datepicker.bundle.js"></script>
+<script src="<%=baseUrl%>/js/report.js"></script>
 <%- include("../partials/footer"); -%>

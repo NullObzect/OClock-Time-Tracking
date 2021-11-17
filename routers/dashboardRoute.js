@@ -4,6 +4,6 @@ const DashboardController = require('../controllers/DashboardController')
 const { checkLogin } = require('../middleware/common/AuthMiddleware')
 
 router.get('/dashboard', decorateHtmlResponse('Dashboard'), checkLogin, DashboardController.getDashboard)
-router.get('/get-start-data', DashboardController.getRunStartData)
+// router.get('/get-start-data', DashboardController.getRunStartData)
 
 module.exports = router

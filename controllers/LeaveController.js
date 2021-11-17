@@ -1,4 +1,5 @@
 const LeaveModel = require('../models/LeaveModel');
+const helperJs = require('../public/js/halper')
 
 const LeaveController = {
   getAddLeavedayPage: async (req, res) => {
@@ -8,9 +9,10 @@ const LeaveController = {
   addLeaveday: async (req, res) => {
     try {
       const {
-        userId, start, end,reason
+        userId, start, end, reason,
       } = req.body
-      const insertedLeaveday = await LeaveModel.addLeaveday(userId, start, end,reason)
+      const insertedLeaveday = await LeaveModel.addLeaveday(userId, helperJs.getDateFormat(start),
+        helperJs.getDateFormat(end), reason)
       if (insertedLeaveday.errno) {
         res.send('Error')
       } else {

@@ -1,5 +1,7 @@
 <%- include("../partials/header"); -%>
 
+
+<!-- Add holiday form -->
 <div class="flex justify-center my-20  ">
   <div class="px-8 py-6 mx-4 mt-2 text-left bg-gray-100 shadow-lg rounded-lg">
     <form action="/add-holiday" method="POST">
@@ -14,7 +16,7 @@
 
     <p class="pb-2">Select start to end Date</p>
 
-      <div date-rangepicker="" class="flex items-center">
+      <div date-rangepicker class="flex items-center">
         <div class="relative">
           <div
             class="
@@ -41,8 +43,10 @@
             </svg>
           </div>
           <input
-            name="start"
-            type="date"
+          
+          
+          type="text"
+          name="start"
             class="
               bg-gray-50
               border border-gray-300
@@ -87,7 +91,7 @@
           </div>
           <input
             name="end"
-            type="date"
+            type="text"
             class="
               bg-gray-50
               border border-gray-300
@@ -113,4 +117,6 @@
     </form>
   </div>
 </div>
+<script src="https://unpkg.com/@themesberg/flowbite@1.1.1/dist/datepicker.bundle.js"></script>
+
 <%- include("../partials/footer"); -%>
