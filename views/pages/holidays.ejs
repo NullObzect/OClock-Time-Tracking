@@ -1,0 +1,75 @@
+<%- include("../partials/header"); -%>
+
+<style>
+  .table-holidays {
+    border-spacing: 0 15px;
+    width: 700px;
+  }
+
+  .table-holidays tr {
+    border-radius: 20px;
+  }
+
+  .table-holidays tr td:nth-child(n + 6),
+  .table-holidays tr th:nth-child(n + 6) {
+    border-radius: 0 0.625rem 0.625rem 0;
+  }
+
+  .table-holidays tr td:nth-child(1),
+  tr th:nth-child(1) {
+    border-radius: 0.625rem 0 0 0.625rem;
+  }
+</style>
+
+<div class="flex justify-center">
+  <a href="/add-holiday"
+    ><button class="p-2 bg-blue-500 rounded-lg text-white font-medium">
+      Add holiday
+    </button>
+  </a>
+</div>
+<div class="bg-white flex justify-center mt-4">
+  <div class="col-span-12">
+    <div class="overflow-auto lg:overflow-visible">
+      <table
+        class="table-holidays text-gray-400 border-separate space-y-6 text-sm"
+      >
+        <thead class="bg-blue-500 text-white">
+          <tr>
+            <th class="p-3">SL</th>
+            <th class="p-3">Holiday Title</th>
+            <th class="p-3 text-left">Start Date</th>
+            <th class="p-3 text-left">End Date</th>
+            <th class="p-3 text-left">Duration</th>
+            <th class="p-3 text-left">Action</th>
+          </tr>
+        </thead>
+        <tbody id="holiday-list">
+          <% holidays.map((day,idx) =>{ %>
+
+          <tr class="bg-blue-200 text-black">
+            <td class="p-2"><%= idx + 1 %></td>
+            <td class="p-2"><%= day.title %></td>
+            <td class="p-2"><%= day.start %></td>
+            <td class="p-2"><%= day.end %></td>
+            <td class="p-2"><%= day.duration + ' ' + 'day' %></td>
+            <td class="p-2">
+              <a href="/edit/holiday/<%= day.id %>"
+                ><button class="p-2 bg-green-300 rounded-lg">Edit</button>
+              </a>
+              <a
+                onclick=" return confirm('Are you Sure???')"
+                href="/delete/holiday/<%= day.id %>"
+                ><button class="p-2 bg-red-300 rounded-lg">Delete</button>
+              </a>
+            </td>
+          </tr>
+
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<%- include("../partials/footer"); -%>
