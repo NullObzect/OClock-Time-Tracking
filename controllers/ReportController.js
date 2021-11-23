@@ -6,6 +6,20 @@ const holidaysArray = [];
 const leaveDaysArray = [];
 global.holidayAndLeavedaysDateRange = []
 
+// functin for total time count
+
+function calculateTime(fixedTime, workingTotalSec){
+  
+  let getFixedSec = Number(fixedTime *  60 * 60 );
+  let getTotalSec =  getFixedSec - workingTotalSec
+  let hours = Math.floor(getTotalSec / 3600);
+  getTotalSec %= 3600;
+  let = minutes = Math.floor(getTotalSec / 60);
+  let = seconds = getTotalSec % 60;
+  
+   return `${hours}:${minutes}:${seconds}`
+    
+  }
 //  function for date formater
 function dateFormate(dateTime) {
   const today = new Date(dateTime)
@@ -87,7 +101,6 @@ const ReportController = {
       // console.log({ margeHolidaysAndLeaveDays });
       // console.log({ leaveDayObject });
 
-    
       holidayAndLeavedaysDateRange = margeHolidaysAndLeaveDays;
 
       // chek holiday and leave day then change type
@@ -109,8 +122,23 @@ const ReportController = {
 
       // last seven days total report pore employee
       const employeeLastSevendaysReportTotal = await AttendanceModel.reportLastSevendaysTotalForEmployee(userId)
-      // console.log({ reportStringify })
+      employeeLastSevendaysReportTotal.forEach((el) => {
+
+
+       console.log(calculateTime(el.fixed_total, el.total_seconds))
+
+       el.totalLessORExtra =  calculateTime(el.fixed_total, el.total_seconds)
+       ;
+       //employeeLastSevendaysReportTotal.push({total_seconds:aa})
+       
+      })
+      console.log({employeeLastSevendaysReportTotal});
+      
+
+
       //  console.log(holidaysArray, leaveDaysArray);
+      const fixedTime = await AttendanceModel.getFixedTime()
+      console.log({ fixedTime });
 
       const userReport = [...reportStringify]
 

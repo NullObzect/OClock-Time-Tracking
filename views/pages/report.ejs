@@ -2,7 +2,7 @@
 
 
 <!-- Markup top  card for employee activits -->
-<div class="">
+<div  class="" >
   <div class="flex justify-between gap-4">
     <div
       class="
@@ -61,7 +61,7 @@
 
 <!-- Markup Date range for employee-->
 
-<div class="mt-5 flex justify-between">
+<div  class="mt-5 flex justify-between">
   <div>
     <h4 class="text-xl font-bold">Reports</h4>
   </div>
@@ -109,7 +109,7 @@
 
 
 <!-- Markup report table for employee -->
-<div class="bg-white flex justify-center mt-4">
+<div  class="bg-white flex justify-center mt-4">
   <div class="col-span-12">
     <div class="overflow-auto lg:overflow-visible">
       <table
@@ -172,13 +172,14 @@
           <% employeeLastSevendaysReportTotal.map(el => {%> 
 
           <tr class="bg-blue-500 text-center text-white font-bold">
-            <td colspan="2">Total = </td>
+            <td colspan="2">Total = <%= 'Present' + ' ' + el.present + '/' + '7'%>  </td>
           <td class="p-3"><%= el.avgStartTime  || '00' %> </td>
           <td class="p-3"><%= el.avgEndTime  || '00'%> </td>
           <td class="p-3"></td>
-          <td class="p-3"></td>
+          <% console.log( typeof el.fixed_total) %> 
+          <td class="p-3"><%= el.fixed_total + 'hr' %></td>
           <td class="p-3"><%= el.weekTotal || '00' %> </td>
-          <td class="p-3"></td>
+          <td class="p-3"><%= el.totalLessORExtra %> </td>
           </tr>
         <% })  %> 
         </tfoot>
@@ -186,6 +187,7 @@
     </div>
   </div>
 </div>
+
 <script src="https://unpkg.com/@themesberg/flowbite@1.1.1/dist/datepicker.bundle.js"></script>
 <script src="<%=baseUrl%>/js/report.js"></script>
 <%- include("../partials/footer"); -%>

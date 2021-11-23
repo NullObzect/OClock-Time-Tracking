@@ -55,7 +55,7 @@ const selectStartDate = async (event) => {
             <td class="p-3">${el.start}</td>
             <td class="p-3">${el.end}</td>
             <td class="p-3 font-medium">${el.day === 'Friday' ? 'Off day' : el.type}</td>
-            <td class="p-3">${el.day === 'Friday' ? '0' : '6'}</td>
+            <td class="p-3">${el.day === 'Friday' ? '0' : el.fixed_time}</td>
             <td class="p-3">${el.working_time}</td>
             <td class="p-3">${el.day === 'Friday' ? el.working_time : el.time_count}</td>
           </tr>
@@ -94,3 +94,5 @@ const selectEndDate = async (event) => {
     )
     .join('');
 };
+
+
