@@ -19,7 +19,42 @@ const LeaveController = {
         res.redirect('/')
       }
     } catch (err) {
-      console.log('====>Error form  LeaveController/addLeaveday', err);
+      console.log('====>Error form  LeaveController/addLeaveday', err)
+    }
+  },
+  employeeLeavedaysList: async (req, res) => {
+    try {
+      const employeeLeaveList = await LeaveModel.getEmployeeLeaveList()
+      res.render('pages/leavedays', { employeeLeaveList })
+    } catch (err) {
+      console.log('====>Error form LeaveController ', err);
+    }
+  },
+  getEditLeavePage: async (req, res) => {
+    global.lId = req.params.id
+    const selectEmployee = await LeaveModel.selectEmployee();
+    const getData = await LeaveModel.getLeaveEditData(lId)
+
+    res.render('pages/editLeave', { selectEmployee, getData })
+  },
+
+  setLeaveData: async (req, res) => {
+    const id = lId
+    const {
+      userId, start, end, reason,
+    } = req.body;
+    const isEdit = await LeaveModel.setLeaveEditData(
+      id,
+      userId,
+      helperJs.getDateFormat(start),
+      helperJs.getDateFormat(end),
+      reason,
+      lId,
+    )
+    if (isEdit.errno) {
+      res.send('Have an Error')
+    } else {
+      res.redirect('/leavedays-list')
     }
   },
 
