@@ -174,7 +174,7 @@
                   <button
                     title="Remove"
                     class="
-                      btn-hover
+                      btn-hover-facebook
                       px-3
                       py-1
                       rounded-full
@@ -275,9 +275,82 @@
                 dark:bg-gray-800
               "
             >
-              <div class="mt-2">
-                <div class="items-center -mx-2 md:flex">
-                  <div class="w-full mx-2">
+              <form action="#" id="edit-form">
+                <div class="mt-2">
+                  <div class="items-center -mx-2 md:flex">
+                    <div class="w-full mx-2">
+                      <label
+                        class="
+                          block
+                          mb-2
+                          text-sm
+                          font-medium
+                          text-gray-600
+                          dark:text-gray-200
+                        "
+                        >Name</label
+                      >
+
+                      <input
+                        id="edit-name"
+                        class="
+                          block
+                          w-full
+                          px-4
+                          py-2
+                          text-gray-700
+                          bg-white
+                          border border-gray-300
+                          rounded-md
+                          dark:bg-gray-800
+                          dark:text-gray-300
+                          dark:border-gray-600
+                          focus:border-blue-500
+                          dark:focus:border-blue-500
+                          focus:outline-none focus:ring
+                        "
+                        type="text"
+                        value="<%= user_name %>"
+                      />
+                    </div>
+
+                    <div class="w-full mx-2 mt-4 md:mt-0">
+                      <label
+                        class="
+                          block
+                          mb-2
+                          text-sm
+                          font-medium
+                          text-gray-600
+                          dark:text-gray-200
+                        "
+                        >Phone Number</label
+                      >
+
+                      <input
+                        class="
+                          block
+                          w-full
+                          px-4
+                          py-2
+                          text-gray-700
+                          bg-white
+                          border border-gray-300
+                          rounded-md
+                          dark:bg-gray-800
+                          dark:text-gray-300
+                          dark:border-gray-600
+                          focus:border-blue-500
+                          dark:focus:border-blue-500
+                          focus:outline-none focus:ring
+                        "
+                        type="number"
+                        value="<%= user_phone %>"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="w-full mt-4">
                     <label
                       class="
                         block
@@ -287,13 +360,14 @@
                         text-gray-600
                         dark:text-gray-200
                       "
-                      >Name</label
+                      >Short bio</label
                     >
 
-                    <input
+                    <textarea
                       class="
                         block
                         w-full
+                        h-40
                         px-4
                         py-2
                         text-gray-700
@@ -305,113 +379,51 @@
                         dark:focus:border-blue-500
                         focus:outline-none focus:ring
                       "
-                      type="text"
-                      value="<%= user_name %>"
-                    />
+                      placeholder="Describe yourself"
+                    ></textarea>
                   </div>
 
-                  <div class="w-full mx-2 mt-4 md:mt-0">
-                    <label
-                      class="
-                        block
-                        mb-2
-                        text-sm
-                        font-medium
-                        text-gray-600
-                        dark:text-gray-200
-                      "
-                      >Phone Number</label
+                  <div class="flex justify-center gap-4 mt-5">
+                    <a href="/profile">
+                      <button
+                        id="reset"
+                        class="
+                          px-4
+                          py-2
+                          text-white
+                          transition-colors
+                          duration-200
+                          transform
+                          bg-gray-400
+                          rounded-md
+                          hover:bg-gray-600
+                          focus:outline-none focus:bg-gray-600
+                        "
+                      >
+                        Reset
+                      </button></a
                     >
 
-                    <input
+                    <button
+                      id="user-save-btn"
                       class="
-                        block
-                        w-full
                         px-4
                         py-2
-                        text-gray-700
-                        bg-white
-                        border border-gray-300
+                        text-white
+                        transition-colors
+                        duration-200
+                        transform
+                        bg-gray-400
                         rounded-md
-                        dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600
-                        focus:border-blue-500
-                        dark:focus:border-blue-500
-                        focus:outline-none focus:ring
+                        hover:bg-gray-600
+                        focus:outline-none focus:bg-gray-600
                       "
-                      type="number"
-                      value="<%= user_phone %>"
-                    />
+                    >
+                      Save
+                    </button>
                   </div>
                 </div>
-
-                <div class="w-full mt-4">
-                  <label
-                    class="
-                      block
-                      mb-2
-                      text-sm
-                      font-medium
-                      text-gray-600
-                      dark:text-gray-200
-                    "
-                    >Short bio</label
-                  >
-
-                  <textarea
-                    class="
-                      block
-                      w-full
-                      h-40
-                      px-4
-                      py-2
-                      text-gray-700
-                      bg-white
-                      border border-gray-300
-                      rounded-md
-                      dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600
-                      focus:border-blue-500
-                      dark:focus:border-blue-500
-                      focus:outline-none focus:ring
-                    "
-                    placeholder="Describe yourself"
-                  ></textarea>
-                </div>
-
-                <div class="flex justify-center gap-4 mt-5">
-                  <button
-                    class="
-                      px-4
-                      py-2
-                      text-white
-                      transition-colors
-                      duration-200
-                      transform
-                      bg-gray-400
-                      rounded-md
-                      hover:bg-gray-600
-                      focus:outline-none focus:bg-gray-600
-                    "
-                  >
-                    Reset
-                  </button>
-                  <button
-                    class="
-                      px-4
-                      py-2
-                      text-white
-                      transition-colors
-                      duration-200
-                      transform
-                      bg-gray-400
-                      rounded-md
-                      hover:bg-gray-600
-                      focus:outline-none focus:bg-gray-600
-                    "
-                  >
-                    Save
-                  </button>
-                </div>
-              </div>
+              </form>
             </div>
           </div>
 
@@ -662,79 +674,6 @@
       </div>
     </div>
     <!-- <button class="btn-hover bg-blue-500 px-4">hover</button> -->
-    <script>
-      // account settings
-      const publicProfileSection = document.getElementById("public-profile");
-      const publicProfileLi = document.getElementById("public-profile-li");
-      const accountSettingSection = document.getElementById("account-settings");
-      const accountSettingLi = document.getElementById("account-setting-li");
-      accountSettingLi.addEventListener("click", () => {
-        publicProfileSection.style.display = "none";
-        accountSettingSection.style.display = "block";
-      });
-      publicProfileLi.addEventListener("click", () => {
-        publicProfileSection.style.display = "block";
-      });
-
-      //modal
-      const modal = document.querySelector(".main-modal");
-      const closeButton = document.querySelectorAll(".modal-close");
-
-      const modalClose = () => {
-        modal.classList.remove("fadeIn");
-        modal.classList.add("fadeOut");
-        setTimeout(() => {
-          modal.style.display = "none";
-        }, 500);
-      };
-
-      const openModal = () => {
-        modal.classList.remove("fadeOut");
-        modal.classList.add("fadeIn");
-        modal.style.display = "flex";
-      };
-
-      for (let i = 0; i < closeButton.length; i++) {
-        const elements = closeButton[i];
-
-        elements.onclick = (e) => modalClose();
-
-        modal.style.display = "none";
-
-        window.onclick = function (event) {
-          if (event.target == modal) modalClose();
-        };
-      }
-      // for facebook
-      const hoverBtn = document.getElementsByClassName("btn-hover")[0];
-      console.log(hoverBtn.textContent);
-      console.log(hoverBtn.textContent);
-      const hoverBtnText = hoverBtn.innerText;
-      hoverBtn.addEventListener("mouseenter", () => {
-        //alert("ok");
-        hoverBtn.innerHTML = `<a href="/remove/facebook">Remove</a>`;
-      });
-      setTimeout(() => {
-        hoverBtn.addEventListener("mouseleave", () => {
-          hoverBtn.innerHTML = hoverBtnText;
-        });
-      }, 2000);
-
-      // for google
-      const googleHoverBtn =
-        document.getElementsByClassName("btn-hover-google")[0];
-
-      const googleHoverBtnText = googleHoverBtn.innerText;
-
-      googleHoverBtn.addEventListener("mouseenter", () => {
-        //alert("ok");
-        googleHoverBtn.innerHTML = `<a href="/remove/google">Remove</a>`;
-      });
-      setTimeout(() => {
-        googleHoverBtn.addEventListener("mouseleave", () => {
-          googleHoverBtn.innerHTML = googleHoverBtnText;
-        });
-      }, 2000);
-    </script>
+    <script src="/js/profile.js"></script>
   </body>
 </html>
