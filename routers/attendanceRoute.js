@@ -8,6 +8,7 @@ router.post('/attendance-start', AttendanceController.attendanceStart)
 router.post('/attendance-end', AttendanceController.attendanceEnd)
 
 // report router
+// gr 
 router.get('/report', decorateHtmlResponse('Report'), checkLogin, ReportController.userReport)
 router.get('/report/between/two-date', ReportController.reportBetweenTwoDate)
 //
