@@ -26,5 +26,45 @@ const HolidayController = {
       console.log('====>Error form HolidayControlle/addHoliday', err);
     }
   },
+  holidayList: async (req, res) => {
+    try {
+      const holidays = await HolidayModel.holidaysList()
+      res.render('pages/holidays', { holidays })
+    } catch (err) {
+      console.log('====>Error form HolidayControlle/holidayList', err);
+    }
+  },
+  getEditHolidayPage: async (req, res) => {
+    global.hId = req.params.id;
+    const holidayData = await HolidayModel.getHolidayData(hId)
+    console.log({ holidayData })
+
+    res.render('pages/editHoliday', { holidayData })
+  },
+  getUpdateHoliday: async (req, res) => {
+    const id = hId;
+    const { title, start, end } = req.body
+    const isUpdate = await HolidayModel.updateHoliday(
+      id,
+      title,
+      helperJs.getDateFormat(start),
+      helperJs.getDateFormat(end),
+      hId,
+    )
+    if (isUpdate.errno) {
+      res.send('Have Error')
+    } else {
+      res.redirect('/holiday-list')
+    }
+  },
+  getDeleteHoliday: async (req, res) => {
+    const getId = req.params.id
+    const isDelete = await HolidayModel.deleteHoliday(getId)
+    if (isDelete.errno) {
+      res.send('Have Error')
+    } else {
+      res.redirect('/holiday-list')
+    }
+  },
 }
 module.exports = HolidayController

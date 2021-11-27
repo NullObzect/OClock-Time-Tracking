@@ -211,6 +211,7 @@ body {
   border-bottom: 1px solid #d3d3d3;
   padding: 10px;
   background: cornsilk;
+  padding-left: 300px;
 }
 .history .date-bar .total-work-time {
   right: 10px;

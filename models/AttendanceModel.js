@@ -74,7 +74,7 @@ const AttendanceModel = {
 
   // an employee report last 7 days
   anEmployeeReportLastSavenDays: async (userId) => {
-    const lastSeventDaysSql = "SELECT DAYNAME(create_at) AS day, DATE_FORMAT(create_at,'%d %b %y') AS date,  DATE_FORMAT(create_at, '%Y-%m-%d') AS date_for_holiday, TIME_FORMAT(MIN(start),'%h:%i %p') AS start, TIME_FORMAT(MAX(end),'%h:%i %p') AS end, TIMEDIFF(MAX(end), MIN(start)) as working_time, SUBTIME(TIMEDIFF(MAX(end), MIN(start)), TIME('06:00:00')) AS time_count, 6 AS fixed_time, 'regular' AS type FROM attendance WHERE user_id = ? AND create_at >  now() - INTERVAL 7 day GROUP BY DATE(create_at) ";
+    const lastSeventDaysSql = "SELECT DAYNAME(create_at) AS day, DATE_FORMAT(create_at,'%d %b %y') AS date,  DATE_FORMAT(create_at, '%Y-%m-%d') AS date_for_holiday, TIME_FORMAT(MIN(start),'%h:%i %p') AS start, TIME_FORMAT(MAX(end),'%h:%i %p') AS end, TIMEDIFF(MAX(end), MIN(start)) as working_time, SUBTIME(TIMEDIFF(MAX(end), MIN(start)), TIME(o.option_value)) AS time_count,  o.option_value  AS  fixed_time, 'regular' AS type FROM attendance  JOIN options AS o  WHERE o.option_title = 'fixed time' AND user_id = ? AND create_at >  now() - INTERVAL 7 day GROUP BY DATE(create_at) ";
     const value = [userId];
     const [rows] = await dbConnect.promise().execute(lastSeventDaysSql, value);
     return rows;
@@ -82,7 +82,7 @@ const AttendanceModel = {
   // an employee repot berween to date
   anEmployeeReportBetweenTwoDate: async (userId, startDate, endDate) => {
     try {
-      const betweenTowDateSql = "SELECT DAYNAME(create_at) AS day, DATE_FORMAT(create_at, '%Y-%m-%d') AS date_for_holiday, DATE_FORMAT(DATE(create_at),'%d %b %y') AS date, TIME_FORMAT(TIME(MIN(start)),'%h:%i %p') AS start, TIME_FORMAT(TIME(MAX(end)),'%h:%i %p') AS end, TIMEDIFF(MAX(end), MIN(start)) as working_time, SUBTIME(TIMEDIFF(MAX(end), MIN(start)), TIME('06:00:00')) AS time_count, 6 AS fixed_time, 'regular' AS type FROM attendance WHERE user_id = ? AND  DATE(create_at) BETWEEN ? AND ? GROUP BY DATE(create_at)";
+      const betweenTowDateSql = "SELECT DAYNAME(create_at) AS day, DATE_FORMAT(create_at, '%Y-%m-%d') AS date_for_holiday, DATE_FORMAT(DATE(create_at),'%d %b %y') AS date, TIME_FORMAT(TIME(MIN(start)),'%h:%i %p') AS start, TIME_FORMAT(TIME(MAX(end)),'%h:%i %p') AS end, TIMEDIFF(MAX(end), MIN(start)) as working_time, SUBTIME(TIMEDIFF(MAX(end), MIN(start)), TIME(o.option_value)) AS time_count, o.option_value  AS fixed_time, 'regular' AS type FROM attendance JOIN options AS o  WHERE o.option_title = 'fixed time' AND user_id = ? AND  DATE(create_at) BETWEEN ? AND ? GROUP BY DATE(create_at)";
 
       const values = [userId, startDate, endDate];
       const [rows] = await dbConnect.promise().execute(betweenTowDateSql, values);
@@ -141,7 +141,7 @@ const AttendanceModel = {
   // last seven days total
   reportLastSevendaysTotalForEmployee: async (id) => {
     try {
-      const getSevendaysTotalSql = 'SELECT TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(start))),"%h:%i %p") AS avgStartTime, TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(end))),"%h:%i %p") AS avgEndTime,  TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) AS weekTotal FROM attendance WHERE user_id = ? AND END IS NOT NULL AND create_at > now() - INTERVAL 7  day'
+      const getSevendaysTotalSql = 'SELECT COUNT(DISTINCT DATE(create_at)) AS present, TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(start))),"%h:%i %p") AS avgStartTime, TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(end))),"%h:%i %p") AS avgEndTime, o.option_value * COUNT(DISTINCT Date(create_at)) AS fixed_total, TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) AS weekTotal, TIME_TO_SEC(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start))))) AS total_seconds, "00" AS totalLessORExtra FROM attendance JOIN options AS o WHERE o.option_title = "fixed time" AND user_id = ? AND END IS NOT NULL AND create_at > now() - INTERVAL 7  day'
       const value = [id]
 
       const [rows] = await dbConnect.promise().execute(getSevendaysTotalSql, value)
@@ -151,6 +151,13 @@ const AttendanceModel = {
       return err;
     }
   },
+
+  // get fixed working hours
+  getFixedTime: async () => {
+    const getHours = "SELECT o.option_value AS fixed_time  FROM `options` AS o WHERE o.option_title = 'fixed time'"
+    const [row] = await dbConnect.promise().execute(getHours)
+    return row;
+  },
 }
-// SELECT TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(start))),"%h:%i %p") AS avgStartTime, TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(end))),"%h:%i %p") AS avgEndTime,  TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) AS weekTotal FROM attendance WHERE user_id = 18 AND END IS NOT NULL AND create_at > now() - INTERVAL 7  day AND create_at
+
 module.exports = AttendanceModel;
