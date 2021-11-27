@@ -2,6 +2,52 @@
 
 
 <!-- Markup top  card for employee activits -->
+
+<div
+
+    class="
+    flex justify-between mb-5
+      px-4
+      py-6
+      rounded-md
+      bg-blue-100
+      border-l-4 border-blue-400
+      shadow-lg
+    "
+  >
+  <% console.log(userInfo) %> 
+  <% let profileUrl = userInfo.avatar %>
+  <% if(profileUrl.search('https://') === -1) {%>
+    <img
+      class="
+        rounded-full
+        h-12
+        w-12
+        object-cover
+        ring ring-blue-500 ring-offset-2 ring-offset-white
+      "
+      src="/uploads/avatars/<%= userInfo.avatar%>"
+    />
+
+    <% } else{ %>
+    <img
+      class="
+        rounded-full
+        h-12
+        w-12
+        object-cover
+        ring ring-green-400 ring-offset-
+        2
+        ring-offset-white
+      "
+      src="<%= userInfo.avatar%>"
+    />
+    <% } %>
+   
+  <div>
+    <h4><b> Name: <%= userInfo.user_name  %> </b></h4>
+  </div>
+  </div>
 <div  class="" >
   <div class="flex justify-between gap-4">
     <div
@@ -61,21 +107,9 @@
 </div>
 
 
-<div class="flex justify-between gap-4">
-  <div
-    class="
-      px-4
-      py-6
-      rounded-md
-      bg-pink-200
-      border-l-4 border-blue-400
-      shadow-lg
-    "
-  >
-    <h3>Avarage Work Start Time</h3>
-    <h4><b><%= avgStartTime || '00:00' %> </b></h4>
-  </div>
-</div>
+
+  
+ 
 <!-- Markup Date range for employee-->
 
 <div  class="mt-5 flex justify-between">

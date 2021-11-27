@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 const AttendanceModel = require('../models/AttendanceModel');
+const UserModel = require('../models/UserModel')
 const { timeToHour } = require('../utilities/formater');
 // grobal variable  multiple date
 const holidaysArray = [];
@@ -53,7 +54,10 @@ const ReportController = {
 
   userReport: async (req, res) => {
     try {
-      const userId = req.user.id;
+      const [user] = await UserModel.findUserByEmail(req.user.userMailFormDB)
+      console.log({user})
+
+      const userId = user.id;
       const lastSevenDaysReport = await AttendanceModel.anEmployeeReportLastSavenDays(userId);
       const [{ avgStartTime }] = await AttendanceModel.avgStartTime(userId)
       const [{ avgEndTime }] = await AttendanceModel.avgEndTime(userId)
@@ -201,14 +205,14 @@ const ReportController = {
     const lastSevenDaysReport = await AttendanceModel.anEmployeeReportLastSavenDays(userId);
     console.log({lastSevenDaysReport});
     
-
+      const userInfo = await AttendanceModel.getEmployeeInfo(userId)
       const [{ avgStartTime }] = await AttendanceModel.avgStartTime(userId)
       const [{ avgEndTime }] = await AttendanceModel.avgEndTime(userId)
       const [{ weekTotal }] = await AttendanceModel.weekTotal(userId)
       const [{ monthTotal }] = await AttendanceModel.thisMonthTotal(userId)
       const weekHr = timeToHour(weekTotal)
       const monthHr = timeToHour(monthTotal)
-      res.render('pages/reportForEmployees', {avgStartTime, avgEndTime, weekHr, monthHr})
+      res.render('pages/reportForEmployees', {userInfo,avgStartTime, avgEndTime, weekHr, monthHr})
     } catch(err){
     console.log('====>Error form', err);
     }

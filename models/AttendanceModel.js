@@ -158,6 +158,14 @@ const AttendanceModel = {
     const [row] = await dbConnect.promise().execute(getHours)
     return row;
   },
+
+  // admin see employee reports
+  getEmployeeInfo: async (id) => {
+    const getInfo = 'SELECT id,user_name, avatar FROM `users` WHERE id = ?'
+    const value = [id]
+    const [row] = await dbConnect.promise().execute(getInfo, value)
+    return row[0]
+  },
 }
 
 module.exports = AttendanceModel;
