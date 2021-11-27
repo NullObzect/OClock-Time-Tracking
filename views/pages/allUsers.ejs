@@ -90,7 +90,7 @@
 </div>
 <!-- End profile card -->
 <!--  Markup User Table  -->
-<div class="flex justify-center">
+<div class="flex justify-start">
   <a href="/add-user"
     ><button class="p-2 bg-blue-500 rounded-lg text-white font-medium ml-4">
       Add User
@@ -322,6 +322,7 @@
             <th class="p-3 text-left">Role</th>
 
             <th class="p-3 text-left">Status</th>
+            <th class="p-3 text-left">Reports</th>
             <th class="p-3 text-left">Action</th>
           </tr>
         </thead>
@@ -333,13 +334,27 @@
               <div class="flex align-items-center">
                 <% if(profileUrl.search('https://') === -1) {%>
                 <img
-                  class="rounded-full h-12 w-12 object-cover"
+                  class="
+                    rounded-full
+                    h-10
+                    w-10
+                    object-cover
+                    ring ring-blue-500 ring-offset-2 ring-offset-white
+                  "
                   src="uploads/avatars/<%= user.avatar%>"
                 />
 
                 <% } else{ %>
                 <img
-                  class="rounded-full h-12 w-12 object-cover"
+                  class="
+                    rounded-full
+                    h-10
+                    w-10
+                    object-cover
+                    ring ring-green-400 ring-offset-
+                    2
+                    ring-offset-white
+                  "
                   src="<%= user.avatar%>"
                 />
                 <% } %>
@@ -357,6 +372,13 @@
               <span class="bg-green-400 text-gray-50 rounded-md px-2"
                 >ACTIVE</span
               >
+            </td>
+            <td class="p-2 text-center">
+              <a href="/report/employee/<%= user.id %>"
+                ><span class="bg-yellow-400 text-gray-50 rounded-md px-2"
+                  >Details</span
+                >
+              </a>
             </td>
             <td class="p-2">
               <a href="#" class="text-gray-500 hover:text-gray-100 mr-2">

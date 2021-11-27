@@ -211,7 +211,6 @@ body {
   border-bottom: 1px solid #d3d3d3;
   padding: 10px;
   background: cornsilk;
-  padding-left: 300px;
 }
 .history .date-bar .total-work-time {
   right: 10px;
@@ -337,8 +336,8 @@ i {
   border-radius: 20px;
 }
 
-.table tr td:nth-child(n + 5),
-.table tr th:nth-child(n + 5) {
+.table tr td:nth-child(n + 6),
+.table tr th:nth-child(n + 6) {
   border-radius: 0 0.625rem 0.625rem 0;
 }
 
