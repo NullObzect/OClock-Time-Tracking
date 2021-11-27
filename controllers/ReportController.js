@@ -190,6 +190,31 @@ const ReportController = {
     }
   },
 
+
+
+  // Admin see employees reports 
+  reportEmployees: async(req,res) =>{
+
+    try{
+    const userId = req.params.id
+    console.log({userId})
+    const lastSevenDaysReport = await AttendanceModel.anEmployeeReportLastSavenDays(userId);
+    console.log({lastSevenDaysReport});
+    
+
+      const [{ avgStartTime }] = await AttendanceModel.avgStartTime(userId)
+      const [{ avgEndTime }] = await AttendanceModel.avgEndTime(userId)
+      const [{ weekTotal }] = await AttendanceModel.weekTotal(userId)
+      const [{ monthTotal }] = await AttendanceModel.thisMonthTotal(userId)
+      const weekHr = timeToHour(weekTotal)
+      const monthHr = timeToHour(monthTotal)
+      res.render('pages/reportForEmployees', {avgStartTime, avgEndTime, weekHr, monthHr})
+    } catch(err){
+    console.log('====>Error form', err);
+    }
+    
+  }
+
 }
 
 module.exports = ReportController;
