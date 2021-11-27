@@ -6,12 +6,16 @@ const UserModel = require('../../models/UserModel')
 dotenv.config()
 
 const checkLogin = (req, res, next) => {
+  console.log('check login ')
+
   const cookies = Object.keys(req.signedCookies).length > 0 ? req.signedCookies : null
+  console.log({ cookies })
   if (cookies) {
     try {
       const token = cookies[process.env.COOKIE_NAME]
       const { userObject } = jwt.verify(token, process.env.JWT_SECRET)
       req.user = userObject
+      console.log({ userObject })
       if (res.locals.html) {
         res.locals.loggedInUser = userObject
       }
@@ -43,6 +47,7 @@ const checkLogin = (req, res, next) => {
 }
 
 const checkUser = (req, res, next) => {
+  console.log('check user')
   const token = req.signedCookies[process.env.COOKIE_NAME];
   if (token) {
     jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
