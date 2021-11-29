@@ -6,7 +6,6 @@ const env = require('dotenv')
 const session = require('express-session')
 const passport = require('passport')
 const flash = require('connect-flash')
-const dbConnect = require('./config/database')
 const router = require('./routers/routes');
 // for passport facebook congif/passportFB
 require('./utilities/passportFB')(passport)
@@ -41,9 +40,7 @@ app.use(notFoundHandler)
 app.use(errorHandler)
 
 // server
-app.listen(process.env.PORT, async () => {
+app.listen(process.env.PORT, () => {
   // eslint-disable-next-line no-console
-  const onlyGroupbyNull = 'SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,"ONLY_FULL_GROUP_BY",""))';
-  await dbConnect.promise().execute(onlyGroupbyNull)
   console.log(`Server Running http://localhost:${process.env.PORT}`);
 });
