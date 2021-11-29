@@ -226,7 +226,7 @@ button {
             <td class="p-3"><%= el.day === 'Friday' ? '0' : el.fixed_time  %></td>
             <td class="p-3"><%= el.working_time %></td>
             <td class="p-3">
-              <%= el.day === 'Friday' ? el.working_time : el.time_count %>
+              <%= el.type !== 'regular'  ? '00:00:00' : el.time_count %>
             </td>
             
           </tr>
@@ -255,6 +255,9 @@ button {
   </div>
 </div>
 <script>
+
+  
+ 
   const pageNumbers = (total, max, current) => {
   const half = Math.floor(max / 2);
   let to = max

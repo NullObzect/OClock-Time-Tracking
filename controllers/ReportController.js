@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+const e = require('connect-flash');
 const AttendanceModel = require('../models/AttendanceModel');
 const UserModel = require('../models/UserModel')
 const { timeToHour } = require('../utilities/formater');
@@ -31,6 +32,20 @@ function dateFormate(dateTime) {
 
   return getDate;
 }
+// sum fixedTime 
+let sumFixedTime = 0;
+function totalFixedTime(day, fixedTime, type){
+  
+  
+  let getHour = fixedTime[1]
+  if(type === 'regular' && day !== 'Friday'){
+    sumFixedTime += Number(getHour);
+}else{
+  sumFixedTime += 0;
+}
+ return sumFixedTime;
+}
+
 // holiday dates function
 function multipleDate(numOfDay, date) {
   const myDate = new Date(date);
@@ -124,22 +139,36 @@ const ReportController = {
         }
       }
 
+        // sum fixed time 
+      console.log({reportStringify});
+      
+        
+     let sumSevendaysFixedTime; 
+       reportStringify.forEach(el =>{
+        sumSevendaysFixedTime = totalFixedTime(el.day, el.fixed_time, el.type)
+        })
+        console.log({sumSevendaysFixedTime});
+
+
       // last seven days total report pore employee
       const employeeLastSevendaysReportTotal = await AttendanceModel.reportLastSevendaysTotalForEmployee(userId)
       employeeLastSevendaysReportTotal.forEach((el) => {
 
 
-       console.log(calculateTime(el.fixed_total, el.total_seconds))
+        // console.log({holidayAndLeavedaysDateRange});
+        
+       console.log('calculate time',calculateTime(el.fixed_total, el.total_seconds))
 
        el.totalLessORExtra =  calculateTime(el.fixed_total, el.total_seconds)
+       el.fixed_total = sumSevendaysFixedTime
        ;
        //employeeLastSevendaysReportTotal.push({total_seconds:aa})
        
       })
       console.log({employeeLastSevendaysReportTotal});
       
-
-
+ 
+    
       //  console.log(holidaysArray, leaveDaysArray);
       const fixedTime = await AttendanceModel.getFixedTime()
       console.log({ fixedTime });
@@ -184,10 +213,28 @@ const ReportController = {
           }
         }
       }
+        // let dataRangeFixedTime ;
+        // dataToJson.forEach(el =>{
 
-      // console.log({ dataToJson });
+        //   dataRangeFixedTime = totalFixedTime(el.day, el.fixed_time,el.type)
+        // })
+        // console.log({dataRangeFixedTime});
 
-      return res.json(dataToJson);
+
+
+        const user =  {
+          name: 'GR',
+          age: 24
+        }
+
+      console.log({  dataToJson, user });
+    
+   
+        
+        return res.json(dataToJson)
+       // return res.json({reports:{dataToJson}, user: {user}})
+
+
     } catch (err) {
       console.log('====>Error form ReportController/reportBetweenTwoDate', err);
       return err;

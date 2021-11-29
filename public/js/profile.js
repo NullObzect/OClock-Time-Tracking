@@ -59,6 +59,9 @@ editName.addEventListener('keyup', () => {
   // if (getValue !== val) {
   userSaveBtn.disabled = true ? userSaveBtn.disabled = false : ''
   resetBtn.disabled = false;
+  resetBtn.addEventListener('onclick', () => {
+    console.log('kk')
+  })
 
   userSaveBtn.style.background = 'red'
 })

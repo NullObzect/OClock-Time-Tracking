@@ -44,6 +44,10 @@ const selectStartDate = async (event) => {
     `${baseUrl}/report/between/two-date?startDate=${startDate}&endDate=${getCurrentDate()}`,
   );
   const jsonData = await data.json();
+  //const getData = await data.json();
+  // const jsonData = getData.reports.dataToJson
+  // console.log({ jsonData });
+
   const viewPerPage = 4
   const pageCount = Math.ceil(jsonData.length / viewPerPage)
 
@@ -113,7 +117,7 @@ const selectStartDate = async (event) => {
       workStatus.textContent = el.day === 'Friday' ? 'Off day' : el.type
       const workHour = document.createElement('td')
       workHour.className = 'p-3'
-      workHour.textContent = el.day === 'Friday' ? '0' : '6'
+      workHour.textContent = el.day === 'Friday' ? '0' : el.fixed_time
       const workTime = document.createElement('td')
       workTime.className = 'p-3'
       workTime.textContent = el.working_time
@@ -136,16 +140,19 @@ const selectStartDate = async (event) => {
   // end date
 
   const selectEndDate = async (event) => {
+    alert('ok')
     const endDate = event.target.value;
 
     console.log('end date', endDate);
-    const data = await fetch(
+    const endDateData = await fetch(
       `${baseUrl}/report/between/two-date?startDate=${startDate}&endDate=${endDate}`,
     );
-    const jsonData = await data.json();
-    jsonData.map((el) => console.log(el.create_date));
-    console.log(jsonData);
-    anUserReportTable.innerHTML = jsonData
+    const getEndDateDataInJson = await endDateData.json();
+    // const getEndDateData = getEndDateDataInJson.reports.dataToJson
+    // console.log({ getEndDateData });
+    // jsonData.map((el) => console.log('xxx', el.create_date));
+    // console.log('objects', jsonData);
+    anUserReportTable.innerHTML = getEndDateDataInJson
       .map(
         (el) => `
           <tr class="${el.day === 'Friday' ? 'bg-red-200'
