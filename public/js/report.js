@@ -103,7 +103,6 @@ function PaginationButtons(totalPages, maxPageVisible = 10, currentPage = 1) {
 
 // get start date
 let startDate;
-console.log('kkk');
 
 // getDate format
 function getDateFormat(date) {
