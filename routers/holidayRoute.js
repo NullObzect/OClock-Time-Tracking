@@ -11,6 +11,6 @@ router.post('/edit/holiday', decorateHtmlResponse('Edit Holiday'), HolidayContro
 
 router.get('/delete/holiday/:id', HolidayController.getDeleteHoliday)
 
-router.get('/employee-see/holidays', decorateHtmlResponse('Holidays'), checkLogin,  HolidayController.employeeSeeHolidays)
+router.get('/employee-see/holidays', decorateHtmlResponse('Holidays'), checkLogin, HolidayController.employeeSeeHolidays)
 
 module.exports = router

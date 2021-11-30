@@ -69,10 +69,7 @@ const ReportController = {
 
   userReport: async (req, res) => {
     try {
-      const [user] = await UserModel.findUserByEmail(req.user.userMailFormDB)
-      console.log({user})
-
-      const userId = user.id;
+     
       const lastSevenDaysReport = await AttendanceModel.anEmployeeReportLastSavenDays(userId);
       const [{ avgStartTime }] = await AttendanceModel.avgStartTime(userId)
       const [{ avgEndTime }] = await AttendanceModel.avgEndTime(userId)
