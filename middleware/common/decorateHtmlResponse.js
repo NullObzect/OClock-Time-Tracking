@@ -1,3 +1,5 @@
+const Flash = require('../../utilities/Flash')
+
 function decorateHtmlResponse(pageTitle) {
   return (req, res, next) => {
     res.locals.html = true;
@@ -11,6 +13,7 @@ function decorateHtmlResponse(pageTitle) {
     res.locals.loggedInUser = {}
     res.locals.signIn = false
     res.locals.addUser = false
+    res.locals.flashMessage = Flash.getMessage(req)
     res.locals.baseUrl = process.env.BASE_URL
     next();
   };
