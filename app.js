@@ -24,7 +24,9 @@ app.use(session({
   secret: process.env.COOKIE_SECRET,
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: true },
+  // using flash message
+  // cookie: {maxAge: 1 },
+  // cookie: { httpOnly: true },
 }))
 app.use(passport.initialize());
 app.use(passport.session());

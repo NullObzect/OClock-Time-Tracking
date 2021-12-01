@@ -1,17 +1,23 @@
 const HolidayModel = require('../models/HolidayModel');
 
 const helperJs = require('../public/js/halper')
+const Flash = require('../utilities/Flash')
 // console.log(helperJs)
 
 const HolidayController = {
 
   getAddHolidayPage: async (req, res) => {
+    console.log('message', req.flash('fail'))
     res.render('pages/addHolidays')
   },
   addHoliday: async (req, res) => {
     try {
       const { title, start, end } = req.body
-
+      if (req.body.title == '') {
+        console.log('tittle error')
+        req.flash('fail', 'please input fill up')
+        res.redirect('/add-holiday')
+      }
       const inserted = await HolidayModel.addHoliday(
         title,
         helperJs.getDateFormat(start),
