@@ -48,6 +48,7 @@ const UserController = {
       );
       console.log({ insertedData })
       if (insertedData.errno) {
+        console.log('error')
         res.send('ERROR');
       } else {
         res.render('pages/addUser', { addUser: true });
