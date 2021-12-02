@@ -134,10 +134,30 @@ const selectStartDate = async (event) => {
   const data = await fetch(
     `${baseUrl}/report/between/two-date?startDate=${startDate}&endDate=${getCurrentDate()}`,
   );
-  const jsonData = await data.json();
-  reportData.push(jsonData)
+  const getObjects = await data.json();
+  const getReports = getObjects.reports.dataToJson
+  // between to data total
+  const dateRangeTotalTr = document.getElementById('last-seven-days-total')
+
+  const getReportsTotal = getObjects.reportDateRangeTotal.betweenTowDateTotalToJson
+  console.log({ getReportsTotal });
+
+  dateRangeTotalTr.innerHTML = getReportsTotal.map((el) => `
+    
+    <tr class="bg-blue-500 text-center text-white font-bold">
+    <td colspan="2">Total =  ${el.present} </td>
+  <td class="p-3">${el.avgStartTime || '00'} </td>
+  <td class="p-3">${el.avgEndTime || '00'} </td>
+  <td class="p-3"></td>
+  <td class="p-3"> ${el.fixed_total}hr</td>
+  <td class="p-3"> ${el.weekTotal || '00'} </td>
+  <td class="p-3"> </td>
+  </tr>
+    `)
+
+  reportData.push(getReports)
   // console.log('start', jsonData)
-  show(jsonData)
+  show(getReports)
 }
 
 // end date
@@ -149,10 +169,28 @@ const selectEndDate = async (event) => {
   const data = await fetch(
     `${baseUrl}/report/between/two-date?startDate=${startDate}&endDate=${endDate}`,
   );
-  const jsonData = await data.json();
-  jsonData.map((el) => console.log(el.create_date));
-  endData.push(jsonData)
-  show(jsonData)
+  const getObjects = await data.json();
+  const getReports = getObjects.reports.dataToJson
+
+  const dateRangeTotalTr = document.getElementById('last-seven-days-total')
+
+  const getReportsTotal = getObjects.reportDateRangeTotal.betweenTowDateTotalToJson
+  console.log({ getReportsTotal });
+
+  dateRangeTotalTr.innerHTML = getReportsTotal.map((el) => `
+    
+    <tr class="bg-blue-500 text-center text-white font-bold">
+    <td colspan="2">Total =  ${el.present} </td>
+  <td class="p-3">${el.avgStartTime || '00'} </td>
+  <td class="p-3">${el.avgEndTime || '00'} </td>
+  <td class="p-3"></td>
+  <td class="p-3"> ${el.fixed_total}hr</td>
+  <td class="p-3"> ${el.weekTotal || '00'} </td>
+  <td class="p-3"> </td>
+  </tr>
+    `)
+  endData.push(getReports)
+  show(getReports)
 };
 
 function show(data) {
@@ -177,9 +215,9 @@ function show(data) {
   }
 
   const paginationButtons = new PaginationButtons(pageCount, pageVisible)
-  console.log('dd',report.length)
+  console.log('dd', report.length)
 
-  if(report.length>viewPerPage){
+  if (report.length > viewPerPage) {
     paginationButtons.render(paginationShow)
   }
   paginationButtons.onChange((e) => {

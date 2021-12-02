@@ -109,7 +109,7 @@ const ReportController = {
       })
 
       const employeeWorkInLeaveDay = leaveDaysArray.filter((el) => lastSevenDaysReportDates.includes(el))
-      console.log({ employeeWorkInLeaveDay });
+     // console.log({ employeeWorkInLeaveDay });
 
       const leaveDayObject = [];
       employeeWorkInLeaveDay.forEach((el) => {
@@ -140,7 +140,7 @@ const ReportController = {
       }
 
         // sum fixed time 
-      console.log({reportStringify});
+     // console.log({reportStringify});
       
         
      let sumSevendaysFixedTime; 
@@ -157,7 +157,7 @@ const ReportController = {
 
         // console.log({holidayAndLeavedaysDateRange});
         
-       console.log('calculate time',calculateTime(el.fixed_total, el.total_seconds))
+      // console.log('calculate time',calculateTime(el.fixed_total, el.total_seconds))
 
        el.totalLessORExtra =  calculateTime(el.fixed_total, el.total_seconds)
        el.fixed_total = sumSevendaysFixedTime
@@ -165,16 +165,16 @@ const ReportController = {
        //employeeLastSevendaysReportTotal.push({total_seconds:aa})
        
       })
-      console.log({employeeLastSevendaysReportTotal});
+    //  console.log({employeeLastSevendaysReportTotal});
     
       //  console.log(holidaysArray, leaveDaysArray);
       const fixedTime = await AttendanceModel.getFixedTime()
-      console.log({ fixedTime });
+    //  console.log({ fixedTime });
 
       const userReport = [...reportStringify]
       sumFixedTime = 0;
 
-      console.log({ userReport });
+      //console.log({ userReport });
 
       res.render('pages/report', {
         userReport, avgStartTime, avgEndTime, weekHr, monthHr, employeeLastSevendaysReportTotal,
@@ -192,9 +192,13 @@ const ReportController = {
       const getData = await AttendanceModel.anEmployeeReportBetweenTwoDate(
         userId, startDate, endDate,
       );
+      const getBetweenTowDateTotal = await AttendanceModel.reportBetweenTwoDateTotal(userId,startDate,endDate)
+      const betweenTowDateTotalToJson = JSON.parse(JSON.stringify(getBetweenTowDateTotal))
+      console.log({betweenTowDateTotalToJson});
+      
       const dataToJson = JSON.parse(JSON.stringify(getData))
-      console.log({ dataToJson });
-      console.log({ holidayAndLeavedaysDateRange });
+      // console.log({ dataToJson });
+      // console.log({ holidayAndLeavedaysDateRange });
 
       for (let i = 0; i < dataToJson.length; i += 1) {
         // eslint-disable-next-line no-undef
@@ -226,12 +230,12 @@ const ReportController = {
           age: 24
         }
 
-      console.log({  dataToJson, user });
+      // console.log({  dataToJson, user });
     
    
         
-        return res.json(dataToJson)
-       // return res.json({reports:{dataToJson}, user: {user}})
+       // return res.json(dataToJson)
+       return res.json({reports:{dataToJson}, reportDateRangeTotal: {betweenTowDateTotalToJson}})
 
 
     } catch (err) {
