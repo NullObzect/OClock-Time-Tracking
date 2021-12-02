@@ -39,5 +39,7 @@ router.get('/user-verify/:token', UserController.userVerifySet)
 
 // update user
 router.get('/update-user/:id', decorateHtmlResponse('Update User'), UserController.updateUser)
+// user or employee edit name
+router.post('/user/edit/info', UserController.userCanEditName)
 
 module.exports = router;
