@@ -33,7 +33,7 @@ function dateFormate(dateTime) {
   return getDate;
 }
 // sum fixedTime 
-let sumFixedTime = 0;
+let sumFixedTime = null;
 function totalFixedTime(day, fixedTime, type){
   
   
@@ -69,7 +69,10 @@ const ReportController = {
 
   userReport: async (req, res) => {
     try {
-     
+      const [user] = await UserModel.findUserByEmail(req.user.userMailFormDB)
+      console.log({user})
+
+      const userId = user.id;
       const lastSevenDaysReport = await AttendanceModel.anEmployeeReportLastSavenDays(userId);
       const [{ avgStartTime }] = await AttendanceModel.avgStartTime(userId)
       const [{ avgEndTime }] = await AttendanceModel.avgEndTime(userId)
@@ -163,14 +166,13 @@ const ReportController = {
        
       })
       console.log({employeeLastSevendaysReportTotal});
-      
- 
     
       //  console.log(holidaysArray, leaveDaysArray);
       const fixedTime = await AttendanceModel.getFixedTime()
       console.log({ fixedTime });
 
       const userReport = [...reportStringify]
+      sumFixedTime = 0;
 
       console.log({ userReport });
 
