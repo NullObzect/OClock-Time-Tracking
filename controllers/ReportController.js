@@ -225,15 +225,9 @@ const ReportController = {
 
 
 
-        const user =  {
-          name: 'GR',
-          age: 24
-        }
-
-      // console.log({  dataToJson, user });
     
    
-        
+
        // return res.json(dataToJson)
        return res.json({reports:{dataToJson}, reportDateRangeTotal: {betweenTowDateTotalToJson}})
 
@@ -251,24 +245,148 @@ const ReportController = {
 
     try{
     const userId = req.params.id
-    console.log({userId})
-    const lastSevenDaysReport = await AttendanceModel.anEmployeeReportLastSavenDays(userId);
-    console.log({lastSevenDaysReport});
+      global.getId = userId
+    const userInfo = await AttendanceModel.getEmployeeInfo(userId)
+    const [{ avgStartTime }] = await AttendanceModel.avgStartTime(userId)
+    const [{ avgEndTime }] = await AttendanceModel.avgEndTime(userId)
+    const [{ weekTotal }] = await AttendanceModel.weekTotal(userId)
+    const [{ monthTotal }] = await AttendanceModel.thisMonthTotal(userId)
+    const weekHr = timeToHour(weekTotal)
+    const monthHr = timeToHour(monthTotal)
+
+    const lastSevenDaysReport = await AttendanceModel.anEmployeeReportLastSavenDays(req.params.id);
+    console.log('for admin ',{lastSevenDaysReport});
     
-      const userInfo = await AttendanceModel.getEmployeeInfo(userId)
-      const [{ avgStartTime }] = await AttendanceModel.avgStartTime(userId)
-      const [{ avgEndTime }] = await AttendanceModel.avgEndTime(userId)
-      const [{ weekTotal }] = await AttendanceModel.weekTotal(userId)
-      const [{ monthTotal }] = await AttendanceModel.thisMonthTotal(userId)
-      const weekHr = timeToHour(weekTotal)
-      const monthHr = timeToHour(monthTotal)
-      res.render('pages/reportForEmployees', {userInfo,avgStartTime, avgEndTime, weekHr, monthHr})
+    
+    // for holidays
+    const holidaysDate = await AttendanceModel.holidaysDate();
+    // multiple date
+
+    holidaysDate.forEach((el) => {
+      multipleDate(el.count_holiday, el.holiday_start)
+    })
+    const lastSevenDaysReportDates = []
+    const reportStringify = JSON.parse(JSON.stringify(lastSevenDaysReport));
+
+    reportStringify.forEach((el) => {
+      lastSevenDaysReportDates.push(el.date_for_holiday)
+    })
+    // check employee work in holiday
+    const employeeWorkInHoliday = holidaysArray.filter((el) => lastSevenDaysReportDates.includes(el))
+    // console.log({ employeeWorkInHoliday })
+    const holidayObject = [];
+    employeeWorkInHoliday.forEach((el) => {
+      holidayObject.push({ h_date: el, type: 'holiday', fixed_time: '0' })
+    })
+
+    // =========for employee leave date
+    const employeeLeaveDates = await AttendanceModel.employeeLeaveDates(req.params.id)
+
+    employeeLeaveDates.forEach((el) => {
+      multipleLeaveDates(el.count_leave_day, el.leave_start)
+    })
+
+    const employeeWorkInLeaveDay = leaveDaysArray.filter((el) => lastSevenDaysReportDates.includes(el))
+
+    const leaveDayObject = [];
+    employeeWorkInLeaveDay.forEach((el) => {
+      leaveDayObject.push({ l_date: el, type: 'leave', fixed_time: '0' })
+    })
+    // marge holiday and leave days array of object
+    const margeHolidaysAndLeaveDays = [...holidayObject, ...leaveDayObject]
+
+    holidayAndLeavedaysDateRange = margeHolidaysAndLeaveDays;
+
+    // chek holiday and leave day then change type
+    for (let i = 0; i < reportStringify.length; i += 1) {
+      for (let j = 0; j < margeHolidaysAndLeaveDays.length; j += 1) {
+        if (reportStringify[i].date_for_holiday === margeHolidaysAndLeaveDays[j].h_date) {
+          reportStringify[i].type = margeHolidaysAndLeaveDays[j].type
+          reportStringify[i].fixed_time = margeHolidaysAndLeaveDays[j].fixed_time
+
+          break;
+        } else if (reportStringify[i].date_for_holiday === margeHolidaysAndLeaveDays[j].l_date) {
+          reportStringify[i].type = margeHolidaysAndLeaveDays[j].type
+          reportStringify[i].fixed_time = margeHolidaysAndLeaveDays[j].fixed_time
+
+          break;
+        }
+      }
+    }
+
+    
+      
+   let sumSevendaysFixedTime; 
+     reportStringify.forEach(el =>{
+      sumSevendaysFixedTime = totalFixedTime(el.day, el.fixed_time, el.type)
+      })
+      console.log({sumSevendaysFixedTime});
+
+
+    // last seven days total report pore employee
+    const employeeLastSevendaysReportTotal = await AttendanceModel.reportLastSevendaysTotalForEmployee(req.params.id)
+    employeeLastSevendaysReportTotal.forEach((el) => {
+     el.totalLessORExtra =  calculateTime(el.fixed_total, el.total_seconds)
+     el.fixed_total = sumSevendaysFixedTime
+     ;
+     
+    })
+
+    const userReport = [...reportStringify]
+    sumFixedTime = 0;
+
+   // console.log({ userReport });
+
+      res.render('pages/reportForEmployees', {userInfo,avgStartTime, avgEndTime, weekHr, monthHr, userReport, employeeLastSevendaysReportTotal})
     } catch(err){
     console.log('====>Error form', err);
     }
     
-  }
+  },
+    // return data AJAX for date range input
+    reportBetweenTwoDateForAdmin: async (req, res) => {
+      try {
+ 
+        const { startDate, endDate } = req.query;
+       // console.log(startDate, endData);
+        
+        const getData = await AttendanceModel.anEmployeeReportBetweenTwoDate(
+          getId, startDate, endDate,
+        );
+        const getBetweenTowDateTotal = await AttendanceModel.reportBetweenTwoDateTotal(getId,startDate,endDate)
+        const betweenTowDateTotalToJson = JSON.parse(JSON.stringify(getBetweenTowDateTotal))
+        console.log({betweenTowDateTotalToJson});
+        
+        const dataToJson = JSON.parse(JSON.stringify(getData))
 
+        for (let i = 0; i < dataToJson.length; i += 1) {
+          // eslint-disable-next-line no-undef
+          for (let j = 0; j < holidayAndLeavedaysDateRange.length; j += 1) {
+            if (dataToJson[i].date_for_holiday === holidayAndLeavedaysDateRange[j].h_date) {
+              dataToJson[i].type = holidayAndLeavedaysDateRange[j].type
+              dataToJson[i].fixed_time = holidayAndLeavedaysDateRange[j].fixed_time
+  
+              break;
+            } else if (dataToJson[i].date_for_holiday === holidayAndLeavedaysDateRange[j].l_date) {
+              dataToJson[i].type = holidayAndLeavedaysDateRange[j].type
+              dataToJson[i].fixed_time = holidayAndLeavedaysDateRange[j].fixed_time
+  
+              break;
+            }
+          }
+        }
+
+     // console.log({dataToJson, betweenTowDateTotalToJson});
+      
+         // return res.json(dataToJson)
+         return res.json({reports:{dataToJson}, reportDateRangeTotal: {betweenTowDateTotalToJson}})
+  
+  
+      } catch (err) {
+        console.log('====>Error form ReportController/reportEmployees', err);
+        return err;
+      }
+    },
 }
 
 module.exports = ReportController;
