@@ -275,7 +275,7 @@
                 dark:bg-gray-800
               "
             >
-              <form action="#" id="edit-form">
+              <form action="/user/edit/info" method="post" id="edit-form">
                 <div class="mt-2">
                   <div class="items-center -mx-2 md:flex">
                     <div class="w-full mx-2">
@@ -293,6 +293,7 @@
 
                       <input
                         id="edit-name"
+                        name="name"
                         class="
                           block
                           w-full
@@ -328,6 +329,8 @@
                       >
 
                       <input
+                        id="edit-number"
+                        name="number"
                         class="
                           block
                           w-full
@@ -344,7 +347,7 @@
                           dark:focus:border-blue-500
                           focus:outline-none focus:ring
                         "
-                        type="number"
+                        type="tel"
                         value="<%= user_phone %>"
                       />
                     </div>
@@ -386,6 +389,7 @@
                   <div class="flex justify-center gap-4 mt-5">
                     <a href="/profile">
                       <button
+                        type="reset"
                         id="reset"
                         class="
                           px-4
@@ -396,7 +400,6 @@
                           transform
                           bg-gray-400
                           rounded-md
-                          hover:bg-gray-600
                           focus:outline-none focus:bg-gray-600
                         "
                       >
@@ -406,6 +409,7 @@
 
                     <button
                       id="user-save-btn"
+                      type="submit"
                       class="
                         px-4
                         py-2
@@ -415,7 +419,6 @@
                         transform
                         bg-gray-400
                         rounded-md
-                        hover:bg-gray-600
                         focus:outline-none focus:bg-gray-600
                       "
                     >

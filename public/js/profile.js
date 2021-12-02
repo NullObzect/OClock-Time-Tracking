@@ -46,24 +46,15 @@ const userSaveBtn = document.getElementById('user-save-btn')
 const resetBtn = document.getElementById('reset')
 userSaveBtn.disabled = true;
 resetBtn.disabled = true;
-// console.log(userSaveBtn)
-// const editName = (event) => {
-//   //alert('ok')
-//   userSaveBtn.style.background = 'red'
-// }
 
-const editName = document.getElementById('edit-name');
+const editFrom = document.getElementById('edit-form');
 
-editName.addEventListener('keyup', () => {
-  // const val = event.target.value
-  // if (getValue !== val) {
+editFrom.addEventListener('keyup', () => {
   userSaveBtn.disabled = true ? userSaveBtn.disabled = false : ''
   resetBtn.disabled = false;
-  resetBtn.addEventListener('onclick', () => {
-    console.log('kk')
-  })
 
-  userSaveBtn.style.background = 'red'
+  userSaveBtn.style.background = 'green'
+  resetBtn.style.background = 'red'
 })
 
 // for facebook
