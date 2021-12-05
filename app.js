@@ -46,3 +46,5 @@ app.listen(process.env.PORT, () => {
   // eslint-disable-next-line no-console
   console.log(`Server Running http://localhost:${process.env.PORT}`);
 });
+
+// SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,"ONLY_FULL_GROUP_BY",""))

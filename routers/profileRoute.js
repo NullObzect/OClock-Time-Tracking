@@ -6,6 +6,6 @@ const { checkLogin } = require('../middleware/common/AuthMiddleware');
 
 // Router for user profile page
 router.get('/profile', decorateHtmlResponse('User Profile'), checkLogin, ProfileController.userProfile)
-router.get('/profile/picture/:id', decorateHtmlResponse('User Profile'), checkLogin, ProfileController.changeProfile)
+router.get('/profile/picture/:id', decorateHtmlResponse('User Profile'), ProfileController.changeProfile)
 
 module.exports = router;

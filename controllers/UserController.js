@@ -3,6 +3,8 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 const { validationResult } = require('express-validator')
+const path = require('path');
+const { unlink } = require('fs');
 const UserModel = require('../models/UserModel');
 const sendMail = require('../utilities/sendMail');
 
@@ -55,6 +57,44 @@ const UserController = {
       }
     } catch (err) {
       return err;
+    }
+  },
+  avatarChange: async (req, res) => {
+    const { user } = req
+    const userAvatar = user.avatar
+    const urlR = /^(http|https)/
+    const platformAvatar = userAvatar.search(urlR)
+    try {
+      const avatar = req.files[0].filename
+      if (avatar) {
+        if (platformAvatar === 0) {
+          try {
+            await UserModel.updateAvatar(avatar, user.id)
+            req.flash('success', 'Change image');
+            res.redirect('/profile');
+          } catch (err) {
+            console.log(err)
+          }
+        } else {
+          try {
+            if (userAvatar !== 'demo_profile.png') {
+              unlink(
+                path.join(__dirname, `../public/uploads/avatars/${userAvatar}`), (err) => {
+                  console.log(err)
+                  console.log(`${userAvatar} delete`)
+                },
+              )
+            }
+            await UserModel.updateAvatar(avatar, user.id)
+            res.redirect('/profile');
+          } catch (err) {
+            console.log(err)
+          }
+        }
+      }
+    } catch (err) {
+      req.flash('fail', 'Select image')
+      res.redirect('/profile')
     }
   },
   // Find User

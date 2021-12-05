@@ -141,6 +141,12 @@ const UserModel = {
     const [rows] = await dbConnect.promise().execute(getUser, value)
     return rows;
   },
+  updateAvatar: async (avatar, id) => {
+    const updateAvatarSql = 'UPDATE `users` SET avatar = ? WHERE id = ?'
+    const values = [avatar, id]
+    const [rows] = await dbConnect.promise().execute(updateAvatarSql, values)
+    return rows;
+  },
 
 }
 module.exports = UserModel;
