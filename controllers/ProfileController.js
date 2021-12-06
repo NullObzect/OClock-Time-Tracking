@@ -1,4 +1,6 @@
 const jwt = require('jsonwebtoken')
+const path = require('path');
+const { unlink } = require('fs');
 const ProfileModel = require('../models/ProfileModel')
 const UserModel = require('../models/UserModel');
 // cookie verifier function
@@ -25,7 +27,7 @@ const ProfileController = {
 
       const platformUser = await ProfileModel.userConnectionDetailsUniqueInfo(id)
       // console.log({ platformUser });
-
+      console.log('req flash', req.flash('fail'))
       res.render('pages/userProfile', {
         platformUser, user_name, user_phone, status, avatar,
       })
@@ -36,6 +38,7 @@ const ProfileController = {
 
   // change facebook profile
   changeProfile: async (req, res) => {
+    const { user } = req
     try {
       console.log(req.url);
       const token = req.signedCookies.Oclock;
@@ -45,7 +48,15 @@ const ProfileController = {
       console.log(id);
       const [platformUser] = await ProfileModel.userId(id)
       const { user_avatar } = platformUser
-
+      const userAvatar = user.avatar
+      if (userAvatar !== 'demo_profile.png') {
+        unlink(
+          path.join(__dirname, `../public/uploads/avatars/${userAvatar}`), (err) => {
+            console.log(err)
+            console.log(`${userAvatar} delete`)
+          },
+        )
+      }
       const updateProfile = await ProfileModel.setProfile(user_avatar, userMailFormDB)
       if (updateProfile.errno) {
         res.send('error')

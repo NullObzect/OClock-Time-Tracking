@@ -50,3 +50,5 @@ app.listen(process.env.PORT, async () => {
   await dbConnect.promise().execute(onlyGroupbyNull)
   console.log(`Server Running http://localhost:${process.env.PORT}`);
 });
+
+// SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,"ONLY_FULL_GROUP_BY",""))

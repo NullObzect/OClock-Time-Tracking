@@ -69,12 +69,12 @@
         >
           <div class="justify-center items-center mb-3">
             <% let url = avatar %> <% if(url.search('https://') === -1){ %>
-            <img
+            <img 
               class="rounded-full h-20 w-20 object-cover"
               src="/uploads/avatars/<%= avatar %>"
             />
             <% } else {%>
-            <img
+            <img 
               class="rounded-full h-20 w-20 object-cover"
               src="<%= avatar %>"
             />
@@ -346,13 +346,18 @@
                           focus:border-blue-500
                           dark:focus:border-blue-500
                           focus:outline-none focus:ring
+<<<<<<< HEAD
                         "
                         type="tel"
+=======
+                          "
+                        type="number"
+>>>>>>> main
                         value="<%= user_phone %>"
-                      />
+                        />
                     </div>
                   </div>
-
+                  
                   <div class="w-full mt-4">
                     <label
                       class="
@@ -364,11 +369,11 @@
                         dark:text-gray-200
                       "
                       >Short bio</label
-                    >
+                      >
 
                     <textarea
                       class="
-                        block
+                      block
                         w-full
                         h-40
                         px-4
@@ -496,19 +501,20 @@
           <!--Body-->
           <div class="my-3 relative">
             <div>
+              <form action="/user-avatar-change" enctype="multipart/form-data"  method="post">
               <% if(url.search('https://') === -1){ %>
-              <img
+              <img id="img" 
                 class="rounded-full h-20 w-20 object-cover"
                 src="/uploads/avatars/<%= avatar %>"
               />
               <% } else{%>
-              <img
+              <img  id="img" 
                 class="rounded-full h-20 w-20 object-cover"
                 src="<%= avatar %>"
               />
               <% } %>
               <label class="absolute top-12 left-40">
-                <input class="hidden" type="file" />
+                <input  type="file"  name="avatar" class="hidden"  onchange="readURL(this)"  accept="accept" />
                 <small
                   class="
                     text-sm
@@ -522,7 +528,24 @@
                 >
                   Change
                 </small>
+                <button
+            type="submit"
+              class="
+                focus:outline-none
+                px-4
+                bg-teal-500
+                py-2
+                ml-3
+                rounded-lg
+                text-white
+                bg-green-400
+              "
+            >
+              Save
+            </button>
               </label>
+            </form>
+
               <div>
                 <h5 class="text-sm mb-1">Sync a profile picture with</h5>
 
@@ -669,14 +692,39 @@
                 text-white
                 bg-green-400
               "
+              onclick="avatarChange()"
             >
               Save
             </button>
-          </div>
+            </div>
         </div>
       </div>
     </div>
+
     <!-- <button class="btn-hover bg-blue-500 px-4">hover</button> -->
+
+    <script>
+      function readURL(input) {
+    if (input.files && input.files[0]) {
+    
+      var reader = new FileReader();
+      reader.onload = function (e) { 
+        document.querySelector("#img").setAttribute("src",e.target.result);
+      };
+
+      reader.readAsDataURL(input.files[0]); 
+    }
+  }
+    </script>
+    <script>
+      
+      function avatarChange(){
+        const avatar = document.getElementsByName('avatar')
+        console.log(avatar)
+      }
+      </script>
+
     <script src="/js/profile.js"></script>
+
   </body>
 </html>

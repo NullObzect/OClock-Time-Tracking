@@ -6,7 +6,6 @@ const UserModel = require('../../models/UserModel')
 dotenv.config()
 
 const checkLogin = (req, res, next) => {
-  console.log('chek log in');
   const cookies = Object.keys(req.signedCookies).length > 0 ? req.signedCookies : null
   if (cookies) {
     try {
@@ -44,7 +43,6 @@ const checkLogin = (req, res, next) => {
 }
 
 const checkUser = (req, res, next) => {
-  console.log('check user')
   const token = req.signedCookies[process.env.COOKIE_NAME];
   if (token) {
     jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {

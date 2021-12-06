@@ -37,6 +37,9 @@ router.get('/user-verify/:token', UserController.userVerifySet)
 // router.get('/forgot-password', UserController.getUserForgotPassword)
 // router.post('/forgot-password', UserController.userForgotPassword)
 
+// User Avatar Change
+router.post('/user-avatar-change', decorateHtmlResponse('Update User'), avatarUpload, UserController.avatarChange)
+
 // update user
 router.get('/update-user/:id', decorateHtmlResponse('Update User'), UserController.updateUser)
 // user or employee edit name

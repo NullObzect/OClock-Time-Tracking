@@ -141,13 +141,18 @@ const UserModel = {
     const [rows] = await dbConnect.promise().execute(getUser, value)
     return rows;
   },
+  updateAvatar: async (avatar, id) => {
+    const updateAvatarSql = 'UPDATE `users` SET avatar = ? WHERE id = ?'
+    const values = [avatar, id]
+    const [rows] = await dbConnect.promise().execute(updateAvatarSql, values)
+    return rows;
+  },
   getUserEditInfo: async (uId, name, number, id) => {
     const getEdit = 'UPDATE `users` SET `id`= ?,`user_name`= ?, `user_phone`= ? WHERE id =?'
     const values = [uId, name, number, id]
     const [rows] = await dbConnect.promise().execute(getEdit, values)
     return rows.affectedRows;
   },
-
 
 }
 module.exports = UserModel;
