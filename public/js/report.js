@@ -1,9 +1,23 @@
+
 const baseUrl = 'http://localhost:5000';
 const reportData = []
 const endData = []
 // import  { helperJs } from '/public/js/halper.js';
 // console.log("xxx",helperJs)
 
+
+function calculateTime(fixedTime, workingTotalSec){
+  
+  let getFixedSec = Number(fixedTime *  60 * 60 );
+  let getTotalSec =  getFixedSec - workingTotalSec
+  let hours = Math.floor(getTotalSec / 3600);
+  getTotalSec %= 3600;
+  let = minutes = Math.floor(getTotalSec / 60);
+  let = seconds = getTotalSec % 60;
+  
+   return `${hours}:${minutes}:${seconds}`
+    
+  }
 // Pagination Function start
 const pageNumbers = (total, max, current) => {
   const half = Math.floor(max / 2);
@@ -118,6 +132,7 @@ function getDateFormat(date) {
 const selectStartDate = async (event) => {
   const getDate = getDateFormat(event.target.value);
 
+
   startDate = getDate;
 
   // get current date
@@ -136,12 +151,12 @@ const selectStartDate = async (event) => {
   );
   const getObjects = await data.json();
   const getReports = getObjects.reports.dataToJson
+
   // between to data total
   const dateRangeTotalTr = document.getElementById('last-seven-days-total')
-
+ 
   const getReportsTotal = getObjects.reportDateRangeTotal.betweenTowDateTotalToJson
   console.log({ getReportsTotal });
-
   dateRangeTotalTr.innerHTML = getReportsTotal.map((el) => `
     
     <tr class="bg-blue-500 text-center text-white font-bold">
@@ -149,12 +164,12 @@ const selectStartDate = async (event) => {
   <td class="p-3">${el.avgStartTime || '00'} </td>
   <td class="p-3">${el.avgEndTime || '00'} </td>
   <td class="p-3"></td>
-  <td class="p-3"> ${el.fixed_total}hr</td>
+  <td class="p-3"> ${el.fixed_total || '00'}hr</td>
   <td class="p-3"> ${el.weekTotal || '00'} </td>
-  <td class="p-3"> </td>
+  <td class="p-3">${el.totalLessORExtra || '00'}</td>
   </tr>
     `)
-
+   
   reportData.push(getReports)
   // console.log('start', jsonData)
   show(getReports)
@@ -184,9 +199,9 @@ const selectEndDate = async (event) => {
   <td class="p-3">${el.avgStartTime || '00'} </td>
   <td class="p-3">${el.avgEndTime || '00'} </td>
   <td class="p-3"></td>
-  <td class="p-3"> ${el.fixed_total}hr</td>
+  <td class="p-3"> ${el.fixed_total || '00'}hr</td>
   <td class="p-3"> ${el.weekTotal || '00'} </td>
-  <td class="p-3"> </td>
+  <td class="p-3">${el.totalLessORExtra || '00'}</td>
   </tr>
     `)
   endData.push(getReports)

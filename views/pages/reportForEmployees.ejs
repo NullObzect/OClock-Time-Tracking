@@ -202,9 +202,9 @@
           <td class="p-3"><%= el.avgStartTime  || '00' %> </td>
           <td class="p-3"><%= el.avgEndTime  || '00'%> </td>
           <td class="p-3"></td>
-          <td class="p-3"><%= el.fixed_total + 'hr' %></td>
+          <td class="p-3"><%= el.fixed_total  + 'hr' || '00' + 'hr' %></td>
           <td class="p-3"><%= el.weekTotal || '00' %> </td>
-          <td class="p-3"><%# el.totalLessORExtra %> </td>
+          <td class="p-3"><%= el.totalLessORExtra === 'NaN:NaN:NaN' ? '00' : el.totalLessORExtra %> </td>
           </tr>
         <% })  %> 
         </tfoot>
@@ -261,8 +261,8 @@ const selectStartDateForAdmin = async (event) => {
   <td class="p-3">${el.avgEndTime || '00'} </td>
   <td class="p-3"></td>
   <td class="p-3"> ${el.fixed_total}hr</td>
-  <td class="p-3"> ${el.weekTotal || '00'} </td>
-  <td class="p-3"> </td>
+  <td class="p-3"> ${el.weekTotal  + 'hr' || '00'} </td>
+  <td class="p-3">${el.totalLessORExtra || '00'}</td>
   </tr>
     `)
 
@@ -296,8 +296,8 @@ const selectEndDateForAdmin = async (event) => {
   <td class="p-3">${el.avgEndTime || '00'} </td>
   <td class="p-3"></td>
   <td class="p-3"> ${el.fixed_total}hr</td>
-  <td class="p-3"> ${el.weekTotal || '00'} </td>
-  <td class="p-3"> </td>
+  <td class="p-3"> ${el.weekTotal  + 'hr' || '00'} </td>
+  <td class="p-3">${el.totalLessORExtra || '00'}</td>
   </tr>
     `)
   // endData.push(getReports)
