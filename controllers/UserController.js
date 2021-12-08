@@ -302,18 +302,34 @@ const UserController = {
 
   // update user
   updateUser: async (req, res) => {
-    // console.log(req.params.id);
-
     const userInfo = await UserModel.getUpdateUserInfo(req.params.id)
-    // const [xx] = userInfo;
-    // const z = xx.user_pass
-    // const aa = '123456'
-    // const yy = await bcrypt.compare(aa, z)
-
-    // console.log(yy);
 
     res.render('pages/updateUser', { userInfo })
   },
+  userCanEditName: async (req, res) => {
+    const uId = req.user.id;
+    const id = uId
+    console.log('user name', req.body);
+    const { name, number } = req.body;
+    const isEdit = await UserModel.getUserEditInfo(uId, name, number, id);
+    if (isEdit.errno) {
+      res.send('Error')
+    } else {
+      res.redirect('/profile')
+    }
+  },
+  // userCanEditNumber: async (req, res) => {
+  //   const uId = req.user.id;
+  //   const id = uId
+  //   console.log('user name', req.body);
+  //   const { number } = req.body;
+  //   const isEdit = await UserModel.getUserEditNumber(uId, number, id);
+  //   if (isEdit.errno) {
+  //     res.send('Error')
+  //   } else {
+  //     res.redirect('/profile')
+  //   }
+  // },
 
 };
 

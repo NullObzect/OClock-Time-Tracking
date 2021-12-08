@@ -120,13 +120,13 @@
     <input
       type="date"
       class="p-2 bg-blue-200 rounded-md cursor-pointer shadow-md"
-      onchange="selectStartDate(event)"
+      onchange="selectStartDateForAdmin(event)"
     />
     <small class="p-2 text-md font-bold">To</small>
     <input
       type="date"
       class="p-2 bg-blue-200 rounded-md cursor-pointer shadow-md"
-      onchange="selectEndDate(event)"
+      onchange="selectEndDateForAdmin(event)"
     />
   </div>
 </div> 
@@ -157,12 +157,12 @@
         <tbody id="an-user-report">
         
           
-          <%# userReport.map(el => {%>
+          <% userReport.map(el => {%>
             <%# console.log('holiday',el.date_for_holiday) %> 
             <%#console.log('day',el.day) %> 
           <tr
             class="
-              <%#
+              <%=
               el.day===
               "Friday"
               ?
@@ -175,44 +175,136 @@
               text-black
             "
           >
-          <td class="p-3"><%# el.day %></td>
-            <td class="p-3 font-medium capitalize"><%# el.date  %></td>
+          <td class="p-3"><%= el.day %></td>
+            <td class="p-3 font-medium capitalize"><%= el.date  %></td>
             <td class="p-3">
-              <%#  el.start  %>
+              <%= el.start  %>
             </td>
           
-            <td class="p-3"><%#  el.end %></td>
-            <td class="p-3 font-medium"><%# el.day === 'Friday' ? 'Off day' : el.type %></td>
+            <td class="p-3"><%=  el.end %></td>
+            <td class="p-3 font-medium"><%= el.day === 'Friday' ? 'Off day' : el.type %></td>
 
-            <td class="p-3"><%# el.day === 'Friday' ? '0' : el.fixed_time  %></td>
-            <td class="p-3"><%# el.working_time %></td>
+            <td class="p-3"><%= el.day === 'Friday' ? '0' : el.fixed_time  %></td>
+            <td class="p-3"><%= el.working_time %></td>
             <td class="p-3">
-              <%# el.day === 'Friday' ? el.working_time : el.time_count %>
+              <%= el.day === 'Friday' ? el.working_time : el.time_count %>
             </td>
             
           </tr>
-          <%#}) %>
+          <% }) %>
         </tbody>
 
-        <tfoot id="last-seven-days-total" >
-          <%# employeeLastSevendaysReportTotal.map(el => {%> 
+        <tfoot id="date-range-total" >
+          <% employeeLastSevendaysReportTotal.map(el => {%> 
 
           <tr class="bg-blue-500 text-center text-white font-bold">
-            <td colspan="2">Total = <%# 'Present' + ' ' + el.present + '/' + '7'%>  </td>
-          <td class="p-3"><%# el.avgStartTime  || '00' %> </td>
-          <td class="p-3"><%# el.avgEndTime  || '00'%> </td>
+            <td colspan="2">Total = <%= 'Present' + ' ' + el.present + '/' + '7'%>  </td>
+          <td class="p-3"><%= el.avgStartTime  || '00' %> </td>
+          <td class="p-3"><%= el.avgEndTime  || '00'%> </td>
           <td class="p-3"></td>
-          <td class="p-3"><%# el.fixed_total + 'hr' %></td>
-          <td class="p-3"><%# el.weekTotal || '00' %> </td>
-          <td class="p-3"><%# el.totalLessORExtra %> </td>
+          <td class="p-3"><%= el.fixed_total  + 'hr' || '00' + 'hr' %></td>
+          <td class="p-3"><%= el.weekTotal || '00' %> </td>
+          <td class="p-3"><%= el.totalLessORExtra === 'NaN:NaN:NaN' ? '00' : el.totalLessORExtra %> </td>
           </tr>
-        <%# })  %> 
+        <% })  %> 
         </tfoot>
       </table>
     </div>
   </div>
 </div>
 
+
+<script>
+// getDate format
+function getDateFormat(date) {
+  let today = new Date(date);
+  const dd = String(today.getDate()).padStart(2, '0');
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const yyyy = today.getFullYear();
+  today = `${yyyy}-${mm}-${dd}`;
+
+  return today;
+}
+
+const selectStartDateForAdmin = async (event) => {
+  const getDate = getDateFormat(event.target.value);
+
+  startDate = getDate;
+
+  // get current date
+  function getCurrentDate() {
+    let today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const yyyy = today.getFullYear();
+    today = `${yyyy}-${mm}-${dd}`;
+
+    return today;
+  }
+
+  const data = await fetch(
+    `${baseUrl}/report/between/two-date/:id?startDate=${startDate}&endDate=${getCurrentDate()}`,
+  );
+  const getObjects = await data.json();
+  const getReports = getObjects.reports.dataToJson
+  // between to data total
+  const dateRangeTotalTr = document.getElementById('date-range-total')
+
+  const getReportsTotal = getObjects.reportDateRangeTotal.betweenTowDateTotalToJson
+  console.log({ getReportsTotal });
+
+  dateRangeTotalTr.innerHTML = getReportsTotal.map((el) => `
+    
+    <tr class="bg-blue-500 text-center text-white font-bold">
+    <td colspan="2">Total =  ${el.present} </td>
+  <td class="p-3">${el.avgStartTime || '00'} </td>
+  <td class="p-3">${el.avgEndTime || '00'} </td>
+  <td class="p-3"></td>
+  <td class="p-3"> ${el.fixed_total}hr</td>
+  <td class="p-3"> ${el.weekTotal  + 'hr' || '00'} </td>
+  <td class="p-3">${el.totalLessORExtra || '00'}</td>
+  </tr>
+    `)
+
+  // reportData.push(getReports)
+  // // console.log('start', jsonData)
+  // show(getReports)
+}
+
+// end date
+
+const selectEndDateForAdmin = async (event) => {
+  const endDate = event.target.value;
+
+  console.log('end date', endDate);
+  const data = await fetch(
+    `${baseUrl}/report/between/two-date?startDate=${startDate}&endDate=${endDate}`,
+  );
+  const getObjects = await data.json();
+  const getReports = getObjects.reports.dataToJson
+
+  const dateRangeTotalTr = document.getElementById('date-range-total')
+
+  const getReportsTotal = getObjects.reportDateRangeTotal.betweenTowDateTotalToJson
+  console.log({ getReportsTotal });
+
+  dateRangeTotalTr.innerHTML = getReportsTotal.map((el) => `
+    
+    <tr class="bg-blue-500 text-center text-white font-bold">
+    <td colspan="2">Total =  ${el.present} </td>
+  <td class="p-3">${el.avgStartTime || '00'} </td>
+  <td class="p-3">${el.avgEndTime || '00'} </td>
+  <td class="p-3"></td>
+  <td class="p-3"> ${el.fixed_total}hr</td>
+  <td class="p-3"> ${el.weekTotal  + 'hr' || '00'} </td>
+  <td class="p-3">${el.totalLessORExtra || '00'}</td>
+  </tr>
+    `)
+  // endData.push(getReports)
+  // show(getReports)
+};
+
+</script>
 <script src="https://unpkg.com/@themesberg/flowbite@1.1.1/dist/datepicker.bundle.js"></script>
 <script src="<%=baseUrl%>/js/report.js"></script>
 <%- include("../partials/footer"); -%>

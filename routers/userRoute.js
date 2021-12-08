@@ -42,5 +42,7 @@ router.post('/user-avatar-change', decorateHtmlResponse('Update User'), avatarUp
 
 // update user
 router.get('/update-user/:id', decorateHtmlResponse('Update User'), UserController.updateUser)
+// user or employee edit name
+router.post('/user/edit/info', UserController.userCanEditName)
 
 module.exports = router;

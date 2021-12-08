@@ -226,7 +226,7 @@ button {
             <td class="p-3"><%= el.day === 'Friday' ? '0' : el.fixed_time  %></td>
             <td class="p-3"><%= el.working_time %></td>
             <td class="p-3">
-              <%= el.day === 'Friday' ? el.working_time : el.time_count %>
+              <%= el.type !== 'regular'  ? '00:00:00' : el.time_count %>
             </td>
             
           </tr>
@@ -241,10 +241,9 @@ button {
           <td class="p-3"><%= el.avgStartTime  || '00' %> </td>
           <td class="p-3"><%= el.avgEndTime  || '00'%> </td>
           <td class="p-3"></td>
-          <% console.log( typeof el.fixed_total) %> 
-          <td class="p-3"><%= el.fixed_total + 'hr' %></td>
+          <td class="p-3"><%= el.fixed_total + 'hr' || '00'  %></td>
           <td class="p-3"><%= el.weekTotal || '00' %> </td>
-          <td class="p-3"><%= el.totalLessORExtra %> </td>
+         <td class="p-3"><%= el.totalLessORExtra === 'NaN:NaN:NaN' ? '00' : el.totalLessORExtra %></td> 
           </tr>
         <% })  %> 
         </tfoot>

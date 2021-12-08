@@ -150,6 +150,13 @@ const AttendanceModel = {
       return err;
     }
   },
+  // between to date total for employee
+  reportBetweenTwoDateTotal: async (userId, startDate, endDate) => {
+    const getTotal = 'SELECT COUNT(DISTINCT DATE(create_at)) AS present, TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(start))),"%h:%i %p") AS avgStartTime, TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(end))),"%h:%i %p") AS avgEndTime, o.option_value * COUNT(DISTINCT Date(create_at)) AS fixed_total, TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) AS weekTotal, TIME_TO_SEC(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start))))) AS total_seconds, "00" AS totalLessORExtra FROM attendance JOIN options AS o WHERE o.option_title = "fixed time"  AND user_id = ? AND DATE(create_at) BETWEEN ? AND  ? '
+    const values = [userId, startDate, endDate];
+    const [rows] = await dbConnect.promise().execute(getTotal, values);
+    return rows;
+  },
 
   // get fixed working hours
   getFixedTime: async () => {

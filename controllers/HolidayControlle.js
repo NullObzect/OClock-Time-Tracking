@@ -1,4 +1,5 @@
 const HolidayModel = require('../models/HolidayModel');
+const UserModel = require('../models/UserModel')
 
 const helperJs = require('../public/js/halper')
 const Flash = require('../utilities/Flash')
@@ -34,6 +35,7 @@ const HolidayController = {
   },
   holidayList: async (req, res) => {
     try {
+     
       const holidays = await HolidayModel.holidaysList()
       res.render('pages/holidays', { holidays })
     } catch (err) {
@@ -71,6 +73,16 @@ const HolidayController = {
     } else {
       res.redirect('/holiday-list')
     }
+  },
+  employeeSeeHolidays: async (req, res) => {
+    const [user] = await UserModel.findUserByEmail(req.user.userMailFormDB)
+    console.log({ user })
+
+    const userId = user.id;
+    console.log(userId)
+    const holidays = await HolidayModel.holidaysList()
+
+    res.render('pages/employeeSeeHolidays', { holidays })
   },
 }
 module.exports = HolidayController

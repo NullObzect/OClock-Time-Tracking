@@ -69,12 +69,12 @@
         >
           <div class="justify-center items-center mb-3">
             <% let url = avatar %> <% if(url.search('https://') === -1){ %>
-            <img 
+            <img
               class="rounded-full h-20 w-20 object-cover"
               src="/uploads/avatars/<%= avatar %>"
             />
             <% } else {%>
-            <img 
+            <img
               class="rounded-full h-20 w-20 object-cover"
               src="<%= avatar %>"
             />
@@ -275,7 +275,7 @@
                 dark:bg-gray-800
               "
             >
-              <form action="#" id="edit-form">
+              <form action="/user/edit/info" method="post" id="edit-form">
                 <div class="mt-2">
                   <div class="items-center -mx-2 md:flex">
                     <div class="w-full mx-2">
@@ -293,6 +293,7 @@
 
                       <input
                         id="edit-name"
+                        name="name"
                         class="
                           block
                           w-full
@@ -328,6 +329,8 @@
                       >
 
                       <input
+                        id="edit-number"
+                        name="number"
                         class="
                           block
                           w-full
@@ -343,13 +346,14 @@
                           focus:border-blue-500
                           dark:focus:border-blue-500
                           focus:outline-none focus:ring
-                          "
+                        "
+                        type="tel"
                         type="number"
                         value="<%= user_phone %>"
-                        />
+                      />
                     </div>
                   </div>
-                  
+
                   <div class="w-full mt-4">
                     <label
                       class="
@@ -361,11 +365,11 @@
                         dark:text-gray-200
                       "
                       >Short bio</label
-                      >
+                    >
 
                     <textarea
                       class="
-                      block
+                        block
                         w-full
                         h-40
                         px-4
@@ -386,6 +390,7 @@
                   <div class="flex justify-center gap-4 mt-5">
                     <a href="/profile">
                       <button
+                        type="reset"
                         id="reset"
                         class="
                           px-4
@@ -396,7 +401,6 @@
                           transform
                           bg-gray-400
                           rounded-md
-                          hover:bg-gray-600
                           focus:outline-none focus:bg-gray-600
                         "
                       >
@@ -406,6 +410,7 @@
 
                     <button
                       id="user-save-btn"
+                      type="submit"
                       class="
                         px-4
                         py-2
@@ -415,7 +420,6 @@
                         transform
                         bg-gray-400
                         rounded-md
-                        hover:bg-gray-600
                         focus:outline-none focus:bg-gray-600
                       "
                     >
@@ -467,7 +471,6 @@
           md:max-w-md
           mx-auto
           rounded
-          shadow-lg
           z-50
           overflow-y-auto
         "
@@ -493,52 +496,62 @@
           <!--Body-->
           <div class="my-3 relative">
             <div>
-              <form action="/user-avatar-change" enctype="multipart/form-data"  method="post">
-              <% if(url.search('https://') === -1){ %>
-              <img id="img" 
-                class="rounded-full h-20 w-20 object-cover"
-                src="/uploads/avatars/<%= avatar %>"
-              />
-              <% } else{%>
-              <img  id="img" 
-                class="rounded-full h-20 w-20 object-cover"
-                src="<%= avatar %>"
-              />
-              <% } %>
-              <label class="absolute top-12 left-40">
-                <input  type="file"  name="avatar" class="hidden"  onchange="readURL(this)"  :accept="accept" />
-                <small
-                  class="
-                    text-sm
-                    font-medium
-                    cursor-pointer
-                    rounded-full
-                    px-4
-                    py-2
-                    bg-gray-200
-                  "
-                >
-                  Change
-                </small>
-                <button
-            id="avatar-save"
-            type="submit"
-            disabled
-              class="
-                focus:outline-none
-                px-4
-                bg-teal-500
-                py-2
-                ml-3
-                rounded-lg
-                text-white
-                bg-green-400
-              "
-            >
-              Save
-            </button>
-              </label>
-            </form>
+              <form
+                action="/user-avatar-change"
+                enctype="multipart/form-data"
+                method="post"
+              >
+                <% if(url.search('https://') === -1){ %>
+                <img
+                  id="img"
+                  class="rounded-full h-20 w-20 object-cover"
+                  src="/uploads/avatars/<%= avatar %>"
+                />
+                <% } else{%>
+                <img
+                  id="img"
+                  class="rounded-full h-20 w-20 object-cover"
+                  src="<%= avatar %>"
+                />
+                <% } %>
+                <label class="absolute top-12 left-40">
+                  <input
+                    type="file"
+                    name="avatar"
+                    class="hidden"
+                    onchange="readURL(this)"
+                    accept="accept"
+                  />
+                  <small
+                    class="
+                      text-sm
+                      font-medium
+                      cursor-pointer
+                      rounded-full
+                      px-4
+                      py-2
+                      bg-gray-200
+                    "
+                  >
+                    Change
+                  </small>
+                  <button
+                    type="submit"
+                    class="
+                      focus:outline-none
+                      px-4
+                      bg-teal-500
+                      py-2
+                      ml-3
+                      rounded-lg
+                      text-white
+                      bg-green-400
+                    "
+                  >
+                    Save
+                  </button>
+                </label>
+              </form>
 
               <div>
                 <h5 class="text-sm mb-1">Sync a profile picture with</h5>
@@ -690,12 +703,10 @@
             >
               Save
             </button>
-            </div>
+          </div>
         </div>
       </div>
     </div>
-
-    <!-- <button class="btn-hover bg-blue-500 px-4">hover</button> -->
 
     <script>
       function readURL(input) {
@@ -712,14 +723,12 @@
   }
     </script>
     <script>
-      
-      function avatarChange(){
-        const avatar = document.getElementsByName('avatar')
-        console.log(avatar)
+      function avatarChange() {
+        const avatar = document.getElementsByName("avatar");
+        console.log(avatar);
       }
-      </script>
+    </script>
 
     <script src="/js/profile.js"></script>
-
   </body>
 </html>
