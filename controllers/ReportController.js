@@ -180,19 +180,20 @@ const ReportController = {
       let dateRangeFixedTime = 0;
 
       //  store fixed time with date range
-      // eslint-disable-next-line max-len
-      // eslint-disable-next-line no-return-assign
-      dataToJson.forEach((el) => dateRangeFixedTime = totalFixedTime(el.day, el.fixed_time, el.type))
 
+      dataToJson.forEach((el) => {
+        dateRangeFixedTime = totalFixedTime(el.day, el.fixed_time, el.type)
+      })
       betweenTowDateTotalToJson.forEach((el) => {
         el.fixed_total = dateRangeFixedTime
         el.totalLessORExtra = calculateTime(el.fixed_total, el.total_seconds)
       })
+      console.log({ dateRangeFixedTime });
 
-      // dateRangeFixedTime = 0;
       // count time total extar or less
       // return res.json(dataToJson)
       res.json({ reports: { dataToJson }, reportDateRangeTotal: { betweenTowDateTotalToJson } })
+      dateRangeFixedTime = 0;
     } catch (err) {
       console.log('====>Error form ReportController/reportBetweenTwoDate', err);
       return err;
@@ -340,6 +341,7 @@ const ReportController = {
 
       // console.log({dataToJson, betweenTowDateTotalToJson});
       let dateRangeFixedTime = 0;
+
       // console.log({dataToJson});
 
       dataToJson.forEach((el) => {
@@ -351,13 +353,14 @@ const ReportController = {
         el.totalLessORExtra = calculateTime(el.fixed_total, el.total_seconds)
       })
 
-      dateRangeFixedTime = 0;
+      console.log({ dateRangeFixedTime });
 
       // return res.json(dataToJson)
-      return res.json({
+      res.json({
         reports: { dataToJson },
         reportDateRangeTotal: { betweenTowDateTotalToJson },
       })
+      dateRangeFixedTime = 0;
     } catch (err) {
       console.log('====>Error form ReportController/reportEmployees', err);
       return err;

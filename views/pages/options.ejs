@@ -1,23 +1,28 @@
 <%- include("../partials/header"); -%>
 
 <style>
-  .table-holidays {
+  .table-options {
     border-spacing: 0 15px;
-    width: 500px;
+    width: 600px;
   }
 
-  .table-holidays tr {
+  .table-options tr {
     border-radius: 20px;
   }
 
-  .table-holidays tr td:nth-child(n + 3),
-  .table-holidays tr th:nth-child(n + 3) {
+  .table-options tr td:nth-child(n + 3),
+  .table-options tr th:nth-child(n + 3) {
     border-radius: 0 0.625rem 0.625rem 0;
   }
 
-  .table-holidays tr td:nth-child(1),
+  .table-options tr td:nth-child(1),
   tr th:nth-child(1) {
     border-radius: 0.625rem 0 0 0.625rem;
+  }
+  .option-end {
+    display: none;
+    margin-left: 220px;
+    margin-top: -25px;
   }
 </style>
 
@@ -27,23 +32,64 @@
   <div class="col-span-12">
     <div class="overflow-auto lg:overflow-visible">
       <table
-        class="table-holidays text-gray-400 border-separate space-y-6 text-sm"
+        class="table-options text-gray-400 border-separate space-y-6 text-sm"
       >
         <thead class="bg-blue-500 text-white">
-          <tr>
+          <tr class="text-center">
             <th class="p-3">SL</th>
             <th class="p-3">Title</th>
-            <th class="p-3 text-left">Value</th>
+            <th class="p-3">Value</th>
           </tr>
         </thead>
-        <tbody id="holiday-list">
+        <tbody id="options-list">
           <% optionList.map((op,idx) =>{ %>
 
-          <tr class="bg-blue-200 text-black">
-            <td class="p-3"><%= idx + 1 %></td>
-            <td class="p-3"><%= op.option_title %></td>
-            <td class="p-3"><%= op.option_value %></td>
-          </tr>
+          <form class="option-form" action="/update/fixed-time" method="post">
+            <tr class="bg-blue-200 text-black text-center">
+              <td class="p-3"><%= idx + 1 %></td>
+              <td class="p-3"><%= op.option_title %></td>
+              <td class="p-3 text-center relative">
+                <input type="hidden" name="optionId" value="<%= op.id %>" />
+
+                <input
+                  class="outline-none text-center option-value bg-blue-200"
+                  name="fixedTime"
+                  value="<%= op.option_value %>"
+                />
+
+                <div class="option-end absolute">
+                  <button
+                    class="
+                      px-3
+                      py-1
+                      rounded-lg
+                      font-semibold
+                      text-white
+                      bg-red-400
+                      shadow-md
+                    "
+                    type="reset"
+                  >
+                    Reset
+                  </button>
+                  <button
+                    class="
+                      px-3
+                      py-1
+                      rounded-lg
+                      font-semibold
+                      text-white
+                      bg-green-400
+                      shadow-md
+                    "
+                    type="submit"
+                  >
+                    Add
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </form>
 
           <% }) %>
         </tbody>
@@ -51,5 +97,21 @@
     </div>
   </div>
 </div>
+
+<script>
+  const optionFrom = document.getElementsByClassName("option-form")[0];
+  const optionValue = document.getElementsByClassName("option-value")[1];
+  const btns = document.getElementsByClassName("option-end")[1];
+
+  // optionFrom.addEventListener("keyup", () => {
+  //   //alert("ok");
+  //   console.log("hi");
+  // });
+  optionValue.addEventListener("keyup", () => {
+    //alert("ok");
+    console.log("hi");
+    btns.style.display = "block";
+  });
+</script>
 
 <%- include("../partials/footer"); -%>
