@@ -7,6 +7,7 @@ const session = require('express-session')
 const passport = require('passport')
 const flash = require('connect-flash')
 const router = require('./routers/routes');
+
 // for passport facebook congif/passportFB
 require('./utilities/passportFB')(passport)
 //

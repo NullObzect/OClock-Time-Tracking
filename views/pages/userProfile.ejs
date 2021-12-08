@@ -521,7 +521,9 @@
                   Change
                 </small>
                 <button
+            id="avatar-save"
             type="submit"
+            disabled
               class="
                 focus:outline-none
                 px-4
@@ -702,6 +704,7 @@
       var reader = new FileReader();
       reader.onload = function (e) { 
         document.querySelector("#img").setAttribute("src",e.target.result);
+        document.getElementById("avatar-save").disabled = false;
       };
 
       reader.readAsDataURL(input.files[0]); 
