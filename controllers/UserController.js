@@ -303,8 +303,34 @@ const UserController = {
   // update user
   updateUser: async (req, res) => {
     const userInfo = await UserModel.getUpdateUserInfo(req.params.id)
+    global.userId = userInfo[0].id
 
     res.render('pages/updateUser', { userInfo })
+  },
+  // update user post
+  updateUserPush: async (req, res) => {
+    console.log('update user', userId);
+    console.log(req.body)
+
+    const id = userId
+    const {
+      userName, userPhone, userRole, userMail,userPass
+    } = req.body;
+    const hashPass = await bcrypt.hash(userPass, 10)
+    const isUpdate = await UserModel.adminCanUpdateUser(
+      id,
+      userName,
+      userPhone,
+      userRole,
+      userMail,
+      hashPass,
+      userId,
+    )
+    if (isUpdate.errno) {
+      res.send('Error')
+    } else {
+      res.redirect('/all-users')
+    }
   },
   userCanEditName: async (req, res) => {
     const uId = req.user.id;

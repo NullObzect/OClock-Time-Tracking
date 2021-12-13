@@ -9,7 +9,7 @@
     "build-dev": "webpack --mode development -w",
     "start": "NODE_ENV=development nodemon  app.js",
     "production": "NODE_ENV=production node app.js",
-    "build": "postcss ./src/tailwind.css -o ./public/css/styles.css -w",
+    "build-css": "postcss ./src/tailwind.css -o ./public/css/styles.css -w",
     "prod": "NODE_ENV=production postcss ./src/tailwind.css -o ./public/css/styles.css"
   },
   "author": "",

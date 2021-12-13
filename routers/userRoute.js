@@ -40,8 +40,9 @@ router.get('/user-verify/:token', UserController.userVerifySet)
 // User Avatar Change
 router.post('/user-avatar-change', decorateHtmlResponse('Update User'), avatarUpload, UserController.avatarChange)
 
-// update user
+// admin can update user
 router.get('/update-user/:id', decorateHtmlResponse('Update User'), UserController.updateUser)
+router.post('/update-user', decorateHtmlResponse('Update User'), UserController.updateUserPush)
 // user or employee edit name
 router.post('/user/edit/info', UserController.userCanEditName)
 

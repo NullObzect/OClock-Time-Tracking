@@ -11,30 +11,28 @@ const Formater = {
   },
   // functin for total time count
 
- calculateTime : (fixedTime, workingTotalSec) =>{
-  
-  let getFixedSec = Number(fixedTime *  60 * 60 );
-  let getTotalSec =  getFixedSec - workingTotalSec
-  getTotalSec = getFixedSec === 0 ?  workingTotalSec - getFixedSec : getFixedSec - workingTotalSec
+  calculateTime: (fixedTime, workingTotalSec) => {
+    const getFixedSec = Number(fixedTime * 60 * 60);
+    let getTotalSec = getFixedSec - workingTotalSec
+    getTotalSec = getFixedSec === 0 ? workingTotalSec - getFixedSec : getFixedSec - workingTotalSec
 
-  let hours = Math.floor(getTotalSec / 3600);
-  getTotalSec %= 3600;
-  let = minutes = Math.floor(getTotalSec / 60);
-  let = seconds = getTotalSec % 60;
-  
-   return `${hours}:${minutes}:${seconds}`
-    
+    const hours = Math.floor(getTotalSec / 3600);
+    getTotalSec %= 3600;
+    const minutes = Math.floor(getTotalSec / 60);
+    const seconds = getTotalSec % 60;
+
+    return `${hours}:${minutes}:${seconds}`
   },
-//  function for date formater
- dateFormate: (dateTime) => {
-  const today = new Date(dateTime)
-  const month = today.getMonth() + 1
-  const year = today.getFullYear()
-  const day = today.getDate() < 10 ? `0${today.getDate()}` : today.getDate()
-  const getDate = `${year}-${month}-${day}`;
+  //  function for date formater
+  dateFormate: (dateTime) => {
+    const today = new Date(dateTime)
+    const month = today.getMonth() + 1
+    const year = today.getFullYear()
+    const day = today.getDate() < 10 ? `0${today.getDate()}` : today.getDate()
+    const getDate = `${year}-${month}-${day}`;
 
-  return getDate;
-}
+    return getDate;
+  },
 }
 
 module.exports = Formater
