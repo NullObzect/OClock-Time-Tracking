@@ -309,12 +309,9 @@ const UserController = {
   },
   // update user post
   updateUserPush: async (req, res) => {
-    console.log('update user', userId);
-    console.log(req.body)
-
     const id = userId
     const {
-      userName, userPhone, userRole, userMail,userPass
+      userName, userPhone, userRole, userMail, userPass,
     } = req.body;
     const hashPass = await bcrypt.hash(userPass, 10)
     const isUpdate = await UserModel.adminCanUpdateUser(
@@ -344,19 +341,6 @@ const UserController = {
       res.redirect('/profile')
     }
   },
-  // userCanEditNumber: async (req, res) => {
-  //   const uId = req.user.id;
-  //   const id = uId
-  //   console.log('user name', req.body);
-  //   const { number } = req.body;
-  //   const isEdit = await UserModel.getUserEditNumber(uId, number, id);
-  //   if (isEdit.errno) {
-  //     res.send('Error')
-  //   } else {
-  //     res.redirect('/profile')
-  //   }
-  // },
-
 };
 
 module.exports = UserController;

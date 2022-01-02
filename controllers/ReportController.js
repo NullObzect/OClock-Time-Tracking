@@ -311,7 +311,7 @@ const ReportController = {
   reportBetweenTwoDateForAdmin: async (req, res) => {
     try {
       const { startDate, endDate } = req.query;
-      // console.log(startDate, endData);
+      console.log(startDate, endData);
 
       const getData = await AttendanceModel.anEmployeeReportBetweenTwoDate(
         getId, startDate, endDate,
