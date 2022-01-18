@@ -10,7 +10,7 @@ const profileRoute = require('./profileRoute')
 const attendanceRoute = require('./attendanceRoute')
 const holidayRouter = require('./holidayRoute')
 const leavedayRoute = require('./leavedayRoute')
-const options = require('./optionsRoute')
+const optionsRoute = require('./optionsRoute')
 
 // all routers use
 router.use(
@@ -24,9 +24,10 @@ router.use(
   attendanceRoute,
   holidayRouter,
   leavedayRoute,
-  options,
 
 )
+router.use('/options', optionsRoute)
+router.use('/profile', profileRoute)
 
 // exports route
 module.exports = router;

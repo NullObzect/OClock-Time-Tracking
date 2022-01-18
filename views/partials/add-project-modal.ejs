@@ -1,0 +1,36 @@
+<div id="myModal" class="modal-container">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">Add project</div>
+      <div class="modal-close">
+        <%- include("../partials/icons/close-svg"); -%>
+      </div>
+    </div>
+    <div class="modal-content">
+      <div class="container">
+        <form action="/options/projects" method="POST">
+          <label for="name"
+            >Project Name
+            <div class="">
+              <input id="name" name="name" type="text" />
+            </div>
+          </label>
+          <label for="projectDetails">
+            Project Details
+            <div class="">
+              <textarea
+                name="details"
+                id="projectDetails"
+                cols="30"
+                rows="3"
+              ></textarea>
+            </div>
+          </label>
+          <div class="">
+            <button class="submit-btn" type="submit">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

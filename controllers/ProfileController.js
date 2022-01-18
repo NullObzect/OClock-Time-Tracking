@@ -28,7 +28,7 @@ const ProfileController = {
       const platformUser = await ProfileModel.userConnectionDetailsUniqueInfo(id)
       // console.log({ platformUser });
       console.log('req flash', req.flash('fail'))
-      res.render('pages/userProfile', {
+      res.render('pages/profile', {
         platformUser, user_name, user_phone, status, avatar,
       })
     } catch (err) {

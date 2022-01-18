@@ -1,13 +1,14 @@
 const dbConnect = require('../config/database');
 
 const UserModel = {
-  registerModel: async (userName, userPhone, userRole, userMail, userPass, avatar) => {
+  addUser: async (userName, userPhone, userMail, userPass, avatar) => {
+    console.log(userName, userPhone, userMail, userPass, avatar)
     try {
-      const registerQuery = 'INSERT INTO `users`( `user_name`, `user_phone`, `user_role`, `user_mail`, `user_pass`,`avatar`) VALUES (?,?,?,?,?,?)';
+      const addUserQuery = 'INSERT INTO `users`( `user_name`, `user_phone`, `user_mail`, `user_pass`,`avatar`) VALUES (?,?,?,?,?)';
 
-      const values = [userName, userPhone, userRole, userMail, userPass, avatar];
+      const values = [userName, userPhone, userMail, userPass, avatar];
 
-      const [rows] = await dbConnect.promise().execute(registerQuery, values);
+      const [rows] = await dbConnect.promise().execute(addUserQuery, values);
       return rows;
     } catch (err) {
       return err;

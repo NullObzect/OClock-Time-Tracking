@@ -1,291 +1,61 @@
+/*
+ * ATTENTION: The "eval" devtool has been used (maybe by default in mode: "development").
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
+/** *** */ (() => { // webpackBootstrap
+/** *** */ 	const __webpack_modules__ = ({
 
-const baseUrl = 'http://localhost:5000';
-const reportData = []
-const endData = []
-// import  { helperJs } from '/public/js/halper.js';
-// console.log("xxx",helperJs)
+    /***/ './src/reports.js':
+    /*! ***********************!*\
+  !*** ./src/reports.js ***!
+  \********************** */
+    /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+      eval("function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }\n\nfunction _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, \"next\", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, \"throw\", err); } _next(undefined); }); }; }\n\nvar PaginationButtons = __webpack_require__(/*! ../utilities/pagination */ \"./utilities/pagination.js\");\n\nconsole.log(PaginationButtons);\nvar baseUrl = 'http://localhost:5000';\nvar reportData = [];\nvar endData = []; // import  { helperJs } from '/public/js/halper.js';\n// console.log(\"xxx\",helperJs)\n\nfunction calculateTime(fixedTime, workingTotalSec) {\n  var getFixedSec = Number(fixedTime * 60 * 60);\n  var getTotalSec = getFixedSec - workingTotalSec;\n  var hours = Math.floor(getTotalSec / 3600);\n  getTotalSec %= 3600;\n  var minutes = Math.floor(getTotalSec / 60);\n  var seconds = getTotalSec % 60;\n  return \"\".concat(hours, \":\").concat(minutes, \":\").concat(seconds);\n} // Pagination Function start\n// Pagination Function end\n// get start date\n\n\nvar startDate; // getDate format\n\nfunction getDateFormat(date) {\n  var today = new Date(date);\n  var dd = String(today.getDate()).padStart(2, '0');\n  var mm = String(today.getMonth() + 1).padStart(2, '0');\n  var yyyy = today.getFullYear();\n  today = \"\".concat(yyyy, \"-\").concat(mm, \"-\").concat(dd);\n  return today;\n}\n\nvar selectStartDate = /*#__PURE__*/function () {\n  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(event) {\n    var getDate, getCurrentDate, data, getObjects, getReports, dateRangeTotalTr, getReportsTotal;\n    return regeneratorRuntime.wrap(function _callee$(_context) {\n      while (1) {\n        switch (_context.prev = _context.next) {\n          case 0:\n            getCurrentDate = function _getCurrentDate() {\n              var today = new Date();\n              var dd = String(today.getDate()).padStart(2, '0');\n              var mm = String(today.getMonth() + 1).padStart(2, '0');\n              var yyyy = today.getFullYear();\n              today = \"\".concat(yyyy, \"-\").concat(mm, \"-\").concat(dd);\n              return today;\n            };\n\n            getDate = getDateFormat(event.target.value);\n            startDate = getDate; // get current date\n\n            _context.next = 5;\n            return fetch(\"\".concat(baseUrl, \"/reports/between/two-date?startDate=\").concat(startDate, \"&endDate=\").concat(getCurrentDate()));\n\n          case 5:\n            data = _context.sent;\n            _context.next = 8;\n            return data.json();\n\n          case 8:\n            getObjects = _context.sent;\n            getReports = getObjects.reports.dataToJson; // between to data total\n\n            dateRangeTotalTr = document.getElementById('last-seven-days-total');\n            getReportsTotal = getObjects.reportDateRangeTotal.betweenTowDateTotalToJson;\n            console.log({\n              getReportsTotal: getReportsTotal\n            });\n            dateRangeTotalTr.innerHTML = getReportsTotal.map(function (el) {\n              return \"\\n    \\n    <tr class=\\\"bg-blue-500 text-center text-white font-bold\\\">\\n    <td colspan=\\\"2\\\">Total =  \".concat(el.present, \" </td>\\n  <td class=\\\"p-3\\\">\").concat(el.avgStartTime || '00', \" </td>\\n  <td class=\\\"p-3\\\">\").concat(el.avgEndTime || '00', \" </td>\\n  <td class=\\\"p-3\\\"></td>\\n  <td class=\\\"p-3\\\"> \").concat(el.fixed_total || '00', \"hr</td>\\n  <td class=\\\"p-3\\\"> \").concat(el.weekTotal || '00', \" </td>\\n  <td class=\\\"p-3\\\">\").concat(el.totalLessORExtra || '00', \"</td>\\n  </tr>\\n    \");\n            });\n            reportData.push(getReports); // console.log('start', jsonData)\n\n            show(getReports);\n\n          case 16:\n          case \"end\":\n            return _context.stop();\n        }\n      }\n    }, _callee);\n  }));\n\n  return function selectStartDate(_x) {\n    return _ref.apply(this, arguments);\n  };\n}(); // end date\n\n\nvar selectEndDate = /*#__PURE__*/function () {\n  var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(event) {\n    var endDate, data, getObjects, getReports, dateRangeTotalTr, getReportsTotal;\n    return regeneratorRuntime.wrap(function _callee2$(_context2) {\n      while (1) {\n        switch (_context2.prev = _context2.next) {\n          case 0:\n            endDate = event.target.value;\n            console.log('end date', endDate);\n            _context2.next = 4;\n            return fetch(\"\".concat(baseUrl, \"/reports/between/two-date?startDate=\").concat(startDate, \"&endDate=\").concat(endDate));\n\n          case 4:\n            data = _context2.sent;\n            _context2.next = 7;\n            return data.json();\n\n          case 7:\n            getObjects = _context2.sent;\n            getReports = getObjects.reports.dataToJson;\n            dateRangeTotalTr = document.getElementById('last-seven-days-total');\n            getReportsTotal = getObjects.reportDateRangeTotal.betweenTowDateTotalToJson;\n            console.log({\n              getReportsTotal: getReportsTotal\n            });\n            dateRangeTotalTr.innerHTML = getReportsTotal.map(function (el) {\n              return \"\\n    \\n    <tr class=\\\"bg-blue-500 text-center text-white font-bold\\\">\\n    <td colspan=\\\"2\\\">Total =  \".concat(el.present, \" </td>\\n  <td class=\\\"p-3\\\">\").concat(el.avgStartTime || '00', \" </td>\\n  <td class=\\\"p-3\\\">\").concat(el.avgEndTime || '00', \" </td>\\n  <td class=\\\"p-3\\\"></td>\\n  <td class=\\\"p-3\\\"> \").concat(el.fixed_total || '00', \"hr</td>\\n  <td class=\\\"p-3\\\"> \").concat(el.weekTotal || '00', \" </td>\\n  <td class=\\\"p-3\\\">\").concat(el.totalLessORExtra || '00', \"</td>\\n  </tr>\\n    \");\n            });\n            endData.push(getReports);\n            show(getReports);\n\n          case 15:\n          case \"end\":\n            return _context2.stop();\n        }\n      }\n    }, _callee2);\n  }));\n\n  return function selectEndDate(_x2) {\n    return _ref2.apply(this, arguments);\n  };\n}();\n\nfunction show(data) {\n  var anUserReportTable = document.getElementById('an-user-reports');\n  var paginationShow = document.getElementById('pagination-show');\n  var viewPerPage = 4;\n  var paginationBtn = 5;\n  var reports = data;\n  var pageCount = Math.ceil(reports.length / viewPerPage); // Pagination Button\n\n  var pageVisible = 0;\n\n  if (startDate.length < paginationBtn) {\n    pageVisible = 1;\n  } else {\n    var PN = Math.floor(reports.length / paginationBtn);\n    pageVisible = PN;\n\n    if (PN > paginationBtn) {\n      pageVisible = paginationBtn;\n    }\n  }\n\n  var paginationButtons = new PaginationButtons(pageCount, pageVisible);\n  console.log('dd', reports.length);\n\n  if (reports.length > viewPerPage) {\n    paginationButtons.render(paginationShow);\n  }\n\n  paginationButtons.onChange(function (e) {\n    dataShow(reports, anUserReportTable, viewPerPage, e.target.value);\n  });\n  dataShow(reports, anUserReportTable, viewPerPage, 1);\n\n  function dataShow(items, wapper, rowsPerPage, page) {\n    wapper.innerHTML = '';\n    page--;\n    var start = rowsPerPage * page;\n    var end = start + rowsPerPage;\n    var paginateItems = items.slice(start, end);\n\n    for (var i = 0; i < paginateItems.length; i++) {\n      var el = paginateItems[i];\n      var content = document.createElement('tr');\n      content.className = \"\".concat(el.day === 'Friday' ? 'bg-red-200' : el.type === 'holiday' ? 'bg-yellow-200' : el.type === 'leave' ? 'bg-red-400' : 'bg-blue-200', \" lg:text-black\");\n      var workDay = document.createElement('td');\n      workDay.className = 'p-3';\n      workDay.textContent = el.day;\n      var workDate = document.createElement('td');\n      workDate.className = 'p-3 font-medium capitalize';\n      workDate.textContent = el.date;\n      var workStart = document.createElement('td');\n      workStart.className = 'p-3';\n      workStart.textContent = el.start;\n      var workEnd = document.createElement('td');\n      workEnd.className = 'p-3';\n      workEnd.textContent = el.end;\n      var workStatus = document.createElement('td');\n      workStatus.className = 'p-3 font-medium';\n      workStatus.textContent = el.day === 'Friday' ? 'Off day' : el.type;\n      var workHour = document.createElement('td');\n      workHour.className = 'p-3';\n      workHour.textContent = el.day === 'Friday' ? '0' : el.fixed_time;\n      var workTime = document.createElement('td');\n      workTime.className = 'p-3';\n      workTime.textContent = el.working_time;\n      var workResult = document.createElement('td');\n      workResult.className = 'p-3';\n      workResult.textContent = el.day === 'Friday' ? el.working_time : el.time_count;\n      content.appendChild(workDay);\n      content.appendChild(workDate);\n      content.appendChild(workStart);\n      content.appendChild(workEnd);\n      content.appendChild(workStatus);\n      content.appendChild(workHour);\n      content.appendChild(workTime);\n      content.appendChild(workResult);\n      wapper.append(content);\n    }\n  }\n}\n\n//# sourceURL=webpack://mvc/./src/reports.js?");
+      /***/ }),
 
+    /***/ './utilities/pagination.js':
+    /*! *********************************!*\
+  !*** ./utilities/pagination.js ***!
+  \******************************** */
+    /***/ ((module) => {
+      eval("var pageNumbers = function pageNumbers(total, max, current) {\n  var half = Math.floor(max / 2);\n  var to = max;\n\n  if (current + half >= total) {\n    to = total;\n  } else if (current > half) {\n    to = current + half;\n  }\n\n  var from = to - max;\n  return Array.from({\n    length: max\n  }, function (_, i) {\n    return i + 1 + from;\n  });\n}; // Pagination Button action function\n\n\nfunction PaginationButtons(totalPages) {\n  var _this = this;\n\n  var maxPageVisible = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 10;\n  var currentPage = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;\n  var pages = pageNumbers(totalPages, maxPageVisible, currentPage);\n  var currentPageBtn = null;\n  var buttons = new Map();\n  var fragment = document.createDocumentFragment();\n  var paginationButtonContainer = document.createElement('div');\n  paginationButtonContainer.className = 'pagination-buttons';\n  var disabled = {\n    start: function start() {\n      return pages[0] === 1;\n    },\n    prev: function prev() {\n      return currentPage === 1;\n    },\n    end: function end() {\n      return pages.slice(-1)[0] === totalPages;\n    },\n    next: function next() {\n      return currentPage === totalPages;\n    }\n  }; // Create Button and button details\n\n  var createAndSetupButtons = function createAndSetupButtons() {\n    var label = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';\n    var cls = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';\n    var disabled = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;\n    var handleClick = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : function () {};\n    var button = document.createElement('button');\n    button.textContent = label;\n    button.className = \"page-btn \".concat(cls);\n    button.disabled = disabled;\n    button.addEventListener('click', function (event) {\n      handleClick(event);\n\n      _this.update();\n\n      paginationButtonContainer.value = currentPage;\n      paginationButtonContainer.dispatchEvent(new Event('change'));\n    });\n    return button;\n  };\n\n  var onPageButtonClick = function onPageButtonClick(e) {\n    return currentPage = Number(e.currentTarget.textContent);\n  };\n\n  var onPageButtonUpdate = function onPageButtonUpdate(index) {\n    return function (btn) {\n      btn.textContent = pages[index];\n\n      if (pages[index] === currentPage) {\n        currentPageBtn.classList.remove('active');\n        btn.classList.add('active');\n        currentPageBtn = btn;\n        currentPageBtn.focus();\n      }\n    };\n  };\n\n  buttons.set(createAndSetupButtons('start', 'start-page', disabled.start(), function () {\n    return currentPage = 1;\n  }), function (btn) {\n    return btn.disabled = disabled.start();\n  });\n  buttons.set(createAndSetupButtons('prev', 'prev-page', disabled.prev(), function () {\n    return currentPage -= 1;\n  }), function (btn) {\n    return btn.disabled = disabled.prev();\n  });\n  pages.forEach(function (pageNumber, index) {\n    var isCurrentPage = pageNumber === currentPage;\n    var button = createAndSetupButtons(pageNumber, isCurrentPage ? 'active' : '', false, onPageButtonClick);\n\n    if (isCurrentPage) {\n      currentPageBtn = button;\n    }\n\n    buttons.set(button, onPageButtonUpdate(index));\n  });\n  buttons.set(createAndSetupButtons('next', 'next-page', disabled.next(), function () {\n    return currentPage += 1;\n  }), function (btn) {\n    return btn.disabled = disabled.next();\n  });\n  buttons.set(createAndSetupButtons('end', 'end-page', disabled.end(), function () {\n    return currentPage = totalPages;\n  }), function (btn) {\n    return btn.disabled = disabled.end();\n  });\n  buttons.forEach(function (_, btn) {\n    fragment.appendChild(btn);\n  });\n\n  this.render = function () {\n    var container = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : document.body;\n    paginationButtonContainer.appendChild(fragment);\n    console.log('render', container.children.length);\n\n    if (container.children.length === 1) {\n      container.removeChild(container.children[0]);\n    }\n\n    container.appendChild(paginationButtonContainer);\n  };\n\n  this.update = function () {\n    var newPageNumber = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : currentPage;\n    currentPage = newPageNumber;\n    pages = pageNumbers(totalPages, maxPageVisible, currentPage);\n    buttons.forEach(function (updateButton, button) {\n      return updateButton(button);\n    });\n  };\n\n  this.onChange = function (handler) {\n    paginationButtonContainer.addEventListener('change', handler);\n  };\n}\n\nmodule.exports = PaginationButtons;\n\n//# sourceURL=webpack://mvc/./utilities/pagination.js?");
+      /***/ }),
 
-function calculateTime(fixedTime, workingTotalSec){
-  
-  let getFixedSec = Number(fixedTime *  60 * 60 );
-  let getTotalSec =  getFixedSec - workingTotalSec
-  let hours = Math.floor(getTotalSec / 3600);
-  getTotalSec %= 3600;
-  let = minutes = Math.floor(getTotalSec / 60);
-  let = seconds = getTotalSec % 60;
-  
-   return `${hours}:${minutes}:${seconds}`
-    
-  }
-// Pagination Function start
-const pageNumbers = (total, max, current) => {
-  const half = Math.floor(max / 2);
-  let to = max
-  if (current + half >= total) {
-    to = total;
-  } else if (current > half) {
-    to = current + half
-  }
-  const from = to - max
-  return Array.from({ length: max }, (_, i) => (i + 1) + from)
-}
-
-// Pagination Button action function
-
-function PaginationButtons(totalPages, maxPageVisible = 10, currentPage = 1) {
-  let pages = pageNumbers(totalPages, maxPageVisible, currentPage)
-  let currentPageBtn = null;
-  const buttons = new Map()
-  const fragment = document.createDocumentFragment()
-  const paginationButtonContainer = document.createElement('div');
-  paginationButtonContainer.className = 'pagination-buttons'
-
-  const disabled = {
-    start: () => pages[0] === 1,
-    prev: () => currentPage === 1,
-    end: () => pages.slice(-1)[0] === totalPages,
-    next: () => currentPage === totalPages,
-  }
-
-  // Create Button and button details
-
-  const createAndSetupButtons = (label = '', cls = '', disabled = false, handleClick = () => {}) => {
-    const button = document.createElement('button');
-    button.textContent = label;
-    button.className = `page-btn ${cls}`
-    button.disabled = disabled
-    button.addEventListener('click', (event) => {
-      handleClick(event);
-      this.update();
-      paginationButtonContainer.value = currentPage;
-      paginationButtonContainer.dispatchEvent(new Event('change'));
-    })
-    return button
-  }
-
-  const onPageButtonClick = (e) => currentPage = Number(e.currentTarget.textContent)
-
-  const onPageButtonUpdate = (index) => (btn) => {
-    btn.textContent = pages[index]
-    if (pages[index] === currentPage) {
-      currentPageBtn.classList.remove('active')
-      btn.classList.add('active')
-      currentPageBtn = btn;
-      currentPageBtn.focus()
-    }
-  }
-
-  buttons.set(createAndSetupButtons('start', 'start-page', disabled.start(), () => currentPage = 1), (btn) => btn.disabled = disabled.start())
-  buttons.set(createAndSetupButtons('prev', 'prev-page', disabled.prev(), () => currentPage -= 1), (btn) => btn.disabled = disabled.prev())
-
-  pages.forEach((pageNumber, index) => {
-    const isCurrentPage = pageNumber === currentPage
-    const button = createAndSetupButtons(pageNumber, isCurrentPage ? 'active' : '', false, onPageButtonClick)
-    if (isCurrentPage) {
-      currentPageBtn = button;
-    }
-    buttons.set(button, onPageButtonUpdate(index))
-  })
-
-  buttons.set(createAndSetupButtons('next', 'next-page', disabled.next(), () => currentPage += 1), (btn) => btn.disabled = disabled.next())
-
-  buttons.set(createAndSetupButtons('end', 'end-page', disabled.end(), () => currentPage = totalPages), (btn) => btn.disabled = disabled.end())
-  buttons.forEach((_, btn) => {
-    fragment.appendChild(btn)
-  })
-
-  this.render = (container = document.body) => {
-    paginationButtonContainer.appendChild(fragment)
-    console.log('render', container.children.length)
-    if (container.children.length === 1) {
-      container.removeChild(container.children[0])
-    }
-    container.appendChild(paginationButtonContainer)
-  }
-
-  this.update = (newPageNumber = currentPage) => {
-    currentPage = newPageNumber
-    pages = pageNumbers(totalPages, maxPageVisible, currentPage)
-    buttons.forEach((updateButton, button) => updateButton(button))
-  }
-  this.onChange = (handler) => {
-    paginationButtonContainer.addEventListener('change', handler);
-  }
-}
-// Pagination Function end
-
-// get start date
-let startDate;
-
-// getDate format
-function getDateFormat(date) {
-  let today = new Date(date);
-  const dd = String(today.getDate()).padStart(2, '0');
-  const mm = String(today.getMonth() + 1).padStart(2, '0');
-  const yyyy = today.getFullYear();
-  today = `${yyyy}-${mm}-${dd}`;
-
-  return today;
-}
-
-const selectStartDate = async (event) => {
-  const getDate = getDateFormat(event.target.value);
-
-
-  startDate = getDate;
-
-  // get current date
-  function getCurrentDate() {
-    let today = new Date();
-    const dd = String(today.getDate()).padStart(2, '0');
-    const mm = String(today.getMonth() + 1).padStart(2, '0');
-    const yyyy = today.getFullYear();
-    today = `${yyyy}-${mm}-${dd}`;
-
-    return today;
-  }
-
-  const data = await fetch(
-    `${baseUrl}/report/between/two-date?startDate=${startDate}&endDate=${getCurrentDate()}`,
-  );
-  const getObjects = await data.json();
-  const getReports = getObjects.reports.dataToJson
-
-  // between to data total
-  const dateRangeTotalTr = document.getElementById('last-seven-days-total')
- 
-  const getReportsTotal = getObjects.reportDateRangeTotal.betweenTowDateTotalToJson
-  console.log({ getReportsTotal });
-  dateRangeTotalTr.innerHTML = getReportsTotal.map((el) => `
-    
-    <tr class="bg-blue-500 text-center text-white font-bold">
-    <td colspan="2">Total =  ${el.present} </td>
-  <td class="p-3">${el.avgStartTime || '00'} </td>
-  <td class="p-3">${el.avgEndTime || '00'} </td>
-  <td class="p-3"></td>
-  <td class="p-3"> ${el.fixed_total || '00'}hr</td>
-  <td class="p-3"> ${el.weekTotal || '00'} </td>
-  <td class="p-3">${el.totalLessORExtra || '00'}</td>
-  </tr>
-    `)
-   
-  reportData.push(getReports)
-  // console.log('start', jsonData)
-  show(getReports)
-}
-
-// end date
-
-const selectEndDate = async (event) => {
-  const endDate = event.target.value;
-
-  console.log('end date', endDate);
-  const data = await fetch(
-    `${baseUrl}/report/between/two-date?startDate=${startDate}&endDate=${endDate}`,
-  );
-  const getObjects = await data.json();
-  const getReports = getObjects.reports.dataToJson
-
-  const dateRangeTotalTr = document.getElementById('last-seven-days-total')
-
-  const getReportsTotal = getObjects.reportDateRangeTotal.betweenTowDateTotalToJson
-  console.log({ getReportsTotal });
-
-  dateRangeTotalTr.innerHTML = getReportsTotal.map((el) => `
-    
-    <tr class="bg-blue-500 text-center text-white font-bold">
-    <td colspan="2">Total =  ${el.present} </td>
-  <td class="p-3">${el.avgStartTime || '00'} </td>
-  <td class="p-3">${el.avgEndTime || '00'} </td>
-  <td class="p-3"></td>
-  <td class="p-3"> ${el.fixed_total || '00'}hr</td>
-  <td class="p-3"> ${el.weekTotal || '00'} </td>
-  <td class="p-3">${el.totalLessORExtra || '00'}</td>
-  </tr>
-    `)
-  endData.push(getReports)
-  show(getReports)
-};
-
-function show(data) {
-  const anUserReportTable = document.getElementById('an-user-report');
-  const paginationShow = document.getElementById('pagination-show')
-  const viewPerPage = 4
-  const paginationBtn = 5
-  const report = data
-  const pageCount = Math.ceil(report.length / viewPerPage)
-
-  // Pagination Button
-  let pageVisible = 0
-  if (startDate.length < paginationBtn) {
-    pageVisible = 1
-  } else {
-    const PN = Math.floor(report.length / paginationBtn)
-
-    pageVisible = PN
-    if (PN > paginationBtn) {
-      pageVisible = paginationBtn
-    }
-  }
-
-  const paginationButtons = new PaginationButtons(pageCount, pageVisible)
-  console.log('dd', report.length)
-
-  if (report.length > viewPerPage) {
-    paginationButtons.render(paginationShow)
-  }
-  paginationButtons.onChange((e) => {
-    dataShow(report, anUserReportTable, viewPerPage, e.target.value)
-  });
-
-  dataShow(report, anUserReportTable, viewPerPage, 1)
-
-  function dataShow(items, wapper, rowsPerPage, page) {
-    wapper.innerHTML = ''
-    page--;
-    const start = rowsPerPage * page
-    const end = start + rowsPerPage
-    const paginateItems = items.slice(start, end)
-    for (let i = 0; i < paginateItems.length; i++) {
-      const el = paginateItems[i]
-      const content = document.createElement('tr')
-      content.className = `${el.day === 'Friday' ? 'bg-red-200'
-        : el.type === 'holiday' ? 'bg-yellow-200' : el.type === 'leave' ? 'bg-red-400' : 'bg-blue-200'} lg:text-black`
-      const workDay = document.createElement('td')
-      workDay.className = 'p-3'
-      workDay.textContent = el.day
-      const workDate = document.createElement('td')
-      workDate.className = 'p-3 font-medium capitalize'
-      workDate.textContent = el.date
-      const workStart = document.createElement('td')
-      workStart.className = 'p-3'
-      workStart.textContent = el.start
-      const workEnd = document.createElement('td')
-      workEnd.className = 'p-3'
-      workEnd.textContent = el.end
-      const workStatus = document.createElement('td')
-      workStatus.className = 'p-3 font-medium'
-      workStatus.textContent = el.day === 'Friday' ? 'Off day' : el.type
-      const workHour = document.createElement('td')
-      workHour.className = 'p-3'
-      workHour.textContent = el.day === 'Friday' ? '0' : el.fixed_time
-      const workTime = document.createElement('td')
-      workTime.className = 'p-3'
-      workTime.textContent = el.working_time
-      const workResult = document.createElement('td')
-      workResult.className = 'p-3'
-      workResult.textContent = el.day === 'Friday' ? el.working_time : el.time_count
-
-      content.appendChild(workDay)
-      content.appendChild(workDate)
-      content.appendChild(workStart)
-      content.appendChild(workEnd)
-      content.appendChild(workStatus)
-      content.appendChild(workHour)
-      content.appendChild(workTime)
-      content.appendChild(workResult)
-      wapper.append(content)
-    }
-  }
-}
+    /** *** */ 	});
+  /** ********************************************************************* */
+  /** *** */ 	// The module cache
+  /** *** */ 	const __webpack_module_cache__ = {};
+  /** *** */
+  /** *** */ 	// The require function
+  /** *** */ 	function __webpack_require__(moduleId) {
+    /** *** */ 		// Check if module is in cache
+    /** *** */ 		const cachedModule = __webpack_module_cache__[moduleId];
+    /** *** */ 		if (cachedModule !== undefined) {
+      /** *** */ 			return cachedModule.exports;
+      /** *** */ 		}
+    /** *** */ 		// Create a new module (and put it into the cache)
+    /** *** */ 		const module = __webpack_module_cache__[moduleId] = {
+      /** *** */ 			// no module.id needed
+      /** *** */ 			// no module.loaded needed
+      /** *** */ 			exports: {},
+      /** *** */ 		};
+    /** *** */
+    /** *** */ 		// Execute the module function
+    /** *** */ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+    /** *** */
+    /** *** */ 		// Return the exports of the module
+    /** *** */ 		return module.exports;
+    /** *** */ 	}
+  /** *** */
+  /** ********************************************************************* */
+  /** *** */
+  /** *** */ 	// startup
+  /** *** */ 	// Load entry module and return exports
+  /** *** */ 	// This entry module can't be inlined because the eval devtool is used.
+  /** *** */ 	const __webpack_exports__ = __webpack_require__('./src/reports.js');
+/** *** */
+/** *** */ })();

@@ -1,11 +1,35 @@
 const dbConnect = require('../config/database');
 
 const AttendanceModel = {
-
-  setAttendanceStart: async (id) => {
+  todayStartTime: async (id) => {
+    const getStartSql = 'SELECT  Time_format(MIN(Time(start)),"%h:%i% %p") as start FROM attendance ,projects WHERE user_id = ? and end IS NOT NULL and Date(create_at)= Date(CURRENT_DATE);'
+    const [rows] = await dbConnect.promise().execute(getStartSql, [id]);
+    return rows;
+  },
+  todayEndTime: async (id) => {
+    const getEndSql = 'SELECT Time_format(MAX(Time(end)),"%h:%i% %p") as end FROM attendance ,projects WHERE user_id = ? and Date(create_at)= Date(CURRENT_DATE)';
+    const [rows] = await dbConnect.promise().execute(getEndSql, [id]);
+    return rows;
+  },
+  currentStartTime: async ()=>{
+    const getEndSql = 'SELECT Time_format(CURRENT_TIME,"%h:%i% %p") as end;';
+    const [rows] = await dbConnect.promise().execute(getEndSql);
+    return rows;
+  },
+  currentEndTime: async ()=>{
+    const getEndSql = 'SELECT Time_format(CURRENT_TIME,"%h:%i% %p") as end;';
+    const [rows] = await dbConnect.promise().execute(getEndSql);
+    return rows;
+  },
+  workDetails: async () => {
+    const getWorkDetailsSql = ''
+    const [rows] = await dbConnect.promise().execute(getWorkDetailsSql);
+    return rows;
+  },
+  setAttendanceStart: async (id, projectId, workDetails) => {
     try {
-      const sqlStart = 'INSERT INTO `attendance`(`user_id`) VALUES (?)';
-      const values = [id]
+      const sqlStart = 'INSERT INTO `attendance`(`user_id`,`project_id`, `work_details`) VALUES (?,?,?)';
+      const values = [id, projectId, workDetails]
       const [rows] = await dbConnect.promise().execute(sqlStart, values);
       return rows;
     } catch (err) {
@@ -39,7 +63,7 @@ const AttendanceModel = {
     return rows;
   },
   getToday: async (userId) => {
-    const getTodaySql = 'SELECT  Time_format(Time(start),"%h:%i% %p") as start , Time_format(Time(end),"%h:%i% %p") as end, timediff(end,start ) as total FROM attendance WHERE user_id = ? and end IS NOT NULL and Date(create_at)= Date(CURRENT_DATE)'
+    const getTodaySql = 'SELECT  project_name,work_details, Time_format(Time(start),"%h:%i% %p") as start , Time_format(Time(end),"%h:%i% %p") as end, timediff(end,start ) as total FROM attendance ,projects WHERE project_id=projects.id AND user_id = ? and end IS NOT NULL and Date(create_at)= Date(CURRENT_DATE)'
     const value = [userId]
     const [rows] = await dbConnect.promise().execute(getTodaySql, value);
     return rows;
@@ -71,7 +95,7 @@ const AttendanceModel = {
     return rows;
   },
 
-  // an employee report last 7 days
+  // an employee reports last 7 days
   anEmployeeReportLastSavenDays: async (userId) => {
     const lastSeventDaysSql = "SELECT DAYNAME(create_at) AS day, DATE_FORMAT(create_at,'%d %b %y') AS date,  DATE_FORMAT(create_at, '%Y-%m-%d') AS date_for_holiday, TIME_FORMAT(MIN(start),'%h:%i %p') AS start, TIME_FORMAT(MAX(end),'%h:%i %p') AS end, TIMEDIFF(MAX(end), MIN(start)) as working_time, SUBTIME(TIMEDIFF(MAX(end), MIN(start)), TIME(o.option_value)) AS time_count,  o.option_value  AS  fixed_time, 'regular' AS type FROM attendance  JOIN options AS o  WHERE o.option_title = 'fixed time' AND user_id = ? AND create_at >  now() - INTERVAL 7 day GROUP BY DATE(create_at)";
     const value = [userId];

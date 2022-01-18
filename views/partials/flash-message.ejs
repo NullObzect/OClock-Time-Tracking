@@ -9,13 +9,17 @@
     font-family: Quicksand;
   }
   .alert {
-    width: 50%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translate(calc(50vw - 50%));
+    width: 350px;
     margin: 20px auto;
+    text-align: center;
     padding: 30px;
-    position: relative;
     border-radius: 5px;
     box-shadow: 0 0 15px 5px #ccc;
-
+    transition: 0.5ms;
   }
   .close {
     position: absolute;
@@ -67,22 +71,21 @@
 <% if(flashMessage.success){ %>
 <div class="alert success-alert">
   <h3><%= flashMessage.success %></h3>
-  <a class="close"  >&times;</a>
+  <a class="close">&times;</a>
 </div>
 <% } %> <% if(flashMessage.fail){ %>
 <div class="alert danger-alert">
   <h3><%= flashMessage.fail %></h3>
-  <a class="close" onClick='removeThis(this)'>&times;</a>
+  <a class="close" onClick="removeThis(this)">&times;</a>
 </div>
 <% } %>
 
 <script>
-  setTimeout(function(event){
-    const tar = document.querySelector('.close')
-    removeThis(tar)
-    
-  },3000)
+  setTimeout(function (event) {
+    const tar = document.querySelector(".close");
+    removeThis(tar);
+  }, 3000);
   function removeThis(ele) {
     ele.parentNode.remove();
-};
+  }
 </script>

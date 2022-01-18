@@ -5,7 +5,7 @@ const decorateHtmlResponse = require('../middleware/common/decorateHtmlResponse'
 
 router.get('/add-holiday', decorateHtmlResponse('Add Holiday'), HolidayController.getAddHolidayPage)
 router.post('/add-holiday', decorateHtmlResponse('Add Holiday'), HolidayController.addHoliday)
-router.get('/holiday-list', decorateHtmlResponse('Holidays'),  HolidayController.holidayList)
+router.get('/holiday', decorateHtmlResponse('Holidays'),  HolidayController.holidayList)
 router.get('/edit/holiday/:id', decorateHtmlResponse('Edit Holiday'), HolidayController.getEditHolidayPage)
 router.post('/edit/holiday', decorateHtmlResponse('Edit Holiday'), HolidayController.getUpdateHoliday)
 

@@ -11,9 +11,9 @@ const checkLogin = (req, res, next) => {
     try {
       const token = cookies[process.env.COOKIE_NAME]
       const { userObject } = jwt.verify(token, process.env.JWT_SECRET)
-      req.user = userObject
       if (res.locals.html) {
         res.locals.loggedInUser = userObject
+        console.log(userObject)
       }
       next()
     } catch (err) {
@@ -73,9 +73,9 @@ const redirectLoggedIn = (req, res, next) => {
 
 function requireRole(role) {
   return function (req, res, next) {
-    if (req.user.userRole && role.includes(req.user.userRole)) {
+    if (req.user.user_role && role.includes(req.user.user_role)) {
       next();
-    } else if (req.user.userRole && req.user.userRole === 'user') {
+    } else if (req.user.user_role && req.user.user_role === 'user') {
       next(createError(404, 'Page not found!'));
     } else if (res.locals.html) {
       next(createError(401, 'You are not authorized to access this page!'));

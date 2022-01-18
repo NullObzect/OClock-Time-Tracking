@@ -134,12 +134,12 @@
 
 
 
-<!-- Markup report table for employee -->
+<!-- Markup reports table for employee -->
 <div  class="bg-white flex justify-center mt-4">
   <div class="col-span-12">
     <div class="overflow-auto lg:overflow-visible">
       <table
-        class="table-report text-gray-400 border-separate space-y-6 text-sm"
+        class="table-reports text-gray-400 border-separate space-y-6 text-sm"
       >
         <thead class="bg-blue-500 text-white">
           <tr>
@@ -154,7 +154,7 @@
             <th class="p-3 text-left">Less / Extra</th>
           </tr>
         </thead>
-        <tbody id="an-user-report">
+        <tbody id="an-user-reports">
         
           
           <% userReport.map(el => {%>
@@ -243,7 +243,7 @@ const selectStartDateForAdmin = async (event) => {
   }
 
   const data = await fetch(
-    `${baseUrl}/report/between/two-date/:id?startDate=${startDate}&endDate=${getCurrentDate()}`,
+    `${baseUrl}/reports/between/two-date/:id?startDate=${startDate}&endDate=${getCurrentDate()}`,
   );
   const getObjects = await data.json();
   const getReports = getObjects.reports.dataToJson
@@ -278,7 +278,7 @@ const selectEndDateForAdmin = async (event) => {
 
   console.log('end date', endDate);
   const data = await fetch(
-    `${baseUrl}/report/between/two-date?startDate=${startDate}&endDate=${endDate}`,
+    `${baseUrl}/reports/between/two-date?startDate=${startDate}&endDate=${endDate}`,
   );
   const getObjects = await data.json();
   const getReports = getObjects.reports.dataToJson
@@ -306,5 +306,5 @@ const selectEndDateForAdmin = async (event) => {
 
 </script>
 <script src="https://unpkg.com/@themesberg/flowbite@1.1.1/dist/datepicker.bundle.js"></script>
-<script src="<%=baseUrl%>/js/report.js"></script>
+<script src="<%=baseUrl%>/js/reports.js"></script>
 <%- include("../partials/footer"); -%>

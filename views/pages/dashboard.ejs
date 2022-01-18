@@ -1,73 +1,76 @@
 <%- include("../partials/header"); -%>
-<%- include("../partials/flash-message"); -%>
-<div class="start">
-  <div class="search-bar">
-    <input class="search" placeholder="What are you working on?" type="text" />
-  </div>
-  <div class="add-project">
-    <a href="#open-modal">
-      <span class="add-icon"
-        ><ion-icon name="add-circle-outline"></ion-icon
-      ></span>
-      Project</a
-    >
-  </div>
-  <div class="time" id="elapsedTime">00:00:00</div>
-  <button class="btn-start" id="start-btn">start</button>
 
-  <button style="display: none" class="btn-end" id="end-btn">End</button>
-</div>
-
-<!-- ProJect Modal Start -->
-<div id="open-modal" class="modal-window">
-  <div>
-    <a href="#" title="Close" class="modal-close">Close</a>
-    <h1>Create Project</h1>
-    <div><input placeholder="Project Name" type="text" /></div>
-    <div>
-      <small
-        ><a href=""><button>Submit</button></a></small
-      >
+<div id="dashboard">
+  <div class="dashboard-head">
+    <div class="oclock-box">
+      <div class="time-box">
+        <div class="current-time">
+          12:00
+          <span class="time-meridiem">AM</span>
+        </div>
+        <div class="current-date">Mon 22 Oct</div>
+      </div>
+      <div class="start-details">
+        <table>
+          <tr>
+            <td>Started at:</td>
+            <td id="todayStart"> <%=start || '00 : 00'%></td>
+          </tr>
+          <tr>
+            <td>Ended at:</td>
+            <td id="todayEnd"><%=end || '00 : 00'%></td>
+          </tr>
+          <tr>
+            <td>TotalWork Time:</td>
+            <td id="todayTotal"><%= todayTotal %> </td>
+          </tr>
+          <tr>
+            <td>Break:</td>
+            <td id="breakTime"><%=breakTime  %> </td>
+          </tr>
+        </table>
+      </div>
+      <div class="counter" id="elapsedTime">
+        00:00:00
+      </div>
+      <div class=" button">
+        <div id="end-btn" style="display: none">
+          <%- include("../partials/icons/stop-svg"); -%>
+        </div>
+        <%- include("../partials/start-modal"); -%>
+      <div id="start-btn" class="add-button play">
+        <%- include("../partials/icons/play-svg"); -%>
+      </div>
+      </div>
     </div>
   </div>
+  <div class="dashboard-info">
+    <table class="dashboard-reports">
+      <thead>
+        <tr>
+          <td class="project-name">Project Name</td>
+          <td class="project-work">Work details</td>
+          <td>Start</td>
+          <td>End</td>
+          <td>Total</td>
+        </tr>
+      </thead>
+      <tbody id="todayReport" class="dashboard-reports-tbody">
+        <% today.map(today=>{ %>
+          <tr>
+            <td class="project-name"><%= today.project_name%></td>
+            <td class="project-work"><%= today.work_details%></td>
+          <td><%= today.start%></td>
+          <td><%= today.end%></td>
+          <td><%= today.total%></td>
+          <td class="user-more">
+          <%- include("../partials/icons/more-svg"); -%>
+        </td>
+      </tr>
+    <%}) %> 
+      </tbody>
+    </table>
+  </div>
 </div>
-<!-- ProJect Modal End -->
 
-<div class="history">
-  <div class="date-bar">
-    <div class="date">Today</div>
-    <div id="total-work-time"><%= todayTotal || "00:00:00" %></div>
-  </div>
-  <div id="today-details">
-    <%today.map(t=>{%>
-    <div class="details">
-      <div class="title">hello</div>
-      <div class="project-name">hello world</div>
-      <div class="start-time"><%= t.start %></div>
-      <end class="time"><%= t.end %> </end>
-      <div class="total-work-time"><%= t.total %></div>
-    </div>
-    <% })%>
-  </div>
-</div>
-<div class="history">
-  <div class="date-bar">
-    <div class="date">This Week</div>
-    <div id="total-week-work-time"><%= weekTotal || "00:00:00" %></div>
-  </div>
-  <div id="week-details">
-    <%weekHistory.map(h=>{%>
-    <div class="details">
-      <div class="title"><%= h.date %></div>
-      <div class="project-name">hello world</div>
-      <div class="start-time"><%=h.start %></div>
-      <end class="end-time"><%=h.end %></end>
-      <div class="work-time"><%=h.total %></div>
-    </div>
-    <% })%>
-  </div>
-  </div>
-  <script src="/js/timeTracking.js"></script>
-
-  <%- include("../partials/footer.ejs"); -%>
-</div>
+<%- include("../partials/footer.ejs"); -%>

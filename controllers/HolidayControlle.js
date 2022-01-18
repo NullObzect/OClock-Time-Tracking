@@ -37,7 +37,7 @@ const HolidayController = {
     try {
      
       const holidays = await HolidayModel.holidaysList()
-      res.render('pages/holidays', { holidays })
+      res.render('pages/holiday', { holidays })
     } catch (err) {
       console.log('====>Error form HolidayControlle/holidayList', err);
     }

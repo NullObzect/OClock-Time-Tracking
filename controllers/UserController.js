@@ -2,7 +2,6 @@
 /* eslint-disable consistent-return */
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
-const { validationResult } = require('express-validator')
 const path = require('path');
 const { unlink } = require('fs');
 const UserModel = require('../models/UserModel');
@@ -10,53 +9,40 @@ const sendMail = require('../utilities/sendMail');
 
 const UserController = {
   // render page
-  getUser: (req, res) => {
-    res.render('pages/addUser');
+  getUsers: async (req, res) => {
+    const users = await UserModel.getAllUsersList()
+    res.render('pages/users', { users });
   },
   // insert user
   addUser: async (req, res) => {
-    console.log(req.body)
-    console.log(req.files)
+    let result;
+    let avatar = null;
     const {
-      userName, userPhone, userRole, userMail, userPass,
-    } = req.body;
-    // check validation
-    const errors = validationResult(req).formatWith((error) => error.msg)
-    if (!errors.isEmpty()) {
-      return res.render('pages/addUser', {
-        error: errors.mapped(),
-        value: {
-          userName,
-          userPhone,
-          userRole,
-          userMail,
-          userPass,
+      name, email, phone, password,
+    } = req.body
+    const hashedPassword = await bcrypt.hash(password, 10);
+    if (req.files && req.files.length > 0) {
+      avatar = req.files[0].filename
+      result = await UserModel.addUser(name, phone, email, hashedPassword, avatar)
+    } else {
+      console.log('else')
+      result = await UserModel.addUser(name, phone, email, hashedPassword, avatar)
+    }
+    try {
+      if (result.affectedRows > 0) {
+        res.status(200).json({
+          message: 'User was added successfully!',
+        })
+      }
+    } catch (error) {
+      console.log(error)
+      res.status(500).json({
+        errors: {
+          common: {
+            msg: 'Unknown error occured!',
+          },
         },
       });
-    }
-
-    try {
-      // hashing password
-      const hashPass = await bcrypt.hash(userPass, 10);
-      const avatar = req.files[0].filename
-      console.log({ avatar })
-      const insertedData = await UserModel.registerModel(
-        userName,
-        userPhone,
-        userRole,
-        userMail,
-        hashPass,
-        avatar,
-      );
-      console.log({ insertedData })
-      if (insertedData.errno) {
-        console.log('error')
-        res.send('ERROR');
-      } else {
-        res.render('pages/addUser', { addUser: true });
-      }
-    } catch (err) {
-      return err;
     }
   },
   avatarChange: async (req, res) => {

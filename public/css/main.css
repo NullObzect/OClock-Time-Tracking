@@ -355,26 +355,26 @@ tr th:nth-child(1) {
 }
 /* style for users table */
 #users-table,
-.table-report {
+.table-reports {
   width: 800px;
 }
 
-/* style for  an users report */
+/* style for  an users reports */
 
-.table-report {
+.table-reports {
   border-spacing: 0 15px;
 }
 
-.table-report tr {
+.table-reports tr {
   border-radius: 20px;
 }
 
-.table-report tr td:nth-child(n + 8),
-.table-report tr th:nth-child(n + 8) {
+.table-reports tr td:nth-child(n + 8),
+.table-reports tr th:nth-child(n + 8) {
   border-radius: 0 0.625rem 0.625rem 0;
 }
 
-.table-report tr td:nth-child(1),
+.table-reports tr td:nth-child(1),
 tr th:nth-child(1) {
   border-radius: 0.625rem 0 0 0.625rem;
 }
