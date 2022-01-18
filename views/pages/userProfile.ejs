@@ -536,6 +536,7 @@
                     Change
                   </small>
                   <button
+                    disabled
                     type="submit"
                     class="
                       focus:outline-none
@@ -710,15 +711,17 @@
 
     <script>
       function readURL(input) {
-        if (input.files && input.files[0]) {
-          var reader = new FileReader();
-          reader.onload = function (e) {
-            document.querySelector("#img").setAttribute("src", e.target.result);
-          };
+    if (input.files && input.files[0]) {
+    
+      var reader = new FileReader();
+      reader.onload = function (e) { 
+        document.querySelector("#img").setAttribute("src",e.target.result);
+        document.getElementById("avatar-save").disabled = false;
+      };
 
-          reader.readAsDataURL(input.files[0]);
-        }
-      }
+      reader.readAsDataURL(input.files[0]); 
+    }
+  }
     </script>
     <script>
       function avatarChange() {

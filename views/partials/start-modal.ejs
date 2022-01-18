@@ -1,0 +1,45 @@
+<div id="myModal" class="modal-container">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">Start Work</div>
+      <div onclick="closeModal()" class="modal-close">
+        <%- include("./icons/close-svg"); -%>
+      </div>
+    </div>
+    <div class="modal-content">
+      <div class="container">
+        <form method="post" id="startData">
+          <label for="projectName"
+            >Project Name
+            <div class="">
+              <select name="projectName" id="projectName">
+                <option value="0">Select Project</option>
+                <% projects.map(project =>{%>
+                <option value="<%=project.id%>">
+                  <%=project.project_name%>
+                </option>
+                <%}) %>
+              </select>
+            </div>
+          </label>
+          <label for="text">
+            Work details
+            <div class="">
+              <textarea
+                name="workDetails"
+                id="projectDetails"
+                cols="10"
+                rows="3"
+              ></textarea>
+            </div>
+          </label>
+          <div class="">
+            <button id="start-button" class="submit-btn" type="submit">
+              Start
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

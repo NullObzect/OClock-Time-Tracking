@@ -7,12 +7,14 @@ const decorateHtmlResponse = require('../middleware/common/decorateHtmlResponse'
 router.post('/attendance-start', AttendanceController.attendanceStart)
 router.post('/attendance-end', AttendanceController.attendanceEnd)
 
-// report router
+// router.get('/start-time', AttendanceController.startTime)
+
+// reports router
 // gr
-router.get('/report', decorateHtmlResponse('Report'), checkLogin, ReportController.userReport)
-router.get('/report/between/two-date', ReportController.reportBetweenTwoDate)
+router.get('/reports', decorateHtmlResponse('Report'), checkLogin, ReportController.userReport)
+router.get('/reports/between/two-date', ReportController.reportBetweenTwoDate)
 //
-router.get('/report/employee/:id', decorateHtmlResponse('Employee Report'), ReportController.reportEmployees)
-router.get('/report/between/two-date/:id', ReportController.reportBetweenTwoDateForAdmin)
+router.get('/reports/employee/:id', decorateHtmlResponse('Employee Report'), ReportController.reportEmployees)
+router.get('/reports/between/two-date/:id', ReportController.reportBetweenTwoDateForAdmin)
 
 module.exports = router;

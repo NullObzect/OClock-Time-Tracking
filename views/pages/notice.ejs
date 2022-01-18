@@ -1,0 +1,52 @@
+<%- include("../partials/header"); -%>
+
+      <div id="project">
+        <div class="text-head">
+         <div class="text-title">
+          Notices
+         </div>
+         <%if(user.user_role==='admin'){ %>
+          <div class="add-button">
+            <button class="add-btn"><span class="add-icon">
+             <%- include("../partials/icons/message-add-svg"); -%>
+             </span> <span .add-btn-text>Add Notice</span></button>
+           </div>
+         </div>
+         <%- include("../partials/add-notice-modal"); -%>
+          <% }else{ %>
+            <div class="add-button">
+              <button class="add-btn"><span class="add-icon">
+               <%- include("../partials/icons/message-add-svg"); -%>
+               </span> <span .add-btn-text>Contact</span></button>
+             </div>
+           </div>
+           <%- include("../partials/contact-admin-modal"); -%>
+            <% } %>   
+        <table class="project-table"> 
+          <thead >
+            <tr>
+              <td class="project-table-title">Person</td>
+              <td>Date & Time</td>
+              <td>Notice Details</td>
+            </tr>
+          </thead>
+          <tbody >
+            <% notices.map(notice=>{%> 
+              <tr>
+              <td class="project-table-title"><%= notice.sender_id == user.id ? 'Me' : 'Admin' %> </td>
+              <td><%= notice.date %> <%= notice.time %></td>
+              <td><%= notice.details %></td>
+              <td  class="user-more"><svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="40" height="40" rx="15" />
+                <circle cx="10" cy="20" r="2" fill="#4A4A4A"/>
+                <circle cx="20" cy="20" r="2" fill="#4A4A4A"/>
+                <circle cx="30" cy="20" r="2" fill="#4A4A4A"/>
+                </svg>
+                
+                </td>
+            </tr>
+            <%}) %>
+          </tbody>
+        </table>
+      </div>
+<%- include("../partials/footer"); -%>

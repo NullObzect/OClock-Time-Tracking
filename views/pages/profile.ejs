@@ -1,0 +1,48 @@
+<%- include("../partials/header"); -%>
+
+<div id="profile">
+  <div class="container">
+    <form action="">
+      <div class="profile-avatar">
+        <img
+          src="https://gravatar.com/avatar/b8e1fd79796a3a262ad0bb94517658d9?s=200&d=robohash&r=x"
+          alt=""
+        />
+      </div>
+      <label for="name"
+        >Name
+        <div class="">
+          <input value="Khoaiz" id="name" name="name" type="text" />
+        </div>
+      </label>
+      <label for="email">
+        Email
+        <div class="">
+          <input type="email" name="email" id="email" />
+        </div>
+      </label>
+      <label for="phone">
+        Phone
+        <div class="">
+          <input type="number" name="phone" id="phone" />
+        </div>
+      </label>
+      <label for="oldPassword">
+        New Password
+        <div class="">
+          <input type="password" name="old-password" id="oldPassword" />
+        </div>
+      </label>
+      <label for="newPassword">
+        Password
+        <div class="">
+          <input type="password" name="new-password" id="newPassword" />
+        </div>
+      </label>
+      <div class="">
+        <button class="submit-btn" type="submit">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+<%- include("../partials/footer"); -%>

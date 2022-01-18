@@ -1,0 +1,129 @@
+<div id="myModal" class="modal-container">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">Add User</div>
+      <div onclick="closeModal()" class="modal-close">
+        <%- include("./icons/close-svg"); -%>
+      </div>
+    </div>
+    <div class="modal-content">
+      <div class="container">
+        <form action="/add-user" method="POST" id="add-user-form" enctype="multipart/form-data">
+          <div class="profile-avatar add-user-avatar">
+            <img id="img"
+              src="/uploads/avatars/demo-avatar.png"
+              alt=""
+            />
+              <div id="edit-btn">
+                <label title="upload under 1MB file"  for="edit">
+                  <%- include("./icons/edit-svg"); -%>
+                </label>
+                <input onchange="readURL(this)" name="avatar" hidden id="edit" type="file" :accept="accept">
+              </div>
+          </div>
+          <label for="name"
+            >Name
+            <div class="">
+              <input name="name" class="" type="text" />
+              <p class="error name-error"></p>
+            </div>
+          </label>
+          <label for="email">
+            Email
+            <div class="">
+              <input type="email" name="email" id="email" />
+              <p class="error email-error"></p>
+            </div>
+          </label>
+          <label for="phone">
+            Phone
+            <div class="">
+              <input type="number" name="phone" id="phone" />
+              <p class="error phone-error"></p>
+            </div>
+          </label>
+          <label for="Password">
+            Password
+            <div class="">
+              <input type="password" name="password" id="Password" />
+              <p class="error password-error"></p>
+            </div>
+          </label>
+          <p class="error avatar-error"></p>
+          <p class="error common-error"></p>
+          <div class="">
+            <button class="submit-btn" type="submit">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+        function readURL(input) {
+          console.log(input)
+    if (input.files && input.files[0]) {
+    console.log(document.querySelector('#img'))
+    console.log(document.querySelector('#img').src)
+      var reader = new FileReader();
+      console.log(reader)
+      reader.onload = function (e) { 
+        console.log(e)
+        document.querySelector('#img').setAttribute("src",e.target.result);
+      };
+      reader.readAsDataURL(input.files[0]); 
+    }
+  }
+</script>
+<script>
+  const form = document.querySelector('#add-user-form')
+
+   form.onsubmit = async function (event) {
+    event.preventDefault();
+    // clear errors first
+    const errorPlaceholders = document.querySelectorAll("p.error");
+    for (let i = 0; i < errorPlaceholders.length; i++) {
+      errorPlaceholders[i].style.display = "none";
+    }
+    const inputErrors = document.querySelectorAll("input.error");
+    if (inputErrors.length > 0) {
+      for (let j = 0; j < inputErrors.length; j++) {
+        inputErrors[j].classList.remove("error");
+      }
+    }
+    // prepare the form data
+    const formData = new FormData(form);
+    console.log(formData)
+    // send the request to server
+    let response = await fetch("/add-user", {
+      method: "POST",
+      body: formData,
+    });
+    // get response
+    let result = await response.json();
+    // handle error and response
+    console.log(result)
+    if (result.errors) {
+      // errors
+      Object.keys(result.errors).forEach((fieldName) => {
+        console.log(fieldName)
+        // add error class to all inputs
+        form[fieldName].classList.add("error");
+        // set all error placeholders (p tag) textContent
+        const errorPlaceholder = document.querySelector(`.${fieldName}-error`);
+        errorPlaceholder.textContent = result.errors[fieldName].msg;
+        // make all placeholders visible
+        errorPlaceholder.style.display = "block";
+      });
+    } else {
+      // // success
+      // successToast.showToast();
+      closeModal()
+      document.querySelector("p.error").style.display = "none";
+      // reload the page after 1 second
+      setTimeout(() => {
+        location.reload();
+      }, 1000);
+    }
+  };
+</script>

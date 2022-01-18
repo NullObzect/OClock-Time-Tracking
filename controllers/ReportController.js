@@ -45,9 +45,7 @@ const ReportController = {
 
   userReport: async (req, res) => {
     try {
-      const [user] = await UserModel.findUserByEmail(req.user.userMailFormDB)
-      console.log({ user })
-
+      const { user } = req
       const userId = user.id;
       const lastSevenDaysReport = await AttendanceModel.anEmployeeReportLastSavenDays(userId);
       const [{ avgStartTime }] = await AttendanceModel.avgStartTime(userId)
@@ -124,7 +122,7 @@ const ReportController = {
       })
       console.log({ sumSevendaysFixedTime });
 
-      // last seven days total report pore employee
+      // last seven days total reports pore employee
       const employeeLastSevendaysReportTotal = await AttendanceModel.reportLastSevendaysTotalForEmployee(userId)
       employeeLastSevendaysReportTotal.forEach((el) => {
         el.fixed_total = sumSevendaysFixedTime
@@ -137,7 +135,7 @@ const ReportController = {
 
       // console.log({ userReport });
 
-      res.render('pages/report', {
+      res.render('pages/reports', {
         userReport, avgStartTime, avgEndTime, weekHr, monthHr, employeeLastSevendaysReportTotal,
       });
     } catch (err) {
@@ -281,7 +279,7 @@ const ReportController = {
       })
       console.log({ sumSevendaysFixedTime });
 
-      // last seven days total report for  employee
+      // last seven days total reports for  employee
       // eslint-disable-next-line max-len
       const employeeLastSevendaysReportTotal = await AttendanceModel.reportLastSevendaysTotalForEmployee(req.params.id)
       employeeLastSevendaysReportTotal.forEach((el) => {

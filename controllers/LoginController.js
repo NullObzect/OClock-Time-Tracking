@@ -24,10 +24,11 @@ const LoginController = {
         const userMailFormDB = user.user_mail;
         const userID = user.id;
         const userName = user.user_name;
+        const userAvatar = user.avatar;
         const userPassFormDB = user.user_pass;
         const userRole = user.user_role;
         const userObject = {
-          userID, userName, userMailFormDB, userRole,
+          userID, userName, userMailFormDB, userRole, userAvatar,
         }
         const isValidPass = await bcrypt.compare(userPass, userPassFormDB)
         console.log({ isValidPass });
