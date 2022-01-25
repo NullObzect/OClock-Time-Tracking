@@ -11,12 +11,12 @@ const AttendanceModel = {
     const [rows] = await dbConnect.promise().execute(getEndSql, [id]);
     return rows;
   },
-  currentStartTime: async ()=>{
+  currentStartTime: async () => {
     const getEndSql = 'SELECT Time_format(CURRENT_TIME,"%h:%i% %p") as end;';
     const [rows] = await dbConnect.promise().execute(getEndSql);
     return rows;
   },
-  currentEndTime: async ()=>{
+  currentEndTime: async () => {
     const getEndSql = 'SELECT Time_format(CURRENT_TIME,"%h:%i% %p") as end;';
     const [rows] = await dbConnect.promise().execute(getEndSql);
     return rows;
@@ -62,6 +62,54 @@ const AttendanceModel = {
     const [rows] = await dbConnect.promise().execute(getWeekHistory, value);
     return rows;
   },
+
+  // report for today
+  /* ======= report model  for this week ========= */
+
+  // day , total work time and average work in week
+  weekDayAndWorkTime: async (userId) => {
+    const query = "SELECT COUNT(DISTINCT DATE(create_at)) AS weekDay, TIME_FORMAT( O.option_value, '%h') * COUNT(DISTINCT DATE(create_at)) AS weekFixedTotal, TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) as weekTotalHr, TIME_FORMAT(SEC_TO_TIME(TIMEDIFF(SUM(TIME_TO_SEC(end)), SUM(TIME_TO_SEC(start))) / COUNT(DISTINCT DATE(create_at))), '%h:%i') AS weekAvgTotal FROM attendance JOIN options AS O ON o.option_title = 'fixed time'   WHERE user_id = ? AND END IS NOT NULL and Date(create_at) BETWEEN date( CURRENT_DATE - INTERVAL 6 day) and date(CURRENT_DATE)"
+
+    const value = [userId]
+    const [rows] = await dbConnect.promise().execute(query, value);
+    return rows;
+  },
+  // average start and end time
+  weekAvgStartEnd: async (userId) => {
+    const query = "SELECT TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(StartTime))),'%h:%i %p') AS weekAvgStartTime, TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(EndTime))),'%h:%i %p') AS weekAvgEndTime FROM (SELECT MIN(time(start)) as StartTime, MAX(time(end)) as EndTime FROM attendance WHERE user_id = ? AND DATE(CURRENT_DATE - INTERVAL 6 day)) attendance"
+    const value = [userId]
+    const [rows] = await dbConnect.promise().execute(query, value);
+    return rows;
+  },
+
+  /* ======= report for this month ======= */
+  monthDayAndWorkTime: async (userId) =>{
+    const query = "SELECT COUNT(DISTINCT DATE(create_at)) AS monthDay, TIME_FORMAT( O.option_value, '%h') * COUNT(DISTINCT DATE(create_at)) AS monthFixedTotalHr, TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) as monthWorkTotalHr,  TIME_FORMAT(SEC_TO_TIME(TIMEDIFF(SUM(TIME_TO_SEC(end)), SUM(TIME_TO_SEC(start))) / COUNT(DISTINCT DATE(create_at))), '%h:%i') AS monthAvgTotalHr FROM attendance JOIN options AS O ON o.option_title = 'fixed time'  WHERE user_id = ? AND END IS NOT NULL AND Date(create_at) BETWEEN date( CURRENT_DATE - INTERVAL 30 day) and date(CURRENT_DATE)"
+    const value = [userId]
+    const [rows] = await dbConnect.promise().execute(query, value);
+    return rows;
+  },
+  monthAvgStartEnd: async (userId) => {
+    const query = "SELECT TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(StartTime))),'%h:%i %p') AS monthAvgStartTime, TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(EndTime))),'%h:%i %p') AS monthAvgEndTime FROM (SELECT MIN(time(start)) as StartTime, MAX(time(end)) as EndTime FROM attendance  WHERE user_id = ? AND DATE(CURRENT_DATE - INTERVAL 30 day)) attendance"
+
+    const value = [userId]
+    const [rows] = await dbConnect.promise().execute(query, value);
+    return rows;
+  },
+  /* ===== report for this year ===== */
+  yearDayAndWorkTime: async (userId) =>{
+    const query = "SELECT COUNT(DISTINCT DATE(create_at)) AS yearDay, TIME_FORMAT( O.option_value, '%h') * COUNT(DISTINCT DATE(create_at)) AS yearFixedTotalHr, TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) as yearWorkTotalHr,  TIME_FORMAT(SEC_TO_TIME(TIMEDIFF(SUM(TIME_TO_SEC(end)), SUM(TIME_TO_SEC(start))) / COUNT(DISTINCT DATE(create_at))), '%h:%i') AS yearAvgTotalHr FROM attendance JOIN options AS O ON o.option_title = 'fixed time'  WHERE user_id = ? AND END IS NOT NULL AND Date(create_at) BETWEEN date( CURRENT_DATE - INTERVAL 365 day) and date(CURRENT_DATE)"
+    const value = [userId]
+    const [rows] = await dbConnect.promise().execute(query, value);
+    return rows;
+  },
+  yearAvgStartEnd: async (userId) => {
+    const query = "SELECT TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(StartTime))),'%h:%i %p') AS yearAvgStartTime, TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(EndTime))),'%h:%i %p') AS yearAvgEndTime FROM (SELECT MIN(time(start)) as StartTime, MAX(time(end)) as EndTime FROM attendance  WHERE user_id = ? AND DATE(CURRENT_DATE - INTERVAL 365 day)) attendance"
+
+    const value = [userId]
+    const [rows] = await dbConnect.promise().execute(query, value);
+    return rows;
+  },
   getToday: async (userId) => {
     const getTodaySql = 'SELECT  project_name,work_details, Time_format(Time(start),"%h:%i% %p") as start , Time_format(Time(end),"%h:%i% %p") as end, timediff(end,start ) as total FROM attendance ,projects WHERE project_id=projects.id AND user_id = ? and end IS NOT NULL and Date(create_at)= Date(CURRENT_DATE)'
     const value = [userId]
@@ -102,7 +150,7 @@ const AttendanceModel = {
     const [rows] = await dbConnect.promise().execute(lastSeventDaysSql, value);
     return rows;
   },
-  // an employee repot berween to date
+  // an employee report between to date
   anEmployeeReportBetweenTwoDate: async (userId, startDate, endDate) => {
     try {
       const betweenTowDateSql = "SELECT DAYNAME(create_at) AS day, DATE_FORMAT(create_at, '%Y-%m-%d') AS date_for_holiday, DATE_FORMAT(DATE(create_at),'%d %b %y') AS date, TIME_FORMAT(TIME(MIN(start)),'%h:%i %p') AS start, TIME_FORMAT(TIME(MAX(end)),'%h:%i %p') AS end, TIMEDIFF(MAX(end), MIN(start)) as working_time, SUBTIME(TIMEDIFF(MAX(end), MIN(start)), TIME(o.option_value)) AS time_count, o.option_value  AS fixed_time, 'regular' AS type FROM attendance JOIN options AS o  WHERE o.option_title = 'fixed time' AND user_id = ? AND  DATE(create_at) BETWEEN ? AND ? GROUP BY DATE(create_at)";
