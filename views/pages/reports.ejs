@@ -339,7 +339,9 @@
         <td> <%= el.start  %> </td>
         <td><%=  el.end %></td>
         <td><%= el.day === 'Friday' ? 'Off day' : el.type %></td>
-        <td><%= el.day === 'Friday' ? '0' : el.fixed_time  %></td>
+        <% let isZero = el.fixed_time[0]  %> 
+
+        <td><%= el.day === 'Friday' ? '0' : el.fixed_time.replace(isZero, ' ')  %>  hr</td>
         <td><%= el.working_time %></td>
         <td>
           <%= el.type !== 'regular'  ? '00:00:00' : el.time_count %>
@@ -371,6 +373,7 @@
 <!-- <script src="<%#baseUrl%>/report.js"></script> -->
 
 <script>
+
   /*
 const baseUrl = 'http://localhost:5000';
 
