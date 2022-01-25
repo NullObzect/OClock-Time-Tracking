@@ -14,7 +14,7 @@
         <table>
           <tr>
             <td>Started at:</td>
-            <td id="todayStart"> <%=start || '00 : 00'%></td>
+            <td id="todayStart"><%=start || '00 : 00'%></td>
           </tr>
           <tr>
             <td>Ended at:</td>
@@ -22,29 +22,33 @@
           </tr>
           <tr>
             <td>TotalWork Time:</td>
-            <td id="todayTotal"><%= todayTotal %> </td>
+            <td id="todayTotal"><%= todayTotal %></td>
           </tr>
           <tr>
             <td>Break:</td>
-            <td id="breakTime"><%=breakTime  %> </td>
+            <td id="breakTime"><%=breakTime %></td>
           </tr>
         </table>
       </div>
-      <div class="counter" id="elapsedTime">
-        00:00:00
-      </div>
-      <div class=" button">
+      <div class="counter" id="elapsedTime">00:00:00</div>
+      <div class="button">
         <div id="end-btn" style="display: none">
           <%- include("../partials/icons/stop-svg"); -%>
         </div>
         <%- include("../partials/start-modal"); -%>
-      <div id="start-btn" class="add-button play">
-        <%- include("../partials/icons/play-svg"); -%>
-      </div>
+        <div id="start-btn" class="add-button play">
+          <%- include("../partials/icons/play-svg"); -%>
+        </div>
       </div>
     </div>
   </div>
   <div class="dashboard-info">
+    <% console.log(Object.keys(today).length === 0) %> <%
+    if(Object.keys(today).length === 0){ %>
+
+    <h4>No data</h4>
+    <% } else{ %>
+
     <table class="dashboard-reports">
       <thead>
         <tr>
@@ -55,21 +59,24 @@
           <td>Total</td>
         </tr>
       </thead>
+
       <tbody id="todayReport" class="dashboard-reports-tbody">
         <% today.map(today=>{ %>
-          <tr>
-            <td class="project-name"><%= today.project_name%></td>
-            <td class="project-work"><%= today.work_details%></td>
+        <tr>
+          <td class="project-name"><%= today.project_name%></td>
+          <td class="project-work"><%= today.work_details%></td>
           <td><%= today.start%></td>
           <td><%= today.end%></td>
           <td><%= today.total%></td>
           <td class="user-more">
-          <%- include("../partials/icons/more-svg"); -%>
-        </td>
-      </tr>
-    <%}) %> 
+            <%- include("../partials/icons/more-svg"); -%>
+          </td>
+        </tr>
+        <%}) %>
       </tbody>
     </table>
+
+    <%} %>
   </div>
 </div>
 
