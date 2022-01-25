@@ -23,7 +23,7 @@ const Formater = {
 
     return `${hours}:${minutes}:${seconds}`
   },
-  //  function for date formater
+  //  function for date formate
   dateFormate: (dateTime) => {
     const today = new Date(dateTime)
     const month = today.getMonth() + 1
@@ -32,6 +32,31 @@ const Formater = {
     const getDate = `${year}-${month}-${day}`;
 
     return getDate;
+  },
+  // function for working hour
+  timeFormateForReport: (time) => {
+    if (time == null) {
+      return '0'
+    }
+    const s = time.split(':')
+    const hour = `${s[0]}`
+    const isZero = hour[0]
+    const minutes = `${s[1]}`
+    const result = `${isZero === '0' ? hour.replace(isZero, ' ') : hour}:${minutes}`
+
+    return result
+  },
+
+  workHourFormateForReport: (time) => {
+    if (time == null) return '0'
+    const s = time.split(':')
+    const hour = `${s[0]}`
+    const isZero = hour[0]
+    const minutes = `${s[1]}`
+    const result = `${isZero === '0' ? hour.replace(isZero, ' ') : hour}:${minutes}`
+    const mintIsZeor = result.slice(2, 5)
+    const withOutZeroResult = result.replace(mintIsZeor, ' ')
+    return (mintIsZeor === ':00') ? withOutZeroResult : result;
   },
 }
 
