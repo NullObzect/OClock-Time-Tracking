@@ -1,14 +1,23 @@
-/* eslint-disable consistent-return */
-/* eslint-disable no-param-reassign */
-/* eslint-disable max-len */
-/* eslint-disable no-undef */
+/* eslint-disable no-unused-expressions */
 const AttendanceModel = require('../models/AttendanceModel');
 const UserModel = require('../models/UserModel')
-const { timeToHour, calculateTime, dateFormate } = require('../utilities/formater');
+const {
+  timeToHour, calculateTime, dateFormate, timeFormateForReport, workHourFormateForReport,
+} = require('../utilities/formater');
 // grobal variable  multiple date
 const holidaysArray = [];
 const leaveDaysArray = [];
 global.holidayAndLeavedaysDateRange = []
+
+// constructor function
+function ReportDetails(day, fixedTotalHour, workHour, avgWorkHour, avgStartTime, avgEndTime) {
+  this.day = day
+  this.fixedTotalHour = fixedTotalHour
+  this.workHour = workHourFormateForReport(workHour)
+  this.avgWorkHour = workHourFormateForReport(avgWorkHour)
+  this.avgStartTime = timeFormateForReport(avgStartTime)
+  this.avgEndTime = timeFormateForReport(avgEndTime)
+}
 
 // sum fixedTime
 let sumFixedTime = null;
@@ -54,6 +63,72 @@ const ReportController = {
       const [{ monthTotal }] = await AttendanceModel.thisMonthTotal(userId)
       const weekHr = timeToHour(weekTotal)
       const monthHr = timeToHour(monthTotal)
+
+      // report for today
+      const [{ start }] = await AttendanceModel.todayStartTime(userId)
+      const [{ end }] = await AttendanceModel.todayEndTime(userId)
+      const [tTotal] = await AttendanceModel.todayTotal(userId)
+      const today = await AttendanceModel.getToday(userId)
+      const { todayTotal } = tTotal
+
+      const breakTime = today.length
+
+      const todayReportDetails = {
+        todayTotal,
+        start,
+        end,
+        breakTime,
+      }
+      // report for this week
+      const [{
+        weekDay, weekFixedTotal, weekTotalHr, weekAvgTotal,
+      }] = await AttendanceModel.weekDayAndWorkTime(userId)
+
+      const [{ weekAvgStartTime, weekAvgEndTime }] = await AttendanceModel.weekAvgStartEnd(userId)
+
+      const weekReportDetails = new ReportDetails(
+        weekDay,
+        weekFixedTotal,
+        weekTotalHr,
+        weekAvgTotal,
+        weekAvgStartTime,
+        weekAvgEndTime,
+      )
+
+      // report for this month
+      const [{
+        monthDay, monthFixedTotalHr, monthTotalHr, monthAvgTotalHr,
+      }] = await AttendanceModel.monthDayAndWorkTime(userId)
+
+      const [{ monthAvgStartTime, monthAvgEndTime }] = await
+      AttendanceModel.monthAvgStartEnd(userId)
+
+      const monthReportDetails = new ReportDetails(
+        monthDay,
+        monthFixedTotalHr,
+        monthTotalHr,
+        monthAvgTotalHr,
+        monthAvgStartTime,
+        monthAvgEndTime,
+      )
+      // console.log({ monthReportDetails })
+      // report for this year
+      const [{
+        yearDay, yearFixedTotalHr, yearTotalHr, yearAvgTotalHr,
+      }] = await AttendanceModel.yearDayAndWorkTime(userId)
+
+      const [{ yearAvgStartTime, yearAvgEndTime }] = await
+      AttendanceModel.yearAvgStartEnd(userId)
+
+      const yearReportDetails = new ReportDetails(
+        yearDay,
+        yearFixedTotalHr,
+        yearTotalHr,
+        yearAvgTotalHr,
+        yearAvgStartTime,
+        yearAvgEndTime,
+      )
+      // console.log({ yearReportDetails })
       // for holidays
       const holidaysDate = await AttendanceModel.holidaysDate();
       // multiple date
@@ -122,7 +197,7 @@ const ReportController = {
       })
       console.log({ sumSevendaysFixedTime });
 
-      // last seven days total reports pore employee
+      // last seven days total reports for employee
       const employeeLastSevendaysReportTotal = await AttendanceModel.reportLastSevendaysTotalForEmployee(userId)
       employeeLastSevendaysReportTotal.forEach((el) => {
         el.fixed_total = sumSevendaysFixedTime
@@ -136,7 +211,16 @@ const ReportController = {
       // console.log({ userReport });
 
       res.render('pages/reports', {
-        userReport, avgStartTime, avgEndTime, weekHr, monthHr, employeeLastSevendaysReportTotal,
+        todayReportDetails,
+        weekReportDetails,
+        monthReportDetails,
+        yearReportDetails,
+        userReport,
+        avgStartTime,
+        avgEndTime,
+        weekHr,
+        monthHr,
+        employeeLastSevendaysReportTotal,
       });
     } catch (err) {
       console.log('====>Error form ReportController/ userReport', err);
@@ -210,8 +294,10 @@ const ReportController = {
       const [{ monthTotal }] = await AttendanceModel.thisMonthTotal(userId)
       const weekHr = timeToHour(weekTotal)
       const monthHr = timeToHour(monthTotal)
-
-      // eslint-disable-next-line max-len
+      // report for today
+      // report for this week
+      // report for this month
+      // report for this year
       const lastSevenDaysReport = await AttendanceModel.anEmployeeReportLastSavenDays(req.params.id);
       console.log('for admin ', { lastSevenDaysReport });
 
