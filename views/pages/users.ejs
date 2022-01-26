@@ -1,4 +1,17 @@
 <%- include("../partials/header"); -%>
+
+<style>
+  .hidden-menu {
+    max-height: 0;
+    overflow: hidden;
+    -webkit-transition: max-height 0.5s;
+    -moz-transition: max-height 0.5s;
+    transition: max-height 0.5s;
+  }
+  .hidden-menu-show {
+    max-height: 100%;
+  }
+</style>
 <div id="users">
   <div class="text-head">
     <div class="text-title">Users</div>
@@ -37,15 +50,15 @@
           />
         </td>
         <td>
-          <div class="username"><%=user.user_name%> </div>
+          <div class="username"><%=user.user_name%></div>
           <span id="role"><%= user.user_role==='admin'? 'admin' : ''%> </span>
- 
         </td>
-        <td class="user-phone"><%=user.user_phone  %></td>
-        <td class="user-email"><%=user.user_mail  %></td>
+        <td class="user-phone"><%=user.user_phone %></td>
+        <td class="user-email"><%=user.user_mail %></td>
         <td class="user-status"><span class="status active">Active</span></td>
-        <td class="user-more td-width-zero">
+        <td class="user-more td-width-zero" onclick="openMenu(this)">
           <svg
+            class="user-action-btn"
             width="40"
             height="40"
             viewBox="0 0 40 40"
@@ -57,10 +70,15 @@
             <circle cx="20" cy="20" r="2" fill="#4A4A4A" />
             <circle cx="30" cy="20" r="2" fill="#4A4A4A" />
           </svg>
+          <div class="hidden-menu">
+            <h4>This is dropdown</h4>
+          </div>
         </td>
       </tr>
-    <%}) %> 
-      <tr>
+      <!-- top down menu for each user-->
+
+      <%}) %>
+      <!-- <tr>
         <td class="table-img td-width-zero">
           <img
             src="https://gravatar.com/avatar/b8e1fd79796a3a262ad0bb94517658d9?s=200&d=robohash&r=x"
@@ -85,9 +103,24 @@
             <circle cx="30" cy="20" r="2" fill="#4A4A4A" />
           </svg>
         </td>
-      </tr>
+      </tr> -->
     </tbody>
   </table>
 </div>
+
+<script>
+  function openMenu(menu) {
+    //alert("ok");
+    const currentMenu = menu.childNodes[3];
+    console.log(currentMenu);
+    const showMenu = document.querySelector(".hidden-menu-show");
+
+    if (!currentMenu.classList.contains("hidden-menu-show") && showMenu) {
+      showMenu.classList.remove("hidden-menu-show");
+    }
+    currentMenu.classList.toggle("hidden-menu-show");
+  }
+  const userAction = document.getElementsByClassName("hidden-menu");
+</script>
 
 <%- include("../partials/footer"); -%>

@@ -30,7 +30,7 @@ module.exports = {
       avatar: {
         allowNull: false,
         type: Sequelize.STRING,
-        defaultValue: 'demo_profile.png',
+        defaultValue: 'demo-avatar.png',
       },
       status: {
         allowNull: false,
