@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions */
 const AttendanceModel = require('../models/AttendanceModel');
 const UserModel = require('../models/UserModel')
+const { pageNumbers } = require('../utilities/pagination')
 const {
   timeToHour, calculateTime, dateFormate, timeFormateForReport, workHourFormateForReport,
 } = require('../utilities/formater');
@@ -274,7 +275,21 @@ const ReportController = {
 
       // count time total extar or less
       // return res.json(dataToJson)
-      res.json({ reports: { dataToJson }, reportDateRangeTotal: { betweenTowDateTotalToJson } })
+      const page = Number(req.query.page) || 1
+      const limit = Number(req.query.limit) || 4
+      const startIndex = (page - 1) * limit
+      const endIndex = page * limit
+      const dateRangeReport = dataToJson.slice(startIndex, endIndex)
+      const pageLength = dataToJson.length / limit
+      // eslint-disable-next-line max-len
+      const numberOfPage = Number.isInteger(pageLength) ? Math.floor(pageLength) : Math.floor(pageLength) + 1
+      const pageNumber = pageNumbers(numberOfPage, 2, page)
+      res.json({
+        reports: {
+          dateRangeReport, pageNumber, numberOfPage, pageLength, page,
+        },
+        reportDateRangeTotal: { betweenTowDateTotalToJson },
+      })
       dateRangeFixedTime = 0;
     } catch (err) {
       console.log('====>Error form ReportController/reportBetweenTwoDate', err);

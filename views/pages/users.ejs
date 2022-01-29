@@ -12,6 +12,7 @@
     max-height: 100%;
   }
 </style>
+
 <div id="users">
   <div class="text-head">
     <div class="text-title">Users</div>
@@ -78,35 +79,11 @@
       <!-- top down menu for each user-->
 
       <%}) %>
-      <!-- <tr>
-        <td class="table-img td-width-zero">
-          <img
-            src="https://gravatar.com/avatar/b8e1fd79796a3a262ad0bb94517658d9?s=200&d=robohash&r=x"
-            alt=""
-          />
-        </td>
-        <td>gazi arahad</td>
-        <td class="user-phone">+8801534754667</td>
-        <td class="user-email">gaziiiiiiiii@mail.com</td>
-        <td class="user-status"><span class="status active">Active</span></td>
-        <td class="user-more td-width-zero">
-          <svg
-            width="40"
-            height="40"
-            viewBox="0 0 40 40"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <rect width="40" height="40" rx="15" />
-            <circle cx="10" cy="20" r="2" fill="#4A4A4A" />
-            <circle cx="20" cy="20" r="2" fill="#4A4A4A" />
-            <circle cx="30" cy="20" r="2" fill="#4A4A4A" />
-          </svg>
-        </td>
-      </tr> -->
     </tbody>
   </table>
 </div>
+<!-- Pagination -->
+<%- include("../partials/pagination"); -%>
 
 <script>
   function openMenu(menu) {
@@ -121,6 +98,32 @@
     currentMenu.classList.toggle("hidden-menu-show");
   }
   const userAction = document.getElementsByClassName("hidden-menu");
+
+</script>
+
+<script>
+
+  // Paginations Functions
+
+    function first(e){
+      const firstPage = Number(e)
+      return location.href = `/users?page=${firstPage}`
+    }
+
+    function prev(e) {
+      const prevPage = Number(e - 1)
+      return location.href = `/users?page=${prevPage}`
+    }
+    function next(e) {
+      const nextPage = Number(parseInt(e) + 1)
+      console.log(nextPage)
+      return location.href = `/users?page=${nextPage}`
+    }
+    function last(e) {
+      const lastPage = e
+      return location.href = `/users?page=${lastPage}`
+    }
+
 </script>
 
 <%- include("../partials/footer"); -%>

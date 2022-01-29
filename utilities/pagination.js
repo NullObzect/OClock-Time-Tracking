@@ -7,7 +7,13 @@ const pageNumbers = (total, max, current) => {
     to = current + half
   }
   const from = to - max
-  return Array.from({ length: max }, (_, i) => (i + 1) + from)
+  let arr = Array.from({ length: max }, (_, i) => (i + 1) + from)
+  if (arr[arr.length - 1] + 1 < total) {
+    arr.push('...', total)
+  } else if (arr[arr.length - 1] + 1 === total) {
+    arr = Array.from({ length: max + 1 }, (_, i) => (i + 1) + from)
+  }
+  return arr
 }
 
 // Pagination Button action function
@@ -93,4 +99,4 @@ function PaginationButtons(totalPages, maxPageVisible = 10, currentPage = 1) {
   }
 }
 
-module.exports = PaginationButtons
+module.exports = { pageNumbers }

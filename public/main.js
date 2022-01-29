@@ -38,14 +38,22 @@ if (notificationShow) {
   })
 }
 
-const currentLocation = location.href
+const currentLocation = location.href.split('/')[3]
 const navMenuUl = document.querySelector('.nav-list')
 const navList = navMenuUl.querySelectorAll('li')
-const navLink = navMenuUl.querySelectorAll('a')
 for (let i = 0; i < navList.length; i++) {
-  const aa = navList[i].querySelector('a')
-  if (aa.href == currentLocation) {
+  const aa = navList[i].querySelector('a').href.split('/')[3]
+  if (!currentLocation.search(aa)) {
     navList[i].classList.add('active')
+  }
+}
+
+const bottomNavMenuUl = document.querySelector('.bottom-nav-list')
+const bottomNavList = bottomNavMenuUl.querySelectorAll('li')
+for (let i = 0; i < bottomNavList.length; i++) {
+  const aa = bottomNavList[i].querySelector('a').href.split('/')[3]
+  if (!currentLocation.search(aa)) {
+    bottomNavList[i].classList.add('active-b-nav')
   }
 }
 
@@ -65,3 +73,4 @@ window.onclick = function (event) {
     modal.style.display = 'none';
   }
 }
+

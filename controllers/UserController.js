@@ -6,12 +6,25 @@ const path = require('path');
 const { unlink } = require('fs');
 const UserModel = require('../models/UserModel');
 const sendMail = require('../utilities/sendMail');
+const { pageNumbers } = require('../utilities/pagination')
 
 const UserController = {
   // render page
   getUsers: async (req, res) => {
-    const users = await UserModel.getAllUsersList()
-    res.render('pages/users', { users });
+    const user = await UserModel.getAllUsersList()
+    const page = Number(req.query.page) || 1
+    const limit = Number(req.query.limit) || 4
+    const startIndex = (page - 1) * limit
+    const endIndex = page * limit
+    const users = user.slice(startIndex, endIndex)
+    const pageLength = user.length / limit
+    const numberOfPage = Number.isInteger(pageLength) ? Math.floor(pageLength) : Math.floor(pageLength) + 1
+    console.log({ numberOfPage, page })
+    const pageNumber = pageNumbers(numberOfPage, 2, page)
+    console.log(pageNumber)
+    res.render('pages/users', {
+      users, numberOfPage, page, pageNumber,
+    });
   },
   // insert user
   addUser: async (req, res) => {

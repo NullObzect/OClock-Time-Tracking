@@ -291,9 +291,9 @@
     <p>Last seven days.</p>
   </div>
   <div>
-    <input class="date-input" type="date" onchange="selectStartDate(event)" />
+    <input id="dateStart" class="date-input" type="date" onchange="selectStartDate(event)" />
     <small class="date-to" >To</small>
-    <input class="date-input" type="date" onchange="selectEndDate(event)" />
+    <input id="dateEnd" class="date-input" type="date" onchange="selectEndDate(event)" />
   </div>
 </div>
 
@@ -349,6 +349,8 @@
         
       </tr>
       <% }) %>
+
+      
     </tbody>
     <!-- Table footer -->
     <tfoot id="last-seven-days-total" class="an-employee-report">
@@ -370,12 +372,14 @@
 </div>
 
 </div>
-<!-- <script src="<%#baseUrl%>/report.js"></script> -->
+<div class="pagination" >
+  <ul id="pagination">
+
+  </ul>
+</div>
 
 <script>
-
-  /*
-const baseUrl = 'http://localhost:5000';
+  const baseUrl = 'http://localhost:5000';
 
   
 // get start date
@@ -391,14 +395,7 @@ function getDateFormat(date) {
 
   return today;
 }
-
-const selectStartDate = async (event) => {
-  const getDate = getDateFormat(event.target.value);
-  console.log(event.target.value)
-
-  startDate = getDate;
-
-  // get current date
+// get current date
   function getCurrentDate() {
     let today = new Date();
     const dd = String(today.getDate()).padStart(2, '0');
@@ -409,70 +406,85 @@ const selectStartDate = async (event) => {
     return today;
   }
 
+
+const selectStartDate = async function (event) {
+  const dateStart = document.querySelector("#dateStart")
+  const dateEnd = document.querySelector("#dateEnd")
+  const getDate = getDateFormat(event.target.value);
+  console.log(event.target.value)
+
+  startDate = getDate;
+
+   dateStart.dataset.date = event.target.value;
+   dateEnd.dataset.date = getCurrentDate();
   const data = await fetch(
     `${baseUrl}/reports/between/two-date?startDate=${startDate}&endDate=${getCurrentDate()}`,
   );
-  const getObjects = await data.json();
-  const getReports = getObjects.reports.dataToJson
-
-  // between to data total
-  const dateRangeTotalTr = document.getElementById('last-seven-days-total')
-
-  const getReportsTotal = getObjects.reportDateRangeTotal.betweenTowDateTotalToJson
-  console.log({ getReportsTotal });
-  dateRangeTotalTr.innerHTML = getReportsTotal.map((el) => `
-    
-    <tr class="bg-blue-500 text-center text-white font-bold">
-    <td colspan="2">Total =  ${el.present} </td>
-  <td class="p-3">${el.avgStartTime || '00'} </td>
-  <td class="p-3">${el.avgEndTime || '00'} </td>
-  <td class="p-3"></td>
-  <td class="p-3"> ${el.fixed_total || '00'}hr</td>
-  <td class="p-3"> ${el.weekTotal || '00'} </td>
-  <td class="p-3">${el.totalLessORExtra || '00'}</td>
-  </tr>
-    `)
-
-  //reportData.push(getReports)
-  // console.log('start', jsonData)
-  //show(getReports)
+  const getObjects = await data.json(); 
+  // let isZero;
+  const {dateRangeReport,pageNumber,pageLength,page,numberOfPage} = getObjects.reports
+  console.log({pageNumber,page,pageLength,numberOfPage})
+  console.log(dateRangeReport)
+  const reportTableBody = document.querySelector('#an-user-report')
+  reportShow(reportTableBody,dateRangeReport)
+  pagination(pageNumber,numberOfPage,page)
+  // const pagination = document.querySelector('#pagination')
+  // pagination.innerHTML = pageNumber.map(p =>`<a class=${ page==p ? 'page-active' : ''} ><li onclick="page(${p})">  ${p}  </li></a>`).join('')
 }
 
-// end date
-
-const selectEndDate = async (event) => {
-  const endDate = event.target.value;
-
-  console.log('end date', endDate);
+async function page(pageNo){
+  const dateStart = document.querySelector("#dateStart").dataset.date
+  const dateEnd = document.querySelector("#dateEnd").dataset.date
   const data = await fetch(
-    `${baseUrl}/reports/between/two-date?startDate=${startDate}&endDate=${endDate}`,
+    `${baseUrl}/reports/between/two-date?startDate=${startDate}&endDate=${getCurrentDate()}&page=${pageNo}`,
   );
-  const getObjects = await data.json();
-  const getReports = getObjects.reports.dataToJson
+  const getObjects = await data.json(); 
+  // let isZero;
+  const {dateRangeReport,pageNumber,pageLength,page,numberOfPage} = getObjects.reports
+  const reportTableBody = document.querySelector('#an-user-report')
+  reportShow(reportTableBody,dateRangeReport)
+  pagination(pageNumber,numberOfPage,pageNo)
+}
 
-  const dateRangeTotalTr = document.getElementById('last-seven-days-total')
+function reportShow(reportTableBody,dateRangeReport){
+ return reportTableBody.innerHTML = dateRangeReport.map(el=>
+   ` <tr
+        class="
+          ${el.day ===
+          "Friday"
+          ?
+          "bg-red-200": el.type === "holiday"
+         
+          ? "bg-yellow-200" : el.type === "leave" ? "bg-red-400"  :  "bg-blue-200"
+          
+          }
+          text-black
+        "
+      >
+        <td>${el.day}</td>
+        <td>${el.date}</td>
+        <td> ${ el.start  } </td>
+        <td>${el.end }</td>
+        <td>${ el.day === 'Friday' ? 'Off day' : el.type }</td>
+        <td>${ el.working_time }</td>
+        <td>
+          ${ el.type !== 'regular'  ? '00:00:00' : el.time_count }
+        </td>
+      </tr>`
+  ).join('')
 
-  const getReportsTotal = getObjects.reportDateRangeTotal.betweenTowDateTotalToJson
-  console.log({ getReportsTotal });
+}
+function pagination(pageNumber,numberOfPage,page){
+  const pagination = document.querySelector('#pagination')
+ return pagination.innerHTML = `<li class="first"  onclick="page(${1})"> </li> 
+ <li class="prev" ${Number(page===1) ? "onclick='this.disabled=true'" : `onclick=page(${Number(page-1)})`}></li> 
+ ${pageNumber.map(p =>
+ `<a class=${ page==p ? 'page-active' : ''} ><li onclick="page(${p})">  ${p}  </li></a>`).join('')}
+ <li class="next" ${Number(page===numberOfPage) ? "onclick='this.disabled=true'" : `onclick=page(${Number(page+1)})`}></li> 
+ <li class="last" onclick="page(${numberOfPage})"></li> 
+ `
 
-  dateRangeTotalTr.innerHTML = getReportsTotal.map((el) => `
-    
-    <tr class="bg-blue-500 text-center text-white font-bold">
-    <td colspan="2">Total =  ${el.present} </td>
-  <td class="p-3">${el.avgStartTime || '00'} </td>
-  <td class="p-3">${el.avgEndTime || '00'} </td>
-  <td class="p-3"></td>
-  <td class="p-3"> ${el.fixed_total || '00'}hr</td>
-  <td class="p-3"> ${el.weekTotal || '00'} </td>
-  <td class="p-3">${el.totalLessORExtra || '00'}</td>
-  </tr>
-    `)
-
-  //endData.push(getReports)
-  //show(getReports)
-};
-
-*/
+}
 </script>
 
 <%- include("../partials/footer"); -%>

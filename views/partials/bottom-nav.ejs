@@ -2,12 +2,12 @@
 <div class="header">
   <div class="nav-container">
     <div class="nav-logo">
-      <img width="150px" src="/icons/logo.svg" alt="" />
+     <a href="/"> <img width="150px" src="/icons/logo.svg" alt="" /></a>
     </div>
     <div id="bottom-nav-menu" class="bottom-nav-menu">
       <ul class="bottom-nav-list">
-        <li class="nav-item active-b-nav">
-          <a href="" class="nav-link">
+        <li class="nav-item">
+          <a href="/dashboard" class="nav-link">
             <span class="nav-icon">
               <%- include("./icons/dashboard-svg.ejs"); -%>
             </span>
@@ -15,116 +15,41 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="" class="nav-link">
+          <a href="/users" class="nav-link">
             <span class="nav-icon">
-              <svg
-                width="32"
-                height="32"
-                viewBox="0 0 32 32"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M24.4533 26.6667C25.4133 26.4667 26.32 26.08 27.0666 25.5067C29.1466 23.9467 29.1466 21.3733 27.0666 19.8133C26.3333 19.2533 25.44 18.88 24.4933 18.6667M12.2133 14.4933C12.08 14.48 11.92 14.48 11.7733 14.4933C10.2429 14.4414 8.79284 13.7958 7.73015 12.6933C6.66747 11.5908 6.07564 10.1179 6.07998 8.58667C6.07998 5.32001 8.71998 2.66667 12 2.66667C13.5683 2.63838 15.0836 3.23426 16.2126 4.32322C17.3415 5.41219 17.9917 6.90503 18.02 8.47334C18.0483 10.0417 17.4524 11.557 16.3634 12.6859C15.2745 13.8149 13.7816 14.4651 12.2133 14.4933ZM21.88 5.33334C24.4666 5.33334 26.5466 7.42667 26.5466 10C26.5466 12.52 24.5467 14.5733 22.0533 14.6667C21.9381 14.6533 21.8218 14.6533 21.7067 14.6667L21.88 5.33334ZM5.54665 19.4133C2.31998 21.5733 2.31998 25.0933 5.54665 27.24C9.21331 29.6933 15.2266 29.6933 18.8933 27.24C22.12 25.08 22.12 21.56 18.8933 19.4133C15.24 16.9733 9.22665 16.9733 5.54665 19.4133V19.4133Z"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg> </span
+              <%- include("./icons/users-svg.ejs"); -%>
+            </span
             >Users
           </a>
         </li>
         <li class="nav-item">
-          <a href="" class="nav-link">
+          <a href="/reports" class="nav-link">
             <span class="nav-icon">
-              <svg
-                width="32"
-                height="32"
-                viewBox="0 0 32 32"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M12 29.3333H20C26.6667 29.3333 29.3334 26.6667 29.3334 20V12C29.3334 5.33334 26.6667 2.66667 20 2.66667H12C5.33335 2.66667 2.66669 5.33334 2.66669 12V20C2.66669 26.6667 5.33335 29.3333 12 29.3333Z"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M20.6667 24.6667C22.1334 24.6667 23.3334 23.4667 23.3334 22V9.99999C23.3334 8.53333 22.1334 7.33333 20.6667 7.33333C19.2 7.33333 18 8.53333 18 9.99999V22C18 22.7072 18.281 23.3855 18.7811 23.8856C19.2812 24.3857 19.9594 24.6667 20.6667 24.6667ZM11.3334 24.6667C12.8 24.6667 14 23.4667 14 22V17.3333C14 15.8667 12.8 14.6667 11.3334 14.6667C9.86669 14.6667 8.66669 15.8667 8.66669 17.3333V22C8.66669 22.7072 8.94764 23.3855 9.44774 23.8856C9.94783 24.3857 10.6261 24.6667 11.3334 24.6667Z"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg> </span
+              <%- include("./icons/reports-svg.ejs"); -%>
+            </span
             >Reports
           </a>
         </li>
         <li class="nav-item">
-          <a href="" class="nav-link">
+          <a href="/options" class="nav-link">
             <span class="nav-icon">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="32"
-                height="32"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <path
-                  d="M22 8.27V4.23C22 2.64 21.36 2 19.77 2h-4.04c-1.59 0-2.23.64-2.23 2.23v4.04c0 1.59.64 2.23 2.23 2.23h4.04c1.59 0 2.23-.64 2.23-2.23ZM10.5 8.52V3.98C10.5 2.57 9.86 2 8.27 2H4.23C2.64 2 2 2.57 2 3.98v4.53c0 1.42.64 1.98 2.23 1.98h4.04c1.59.01 2.23-.56 2.23-1.97ZM10.5 19.77v-4.04c0-1.59-.64-2.23-2.23-2.23H4.23c-1.59 0-2.23.64-2.23 2.23v4.04C2 21.36 2.64 22 4.23 22h4.04c1.59 0 2.23-.64 2.23-2.23Z"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                ></path>
-                <path
-                  d="M14.5 17.5h6M17.5 20.5v-6"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                ></path>
-              </svg>
+              <%- include("./icons/options-svg.ejs"); -%>
             </span>
             Options
           </a>
         </li>
         <li class="nav-item">
-          <a href="" class="nav-link">
+          <a href="/profile" class="nav-link">
             <span class="nav-icon">
-              <svg
-                width="32"
-                height="32"
-                viewBox="0 0 16 21"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M8.1465 9.96414C8.05483 9.95497 7.94483 9.95497 7.844 9.96414C6.79185 9.92841 5.79492 9.48457 5.06432 8.7266C4.33373 7.96863 3.92684 6.95605 3.92983 5.9033C3.92983 3.65747 5.74483 1.8333 7.99983 1.8333C8.53371 1.82367 9.06426 1.91929 9.56118 2.1147C10.0581 2.31011 10.5117 2.60148 10.896 2.97218C11.2803 3.34288 11.5879 3.78565 11.8011 4.2752C12.0143 4.76475 12.129 5.29151 12.1386 5.82539C12.1482 6.35926 12.0526 6.88981 11.8572 7.38674C11.6618 7.88366 11.3704 8.33723 10.9997 8.72155C10.629 9.10587 10.1862 9.41341 9.69668 9.62661C9.20713 9.83982 8.68038 9.95451 8.1465 9.96414V9.96414ZM3.56316 13.3466C1.34483 14.8316 1.34483 17.2516 3.56316 18.7275C6.084 20.4141 10.2182 20.4141 12.739 18.7275C14.9573 17.2425 14.9573 14.8225 12.739 13.3466C10.2273 11.6691 6.09316 11.6691 3.56316 13.3466V13.3466Z"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
+              <%- include("./icons/profile-svg.ejs"); -%>
             </span>
             Profile
           </a>
         </li>
         <li class="nav-item">
-          <a href="" class="nav-link">
+          <a href="logout" class="nav-link">
             <span class="nav-icon">
-              <svg
-                width="32"
-                height="32"
-                viewBox="0 0 18 18"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M8.78011 16.3333C4.72844 16.3333 1.44678 13.5833 1.44678 8.99996C1.44678 4.41663 4.72844 1.66663 8.78011 1.66663M13.9868 11.4016L16.3334 9.05496L13.9868 6.70829V11.4016ZM6.94678 9.05496H16.2693H6.94678Z"
-                  stroke-width="1.5"
-                  stroke-miterlimit="10"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
+              <%- include("./icons/logout-svg.ejs"); -%>
             </span>
             Logout
           </a>

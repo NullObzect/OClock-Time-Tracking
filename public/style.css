@@ -199,7 +199,7 @@ main::-webkit-scrollbar-thumb {
   display: none;
   position: absolute;
   width: 180px;
-  height: 70px;
+  height: 80px;
   border-radius: 15px;
   background: #ffffff;
   left: 48px;
@@ -225,13 +225,13 @@ main::-webkit-scrollbar-thumb {
 .more-option li {
   position: relative;
   height: 20px;
-  margin: 0 5px;
+  margin: 2px 5px;
   list-style: none;
   line-height: 20px;
 }
-.more-option li a svg {
-  /* width: 32px;
-  height: 32px; */
+.more-option .more-icon svg{
+  width: 22px;
+  height: 22px;
   margin: 0 20px;
 }
 .more-option li a {
@@ -376,7 +376,7 @@ main::-webkit-scrollbar-thumb {
 }
 .active-b-nav a {
   color: var(--deep);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 /* Bottom Nav Bar End */
@@ -514,6 +514,7 @@ main {
 /* User start */
 #users {
   width: 100%;
+  min-height: 70Vh;
   margin: auto;
 }
 .text-head {
@@ -886,6 +887,54 @@ main {
   padding: 20px 0px;
   border-bottom: 1px solid #b9b9b9;
 }
+ /* Pagination  */
+
+ .pagination ul{
+  width: 100%;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 8px;
+}
+.pagination ul li{
+  color:#837575;
+  list-style: none;
+  height: 40px;
+  width: 40px;
+  margin: 5px;
+  font-size: 12px;
+  padding: 10px;
+  font-weight: 500;
+  border: 1px solid #D8D8D8;
+  box-sizing: border-box;
+  border-radius: 15px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.3s ease;
+}
+.pagination a{
+  text-decoration: none;
+  color: #837575;
+}
+.pagination .page-active li{
+  border: 1px solid  var(--primary);
+  background-color: #0095ff0e;
+  color:  var(--primary);
+}
+.next::before{
+  content: url("/icons/next.svg");
+}
+.last::before{
+  content: url("/icons/last.svg");
+}
+.first::before{
+  content: url("/icons/first.svg");
+}
+.prev::before{
+  content: url("/icons/prev.svg");
+}
 
 @media only screen and (max-width: 1200px) {
   .oclock-box {
@@ -914,6 +963,10 @@ main {
   }
   .sidebar {
     display: none;
+  }
+  .nav-link svg{
+    width: 50px;
+    height: 50px;
   }
   .notification {
     width: 95%;
@@ -1071,6 +1124,14 @@ main {
   .box {
     width: 280px;
     margin: 8px;
+  }
+  .pagination ul li{
+    height: 36px;
+    width: 36px;
+    margin: 3px;
+    font-size: 12px;
+    padding: 8px;
+    border-radius: 13px;
   }
 }
 @media only screen and (max-width: 320px) {

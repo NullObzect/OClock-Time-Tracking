@@ -1,0 +1,20 @@
+<div class="pagination">
+  <ul>
+      <li class="first" onclick="first(1)"> </li>
+      <% if(page===1){ %>
+        <li class="prev"> </li>
+        <% }else{ %>
+          <li class="prev" onclick="prev('<%=page%>')">  </li>
+          <% } %>   
+    <% for(let i=0;i<pageNumber.length;i++){ %>
+      <a href="/users?page=<%=pageNumber[i]%>" class=<%= page==pageNumber[i] ? 'page-active' : '' %> ><li>  <%=pageNumber[i]%>  </li></a>
+      <% } %>
+
+      <% if(page===numberOfPage){ %>
+        <li class="next">  </li>
+        <% }else{ %>
+          <li class="next" onclick="next('<%=page%>')"> </li>
+          <% } %>   
+          <li class="last" onclick="last('<%=numberOfPage%>')"> </li>
+    </ul>
+</div>
