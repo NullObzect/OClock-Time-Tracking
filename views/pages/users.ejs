@@ -4,13 +4,79 @@
   .hidden-menu {
     max-height: 0;
     overflow: hidden;
-    -webkit-transition: max-height 0.5s;
-    -moz-transition: max-height 0.5s;
-    transition: max-height 0.5s;
+    -webkit-transition: max-height 0.2s;
+    -moz-transition: max-height 0.2s;
+    transition: max-height 0.2s;
+    position: relative;
   }
+
+  /* .hidden-menu-show {
+    max-height: 130px;
+  } */
   .hidden-menu-show {
-    max-height: 100%;
+    max-height: 130px;
+    position: absolute;
+    width: 130px;
+    height: 130px;
+    padding: 6px;
+    border-radius: 15px;
+    background: #ffffff;
+    z-index: 99;
+    margin-left: -70px;
+
+    box-shadow: 0px 23px 27px rgba(0, 0, 0, 0.13),
+      0px 6.96494px 6.11893px rgba(0, 0, 0, 0.0847066),
+      0px 2.51788px 1.42419px rgba(0, 0, 0, 0.065),
+      0px 0.750053px 0.0354451px rgba(0, 0, 0, 0.0452935);
   }
+  .hidden-menu-show:after {
+    content: " ";
+    position: absolute;
+    z-index: 100;
+    right: 0;
+    top: 0;
+    border-bottom: 15px solid #ddd;
+    border-right: 15px solid transparent;
+    border-left: 15px solid transparent;
+    border-top: none;
+  }
+  /* content: " ";
+    position: absolute;
+    right: 20px;
+    top: -15px;
+    border-bottom: 15px solid #ffffff;
+    border-right: 15px solid transparent;
+    border-left: 15px solid transparent; */
+  .hidden-menu-show li {
+    position: relative;
+    height: 20px;
+    margin: 0 5px;
+    list-style: none;
+    line-height: 20px;
+  }
+  .hidden-menu-show li a svg {
+    /* width: 32px;
+  height: 32px; */
+    margin: 0 20px;
+  }
+  .hidden-menu-show li a {
+    color: var(--deep2);
+    stroke: var(--deep2);
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    margin: 8px 0px 15px 0px;
+    padding: 5px 0;
+  }
+  .hidden-menu-show li a:hover {
+    background-color: #f6f6f6;
+    border-radius: 9px;
+  }
+  /* #users table tr td:last-child {
+    width: 80px;
+  } */
 </style>
 
 <div id="users">
@@ -72,13 +138,69 @@
             <circle cx="30" cy="20" r="2" fill="#4A4A4A" />
           </svg>
           <div class="hidden-menu">
-            <h4>This is dropdown</h4>
+            <ul>
+              <li>
+                <a href="/reports/<%= user.id %>">
+                  <%# include("./icons/profile-svg.ejs"); -%>
+                  <span>Report</span>
+                </a>
+              </li>
+              <li>
+                <a href="/profile">
+                  <%# include("./icons/profile-svg.ejs"); -%>
+                  <span>View</span>
+                </a>
+              </li>
+              <li>
+                <a href="/update-user/<%= user.id %>">
+                  <%# include("./icons/logout-svg.ejs"); -%>
+                  <span>Update</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  onclick="return confirm('Are you Sure?')"
+                  href="/delete/user/<%= user.id %>"
+                >
+                  <%# include("./icons/logout-svg.ejs"); -%>
+                  <span>Delete</span>
+                </a>
+              </li>
+            </ul>
           </div>
+
+          <%# include("../partials/menu-option.ejs"); -%>
         </td>
       </tr>
-      <!-- top down menu for each user-->
 
       <%}) %>
+
+      <!-- <tr>
+        <td class="table-img td-width-zero">
+          <img
+            src="https://gravatar.com/avatar/b8e1fd79796a3a262ad0bb94517658d9?s=200&d=robohash&r=x"
+            alt=""
+          />
+        </td>
+        <td>gazi rahad</td>
+        <td class="user-phone">+8801534754667</td>
+        <td class="user-email">gaziiiiiiiii@mail.com</td>
+        <td class="user-status"><span class="status active">Active</span></td>
+        <td class="user-more td-width-zero">
+          <svg
+            width="40"
+            height="40"
+            viewBox="0 0 40 40"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect width="40" height="40" rx="15" />
+            <circle cx="10" cy="20" r="2" fill="#4A4A4A" />
+            <circle cx="20" cy="20" r="2" fill="#4A4A4A" />
+            <circle cx="30" cy="20" r="2" fill="#4A4A4A" />
+          </svg>
+        </td>
+      </tr> -->
     </tbody>
   </table>
 </div>
@@ -98,32 +220,30 @@
     currentMenu.classList.toggle("hidden-menu-show");
   }
   const userAction = document.getElementsByClassName("hidden-menu");
-
 </script>
 
 <script>
-
   // Paginations Functions
 
-    function first(e){
-      const firstPage = Number(e)
-      return location.href = `/users?page=${firstPage}`
-    }
+  function first(e) {
+    const firstPage = Number(e);
+    return (location.href = `/users?page=${firstPage}`);
+  }
 
-    function prev(e) {
-      const prevPage = Number(e - 1)
-      return location.href = `/users?page=${prevPage}`
-    }
-    function next(e) {
-      const nextPage = Number(parseInt(e) + 1)
-      console.log(nextPage)
-      return location.href = `/users?page=${nextPage}`
-    }
-    function last(e) {
-      const lastPage = e
-      return location.href = `/users?page=${lastPage}`
-    }
-
+  function prev(e) {
+    const prevPage = Number(e - 1);
+    return (location.href = `/users?page=${prevPage}`);
+  }
+  function next(e) {
+    const nextPage = Number(parseInt(e) + 1);
+    console.log(nextPage);
+    return (location.href = `/users?page=${nextPage}`);
+  }
+  function last(e) {
+    const lastPage = e;
+    return (location.href = `/users?page=${lastPage}`);
+  }
 </script>
+<script src="/js/allUsers.js"></script>
 
 <%- include("../partials/footer"); -%>

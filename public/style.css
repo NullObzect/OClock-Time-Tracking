@@ -612,10 +612,10 @@ main {
 }
 
 /* Reports page start */
-#reports{
+.reports-container {
   margin: 10px 20px;
 }
-#reports .profile {
+.reports-container .profile {
   display: flex;
   margin: 10px 0px;
 }
