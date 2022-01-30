@@ -59,13 +59,7 @@
       <div class="grid sm:grid-cols-12">
         <!-- User side navbar -->
         <div
-          class="
-            sm:col-span-3
-            xs:col-span-12
-            justify-center
-            items-center
-            border-r-2 border-gray-200
-          "
+          class="sm:col-span-3 xs:col-span-12 justify-center items-center border-r-2 border-gray-200"
         >
           <div class="justify-center items-center mb-3">
             <% let url = avatar %> <% if(url.search('https://') === -1){ %>
@@ -145,13 +139,7 @@
 
                 <div class="absolute top-12 mt-2 ml-13">
                   <button
-                    class="
-                      cursor-pointer
-                      rounded-full
-                      shadow-md
-                      bg-blue-200
-                      p-1
-                    "
+                    class="cursor-pointer rounded-full shadow-md bg-blue-200 p-1"
                     onclick="openModal()"
                   >
                     <img
@@ -173,16 +161,7 @@
                   'facebook')) {%>
                   <button
                     title="Remove"
-                    class="
-                      btn-hover-facebook
-                      px-3
-                      py-1
-                      rounded-full
-                      text-sm
-                      font-medium
-                      text-white
-                      bg-blue-600
-                    "
+                    class="btn-hover-facebook px-3 py-1 rounded-full text-sm font-medium text-white bg-blue-600"
                   >
                     <% let fbUserName = platformUser.find(el => el.platform ===
                     'facebook') %> <%= fbUserName.user_name %>
@@ -192,15 +171,7 @@
                   <a href="/auth/facebook">
                     <button
                       title="Connect"
-                      class="
-                        px-3
-                        py-1
-                        rounded-full
-                        text-sm
-                        font-medium
-                        text-white
-                        bg-blue-600
-                      "
+                      class="px-3 py-1 rounded-full text-sm font-medium text-white bg-blue-600"
                     >
                       facebook
                     </button>
@@ -210,16 +181,7 @@
                   connection.platform === 'google')) {%>
                   <button
                     title="Remove"
-                    class="
-                      btn-hover-google
-                      px-3
-                      py-1
-                      rounded-full
-                      text-sm
-                      font-medium
-                      text-white
-                      bg-red-400
-                    "
+                    class="btn-hover-google px-3 py-1 rounded-full text-sm font-medium text-white bg-red-400"
                   >
                     <% let googleUserName = platformUser.find(el => el.platform
                     === 'google') %> <%= googleUserName.user_name %>
@@ -229,15 +191,7 @@
                   <a href="/auth/google">
                     <button
                       title="Connect"
-                      class="
-                        px-3
-                        py-1
-                        rounded-full
-                        text-sm
-                        font-medium
-                        text-white
-                        bg-red-400
-                      "
+                      class="px-3 py-1 rounded-full text-sm font-medium text-white bg-red-400"
                     >
                       google
                     </button>
@@ -245,15 +199,7 @@
 
                   <% } %>
                   <button
-                    class="
-                      px-3
-                      py-1
-                      rounded-full
-                      text-sm
-                      font-medium
-                      text-white
-                      bg-blue-400
-                    "
+                    class="px-3 py-1 rounded-full text-sm font-medium text-white bg-blue-400"
                   >
                     twitter
                   </button>
@@ -264,52 +210,21 @@
             <!-- Markup for Edit user data-->
 
             <div
-              class="
-                mt-3
-                w-full
-                max-w-2xl
-                px-6
-                py-4
-                bg-white
-                rounded-md
-                dark:bg-gray-800
-              "
+              class="mt-3 w-full max-w-2xl px-6 py-4 bg-white rounded-md dark:bg-gray-800"
             >
               <form action="/user/edit/info" method="post" id="edit-form">
                 <div class="mt-2">
                   <div class="items-center -mx-2 md:flex">
                     <div class="w-full mx-2">
                       <label
-                        class="
-                          block
-                          mb-2
-                          text-sm
-                          font-medium
-                          text-gray-600
-                          dark:text-gray-200
-                        "
+                        class="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200"
                         >Name</label
                       >
 
                       <input
                         id="edit-name"
                         name="name"
-                        class="
-                          block
-                          w-full
-                          px-4
-                          py-2
-                          text-gray-700
-                          bg-white
-                          border border-gray-300
-                          rounded-md
-                          dark:bg-gray-800
-                          dark:text-gray-300
-                          dark:border-gray-600
-                          focus:border-blue-500
-                          dark:focus:border-blue-500
-                          focus:outline-none focus:ring
-                        "
+                        class="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
                         type="text"
                         value="<%= user_name %>"
                       />
@@ -317,36 +232,14 @@
 
                     <div class="w-full mx-2 mt-4 md:mt-0">
                       <label
-                        class="
-                          block
-                          mb-2
-                          text-sm
-                          font-medium
-                          text-gray-600
-                          dark:text-gray-200
-                        "
+                        class="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200"
                         >Phone Number</label
                       >
 
                       <input
                         id="edit-number"
                         name="number"
-                        class="
-                          block
-                          w-full
-                          px-4
-                          py-2
-                          text-gray-700
-                          bg-white
-                          border border-gray-300
-                          rounded-md
-                          dark:bg-gray-800
-                          dark:text-gray-300
-                          dark:border-gray-600
-                          focus:border-blue-500
-                          dark:focus:border-blue-500
-                          focus:outline-none focus:ring
-                        "
+                        class="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
                         type="tel"
                         type="number"
                         value="<%= user_phone %>"
@@ -356,33 +249,12 @@
 
                   <div class="w-full mt-4">
                     <label
-                      class="
-                        block
-                        mb-2
-                        text-sm
-                        font-medium
-                        text-gray-600
-                        dark:text-gray-200
-                      "
+                      class="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200"
                       >Short bio</label
                     >
 
                     <textarea
-                      class="
-                        block
-                        w-full
-                        h-40
-                        px-4
-                        py-2
-                        text-gray-700
-                        bg-white
-                        border border-gray-300
-                        rounded-md
-                        dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600
-                        focus:border-blue-500
-                        dark:focus:border-blue-500
-                        focus:outline-none focus:ring
-                      "
+                      class="block w-full h-40 px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
                       placeholder="Describe yourself"
                     ></textarea>
                   </div>
@@ -392,17 +264,7 @@
                       <button
                         type="reset"
                         id="reset"
-                        class="
-                          px-4
-                          py-2
-                          text-white
-                          transition-colors
-                          duration-200
-                          transform
-                          bg-gray-400
-                          rounded-md
-                          focus:outline-none focus:bg-gray-600
-                        "
+                        class="px-4 py-2 text-white transition-colors duration-200 transform bg-gray-400 rounded-md focus:outline-none focus:bg-gray-600"
                       >
                         Reset
                       </button></a
@@ -411,17 +273,7 @@
                     <button
                       id="user-save-btn"
                       type="submit"
-                      class="
-                        px-4
-                        py-2
-                        text-white
-                        transition-colors
-                        duration-200
-                        transform
-                        bg-gray-400
-                        rounded-md
-                        focus:outline-none focus:bg-gray-600
-                      "
+                      class="px-4 py-2 text-white transition-colors duration-200 transform bg-gray-400 rounded-md focus:outline-none focus:bg-gray-600"
                     >
                       Save
                     </button>
@@ -444,36 +296,11 @@
 
     <!-- modale -->
     <div
-      class="
-        main-modal
-        fixed
-        w-full
-        h-100
-        inset-0
-        z-50
-        overflow-hidden
-        flex
-        justify-center
-        items-center
-        animated
-        fadeIn
-        faster
-      "
+      class="main-modal fixed w-full h-100 inset-0 z-50 overflow-hidden flex justify-center items-center animated fadeIn faster"
       style="background: rgba(0, 0, 0, 0.7)"
     >
       <div
-        class="
-          border border-teal-500
-          shadow-lg
-          modal-container
-          bg-white
-          w-11/12
-          md:max-w-md
-          mx-auto
-          rounded
-          z-50
-          overflow-y-auto
-        "
+        class="border border-teal-500 shadow-lg modal-container bg-white w-11/12 md:max-w-md mx-auto rounded z-50 overflow-y-auto"
       >
         <div class="modal-content py-4 text-left px-5">
           <!--Title-->
@@ -523,31 +350,14 @@
                     accept="accept"
                   />
                   <small
-                    class="
-                      text-sm
-                      font-medium
-                      cursor-pointer
-                      rounded-full
-                      px-4
-                      py-2
-                      bg-gray-200
-                    "
+                    class="text-sm font-medium cursor-pointer rounded-full px-4 py-2 bg-gray-200"
                   >
                     Change
                   </small>
                   <button
                     disabled
                     type="submit"
-                    class="
-                      focus:outline-none
-                      px-4
-                      bg-teal-500
-                      py-2
-                      ml-3
-                      rounded-lg
-                      text-white
-                      bg-green-400
-                    "
+                    class="focus:outline-none px-4 bg-teal-500 py-2 ml-3 rounded-lg text-white bg-green-400"
                   >
                     Save
                   </button>
@@ -570,15 +380,7 @@
 
                     <a href="/profile/picture/<%= facebookProfile.id %>">
                       <button
-                        class="
-                          px-3
-                          py-1
-                          rounded-full
-                          text-sm
-                          font-medium
-                          text-white
-                          bg-blue-400
-                        "
+                        class="px-3 py-1 rounded-full text-sm font-medium text-white bg-blue-400"
                       >
                         facebook
                       </button>
@@ -587,15 +389,7 @@
 
                     <a href="/auth/facebook">
                       <button
-                        class="
-                          px-3
-                          py-1
-                          rounded-full
-                          text-sm
-                          font-medium
-                          text-white
-                          bg-blue-600
-                        "
+                        class="px-3 py-1 rounded-full text-sm font-medium text-white bg-blue-600"
                       >
                         Add Facebook
                       </button>
@@ -614,15 +408,7 @@
                     />
                     <a href="/profile/picture/<%= googleProfile.id  %>">
                       <button
-                        class="
-                          px-3
-                          py-1
-                          rounded-full
-                          text-sm
-                          font-medium
-                          text-white
-                          bg-blue-400
-                        "
+                        class="px-3 py-1 rounded-full text-sm font-medium text-white bg-blue-400"
                       >
                         google
                       </button>
@@ -631,15 +417,7 @@
 
                     <a href="/auth/google">
                       <button
-                        class="
-                          px-3
-                          py-1
-                          rounded-full
-                          text-sm
-                          font-medium
-                          text-white
-                          bg-red-400
-                        "
+                        class="px-3 py-1 rounded-full text-sm font-medium text-white bg-red-400"
                       >
                         Add Google
                       </button>
@@ -676,30 +454,12 @@
           <!--Footer-->
           <div class="flex justify-end pt-2">
             <button
-              class="
-                focus:outline-none
-                modal-close
-                px-3
-                py-2
-                bg-blue-400
-                rounded-lg
-                text-white
-                hover:bg-gray-300
-              "
+              class="focus:outline-none modal-close px-3 py-2 bg-blue-400 rounded-lg text-white hover:bg-gray-300"
             >
               Cancel
             </button>
             <button
-              class="
-                focus:outline-none
-                px-4
-                bg-teal-500
-                py-2
-                ml-3
-                rounded-lg
-                text-white
-                bg-green-400
-              "
+              class="focus:outline-none px-4 bg-teal-500 py-2 ml-3 rounded-lg text-white bg-green-400"
               onclick="avatarChange()"
             >
               Save
@@ -711,17 +471,16 @@
 
     <script>
       function readURL(input) {
-    if (input.files && input.files[0]) {
-    
-      var reader = new FileReader();
-      reader.onload = function (e) { 
-        document.querySelector("#img").setAttribute("src",e.target.result);
-        document.getElementById("avatar-save").disabled = false;
-      };
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            document.querySelector("#img").setAttribute("src", e.target.result);
+            document.getElementById("avatar-save").disabled = false;
+          };
 
-      reader.readAsDataURL(input.files[0]); 
-    }
-  }
+          reader.readAsDataURL(input.files[0]);
+        }
+      }
     </script>
     <script>
       function avatarChange() {
@@ -730,6 +489,7 @@
       }
     </script>
 
+    //
     <script src="/js/profile.js"></script>
   </body>
 </html>

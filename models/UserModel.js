@@ -148,13 +148,13 @@ const UserModel = {
     const [rows] = await dbConnect.promise().execute(updateAvatarSql, values)
     return rows;
   },
-  getUserEditInfo: async (uId, name, number, id) => {
-    const getEdit = 'UPDATE `users` SET `id`= ?,`user_name`= ?, `user_phone`= ? WHERE id =?'
-    const values = [uId, name, number, id]
+  getUserEditInfo: async (uId, name, number, email, id) => {
+    const getEdit = 'UPDATE `users` SET `id`= ?,`user_name`= ?, `user_phone`= ?  user_mail = ? WHERE id =?'
+    const values = [uId, name, number, email, id]
     const [rows] = await dbConnect.promise().execute(getEdit, values)
     return rows.affectedRows;
   },
-  adminCanUpdateUser: async (id, userName, userPhone, userRole, userMail,userPass, userId) => {
+  adminCanUpdateUser: async (id, userName, userPhone, userRole, userMail, userPass, userId) => {
   // UPDATE `users` SET `id`=?,`user_name`= ?,`user_phone`=?,`user_role`=?,
   // `user_mail`=?,`user_pass`=?,`avatar`=?,`status`=? WHERE id =?
 
