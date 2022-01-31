@@ -68,7 +68,7 @@ const FbUserController = {
               userObject,
             }, process.env.JWT_SECRET, { expiresIn: maxAge })
             res.cookie(process.env.COOKIE_NAME, tokenTwo, { maxAge, httpOnly: true, signed: true });
-            res.redirect('/profile')
+            res.redirect('/')
           } else {
             res.redirect('/')
           }
