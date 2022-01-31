@@ -31,15 +31,14 @@ const UserController = {
     let result;
     let avatar = null;
     const {
-      name, email, phone, password,
+      name, email, phone,
     } = req.body
-    const hashedPassword = await bcrypt.hash(password, 10);
     if (req.files && req.files.length > 0) {
       avatar = req.files[0].filename
-      result = await UserModel.addUser(name, phone, email, hashedPassword, avatar)
+      result = await UserModel.addUser(name, phone, email, avatar)
     } else {
       console.log('else')
-      result = await UserModel.addUser(name, phone, email, hashedPassword, avatar)
+      result = await UserModel.addUser(name, phone, email, avatar)
     }
     try {
       if (result.affectedRows > 0) {

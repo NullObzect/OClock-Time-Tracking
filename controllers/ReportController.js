@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions */
 const AttendanceModel = require('../models/AttendanceModel');
 const UserModel = require('../models/UserModel')
+const ProfileModel = require('../models/ProfileModel')
 const { pageNumbers } = require('../utilities/pagination')
 const {
   timeToHour, calculateTime, dateFormate, timeFormateForReport, workHourFormateForReport,
@@ -76,6 +77,7 @@ const ReportController = {
       const [{ start }] = await AttendanceModel.todayStartTime(userId)
       const [{ end }] = await AttendanceModel.todayEndTime(userId)
       const [tTotal] = await AttendanceModel.todayTotal(userId)
+      const platformUser = await ProfileModel.userConnectionDetailsUniqueInfo(userId)
       const today = await AttendanceModel.getToday(userId)
       const { todayTotal } = tTotal
 
@@ -219,6 +221,7 @@ const ReportController = {
       // console.log({ userReport });
 
       res.render('pages/reports', {
+        platformUser,
         userInfo,
         todayReportDetails,
         weekReportDetails,

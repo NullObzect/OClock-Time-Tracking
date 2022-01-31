@@ -7,7 +7,6 @@ const userValidator = [
   check('name').isLength({ min: 1 }).withMessage('Name is required!'),
   check('phone').isLength({ min: 1 }).withMessage('Phone number is required!'),
   check('email').isLength({ min: 1 }).withMessage('Email is required!'),
-  check('password').isLength({ min: 1 }).withMessage('Password is required!'),
 ];
 
 const addUserValidationHandler = function (req, res, next) {
