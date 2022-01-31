@@ -68,6 +68,175 @@ main::-webkit-scrollbar-thumb {
   background-color: var(--deep);
 }
 
+/* Login page */
+#login{
+
+}
+.login-box{
+  position: absolute;
+  width: 325px;
+  height: 520px;
+  margin: auto;
+  inset: 0;
+  text-align: center;
+  background: #FFFFFF;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25), 0px 27px 42px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+}
+.login-logo{
+  padding: 20px;
+}
+.login-input input{
+  width: 80%;
+  height: 50px;
+  background: #F6F6F6;
+  border-radius: 17px;
+  border: 0;
+  margin: 8px 0;
+  padding: 5px 12px ;
+  font-size: 18px;
+  color: #7B81A1;
+  line-height: 18px;
+  font-weight: 400;
+}
+.login-btn{
+  width: 85%;
+  height: 55px;
+  background:#103047;
+  margin: 8px 0;
+  font-size: 20px;
+  color:#F6F6F6 ;
+  border: 0;
+  border-radius: 17px;
+  padding: 5px 8px ;
+  cursor: pointer;
+}
+.social-login ul{
+  padding: 0;
+  width: 90%;
+  margin:8px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.social-login ul li {
+  list-style: none;
+  height: 50px;
+  width: 50px;
+  padding: 12.5px;
+  margin: 8px;
+  background: #FFFFFF;
+  border: 1px solid #E1E1E1;
+  box-sizing: border-box;
+  border-radius: 16px;
+  cursor: pointer;
+}
+.login-forget a{
+  font-size: 14px;
+  color: #7B81A1;
+  line-height: 18px;
+  font-weight: 400;
+  text-decoration:none;
+  cursor: pointer;
+}
+.login-active{
+  font-size: 14px;
+  color: #7B81A1;
+  line-height: 18px;
+  font-weight: 400;
+  text-decoration:none;
+  margin-top: 10px;
+}
+.login-active a{
+  cursor: pointer;
+  color: #7B81A1;
+  font-weight: 500;
+  text-decoration:none;
+}
+.error-msg{
+  margin: 0;
+  padding: 5px 0;
+  color: red;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+/* search-modal */
+#search-modal{
+
+}
+.search-modal-box{
+  position: absolute;
+  width: 450px;
+  height: 300px;
+  margin: auto;
+  inset: 0;
+  background: #FFFFFF;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25), 0px 27px 42px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+}
+.login-logo{
+  padding: 20px;
+}
+.active-details{
+  min-height: 160px;
+  padding: 5px 10px;
+}
+.search-details{
+  font-size: 17px;
+  color: var(--deep2);
+  line-height: 20px;
+  padding:16px 10px ;
+}
+.email-input input{
+  width: 90%;
+  margin: 0px 10px;
+  height: 40px;
+  background: none;
+  border-radius: 17px;
+  border: 1px solid;
+  padding: 5px 12px ;
+  font-size: 18px;
+  color:var(--deep-gray);
+  line-height: 18px;
+  font-weight: 400;
+}
+
+.btn-box{
+ float: right;
+ padding: 8px 16px;
+
+}
+.btn{
+  padding: 0px 20px;
+  border-radius: 8px;
+  background-color: #e4e6eb;
+  border : none;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 36px;
+  color: black;
+  margin-left: 8px;
+  cursor: pointer;
+}
+.mail-sent{
+  padding: 10px;
+  line-height: 24px;
+}
+.mail-title{
+  font-size: 18px;
+}
+.mail-text{
+  color: var(--deep2);
+}
+.search-btn{
+  background-color: var(--deep);
+  color: var(--white);
+}
+.cancle-btn{
+  background-color: var(--fade-bluish-gray);
+  color: var(--deep-gray);
+}
 /* Side nav bar start */
 
 .sidebar {
@@ -106,6 +275,7 @@ main::-webkit-scrollbar-thumb {
 }
 .nav-list li:hover {
   background-color: var(--deep);
+  color: var(--white);
   border-radius: 20px;
 }
 .nav-list li a:hover {
@@ -161,7 +331,7 @@ main::-webkit-scrollbar-thumb {
 }
 .bottom-notification {
   display: none;
-  bottom: ;
+  /* bottom: ; */
 }
 .notification:after {
   content: " ";
