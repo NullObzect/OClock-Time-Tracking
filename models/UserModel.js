@@ -122,6 +122,18 @@ const UserModel = {
       return err;
     }
   },
+  searchUser: async (email) => {
+    const searchForgotUserSql = 'SELECT id,user_mail, status FROM `users` WHERE user_mail = ? and status = 1'
+    const value = [email]
+    const [rows] = await dbConnect.promise().execute(searchForgotUserSql, value)
+    return rows;
+  },
+  searchInactiveUser: async (email) => {
+    const searchForgotUserSql = 'SELECT id,user_mail, status FROM `users` WHERE user_mail = ? and status = 2'
+    const value = [email]
+    const [rows] = await dbConnect.promise().execute(searchForgotUserSql, value)
+    return rows;
+  },
   findId: async (id) => {
     const insertSQL = 'SELECT * FROM `users` WHERE id = ?'
     const value = [id]
@@ -154,7 +166,7 @@ const UserModel = {
     const [rows] = await dbConnect.promise().execute(getEdit, values)
     return rows.affectedRows;
   },
-  adminCanUpdateUser: async (id, userName, userPhone, userRole, userMail,userPass, userId) => {
+  adminCanUpdateUser: async (id, userName, userPhone, userRole, userMail, userPass, userId) => {
   // UPDATE `users` SET `id`=?,`user_name`= ?,`user_phone`=?,`user_role`=?,
   // `user_mail`=?,`user_pass`=?,`avatar`=?,`status`=? WHERE id =?
 
