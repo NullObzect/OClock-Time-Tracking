@@ -41,7 +41,7 @@ const LoginController = {
           res.cookie(process.env.COOKIE_NAME, token, { maxAge, httpOnly: true, signed: true })
           // set userObject when user loggedin //
           res.locals.loggedInUser = userObject
-          res.render('pages/login', { signIn: true })
+          res.redirect('/dashboard')
         } else {
           res.locals.auth = true
           throw createError('Login Failed invalid authentication')
@@ -49,7 +49,7 @@ const LoginController = {
       } else {
         console.log('=====> invalid mail');
 
-        throw createError('User Not Found')
+        throw createError('Login Failed invalid authentication')
       }
     } catch (err) {
       console.log('catch', err)

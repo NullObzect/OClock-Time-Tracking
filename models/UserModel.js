@@ -122,6 +122,18 @@ const UserModel = {
       return err;
     }
   },
+  searchUser: async (email) => {
+    const searchForgotUserSql = 'SELECT id,user_mail, status FROM `users` WHERE user_mail = ? and status = 1'
+    const value = [email]
+    const [rows] = await dbConnect.promise().execute(searchForgotUserSql, value)
+    return rows;
+  },
+  searchInactiveUser: async (email) => {
+    const searchForgotUserSql = 'SELECT id,user_mail, status FROM `users` WHERE user_mail = ? and status = 2'
+    const value = [email]
+    const [rows] = await dbConnect.promise().execute(searchForgotUserSql, value)
+    return rows;
+  },
   findId: async (id) => {
     const insertSQL = 'SELECT * FROM `users` WHERE id = ?'
     const value = [id]

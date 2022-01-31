@@ -20,8 +20,14 @@ router.get('/user/view', UserController.userView)
 // Router for search user
 router.get('/search/user', checkLogin, requireRole(['admin']), UserController.searchUser)
 
-router.get('/find-user', decorateHtmlResponse('Find-user'), UserController.getFindUser)
-router.post('/find-user', decorateHtmlResponse('Find-user'), UserController.postFindUser)
+router.get('/search-user', decorateHtmlResponse('search-user'), UserController.getSearchUser)
+
+router.post('/search-user', decorateHtmlResponse('search-user'), UserController.postSearchUser)
+
+router.post('/search-inactive-user', decorateHtmlResponse('search-user'), UserController.postSearchInactiveUser)
+
+router.get('/search-account-active', decorateHtmlResponse('search-user'), UserController.getAccountActive)
+
 router.post('/recover', decorateHtmlResponse('Recover'), UserController.recoverUser)
 router.get('/recover/:token', decorateHtmlResponse('Recover'), UserController.recoverUserVerify)
 
@@ -30,7 +36,7 @@ router.post('/update-password', UserController.userUpdatePassword)
 
 // Verify User
 
-router.get('/user-verify', UserController.userVerify)
+router.post('/user-verify', UserController.userVerify)
 router.get('/user-verify/:token', UserController.userVerifySet)
 
 // Forget user

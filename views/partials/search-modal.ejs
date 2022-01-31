@@ -1,0 +1,40 @@
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/style.css">
+  <title>Document</title>
+</head>
+<body>
+    <div id="search-modal">
+      <div class="search-modal-box">
+        <div class="login-logo">
+          <%- include("./icons/oclock-logo.ejs"); -%>          
+        </div>
+        <hr>
+        <div class="active-details">
+          <div id="details" class="search-details">
+            Please enter your email address or mobile number to search for your account.
+          </div>
+        
+
+        <div id="mail-input" class="email-input">
+          <input required id="email" placeholder="Email" type="text">
+        </div>
+        <div id="error-msg" class="error-msg">
+        
+        </div>
+      </div>
+      <hr>
+        <div class="btn-box">
+          <a href="/"><button id="cancle-btn" class="cancle-btn btn">Cancle</button></a>
+          <button id="continue-btn" style="display: none;"  class="search-btn btn">Continue</button>
+            <button id="search-btn" class="search-btn btn">Search</button>
+            
+        </div>
+
+    </div>
+</body>
+</html>

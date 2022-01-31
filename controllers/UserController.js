@@ -97,45 +97,122 @@ const UserController = {
     }
   },
   // Find User
-  getFindUser: async (req, res) => {
+  getSearchUser: async (req, res) => {
     // req.flash('key', 'hello')
     // const message = req.flash()
     // console.log(message)
-    res.render('pages/find-user')
+    res.render('pages/search-forgot-user')
   },
-  postFindUser: async (req, res) => {
+  getAccountActive: async (req, res) => {
+    // req.flash('key', 'hello')
+    // const message = req.flash()
+    // console.log(message)
+    res.render('pages/search-account-active')
+  },
+  postSearchUser: async (req, res) => {
     const { email } = req.body
-    const [user] = await UserModel.findUserByEmail(email)
-    if (!user) {
-      res.send('user not find')
+    try {
+      const user = await UserModel.searchUser(email)
+      if (user.length) {
+        res.status(200).json({ result: user })
+      } else {
+        res.status(500).json({
+          errors: {
+            common: {
+              msg: '  Your search did not return any results. Please try again with other information.',
+            },
+          },
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
+        errors: {
+          common: {
+            msg: '  Your search did not return any results. Please try again with other information.',
+          },
+        },
+      });
     }
-    res.render('pages/forgot-password', { email })
   },
+  postSearchInactiveUser: async (req, res) => {
+    const { email } = req.body
+    try {
+      const user = await UserModel.searchInactiveUser(email)
+      if (user.length) {
+        res.status(200).json({ result: user })
+      } else {
+        res.status(500).json({
+          errors: {
+            common: {
+              msg: '  Your search did not return any results. Please try again with other information.',
+            },
+          },
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
+        errors: {
+          common: {
+            msg: '  Your search did not return any results. Please try again with other information.',
+          },
+        },
+      });
+    }
+  },
+
   recoverUser: async (req, res) => {
     const userMail = req.body.email
     try {
       const [user] = await UserModel.findUserByEmail(userMail)
+      console.log(user)
       if (user) {
         const { id } = user
         const email = user.user_mail
+        const name = user.user_name
 
         const token = jwt.sign({
           id,
           email,
         }, process.env.JWT_SECRET, { expiresIn: '15m' })
         const link = `${process.env.BASE_URL}/recover/${token}`
-        const subject = 'Oclock reset password ,Link expire in 15 minutes'
+        const subject = 'Oclock reset password , link expire in 15 minutes'
         const textMessage = 'Oclock reset password ,'
-        const htmlMessage = `<h1>Oclock reset password</h1>
-        <div>
-          <h4> Link expire in 15 minutes</h4>
-          <h5>${link}</h5>
-          <a href="${link}"> Click Here</a>
-        </div>`
+        const htmlMessage = `<div id="search-modal">
+        <div style="width: 450px;
+        height: 320px;
+        margin: 50px auto;
+        background: #FFFFFF;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25), 0px 27px 42px rgba(0, 0, 0, 0.2);
+        border-radius: 20px;">
+            <img class="login-logo" src="https://i.imgur.com/bRevMXT.png" alt="">        
+          <hr>
+            <div style="min-height: 130px;
+            padding: 12px 20px;
+            font-size: 20px;
+            line-height: 26px;">
+              Hi, ${name} <br>
+              We received a request to reset your Oclock profile password.
+              Enter the following change password button:
+            </div>
+             <div class="btn-box">
+              <a style="cursor: pointer;"  href="${link}"> <button style="padding: 0px 20px;
+                border-radius: 8px;
+                background-color: #103047;
+                border : none;
+                font-size: 15px;
+                font-weight: 700;
+                line-height: 36px;
+                color: #FFFFFF;
+                margin-left: 8px;
+                text-align: center;
+                cursor: pointer;">Change Password</button></a>
+             </div>
+      </div>`
         await sendMail(email, subject, textMessage, htmlMessage)
-        res.send(`mail send in ${email} <a href='/'>Go back</a>`)
-      } else {
-        res.send('user not find')
+        res.status(200).json({
+          result: 'We sent your code to successfully',
+          email,
+        })
       }
     } catch (err) {
       console.log(err)
@@ -154,7 +231,7 @@ const UserController = {
         }
       }
     } catch (err) {
-      console.log(err)
+      res.render('pages/link-expire')
     }
   },
   userUpdatePassword: async (req, res) => {
@@ -162,6 +239,8 @@ const UserController = {
     try {
       const hashPass = await bcrypt.hash(password, 10);
       UserModel.UpdatePassword(email, hashPass)
+      const [user] = await UserModel.findUserByEmail(email)
+      await UserModel.userVerify(user.id)
       res.redirect('/')
     } catch (err) {
       console.log(err)
@@ -261,24 +340,57 @@ const UserController = {
     }
   },
   userVerify: async (req, res) => {
-    const { id, user_mail } = req.user
-    console.log(id, user_mail)
-    const token = jwt.sign({
-      id,
-      user_mail,
-    }, process.env.JWT_SECRET, { expiresIn: '15m' })
-    const link = `${process.env.BASE_URL}/user-verify/${token}`
-    const subject = 'Oclock Account Verify ,Link expire in 15 minutes'
-    const textMessage = 'Oclock Account Verify ,'
-    const htmlMessage = `<h1>Oclock Account Verify</h1>
-    <div>
-      <h4> Link expire in 15 minutes</h4>
-      <h5>${link}</h5>
-      <a href="${link}"> Click Here</a>
-    </div>`
-    console.log(link)
-    await sendMail(user_mail, subject, textMessage, htmlMessage)
-    res.send(`mail send in ${user_mail} <a href='/'>Go back</a>`)
+    const userMail = req.body.email
+    const [user] = await UserModel.findUserByEmail(userMail)
+    console.log(user)
+    if (user) {
+      const { id } = user
+      const email = user.user_mail
+      const name = user.user_name
+      const token = jwt.sign({
+        id,
+        email,
+      }, process.env.JWT_SECRET, { expiresIn: '15m' })
+      const link = `${process.env.BASE_URL}/user-verify/${token}`
+      const subject = 'Oclock active account, link expire in 15 minutes'
+      const textMessage = 'Oclock Account Verify ,'
+      const htmlMessage = `<div id="search-modal">
+    <div style="width: 450px;
+    height: 320px;
+    margin: 50px auto;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25), 0px 27px 42px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;">
+        <img class="login-logo" src="https://i.imgur.com/bRevMXT.png" alt="">        
+      <hr>
+        <div style="min-height: 130px;
+        padding: 12px 20px;
+        font-size: 20px;
+        line-height: 26px;">
+          Hi, ${name} <br>
+          We received a request to active your Oclock profile account.
+          Enter the following active account button:
+        </div>
+         <div class="btn-box">
+          <a style="cursor: pointer;" href="${link}"> <button style="padding: 0px 20px;
+            border-radius: 8px;
+            background-color: #103047;
+            border : none;
+            font-size: 15px;
+            font-weight: 700;
+            line-height: 36px;
+            color: #FFFFFF;
+            margin-left: 8px;
+            text-align: center;
+            cursor: pointer;">Active account</button></a>
+         </div>
+  </div>`
+      await sendMail(email, subject, textMessage, htmlMessage)
+      res.status(200).json({
+        result: 'We sent your mail to successfully',
+        email,
+      })
+    }
   },
   userVerifySet: async (req, res) => {
     const { token } = req.params
@@ -286,16 +398,14 @@ const UserController = {
       const isVerified = jwt.verify(token, process.env.COOKIE_SECRET)
       console.log('verify', isVerified)
       if (isVerified) {
-        const { user_mail } = isVerified
-        const [user] = await UserModel.findUserByEmail(user_mail)
+        const { email } = isVerified
+        const [user] = await UserModel.findUserByEmail(email)
         if (user) {
-          console.log(user)
-          await UserModel.userVerify(user.id)
-          res.redirect('/profile')
+          res.render('pages/new-password', { email })
         }
       }
     } catch (err) {
-      console.log(err)
+      res.render('pages/link-expire')
     }
   },
 
