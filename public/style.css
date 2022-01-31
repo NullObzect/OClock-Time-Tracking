@@ -807,6 +807,9 @@ main {
   height: 30px;
   cursor: pointer;
 }
+.social-active svg{
+  fill: var(--deep-gray)
+}
 .profile-info {
   margin: 20px 25px;
 }
