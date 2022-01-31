@@ -12,6 +12,8 @@ const pageNumbers = (total, max, current) => {
     arr.push('...', total)
   } else if (arr[arr.length - 1] + 1 === total) {
     arr = Array.from({ length: max + 1 }, (_, i) => (i + 1) + from)
+  } else if (max > total) {
+    arr = Array.from({ length: 1 }, (_, i) => (i + 1))
   }
   return arr
 }
