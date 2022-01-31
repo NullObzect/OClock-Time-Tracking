@@ -16,6 +16,8 @@ router.get('/reports/:id', decorateHtmlResponse('Report'), checkLogin, ReportCon
 //
 router.get('/reports/between/two-date', ReportController.reportBetweenTwoDate)
 //
+// router.get('/reports/between/two-date/:id', ReportController.reportBetweenTwoDate)
+
 // router.get('/reports/employee/:id', decorateHtmlResponse('Employee Report'), ReportController.reportEmployees)
 router.get('/reports/between/two-date/:id', ReportController.reportBetweenTwoDateForAdmin)
 

@@ -102,10 +102,10 @@ const ReportController = {
         weekAvgStartTime,
         weekAvgEndTime,
       )
-
+      console.log({ weekReportDetails })
       // report for this month
       const [{
-        monthDay, monthFixedTotalHr, monthTotalHr, monthAvgTotalHr,
+        monthDay, monthFixedTotalHr, monthWorkTotalHr, monthAvgTotalHr,
       }] = await AttendanceModel.monthDayAndWorkTime(userId)
 
       const [{ monthAvgStartTime, monthAvgEndTime }] = await
@@ -114,15 +114,15 @@ const ReportController = {
       const monthReportDetails = new ReportDetails(
         monthDay,
         monthFixedTotalHr,
-        monthTotalHr,
+        monthWorkTotalHr,
         monthAvgTotalHr,
         monthAvgStartTime,
         monthAvgEndTime,
       )
-      // console.log({ monthReportDetails })
+      console.log({ monthReportDetails })
       // report for this year
       const [{
-        yearDay, yearFixedTotalHr, yearTotalHr, yearAvgTotalHr,
+        yearDay, yearFixedTotalHr, yearWorkTotalHr, yearAvgTotalHr,
       }] = await AttendanceModel.yearDayAndWorkTime(userId)
 
       const [{ yearAvgStartTime, yearAvgEndTime }] = await
@@ -131,7 +131,7 @@ const ReportController = {
       const yearReportDetails = new ReportDetails(
         yearDay,
         yearFixedTotalHr,
-        yearTotalHr,
+        yearWorkTotalHr,
         yearAvgTotalHr,
         yearAvgStartTime,
         yearAvgEndTime,
@@ -240,6 +240,15 @@ const ReportController = {
   reportBetweenTwoDate: async (req, res) => {
     try {
       const userId = req.user.id;
+      // const { user } = req
+
+      // let userId;
+      // if (req.params.id) {
+      //   userId = req.params.id;
+      // } else {
+      //   userId = user.id;
+      // }
+
       const { startDate, endDate } = req.query;
       const getData = await AttendanceModel.anEmployeeReportBetweenTwoDate(
         userId, startDate, endDate,

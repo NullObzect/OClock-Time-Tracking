@@ -118,7 +118,20 @@ input[type="date"]:valid::before {
 	content: "" !important;
 }
 
+.filtered-report{
+  background: #f3f3f3;
+  border-radius: 22px;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  display: none;
 
+}
+.filtered-report .box{
+  background-color: #f3f3f3;
+  border: none;
+}
 </style>
 
 <!--  Markup for an  employee report-->
@@ -328,6 +341,28 @@ input[type="date"]:valid::before {
   </div>
 
 
+ <!-- Markup for filtered  report   box -->
+
+ <div class="filtered-report">
+
+    
+  <div class="week box">
+    <h2>Filtered by</h2>
+    <div class="details">
+      <table id="total-report">
+      
+      </table>
+    </div>
+
+  
+  </div>
+
+  <div class="filtered-date">
+    <p><span class="select-start-date">/01/2022</span> to  <span class="select-end-date">/01/2022</span> </p>
+  </div>
+  </div>
+
+  
 <!-- Markup Date range for employee-->
 
 <div class="date-range-input">
@@ -398,7 +433,7 @@ input[type="date"]:valid::before {
       
     </tbody>
     <!-- Table footer -->
-    <tfoot id="last-seven-days-total" class="an-employee-report">
+    <!-- <tfoot id="last-seven-days-total" class="an-employee-report">
       <% employeeLastSevendaysReportTotal.map(el => {%> 
      
 
@@ -412,10 +447,11 @@ input[type="date"]:valid::before {
         <td class="p-3"><%= el.totalLessORExtra === 'NaN:NaN:NaN' ? '00' : el.totalLessORExtra %></td> 
       </tr>
     <% })  %> 
-    </tfoot>
+    </tfoot> -->
   </table>
 </div>
 
+ 
 </div>
 <div class="pagination" >
   <ul id="pagination">
@@ -426,7 +462,6 @@ input[type="date"]:valid::before {
 <script>
   const baseUrl = 'http://localhost:5000';
 
-  
 // get start date
 let startDate;
 
@@ -450,13 +485,22 @@ function getDateFormat(date) {
 
     return today;
   }
-
+  //console.log(getCurrentDate());
+// constructor function
+function ReportDetails(day, fixedTotalHour, workHour, avgWorkHour, avgStartTime, avgEndTime) {
+  this.day = day
+  this.fixedTotalHour = fixedTotalHour
+  this.workHour = workHour
+  this.avgWorkHour = avgWorkHour
+  this.avgStartTime = avgStartTime
+  this.avgEndTime = avgEndTime
+}
 
 const selectStartDate = async function (event) {
   const dateStart = document.querySelector("#dateStart")
   const dateEnd = document.querySelector("#dateEnd")
   const getDate = getDateFormat(event.target.value);
-  console.log(event.target.value)
+  //console.log(event.target.value)
 
   startDate = getDate;
 
@@ -466,7 +510,65 @@ const selectStartDate = async function (event) {
     `${baseUrl}/reports/between/two-date?startDate=${startDate}&endDate=${getCurrentDate()}`,
   );
   const getObjects = await data.json(); 
-  // let isZero;
+
+  //========== date range total  
+  console.log(getObjects.reportDateRangeTotal.betweenTowDateTotalToJson)
+  const [{day,weekTotal, fixed_total,
+  
+    avgWorkHour, avgStartTime, avgEndTime}] = getObjects.reportDateRangeTotal.betweenTowDateTotalToJson;
+  //console.log(present,weekTotal, fixed_total, avgStartTime, avgEndTime)
+  const dateRangeTotal = new ReportDetails(
+    day,
+    fixed_total,
+    weekTotal,
+    avgWorkHour,
+    avgStartTime,
+    avgEndTime,
+  );
+  console.log(dateRangeTotal !== null)
+  console.log(dateRangeTotal.avgEndTime)
+
+  const totalReport = document.getElementById("total-report");
+  const filteredReport = document.querySelector('.filtered-report');
+  const selectStartDate = document.querySelector('.select-start-date');
+  const selectEndDate = document.querySelector('.select-end-date');
+
+console.log("mmmmmmmm", dateRangeTotal === null);
+
+  console.log(filteredReport)
+   if(dateRangeTotal === null){
+        filteredReport.style.display = 'none !important';
+   }else{
+     filteredReport.style.display = 'block';
+     filteredReport.style.display = 'flex';
+     selectStartDate.textContent = getDate
+      selectEndDate.textContent = getCurrentDate()
+  totalReport.innerHTML = `
+
+      <tr>
+          <td>Workday:</td>
+          <td> ${dateRangeTotal.day }/6 day <span class="low">- 2</span></td>
+        </tr>
+        <tr>
+          <td>Work hour:</td>
+          <td>${dateRangeTotal.workHour }/${ dateRangeTotal.fixedTotalHour} hr</td>
+        </tr>
+        <tr>
+          <td>Avg Work:</td>
+          <td> ${ dateRangeTotal.avgWorkHour } hr</td>
+        </tr>
+        <tr>
+          <td>Avg Start:</td>
+          <td>${dateRangeTotal.avgStartTime } </td>
+        </tr>
+        <tr>
+          <td>Avg End:</td>
+          <td>${ dateRangeTotal.avgEndTime } </td>
+        </tr>
+  `
+      }
+  //
+
   const {dateRangeReport,pageNumber,pageLength,page,numberOfPage} = getObjects.reports
   console.log({pageNumber,page,pageLength,numberOfPage})
   console.log(dateRangeReport)
@@ -532,6 +634,83 @@ function pagination(pageNumber,numberOfPage,page){
  `
 
 }
+
+// when select end date 
+const selectEndDate = async (event) => {
+  const dateStart = document.querySelector("#dateStart")
+  const dateEnd = document.querySelector("#dateEnd")
+  const endDate = event.target.value;
+
+  console.log('end date', endDate);
+  const data = await fetch(
+    `${baseUrl}/reports/between/two-date?startDate=${startDate}&endDate=${endDate}`,);
+  const getObjects = await data.json();
+  console.log("xxxx",getObjects)
+   //========== date range total  
+   console.log(getObjects.reportDateRangeTotal.betweenTowDateTotalToJson)
+  const [{day,weekTotal, fixed_total,
+  
+    avgWorkHour, avgStartTime, avgEndTime}] = getObjects.reportDateRangeTotal.betweenTowDateTotalToJson;
+  //console.log(present,weekTotal, fixed_total, avgStartTime, avgEndTime)
+  const dateRangeTotal = new ReportDetails(
+    day,
+    fixed_total,
+    weekTotal,
+    avgWorkHour,
+    avgStartTime,
+    avgEndTime,
+  );
+ console.log({dateRangeTotal})
+  
+  const totalReport = document.getElementById("total-report");
+  const filteredReport = document.querySelector('.filtered-report');
+  const selectStartDate = document.querySelector('.select-start-date');
+  const selectEndDate = document.querySelector('.select-end-date');
+
+
+
+  console.log(filteredReport)
+   if(dateRangeTotal === null){
+        filteredReport.style.display = 'none !important';
+   }else{
+     filteredReport.style.display = 'block';
+     filteredReport.style.display = 'flex';
+      selectEndDate.textContent = endDate;
+  totalReport.innerHTML = `
+
+      <tr>
+          <td>Workday:</td>
+          <td> ${dateRangeTotal.day }/6 day <span class="low">- 2</span></td>
+        </tr>
+        <tr>
+          <td>Work hour:</td>
+          <td>${dateRangeTotal.workHour }/${ dateRangeTotal.fixedTotalHour} hr</td>
+        </tr>
+        <tr>
+          <td>Avg Work:</td>
+          <td> ${ dateRangeTotal.avgWorkHour } hr</td>
+        </tr>
+        <tr>
+          <td>Avg Start:</td>
+          <td>${dateRangeTotal.avgStartTime } </td>
+        </tr>
+        <tr>
+          <td>Avg End:</td>
+          <td>${ dateRangeTotal.avgEndTime } </td>
+        </tr>
+  `
+}
+
+//========== date range report data and pagination
+
+const {dateRangeReport,pageNumber,pageLength,page,numberOfPage} = getObjects.reports
+  console.log({pageNumber,page,pageLength,numberOfPage})
+  console.log(dateRangeReport)
+  const reportTableBody = document.querySelector('#an-user-report')
+  reportShow(reportTableBody,dateRangeReport)
+  pagination(pageNumber,numberOfPage,page)
+          
+  } 
 </script>
 
 <%- include("../partials/footer"); -%>
