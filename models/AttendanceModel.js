@@ -83,7 +83,7 @@ const AttendanceModel = {
   },
 
   /* ======= report for this month ======= */
-  monthDayAndWorkTime: async (userId) =>{
+  monthDayAndWorkTime: async (userId) => {
     const query = "SELECT COUNT(DISTINCT DATE(create_at)) AS monthDay, TIME_FORMAT( O.option_value, '%h') * COUNT(DISTINCT DATE(create_at)) AS monthFixedTotalHr, TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) as monthWorkTotalHr,  TIME_FORMAT(SEC_TO_TIME(TIMEDIFF(SUM(TIME_TO_SEC(end)), SUM(TIME_TO_SEC(start))) / COUNT(DISTINCT DATE(create_at))), '%h:%i') AS monthAvgTotalHr FROM attendance JOIN options AS O ON o.option_title = 'fixed time'  WHERE user_id = ? AND END IS NOT NULL AND Date(create_at) BETWEEN date( CURRENT_DATE - INTERVAL 30 day) and date(CURRENT_DATE)"
     const value = [userId]
     const [rows] = await dbConnect.promise().execute(query, value);
@@ -97,7 +97,7 @@ const AttendanceModel = {
     return rows;
   },
   /* ===== report for this year ===== */
-  yearDayAndWorkTime: async (userId) =>{
+  yearDayAndWorkTime: async (userId) => {
     const query = "SELECT COUNT(DISTINCT DATE(create_at)) AS yearDay, TIME_FORMAT( O.option_value, '%h') * COUNT(DISTINCT DATE(create_at)) AS yearFixedTotalHr, TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) as yearWorkTotalHr,  TIME_FORMAT(SEC_TO_TIME(TIMEDIFF(SUM(TIME_TO_SEC(end)), SUM(TIME_TO_SEC(start))) / COUNT(DISTINCT DATE(create_at))), '%h:%i') AS yearAvgTotalHr FROM attendance JOIN options AS O ON o.option_title = 'fixed time'  WHERE user_id = ? AND END IS NOT NULL AND Date(create_at) BETWEEN date( CURRENT_DATE - INTERVAL 365 day) and date(CURRENT_DATE)"
     const value = [userId]
     const [rows] = await dbConnect.promise().execute(query, value);
@@ -153,7 +153,7 @@ const AttendanceModel = {
   // an employee report between to date
   anEmployeeReportBetweenTwoDate: async (userId, startDate, endDate) => {
     try {
-      const betweenTowDateSql = "SELECT DAYNAME(create_at) AS day, DATE_FORMAT(create_at, '%Y-%m-%d') AS date_for_holiday, DATE_FORMAT(DATE(create_at),'%d %b %y') AS date, TIME_FORMAT(TIME(MIN(start)),'%h:%i %p') AS start, TIME_FORMAT(TIME(MAX(end)),'%h:%i %p') AS end, TIMEDIFF(MAX(end), MIN(start)) as working_time, SUBTIME(TIMEDIFF(MAX(end), MIN(start)), TIME(o.option_value)) AS time_count, o.option_value  AS fixed_time, 'regular' AS type FROM attendance JOIN options AS o  WHERE o.option_title = 'fixed time' AND user_id = ? AND  DATE(create_at) BETWEEN ? AND ? GROUP BY DATE(create_at)";
+      const betweenTowDateSql = "SELECT DAYNAME(create_at) AS day, DATE_FORMAT(create_at, '%Y-%m-%d') AS date_for_holiday, DATE_FORMAT(DATE(create_at),'%d %b %y') AS date, TIME_FORMAT(TIME(MIN(start)),'%h:%i %p') AS start, TIME_FORMAT(TIME(MAX(end)),'%h:%i %p') AS end, TIMEDIFF(MAX(end), MIN(start)) as working_time, SUBTIME(TIMEDIFF(MAX(end), MIN(start)), TIME(o.option_value)) AS time_count,  TIME_FORMAT(o.option_value, '%h')  AS fixed_time, 'regular' AS type FROM attendance JOIN options AS o  WHERE o.option_title = 'fixed time' AND user_id = ? AND  DATE(create_at) BETWEEN ? AND ? GROUP BY DATE(create_at)";
 
       const values = [userId, startDate, endDate];
       const [rows] = await dbConnect.promise().execute(betweenTowDateSql, values);
@@ -239,7 +239,7 @@ const AttendanceModel = {
 
   // admin see employee reports
   getEmployeeInfo: async (id) => {
-    const getInfo = 'SELECT id,user_name, avatar FROM `users` WHERE id = ?'
+    const getInfo = 'SELECT id,user_name,user_role,user_phone,user_mail, avatar FROM `users` WHERE id = ?'
     const value = [id]
     const [row] = await dbConnect.promise().execute(getInfo, value)
     return row[0]

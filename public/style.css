@@ -399,7 +399,7 @@ main::-webkit-scrollbar-thumb {
   list-style: none;
   line-height: 20px;
 }
-.more-option .more-icon svg{
+.more-option .more-icon svg {
   width: 22px;
   height: 22px;
   margin: 0 20px;
@@ -684,7 +684,7 @@ main {
 /* User start */
 #users {
   width: 100%;
-  min-height: 70Vh;
+  min-height: 70vh;
   margin: auto;
 }
 .text-head {
@@ -782,10 +782,10 @@ main {
 }
 
 /* Reports page start */
-#reports{
+.reports-container {
   margin: 10px 20px;
 }
-#reports .profile {
+.reports-container .profile {
   display: flex;
   margin: 10px 0px;
 }
@@ -909,6 +909,7 @@ main {
 }
 #profile {
   width: 100%;
+  position: relative;
 }
 #profile .container {
 }
@@ -1057,9 +1058,9 @@ main {
   padding: 20px 0px;
   border-bottom: 1px solid #b9b9b9;
 }
- /* Pagination  */
+/* Pagination  */
 
- .pagination ul{
+.pagination ul {
   width: 100%;
   display: flex;
   text-align: center;
@@ -1068,8 +1069,8 @@ main {
   flex-wrap: wrap;
   padding: 8px;
 }
-.pagination ul li{
-  color:#837575;
+.pagination ul li {
+  color: #837575;
   list-style: none;
   height: 40px;
   width: 40px;
@@ -1077,32 +1078,32 @@ main {
   font-size: 12px;
   padding: 10px;
   font-weight: 500;
-  border: 1px solid #D8D8D8;
+  border: 1px solid #d8d8d8;
   box-sizing: border-box;
   border-radius: 15px;
   cursor: pointer;
   user-select: none;
   transition: all 0.3s ease;
 }
-.pagination a{
+.pagination a {
   text-decoration: none;
   color: #837575;
 }
-.pagination .page-active li{
-  border: 1px solid  var(--primary);
+.pagination .page-active li {
+  border: 1px solid var(--primary);
   background-color: #0095ff0e;
-  color:  var(--primary);
+  color: var(--primary);
 }
-.next::before{
+.next::before {
   content: url("/icons/next.svg");
 }
-.last::before{
+.last::before {
   content: url("/icons/last.svg");
 }
-.first::before{
+.first::before {
   content: url("/icons/first.svg");
 }
-.prev::before{
+.prev::before {
   content: url("/icons/prev.svg");
 }
 
@@ -1134,7 +1135,7 @@ main {
   .sidebar {
     display: none;
   }
-  .nav-link svg{
+  .nav-link svg {
     width: 50px;
     height: 50px;
   }
@@ -1295,7 +1296,7 @@ main {
     width: 280px;
     margin: 8px;
   }
-  .pagination ul li{
+  .pagination ul li {
     height: 36px;
     width: 36px;
     margin: 3px;

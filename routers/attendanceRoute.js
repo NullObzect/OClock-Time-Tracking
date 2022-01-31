@@ -12,9 +12,11 @@ router.post('/attendance-end', AttendanceController.attendanceEnd)
 // reports router
 // gr
 router.get('/reports', decorateHtmlResponse('Report'), checkLogin, ReportController.userReport)
+router.get('/reports/:id', decorateHtmlResponse('Report'), checkLogin, ReportController.userReport)
+//
 router.get('/reports/between/two-date', ReportController.reportBetweenTwoDate)
 //
-router.get('/reports/employee/:id', decorateHtmlResponse('Employee Report'), ReportController.reportEmployees)
+// router.get('/reports/employee/:id', decorateHtmlResponse('Employee Report'), ReportController.reportEmployees)
 router.get('/reports/between/two-date/:id', ReportController.reportBetweenTwoDateForAdmin)
 
 module.exports = router;

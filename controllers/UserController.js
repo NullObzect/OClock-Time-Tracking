@@ -442,8 +442,8 @@ const UserController = {
     const uId = req.user.id;
     const id = uId
     console.log('user name', req.body);
-    const { name, number } = req.body;
-    const isEdit = await UserModel.getUserEditInfo(uId, name, number, id);
+    const { name, number, email } = req.body;
+    const isEdit = await UserModel.getUserEditInfo(uId, name, number, email, id);
     if (isEdit.errno) {
       res.send('Error')
     } else {

@@ -20,8 +20,10 @@ const ProfileController = {
       const { userMailFormDB } = cookieVerifier(token)
       // console.log({ userMailFormDB });
       const [findIdFormUser] = await UserModel.findUserByEmail(userMailFormDB)
+      console.log({ findIdFormUser });
+      
       const {
-        id, user_name, user_phone, status, avatar,
+        id, user_name, user_phone, user_mail, status, avatar,
       } = findIdFormUser
       // console.log({ status, avatar })
 
@@ -29,7 +31,7 @@ const ProfileController = {
       // console.log({ platformUser });
       console.log('req flash', req.flash('fail'))
       res.render('pages/profile', {
-        platformUser, user_name, user_phone, status, avatar,
+        platformUser, user_name, user_phone, user_mail, status, avatar,
       })
     } catch (err) {
       console.log('====>Error form userProfile Controller', err);

@@ -11,14 +11,14 @@
         <span class="link-name"> Dashboard </span>
       </a>
     </li>
-    <%if(loggedInUser.userRole==='admin'){ %> 
-      <li>
-        <a href="/users">
-          <%- include("./icons/users-svg.ejs"); -%>
-          <span class="link-name"> Users </span>
-        </a>
-      </li>
-      <% } %> 
+    <%if(loggedInUser.userRole==='admin'){ %>
+    <li>
+      <a href="/users">
+        <%- include("./icons/users-svg.ejs"); -%>
+        <span class="link-name"> Users </span>
+      </a>
+    </li>
+    <% } %>
     <li>
       <a href="/reports">
         <%- include("./icons/reports-svg.ejs"); -%>
@@ -42,7 +42,7 @@
       %>"
       alt=""
     />
-    <div class="username"><%= loggedInUser.userName %> </div>
+    <div class="username"><%= loggedInUser.userName %></div>
     <div id="more-btn" class="more">
       <svg
         width="13"

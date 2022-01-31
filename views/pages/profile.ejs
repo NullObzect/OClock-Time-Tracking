@@ -1,48 +1,244 @@
 <%- include("../partials/header"); -%>
 
+<style>
+  /* .profile-avatar {
+    position: relative;
+  } */
+  .update-img-btn-gp {
+    position: absolute;
+    margin-left: 52%;
+    margin-top: -6%;
+    cursor: pointer;
+    background: #2e2e2e;
+    border: solid 1px #2e2e2e;
+    max-width: 35px;
+    height: 35px;
+    border-radius: 20px;
+    overflow: hidden;
+    gap: 10px;
+    padding: 5px 12px 8px 12px;
+    opacity: 0.9;
+  }
+  .update-img-btn-gp a:nth-child(1) {
+    content: " ";
+    margin-left: -5px;
+  }
+  .update-img-btn-gp a:nth-child(2),
+  a:nth-child(3) {
+    content: " ";
+    margin-left: 10px;
+  }
+  .update-img-btn-gp svg {
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+  }
+  .update-img-btn-gp:hover {
+    max-width: 180px;
+    opacity: 1;
+
+    transition: all 1s;
+  }
+  .update-icon {
+    display: inline-block;
+  }
+  #profile .social-icon {
+    margin-bottom: 10px;
+  }
+</style>
 <div id="profile">
   <div class="container">
-    <form action="">
+    <form action="/user/edit/info" method="post" id="edit-form">
       <div class="profile-avatar">
+        <% let url = avatar %> <% if(url.search('https://') === -1){ %>
         <img
-          src="https://gravatar.com/avatar/b8e1fd79796a3a262ad0bb94517658d9?s=200&d=robohash&r=x"
-          alt=""
+          class="rounded-full h-20 w-20 object-cover"
+          src="/uploads/avatars/<%= avatar %>"
         />
+        <% } else {%>
+        <img class="rounded-full h-20 w-20 object-cover" src="<%= avatar %>" />
+        <% } %>
+
+        <!-- Markup for update img -->
+        <div class="update-img-btn-gp">
+          <a href="">
+            <div class="update-icon">
+              <label title="upload under 1MB file" for="edit">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="32"
+                  height="32"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
+                  <path
+                    d="m13.26 3.6-8.21 8.69c-.31.33-.61.98-.67 1.43l-.37 3.24c-.13 1.17.71 1.97 1.87 1.77l3.22-.55c.45-.08 1.08-.41 1.39-.75l8.21-8.69c1.42-1.5 2.06-3.21-.15-5.3-2.2-2.07-3.87-1.34-5.29.16Z"
+                    stroke="#ffffff"
+                    stroke-width="1.5"
+                    stroke-miterlimit="10"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></path>
+                  <path
+                    d="M11.89 5.05a6.126 6.126 0 0 0 5.45 5.15M3 22h18"
+                    stroke="#ffffff"
+                    stroke-width="1.5"
+                    stroke-miterlimit="10"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></path>
+                </svg>
+              </label>
+              <input
+                onchange="readURL(this)"
+                name="avatar"
+                hidden
+                id="edit"
+                type="file"
+                :accept="accept"
+              />
+            </div>
+          </a>
+
+          <a href="">
+            <div class="update-icon">
+              <%- include("../partials/icons/google-svg.ejs"); -%>
+            </div>
+          </a>
+          <a>
+            <div class="update-icon">
+              <%- include("../partials/icons/facebook-svg.ejs"); -%>
+            </div>
+          </a>
+        </div>
       </div>
+
+      <!-- Markup for icon -->
+
+      <div class="social-icon">
+        <span
+          ><a href=""
+            ><svg
+              width="30"
+              height="30"
+              viewBox="0 0 30 30"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M17.6667 11.4V15.2667H21.1333C21.4 15.2667 21.5333 15.5333 21.5333 15.8L21 18.3333C21 18.4667 20.7333 18.6 20.6 18.6H17.6667V28.3333H13.6667V18.7333H11.4C11.1333 18.7333 11 18.6 11 18.3333V15.8C11 15.5333 11.1333 15.4 11.4 15.4H13.6667V11C13.6667 8.73333 15.4 7 17.6667 7H21.2667C21.5333 7 21.6667 7.13333 21.6667 7.4V10.6C21.6667 10.8667 21.5333 11 21.2667 11H18.0667C17.8 11 17.6667 11.1333 17.6667 11.4V11.4Z"
+                stroke="#7B81A2"
+                stroke-width="2"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+              />
+              <path
+                d="M18.9998 28.3334H10.9998C4.33317 28.3334 1.6665 25.6667 1.6665 19.0001V11.0001C1.6665 4.33341 4.33317 1.66675 10.9998 1.66675H18.9998C25.6665 1.66675 28.3332 4.33341 28.3332 11.0001V19.0001C28.3332 25.6667 25.6665 28.3334 18.9998 28.3334Z"
+                stroke="#7B81A2"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </a>
+        </span>
+        <span
+          ><a href=""
+            ><svg
+              width="30"
+              height="30"
+              viewBox="0 0 30 30"
+              fill="black"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M27.7998 12.6001H15.2664V17.5334H22.5998C22.4664 18.7334 21.6664 20.6001 19.9331 21.8001C18.8664 22.6001 17.2664 23.1334 15.2664 23.1334C11.7998 23.1334 8.73311 20.8667 7.66644 17.5334C7.39977 16.7334 7.26644 15.8001 7.26644 14.8667C7.26644 13.9334 7.39977 13.0001 7.66644 12.2001C7.79977 11.9334 7.79977 11.6667 7.93311 11.5334C9.13311 8.73341 11.9331 6.73342 15.2664 6.73342C17.7998 6.73342 19.3998 7.80008 20.4664 8.73342L24.1998 5.00008C21.9331 3.00008 18.8664 1.66675 15.2664 1.66675C10.0664 1.66675 5.53311 4.60008 3.39977 9.00008C2.46644 10.8667 1.93311 12.8667 1.93311 15.0001C1.93311 17.1334 2.46644 19.1334 3.39977 21.0001C5.53311 25.4001 10.0664 28.3334 15.2664 28.3334C18.8664 28.3334 21.9331 27.1334 24.0664 25.1334C26.5998 22.8667 28.0664 19.4001 28.0664 15.2667C28.0664 14.2001 27.9331 13.4001 27.7998 12.6001V12.6001Z"
+                stroke="#7B81A2"
+                stroke-width="2"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </a>
+        </span>
+        <span
+          ><a href=""
+            ><svg
+              width="32"
+              height="27"
+              viewBox="0 0 32 27"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M30.6668 1.99998C29.39 2.90062 27.9763 3.58946 26.4802 4.03998C25.6771 3.11666 24.6099 2.46224 23.4229 2.16521C22.2358 1.86819 20.9862 1.94291 19.8429 2.37925C18.6997 2.81559 17.7181 3.59252 17.0308 4.60494C16.3435 5.61736 15.9838 6.81643 16.0002 8.03998V9.37331C13.657 9.43407 11.3352 8.9144 9.24151 7.86057C7.14782 6.80675 5.34725 5.25149 4.00016 3.33331C4.00016 3.33331 -1.33317 15.3333 10.6668 20.6666C7.92087 22.5306 4.64971 23.4652 1.3335 23.3333C13.3335 30 28.0002 23.3333 28.0002 7.99998C27.9989 7.62858 27.9632 7.25811 27.8935 6.89331C29.2543 5.5513 30.2146 3.85693 30.6668 1.99998V1.99998Z"
+                stroke="#7B81A2"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </a>
+        </span>
+      </div>
+
       <label for="name"
         >Name
         <div class="">
-          <input value="Khoaiz" id="name" name="name" type="text" />
+          <input value="<%= user_name %>" id="name" name="name" type="text" />
         </div>
       </label>
       <label for="email">
         Email
         <div class="">
-          <input type="email" name="email" id="email" />
+          <input
+            type="email"
+            name="email"
+            id="email"
+            value="<%= user_mail %>"
+          />
         </div>
       </label>
       <label for="phone">
         Phone
         <div class="">
-          <input type="number" name="phone" id="phone" />
+          <input type="tel" value="<%= user_phone %>" name="phone" id="phone" />
         </div>
       </label>
+
+      <label for="newPassword">
+        Old Password
+        <div class="">
+          <input type="password" name="new-password" id="newPassword" />
+        </div>
+      </label>
+
       <label for="oldPassword">
         New Password
         <div class="">
           <input type="password" name="old-password" id="oldPassword" />
         </div>
       </label>
-      <label for="newPassword">
-        Password
-        <div class="">
-          <input type="password" name="new-password" id="newPassword" />
-        </div>
-      </label>
       <div class="">
-        <button class="submit-btn" type="submit">Save</button>
+        <button id="user-save-btn" class="submit-btn" type="submit">
+          Save
+        </button>
       </div>
     </form>
   </div>
 </div>
+<script>
+  const name = document.getElementById("name");
+  console.log(name.value);
+  const editFrom = document.querySelector("#edit-form");
+  const userSaveBtn = document.getElementById("user-save-btn");
+
+  userSaveBtn.disabled = true;
+  console.log({ editFrom, userSaveBtn });
+  editFrom.addEventListener("keyup", () => {
+    userSaveBtn.disabled = true ? (userSaveBtn.disabled = false) : "";
+    userSaveBtn.style.background = "green";
+  });
+</script>
 <%- include("../partials/footer"); -%>
