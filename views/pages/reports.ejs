@@ -127,19 +127,15 @@ input[type="date"]:valid::before {
 <div class="profile">
 
   <div class="avatar">
-<% let profileUrl = userInfo.avatar %>
-<% if(profileUrl.search('https://') === -1) {%>
-  <img
-   
-    src="/uploads/avatars/<%= userInfo.avatar%>"
-  />
 
-  <% } else{ %>
-  <img
-    
-    src="<%= userInfo.avatar%>"
-  />
-  <% } %>
+    <% if(userInfo.avatar.match(/([\w+]+\:\/\/)?([\w\d-]+\.)*[\w-]+[\.\:]\w+([\/\?\=\&\#\.]?[\w-]+)*\/?/gm)){ %>
+        <img
+        src="<%= userInfo.avatar%>"
+        />
+    <%} else{%>
+      <img
+      src="/uploads/avatars/<%userInfo.avatar===null ? 'demo-avatar.png' : userInfo.avatar %> "
+      <% } %> 
  
   </div>
   <div class="profile-info">
@@ -303,11 +299,44 @@ input[type="date"]:valid::before {
     <h4>Reports</h4>
     <p>Last seven days.</p>
   </div>
-  <div class="date-range-input-container">
-    <input class="date-input" type="date" id="dateStart" placeholder=" -- / -- / ---- " onchange="selectStartDate(event)" />
-    <small class="date-to" >To</small>
-    <input class="date-input" type="date" id="dateEnd" placeholder=" -- / -- / ---- " onchange="selectEndDate(event)" />
-  </div>
+  <div class="date-picker">
+      <div class="start-date">
+        <input
+          id="startPicker"
+          type="text"
+          placeholder="-- / -- / ----"
+        />
+      </div>
+      <div class="to">to</div>
+      <div class="end-date">
+        <input id="endPicker" placeholder="-- / -- / ----" />
+      </div>
+      <div id="date-icon" onclick="dateRange()" class="date-icon">
+        <svg
+          width="26"
+          height="30"
+          viewBox="0 0 26 30"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M7.66667 1.66675V5.66675V1.66675ZM18.3333 1.66675V5.66675V1.66675ZM1.66667 11.1201H24.3333H1.66667ZM25 10.3334V21.6667C25 25.6667 23 28.3334 18.3333 28.3334H7.66667C3 28.3334 1 25.6667 1 21.6667V10.3334C1 6.33341 3 3.66675 7.66667 3.66675H18.3333C23 3.66675 25 6.33341 25 10.3334Z"
+            stroke="#848484"
+            stroke-width="2"
+            stroke-miterlimit="10"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M8.05859 21.2666H8.07193M17.9266 17.2666H17.9386H17.9266ZM17.9266 21.2666H17.9386H17.9266ZM12.9933 17.2666H13.0066H12.9933ZM12.9933 21.2666H13.0066H12.9933ZM8.05859 17.2666H8.07193H8.05859Z"
+            stroke="#848484"
+            stroke-width="2.66667"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+    </div>
 </div>
 
 <!-- Markup for report table  -->
@@ -394,9 +423,15 @@ input[type="date"]:valid::before {
 <script>
   const baseUrl = 'http://localhost:5000';
 
-  
-// get start date
-let startDate;
+  const startDatePicker = MCDatepicker.create({
+        el: "#startPicker",
+        dateFormat: "DD-MM-YYYY",
+      });
+  const endDatePicker = MCDatepicker.create({
+        el: "#endPicker",
+        dateFormat: "DD-MM-YYYY",
+      });
+;
 
 // getDate format
 function getDateFormat(date) {
@@ -420,18 +455,19 @@ function getDateFormat(date) {
   }
 
 
-const selectStartDate = async function (event) {
-  const dateStart = document.querySelector("#dateStart")
-  const dateEnd = document.querySelector("#dateEnd")
-  const getDate = getDateFormat(event.target.value);
-  console.log(event.target.value)
+const dateRange = async function (event) {
+  const dateStart = document.querySelector("#startPicker")
+  const dateEnd = document.querySelector("#endPicker")
+  const startDate = getDateFormat (startDatePicker.getFullDate())
+  const endDate = getDateFormat (endDatePicker.getFullDate() || getCurrentDate())
 
-  startDate = getDate;
+  dateStart.dataset.date = startDate
+  dateEnd.dataset.date = endDate
+console.log(startDate)
+console.log(endDate)
 
-   dateStart.dataset.date = event.target.value;
-   dateEnd.dataset.date = getCurrentDate();
   const data = await fetch(
-    `${baseUrl}/reports/between/two-date?startDate=${startDate}&endDate=${getCurrentDate()}`,
+    `${baseUrl}/reports/between/two-date?startDate=${startDate}&endDate=${endDate}`,
   );
   const getObjects = await data.json(); 
   // let isZero;
@@ -446,10 +482,10 @@ const selectStartDate = async function (event) {
 }
 
 async function page(pageNo){
-  const dateStart = document.querySelector("#dateStart").dataset.date
-  const dateEnd = document.querySelector("#dateEnd").dataset.date
+  const startDate = document.querySelector("#startPicker").dataset.date
+  const endDate = document.querySelector("#endPicker").dataset.date
   const data = await fetch(
-    `${baseUrl}/reports/between/two-date?startDate=${startDate}&endDate=${getCurrentDate()}&page=${pageNo}`,
+    `${baseUrl}/reports/between/two-date?startDate=${startDate}&endDate=${endDate}&page=${pageNo}`,
   );
   const getObjects = await data.json(); 
   // let isZero;
