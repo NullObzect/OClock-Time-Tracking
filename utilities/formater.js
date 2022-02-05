@@ -58,20 +58,6 @@ const Formater = {
     const withOutZeroResult = result.replace(mintIsZeor, ' ')
     return (mintIsZeor === ':00') ? withOutZeroResult : result;
   },
-
-  timeToHourWithoutMint: (time) => {
-    if (time == null) {
-      return '0'
-    }
-    const s = time.split(':')
-    const hour = `${s[0]}`
-    const isZero = hour[0]
-    const result = `${isZero === '0' ? hour.replace(isZero, ' ') : hour}`
-
-    return result
-  },
-
-
 }
 
 module.exports = Formater

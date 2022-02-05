@@ -4,9 +4,9 @@
   .hidden-menu {
     max-height: 0;
     overflow: hidden;
-    -webkit-transition: max-height 0.4s;
-    -moz-transition: max-height 0.4s;
-    transition: max-height 0.4s;
+    -webkit-transition: max-height 0.2s;
+    -moz-transition: max-height 0.2s;
+    transition: max-height 0.2s;
     position: relative;
   }
 
@@ -24,12 +24,22 @@
     z-index: 99;
     margin-left: -70px;
 
-    box-shadow: 0px 0px 35px rgba(0, 0, 0, 0.13),
+    box-shadow: 0px 23px 27px rgba(0, 0, 0, 0.13),
       0px 6.96494px 6.11893px rgba(0, 0, 0, 0.0847066),
       0px 2.51788px 1.42419px rgba(0, 0, 0, 0.065),
       0px 0.750053px 0.0354451px rgba(0, 0, 0, 0.0452935);
   }
-
+  .hidden-menu-show:after {
+    content: " ";
+    position: absolute;
+    z-index: 100;
+    right: 0;
+    top: 0;
+    border-bottom: 15px solid #ddd;
+    border-right: 15px solid transparent;
+    border-left: 15px solid transparent;
+    border-top: none;
+  }
   /* content: " ";
     position: absolute;
     right: 20px;
@@ -138,7 +148,7 @@
               <li>
                 <a href="/profile">
                   <%# include("./icons/profile-svg.ejs"); -%>
-                  <span>Profile</span>
+                  <span>View</span>
                 </a>
               </li>
               <li>

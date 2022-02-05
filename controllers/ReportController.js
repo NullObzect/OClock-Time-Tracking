@@ -4,33 +4,21 @@ const UserModel = require('../models/UserModel')
 const ProfileModel = require('../models/ProfileModel')
 const { pageNumbers } = require('../utilities/pagination')
 const {
-  timeToHour, calculateTime, dateFormate, timeFormateForReport, workHourFormateForReport, timeToHourWithoutMint,
+  timeToHour, calculateTime, dateFormate, timeFormateForReport, workHourFormateForReport,
 } = require('../utilities/formater');
-//
-
 // grobal variable  multiple date
 const holidaysArray = [];
 const leaveDaysArray = [];
 global.holidayAndLeavedaysDateRange = []
 
 // constructor function
-function ReportDetails(day, fixedTotalHour, workHour, avgWorkHour, avgStartTime, avgEndTime, totalExtra, totalLess) {
-  this.day = day || null
-  this.fixedTotalHour = fixedTotalHour || null
+function ReportDetails(day, fixedTotalHour, workHour, avgWorkHour, avgStartTime, avgEndTime) {
+  this.day = day
+  this.fixedTotalHour = fixedTotalHour
   this.workHour = workHourFormateForReport(workHour)
   this.avgWorkHour = workHourFormateForReport(avgWorkHour)
   this.avgStartTime = timeFormateForReport(avgStartTime)
   this.avgEndTime = timeFormateForReport(avgEndTime)
-  this.totalExtra = timeToHourWithoutMint(totalExtra)
-  this.totalLess = timeToHourWithoutMint(totalLess)
-}
-function TodayReportDetails(todayTotal, start, end, breakTime, totalExtra, totalLess) {
-  this.todayTotal = timeFormateForReport(todayTotal)
-  this.start = start
-  this.end = end
-  this.breakTime = breakTime
-  this.totalExtra = timeToHourWithoutMint(totalExtra)
-  this.totalLess = timeToHourWithoutMint(totalLess)
 }
 
 // sum fixedTime
@@ -89,46 +77,25 @@ const ReportController = {
       const [{ start }] = await AttendanceModel.todayStartTime(userId)
       const [{ end }] = await AttendanceModel.todayEndTime(userId)
       const [tTotal] = await AttendanceModel.todayTotal(userId)
-      const [{ totalExtrOrLess }] = await AttendanceModel.todayTotal(userId)
-      let extraWorkHour; let lessWorkHour;
-      if (totalExtrOrLess === null) {
-        extraWorkHour = '00:00';
-        lessWorkHour = '00:00';
-      } else if (totalExtrOrLess[0] === '-') {
-        lessWorkHour = totalExtrOrLess;
-      } else {
-        extraWorkHour = totalExtrOrLess;
-      }
       const platformUser = await ProfileModel.userConnectionDetailsUniqueInfo(userId)
       const today = await AttendanceModel.getToday(userId)
       const { todayTotal } = tTotal
 
       const breakTime = today.length
-      console.log({ totalExtrOrLess })
 
-      const todayReportDetails = new TodayReportDetails(
+      const todayReportDetails = {
         todayTotal,
         start,
         end,
         breakTime,
-        extraWorkHour,
-        lessWorkHour,
-      )
+      }
       // report for this week
       const [{
-        weekDay, weekFixedTotal, weekTotalHr, weekAvgTotal, weekTotalExtrOrLess,
+        weekDay, weekFixedTotal, weekTotalHr, weekAvgTotal,
       }] = await AttendanceModel.weekDayAndWorkTime(userId)
 
       const [{ weekAvgStartTime, weekAvgEndTime }] = await AttendanceModel.weekAvgStartEnd(userId)
-      let weekExtraWorkHour; let weekLessWorkHour;
-      if (weekTotalExtrOrLess === null) {
-        weekExtraWorkHour = '00:00';
-        weekLessWorkHour = '00:00';
-      } else if (weekTotalExtrOrLess[0] === '-') {
-        weekLessWorkHour = weekTotalExtrOrLess;
-      } else {
-        weekExtraWorkHour = weekTotalExtrOrLess;
-      }
+
       const weekReportDetails = new ReportDetails(
         weekDay,
         weekFixedTotal,
@@ -136,26 +103,16 @@ const ReportController = {
         weekAvgTotal,
         weekAvgStartTime,
         weekAvgEndTime,
-        weekExtraWorkHour,
-        weekLessWorkHour,
       )
       console.log({ weekReportDetails })
       // report for this month
       const [{
-        monthDay, monthFixedTotalHr, monthWorkTotalHr, monthAvgTotalHr, monthTotalExtrOrLess,
+        monthDay, monthFixedTotalHr, monthWorkTotalHr, monthAvgTotalHr,
       }] = await AttendanceModel.monthDayAndWorkTime(userId)
 
       const [{ monthAvgStartTime, monthAvgEndTime }] = await
       AttendanceModel.monthAvgStartEnd(userId)
-      let monthExtraWorkHour; let monthLessWorkHour;
-      if (monthTotalExtrOrLess === null) {
-        monthExtraWorkHour = '00:00';
-        monthLessWorkHour = '00:00';
-      } else if (monthTotalExtrOrLess[0] === '-') {
-        monthLessWorkHour = monthTotalExtrOrLess;
-      } else {
-        monthExtraWorkHour = monthTotalExtrOrLess;
-      }
+
       const monthReportDetails = new ReportDetails(
         monthDay,
         monthFixedTotalHr,
@@ -163,26 +120,16 @@ const ReportController = {
         monthAvgTotalHr,
         monthAvgStartTime,
         monthAvgEndTime,
-        monthExtraWorkHour,
-        monthLessWorkHour,
       )
       console.log({ monthReportDetails })
       // report for this year
       const [{
-        yearDay, yearFixedTotalHr, yearWorkTotalHr, yearAvgTotalHr, yearTotalExtrOrLess,
+        yearDay, yearFixedTotalHr, yearWorkTotalHr, yearAvgTotalHr,
       }] = await AttendanceModel.yearDayAndWorkTime(userId)
 
       const [{ yearAvgStartTime, yearAvgEndTime }] = await
       AttendanceModel.yearAvgStartEnd(userId)
-      let yearExtraWorkHour; let yearLessWorkHour;
-      if (yearTotalExtrOrLess === null) {
-        yearExtraWorkHour = '00:00';
-        yearLessWorkHour = '00:00';
-      } else if (yearTotalExtrOrLess[0] === '-') {
-        yearLessWorkHour = yearTotalExtrOrLess;
-      } else {
-        yearExtraWorkHour = yearTotalExtrOrLess;
-      }
+
       const yearReportDetails = new ReportDetails(
         yearDay,
         yearFixedTotalHr,
@@ -190,8 +137,6 @@ const ReportController = {
         yearAvgTotalHr,
         yearAvgStartTime,
         yearAvgEndTime,
-        yearExtraWorkHour,
-        yearLessWorkHour,
       )
       // console.log({ yearReportDetails })
       // for holidays
@@ -313,6 +258,7 @@ const ReportController = {
       );
       const getBetweenTowDateTotal = await AttendanceModel.reportBetweenTwoDateTotal(userId, startDate, endDate)
       const betweenTowDateTotalToJson = JSON.parse(JSON.stringify(getBetweenTowDateTotal))
+      console.log({ betweenTowDateTotalToJson });
 
       const dataToJson = JSON.parse(JSON.stringify(getData))
       // console.log({ dataToJson });
@@ -338,13 +284,14 @@ const ReportController = {
 
       //  store fixed time with date range
 
+      dataToJson.forEach((el) => {
+        dateRangeFixedTime = totalFixedTime(el.day, el.fixed_time, el.type)
+      })
       betweenTowDateTotalToJson.forEach((el) => {
-        el.fixed_total = el.day * el.fixedTime;
+        el.fixed_total = dateRangeFixedTime
         el.totalLessORExtra = calculateTime(el.fixed_total, el.total_seconds)
       })
-
-      console.log('yyy', { dataToJson });
-      console.log('xxxx', { betweenTowDateTotalToJson });
+      console.log({ dateRangeFixedTime });
 
       // count time total extar or less
       // return res.json(dataToJson)
@@ -403,17 +350,27 @@ const ReportController = {
       }
 
       // console.log({dataToJson, betweenTowDateTotalToJson});
+      let dateRangeFixedTime = 0;
+
+      // console.log({dataToJson});
+
+      dataToJson.forEach((el) => {
+        dateRangeFixedTime = totalFixedTime(el.day, el.fixed_time, el.type)
+      })
 
       betweenTowDateTotalToJson.forEach((el) => {
-        el.fixed_total = el.day * el.fixedTime;
+        el.fixed_total = dateRangeFixedTime
         el.totalLessORExtra = calculateTime(el.fixed_total, el.total_seconds)
       })
+
+      console.log({ dateRangeFixedTime });
 
       // return res.json(dataToJson)
       res.json({
         reports: { dataToJson },
         reportDateRangeTotal: { betweenTowDateTotalToJson },
       })
+      dateRangeFixedTime = 0;
     } catch (err) {
       console.log('====>Error form ReportController/reportEmployees', err);
       return err;
