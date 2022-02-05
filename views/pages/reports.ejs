@@ -205,7 +205,8 @@ input[type="date"]:valid::before {
         <table class="work">
           <tr>
             <td>Work:</td>
-            <td><%= todayReportDetails.todayTotal || "00:00" %> hr <span class="high">+ 15</span></td>
+            <td><%= todayReportDetails.todayTotal || "00:00" %> hr <span 
+              class="<%= todayReportDetails.totalLess ? 'low' : 'high' %>"><%=   todayReportDetails.totalLess ?  todayReportDetails.totalLess    : '+' + todayReportDetails.totalExtra %> hr</span></td>
           </tr>
           <tr>
             <td>Time:</td>
@@ -227,11 +228,14 @@ input[type="date"]:valid::before {
         <table>
           <tr>
             <td>Workday:</td>
-            <td><%= weekReportDetails.day %>/6 day <span class="low">- 2</span></td>
+          
+
+            <td><%= weekReportDetails.day %>/6 day <span class="<%= Number(6) >  Number(weekReportDetails.day)   ? 'low'  :   Number(6 == weekReportDetails.day) ?  '' : 'high' %>">
+            <%= Number(6) >  Number(weekReportDetails.day)   ? '-' + Number( 6 - weekReportDetails.day)  :   Number(6 == weekReportDetails.day) ?  '' :    '+' + Number(weekReportDetails.day - 6) %></span></td>
           </tr>
           <tr>
             <td>Work hour:</td>
-            <td><%= weekReportDetails.workHour%>/<%= weekReportDetails.fixedTotalHour   %> hr</td>
+            <td><%= weekReportDetails.workHour%>/<%= weekReportDetails.fixedTotalHour   %> hr<span class="<%= weekReportDetails.totalLess ? 'low' : 'high' %>"><%= weekReportDetails.totalLess ?  weekReportDetails.totalLess  : '+' + weekReportDetails.totalExtra %> hr</span></td>
           </tr>
           <tr>
             <td>Avg Work:</td>
@@ -254,11 +258,15 @@ input[type="date"]:valid::before {
         <table>
           <tr>
             <td>Workday:</td>
-            <td> <%=monthReportDetails.day %>/6 day</td>
+            <td> <%=monthReportDetails.day %>/26 day <span class="<%= Number(26) >  Number(monthReportDetails.day)   ? 'low'  :   Number(26 == monthReportDetails.day) ?  '' : 'high' %>">
+            <%= Number(26) >  Number(monthReportDetails.day)   ? '-' + Number( 26 - monthReportDetails.day)  :   Number(26 == monthReportDetails.day) ?  '' :    '+' + Number(monthReportDetails.day - 26) %></span> </td>
           </tr>
           <tr>
             <td>Work hour:</td>
-            <td><%=monthReportDetails.workHour  + '/' + monthReportDetails.fixedTotalHour %> hr</td>
+            <td><%=monthReportDetails.workHour  + '/' + monthReportDetails.fixedTotalHour %><span class="<%= monthReportDetails.totalLess ? 'low' : 'high' %>"><%= monthReportDetails.totalLess ?  monthReportDetails.totalLess  : '+' + monthReportDetails.totalExtra %> hr</span></td>
+
+
+            
           </tr>
           <tr>
             <td>Avg Work:</td>
@@ -281,7 +289,7 @@ input[type="date"]:valid::before {
         <table>
           <tr>
             <td>Workday:</td>
-            <td><%= yearReportDetails.day %>/6 day</td>
+            <td><%= yearReportDetails.day %>/300 day <span class="<%= yearReportDetails.totalLess ? 'low' : 'high' %>"><%= yearReportDetails.totalLess ?  yearReportDetails.totalLess  : '+' + yearReportDetails.totalExtra %> hr</span></td>
           </tr>
           <tr>
             <td>Work hour:</td>
@@ -305,27 +313,6 @@ input[type="date"]:valid::before {
   </div>
 
 
- <!-- Markup for filtered  report   box -->
-
- <div class="filtered-report">
-
-    
-  <div class="week box">
-    <h2>Filtered by</h2>
-    <div class="details">
-      <table id="total-report">
-      
-      </table>
-    </div>
-
-  
-  </div>
-
-  <div class="filtered-date">
-    <p><span class="select-start-date">/01/2022</span> to  <span class="select-end-date">/01/2022</span> </p>
-  </div>
-  </div>
-
   
 <!-- Markup Date range for employee-->
 
@@ -340,6 +327,27 @@ input[type="date"]:valid::before {
     <input class="date-input" type="date" id="dateEnd" placeholder=" -- / -- / ---- " onchange="selectEndDate(event)" />
   </div>
 </div>
+
+<!-- Markup for filtered  report   box -->
+
+<div class="filtered-report">
+
+   
+ <div class="week box">
+   <h2>Filtered by</h2>
+   <div class="details">
+     <table id="total-report">
+     
+     </table>
+   </div>
+
+ 
+ </div>
+
+ <div class="filtered-date">
+   <p><span class="select-start-date">/01/2022</span> to  <span class="select-end-date">/01/2022</span> </p>
+ </div>
+ </div>
 
 <!-- Markup for report table  -->
 <div class="an-employee-report">
@@ -424,6 +432,19 @@ input[type="date"]:valid::before {
 </div>
 
 <script>
+  function workHourFormater(time) {
+  if (time == null) return '0'
+  const s = time.split(':')
+  const hour = `${s[0]}`
+  const isZero = hour[0]
+  const minutes = `${s[1]}`
+  const result = `${isZero === '0' ? hour.replace(isZero, ' ') : hour}:${minutes}`
+  const mintIsZeor = result.slice(2, 5)
+  const withOutZeroResult = result.replace(mintIsZeor, ' ')
+  return (mintIsZeor === ':00') ? withOutZeroResult : result;
+}
+
+
   const baseUrl = 'http://localhost:5000';
 
 // get start date

@@ -69,52 +69,51 @@ main::-webkit-scrollbar-thumb {
 }
 
 /* Login page */
-#login{
-
+#login {
 }
-.login-box{
+.login-box {
   position: absolute;
   width: 325px;
   height: 520px;
   margin: auto;
   inset: 0;
   text-align: center;
-  background: #FFFFFF;
+  background: #ffffff;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25), 0px 27px 42px rgba(0, 0, 0, 0.2);
   border-radius: 20px;
 }
-.login-logo{
+.login-logo {
   padding: 20px;
 }
-.login-input input{
+.login-input input {
   width: 80%;
   height: 50px;
-  background: #F6F6F6;
+  background: #f6f6f6;
   border-radius: 17px;
   border: 0;
   margin: 8px 0;
-  padding: 5px 12px ;
+  padding: 5px 12px;
   font-size: 18px;
-  color: #7B81A1;
+  color: #7b81a1;
   line-height: 18px;
   font-weight: 400;
 }
-.login-btn{
+.login-btn {
   width: 85%;
   height: 55px;
-  background:#103047;
+  background: #103047;
   margin: 8px 0;
   font-size: 20px;
-  color:#F6F6F6 ;
+  color: #f6f6f6;
   border: 0;
   border-radius: 17px;
-  padding: 5px 8px ;
+  padding: 5px 8px;
   cursor: pointer;
 }
-.social-login ul{
+.social-login ul {
   padding: 0;
   width: 90%;
-  margin:8px auto;
+  margin: 8px auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -125,35 +124,35 @@ main::-webkit-scrollbar-thumb {
   width: 50px;
   padding: 12.5px;
   margin: 8px;
-  background: #FFFFFF;
-  border: 1px solid #E1E1E1;
+  background: #ffffff;
+  border: 1px solid #e1e1e1;
   box-sizing: border-box;
   border-radius: 16px;
   cursor: pointer;
 }
-.login-forget a{
+.login-forget a {
   font-size: 14px;
-  color: #7B81A1;
+  color: #7b81a1;
   line-height: 18px;
   font-weight: 400;
-  text-decoration:none;
+  text-decoration: none;
   cursor: pointer;
 }
-.login-active{
+.login-active {
   font-size: 14px;
-  color: #7B81A1;
+  color: #7b81a1;
   line-height: 18px;
   font-weight: 400;
-  text-decoration:none;
+  text-decoration: none;
   margin-top: 10px;
 }
-.login-active a{
+.login-active a {
   cursor: pointer;
-  color: #7B81A1;
+  color: #7b81a1;
   font-weight: 500;
-  text-decoration:none;
+  text-decoration: none;
 }
-.error-msg{
+.error-msg {
   margin: 0;
   padding: 5px 0;
   color: red;
@@ -162,56 +161,54 @@ main::-webkit-scrollbar-thumb {
 }
 
 /* search-modal */
-#search-modal{
-
+#search-modal {
 }
-.search-modal-box{
+.search-modal-box {
   position: absolute;
   width: 450px;
   height: 300px;
   margin: auto;
   inset: 0;
-  background: #FFFFFF;
+  background: #ffffff;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25), 0px 27px 42px rgba(0, 0, 0, 0.2);
   border-radius: 20px;
 }
-.login-logo{
+.login-logo {
   padding: 20px;
 }
-.active-details{
+.active-details {
   min-height: 160px;
   padding: 5px 10px;
 }
-.search-details{
+.search-details {
   font-size: 17px;
   color: var(--deep2);
   line-height: 20px;
-  padding:16px 10px ;
+  padding: 16px 10px;
 }
-.email-input input{
+.email-input input {
   width: 90%;
   margin: 0px 10px;
   height: 40px;
   background: none;
   border-radius: 17px;
   border: 1px solid;
-  padding: 5px 12px ;
+  padding: 5px 12px;
   font-size: 18px;
-  color:var(--deep-gray);
+  color: var(--deep-gray);
   line-height: 18px;
   font-weight: 400;
 }
 
-.btn-box{
- float: right;
- padding: 8px 16px;
-
+.btn-box {
+  float: right;
+  padding: 8px 16px;
 }
-.btn{
+.btn {
   padding: 0px 20px;
   border-radius: 8px;
   background-color: #e4e6eb;
-  border : none;
+  border: none;
   font-size: 16px;
   font-weight: 600;
   line-height: 36px;
@@ -219,21 +216,21 @@ main::-webkit-scrollbar-thumb {
   margin-left: 8px;
   cursor: pointer;
 }
-.mail-sent{
+.mail-sent {
   padding: 10px;
   line-height: 24px;
 }
-.mail-title{
+.mail-title {
   font-size: 18px;
 }
-.mail-text{
+.mail-text {
   color: var(--deep2);
 }
-.search-btn{
+.search-btn {
   background-color: var(--deep);
   color: var(--white);
 }
-.cancle-btn{
+.cancle-btn {
   background-color: var(--fade-bluish-gray);
   color: var(--deep-gray);
 }
@@ -807,8 +804,8 @@ main {
   height: 30px;
   cursor: pointer;
 }
-.social-active svg{
-  fill: var(--deep-gray)
+.social-active svg {
+  fill: var(--deep-gray);
 }
 .profile-info {
   margin: 20px 25px;
@@ -858,7 +855,7 @@ main {
   color: #3d4e5e;
 }
 .box {
-  width: 220px;
+  width: 250px;
   height: 150px;
   padding: 12px;
   border: 1px solid #e6e6e6;
