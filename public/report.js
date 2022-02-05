@@ -38,7 +38,6 @@ function getDateFormat(date) {
 
 const selectStartDate = async (event) => {
   const getDate = getDateFormat(event.target.value);
-  console.log(getDate)
 
   startDate = getDate;
 

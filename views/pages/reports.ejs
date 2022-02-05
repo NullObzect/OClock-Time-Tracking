@@ -118,7 +118,20 @@ input[type="date"]:valid::before {
 	content: "" !important;
 }
 
+.filtered-report{
+  background: #f3f3f3;
+  border-radius: 22px;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  display: none;
 
+}
+.filtered-report .box{
+  background-color: #f3f3f3;
+  border: none;
+}
 </style>
 
 <!--  Markup for an  employee report-->
@@ -127,15 +140,19 @@ input[type="date"]:valid::before {
 <div class="profile">
 
   <div class="avatar">
+<% let profileUrl = userInfo.avatar %>
+<% if(profileUrl.search('https://') === -1) {%>
+  <img
+   
+    src="/uploads/avatars/<%= userInfo.avatar%>"
+  />
 
-    <% if(userInfo.avatar.match(/([\w+]+\:\/\/)?([\w\d-]+\.)*[\w-]+[\.\:]\w+([\/\?\=\&\#\.]?[\w-]+)*\/?/gm)){ %>
-        <img
-        src="<%= userInfo.avatar%>"
-        />
-    <%} else{%>
-      <img
-      src="/uploads/avatars/<%userInfo.avatar===null ? 'demo-avatar.png' : userInfo.avatar %> "
-      <% } %> 
+  <% } else{ %>
+  <img
+    
+    src="<%= userInfo.avatar%>"
+  />
+  <% } %>
  
   </div>
   <div class="profile-info">
@@ -192,7 +209,8 @@ input[type="date"]:valid::before {
         <table class="work">
           <tr>
             <td>Work:</td>
-            <td><%= todayReportDetails.todayTotal || "00:00" %> hr <span class="high">+ 15</span></td>
+            <td><%= todayReportDetails.todayTotal || "00:00" %> hr <span 
+              class="<%= todayReportDetails.totalLess ? 'low' : 'high' %>"><%=   todayReportDetails.totalLess ?  todayReportDetails.totalLess    : '+' + todayReportDetails.totalExtra %> hr</span></td>
           </tr>
           <tr>
             <td>Time:</td>
@@ -214,11 +232,14 @@ input[type="date"]:valid::before {
         <table>
           <tr>
             <td>Workday:</td>
-            <td><%= weekReportDetails.day %>/6 day <span class="low">- 2</span></td>
+          
+
+            <td><%= weekReportDetails.day %>/6 day <span class="<%= Number(6) >  Number(weekReportDetails.day)   ? 'low'  :   Number(6 == weekReportDetails.day) ?  '' : 'high' %>">
+            <%= Number(6) >  Number(weekReportDetails.day)   ? '-' + Number( 6 - weekReportDetails.day)  :   Number(6 == weekReportDetails.day) ?  '' :    '+' + Number(weekReportDetails.day - 6) %></span></td>
           </tr>
           <tr>
             <td>Work hour:</td>
-            <td><%= weekReportDetails.workHour%>/<%= weekReportDetails.fixedTotalHour   %> hr</td>
+            <td><%= weekReportDetails.workHour%>/<%= weekReportDetails.fixedTotalHour   %> hr<span class="<%= weekReportDetails.totalLess ? 'low' : 'high' %>"><%= weekReportDetails.totalLess ?  weekReportDetails.totalLess  : '+' + weekReportDetails.totalExtra %> hr</span></td>
           </tr>
           <tr>
             <td>Avg Work:</td>
@@ -241,11 +262,15 @@ input[type="date"]:valid::before {
         <table>
           <tr>
             <td>Workday:</td>
-            <td> <%=monthReportDetails.day %>/6 day</td>
+            <td> <%=monthReportDetails.day %>/26 day <span class="<%= Number(26) >  Number(monthReportDetails.day)   ? 'low'  :   Number(26 == monthReportDetails.day) ?  '' : 'high' %>">
+            <%= Number(26) >  Number(monthReportDetails.day)   ? '-' + Number( 26 - monthReportDetails.day)  :   Number(26 == monthReportDetails.day) ?  '' :    '+' + Number(monthReportDetails.day - 26) %></span> </td>
           </tr>
           <tr>
             <td>Work hour:</td>
-            <td><%=monthReportDetails.workHour  + '/' + monthReportDetails.fixedTotalHour %> hr</td>
+            <td><%=monthReportDetails.workHour  + '/' + monthReportDetails.fixedTotalHour %><span class="<%= monthReportDetails.totalLess ? 'low' : 'high' %>"><%= monthReportDetails.totalLess ?  monthReportDetails.totalLess  : '+' + monthReportDetails.totalExtra %> hr</span></td>
+
+
+            
           </tr>
           <tr>
             <td>Avg Work:</td>
@@ -268,7 +293,7 @@ input[type="date"]:valid::before {
         <table>
           <tr>
             <td>Workday:</td>
-            <td><%= yearReportDetails.day %>/6 day</td>
+            <td><%= yearReportDetails.day %>/300 day <span class="<%= yearReportDetails.totalLess ? 'low' : 'high' %>"><%= yearReportDetails.totalLess ?  yearReportDetails.totalLess  : '+' + yearReportDetails.totalExtra %> hr</span></td>
           </tr>
           <tr>
             <td>Work hour:</td>
@@ -292,6 +317,7 @@ input[type="date"]:valid::before {
   </div>
 
 
+  
 <!-- Markup Date range for employee-->
 
 <div class="date-range-input">
@@ -299,45 +325,33 @@ input[type="date"]:valid::before {
     <h4>Reports</h4>
     <p>Last seven days.</p>
   </div>
-  <div class="date-picker">
-      <div class="start-date">
-        <input
-          id="startPicker"
-          type="text"
-          placeholder="-- / -- / ----"
-        />
-      </div>
-      <div class="to">to</div>
-      <div class="end-date">
-        <input id="endPicker" placeholder="-- / -- / ----" />
-      </div>
-      <div id="date-icon" onclick="dateRange()" class="date-icon">
-        <svg
-          width="26"
-          height="30"
-          viewBox="0 0 26 30"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M7.66667 1.66675V5.66675V1.66675ZM18.3333 1.66675V5.66675V1.66675ZM1.66667 11.1201H24.3333H1.66667ZM25 10.3334V21.6667C25 25.6667 23 28.3334 18.3333 28.3334H7.66667C3 28.3334 1 25.6667 1 21.6667V10.3334C1 6.33341 3 3.66675 7.66667 3.66675H18.3333C23 3.66675 25 6.33341 25 10.3334Z"
-            stroke="#848484"
-            stroke-width="2"
-            stroke-miterlimit="10"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-          <path
-            d="M8.05859 21.2666H8.07193M17.9266 17.2666H17.9386H17.9266ZM17.9266 21.2666H17.9386H17.9266ZM12.9933 17.2666H13.0066H12.9933ZM12.9933 21.2666H13.0066H12.9933ZM8.05859 17.2666H8.07193H8.05859Z"
-            stroke="#848484"
-            stroke-width="2.66667"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
-      </div>
-    </div>
+  <div class="date-range-input-container">
+    <input class="date-input" type="date" id="dateStart" placeholder=" -- / -- / ---- " onchange="selectStartDate(event)" />
+    <small class="date-to" >To</small>
+    <input class="date-input" type="date" id="dateEnd" placeholder=" -- / -- / ---- " onchange="selectEndDate(event)" />
+  </div>
 </div>
+
+<!-- Markup for filtered  report   box -->
+
+<div class="filtered-report">
+
+   
+ <div class="week box">
+   <h2>Filtered by</h2>
+   <div class="details">
+     <table id="total-report">
+     
+     </table>
+   </div>
+
+ 
+ </div>
+
+ <div class="filtered-date">
+   <p><span class="select-start-date">/01/2022</span> to  <span class="select-end-date">/01/2022</span> </p>
+ </div>
+ </div>
 
 <!-- Markup for report table  -->
 <div class="an-employee-report">
@@ -395,7 +409,7 @@ input[type="date"]:valid::before {
       
     </tbody>
     <!-- Table footer -->
-    <tfoot id="last-seven-days-total" class="an-employee-report">
+    <!-- <tfoot id="last-seven-days-total" class="an-employee-report">
       <% employeeLastSevendaysReportTotal.map(el => {%> 
      
 
@@ -409,10 +423,11 @@ input[type="date"]:valid::before {
         <td class="p-3"><%= el.totalLessORExtra === 'NaN:NaN:NaN' ? '00' : el.totalLessORExtra %></td> 
       </tr>
     <% })  %> 
-    </tfoot>
+    </tfoot> -->
   </table>
 </div>
 
+ 
 </div>
 <div class="pagination" >
   <ul id="pagination">
@@ -421,17 +436,23 @@ input[type="date"]:valid::before {
 </div>
 
 <script>
+  function workHourFormater(time) {
+  if (time == null) return '0'
+  const s = time.split(':')
+  const hour = `${s[0]}`
+  const isZero = hour[0]
+  const minutes = `${s[1]}`
+  const result = `${isZero === '0' ? hour.replace(isZero, ' ') : hour}:${minutes}`
+  const mintIsZeor = result.slice(2, 5)
+  const withOutZeroResult = result.replace(mintIsZeor, ' ')
+  return (mintIsZeor === ':00') ? withOutZeroResult : result;
+}
+
+
   const baseUrl = 'http://localhost:5000';
 
-  const startDatePicker = MCDatepicker.create({
-        el: "#startPicker",
-        dateFormat: "DD-MM-YYYY",
-      });
-  const endDatePicker = MCDatepicker.create({
-        el: "#endPicker",
-        dateFormat: "DD-MM-YYYY",
-      });
-;
+// get start date
+let startDate;
 
 // getDate format
 function getDateFormat(date) {
@@ -453,24 +474,90 @@ function getDateFormat(date) {
 
     return today;
   }
+  //console.log(getCurrentDate());
+// constructor function
+function ReportDetails(day, fixedTotalHour, workHour, avgWorkHour, avgStartTime, avgEndTime) {
+  this.day = day
+  this.fixedTotalHour = fixedTotalHour
+  this.workHour = workHour
+  this.avgWorkHour = avgWorkHour
+  this.avgStartTime = avgStartTime
+  this.avgEndTime = avgEndTime
+}
 
+const selectStartDate = async function (event) {
+  const dateStart = document.querySelector("#dateStart")
+  const dateEnd = document.querySelector("#dateEnd")
+  const getDate = getDateFormat(event.target.value);
+  //console.log(event.target.value)
 
-const dateRange = async function (event) {
-  const dateStart = document.querySelector("#startPicker")
-  const dateEnd = document.querySelector("#endPicker")
-  const startDate = getDateFormat (startDatePicker.getFullDate())
-  const endDate = getDateFormat (endDatePicker.getFullDate() || getCurrentDate())
+  startDate = getDate;
 
-  dateStart.dataset.date = startDate
-  dateEnd.dataset.date = endDate
-console.log(startDate)
-console.log(endDate)
-
+   dateStart.dataset.date = event.target.value;
+   dateEnd.dataset.date = getCurrentDate();
   const data = await fetch(
-    `${baseUrl}/reports/between/two-date?startDate=${startDate}&endDate=${endDate}`,
+    `${baseUrl}/reports/between/two-date?startDate=${startDate}&endDate=${getCurrentDate()}`,
   );
   const getObjects = await data.json(); 
-  // let isZero;
+
+  //========== date range total  
+  console.log(getObjects.reportDateRangeTotal.betweenTowDateTotalToJson)
+  const [{day,weekTotal, fixed_total,
+  
+    avgWorkHour, avgStartTime, avgEndTime}] = getObjects.reportDateRangeTotal.betweenTowDateTotalToJson;
+  //console.log(present,weekTotal, fixed_total, avgStartTime, avgEndTime)
+  const dateRangeTotal = new ReportDetails(
+    day,
+    fixed_total,
+    weekTotal,
+    avgWorkHour,
+    avgStartTime,
+    avgEndTime,
+  );
+  console.log(dateRangeTotal !== null)
+  console.log(dateRangeTotal.avgEndTime)
+
+  const totalReport = document.getElementById("total-report");
+  const filteredReport = document.querySelector('.filtered-report');
+  const selectStartDate = document.querySelector('.select-start-date');
+  const selectEndDate = document.querySelector('.select-end-date');
+
+console.log("mmmmmmmm", dateRangeTotal === null);
+
+  console.log(filteredReport)
+   if(dateRangeTotal === null){
+        filteredReport.style.display = 'none !important';
+   }else{
+     filteredReport.style.display = 'block';
+     filteredReport.style.display = 'flex';
+     selectStartDate.textContent = getDate
+      selectEndDate.textContent = getCurrentDate()
+  totalReport.innerHTML = `
+
+      <tr>
+          <td>Workday:</td>
+          <td> ${dateRangeTotal.day }/6 day <span class="low">- 2</span></td>
+        </tr>
+        <tr>
+          <td>Work hour:</td>
+          <td>${dateRangeTotal.workHour }/${ dateRangeTotal.fixedTotalHour} hr</td>
+        </tr>
+        <tr>
+          <td>Avg Work:</td>
+          <td> ${ dateRangeTotal.avgWorkHour } hr</td>
+        </tr>
+        <tr>
+          <td>Avg Start:</td>
+          <td>${dateRangeTotal.avgStartTime } </td>
+        </tr>
+        <tr>
+          <td>Avg End:</td>
+          <td>${ dateRangeTotal.avgEndTime } </td>
+        </tr>
+  `
+      }
+  //
+
   const {dateRangeReport,pageNumber,pageLength,page,numberOfPage} = getObjects.reports
   console.log({pageNumber,page,pageLength,numberOfPage})
   console.log(dateRangeReport)
@@ -482,10 +569,10 @@ console.log(endDate)
 }
 
 async function page(pageNo){
-  const startDate = document.querySelector("#startPicker").dataset.date
-  const endDate = document.querySelector("#endPicker").dataset.date
+  const dateStart = document.querySelector("#dateStart").dataset.date
+  const dateEnd = document.querySelector("#dateEnd").dataset.date
   const data = await fetch(
-    `${baseUrl}/reports/between/two-date?startDate=${startDate}&endDate=${endDate}&page=${pageNo}`,
+    `${baseUrl}/reports/between/two-date?startDate=${startDate}&endDate=${getCurrentDate()}&page=${pageNo}`,
   );
   const getObjects = await data.json(); 
   // let isZero;
@@ -536,6 +623,83 @@ function pagination(pageNumber,numberOfPage,page){
  `
 
 }
+
+// when select end date 
+const selectEndDate = async (event) => {
+  const dateStart = document.querySelector("#dateStart")
+  const dateEnd = document.querySelector("#dateEnd")
+  const endDate = event.target.value;
+
+  console.log('end date', endDate);
+  const data = await fetch(
+    `${baseUrl}/reports/between/two-date?startDate=${startDate}&endDate=${endDate}`,);
+  const getObjects = await data.json();
+  console.log("xxxx",getObjects)
+   //========== date range total  
+   console.log(getObjects.reportDateRangeTotal.betweenTowDateTotalToJson)
+  const [{day,weekTotal, fixed_total,
+  
+    avgWorkHour, avgStartTime, avgEndTime}] = getObjects.reportDateRangeTotal.betweenTowDateTotalToJson;
+  //console.log(present,weekTotal, fixed_total, avgStartTime, avgEndTime)
+  const dateRangeTotal = new ReportDetails(
+    day,
+    fixed_total,
+    weekTotal,
+    avgWorkHour,
+    avgStartTime,
+    avgEndTime,
+  );
+ console.log({dateRangeTotal})
+  
+  const totalReport = document.getElementById("total-report");
+  const filteredReport = document.querySelector('.filtered-report');
+  const selectStartDate = document.querySelector('.select-start-date');
+  const selectEndDate = document.querySelector('.select-end-date');
+
+
+
+  console.log(filteredReport)
+   if(dateRangeTotal === null){
+        filteredReport.style.display = 'none !important';
+   }else{
+     filteredReport.style.display = 'block';
+     filteredReport.style.display = 'flex';
+      selectEndDate.textContent = endDate;
+  totalReport.innerHTML = `
+
+      <tr>
+          <td>Workday:</td>
+          <td> ${dateRangeTotal.day }/6 day <span class="low">- 2</span></td>
+        </tr>
+        <tr>
+          <td>Work hour:</td>
+          <td>${dateRangeTotal.workHour }/${ dateRangeTotal.fixedTotalHour} hr</td>
+        </tr>
+        <tr>
+          <td>Avg Work:</td>
+          <td> ${ dateRangeTotal.avgWorkHour } hr</td>
+        </tr>
+        <tr>
+          <td>Avg Start:</td>
+          <td>${dateRangeTotal.avgStartTime } </td>
+        </tr>
+        <tr>
+          <td>Avg End:</td>
+          <td>${ dateRangeTotal.avgEndTime } </td>
+        </tr>
+  `
+}
+
+//========== date range report data and pagination
+
+const {dateRangeReport,pageNumber,pageLength,page,numberOfPage} = getObjects.reports
+  console.log({pageNumber,page,pageLength,numberOfPage})
+  console.log(dateRangeReport)
+  const reportTableBody = document.querySelector('#an-user-report')
+  reportShow(reportTableBody,dateRangeReport)
+  pagination(pageNumber,numberOfPage,page)
+          
+  } 
 </script>
 
 <%- include("../partials/footer"); -%>
