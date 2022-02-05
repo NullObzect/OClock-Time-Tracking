@@ -140,19 +140,15 @@ input[type="date"]:valid::before {
 <div class="profile">
 
   <div class="avatar">
-<% let profileUrl = userInfo.avatar %>
-<% if(profileUrl.search('https://') === -1) {%>
-  <img
-   
-    src="/uploads/avatars/<%= userInfo.avatar%>"
-  />
 
-  <% } else{ %>
-  <img
-    
-    src="<%= userInfo.avatar%>"
-  />
-  <% } %>
+    <% if(userInfo.avatar.match(/([\w+]+\:\/\/)?([\w\d-]+\.)*[\w-]+[\.\:]\w+([\/\?\=\&\#\.]?[\w-]+)*\/?/gm)){ %>
+        <img
+        src="<%= userInfo.avatar%>"
+        />
+    <%} else{%>
+      <img
+      src="/uploads/avatars/<%userInfo.avatar===null ? 'demo-avatar.png' : userInfo.avatar %>/>"
+      <% } %> 
  
   </div>
   <div class="profile-info">
@@ -456,12 +452,15 @@ let startDate;
 
 // getDate format
 function getDateFormat(date) {
+  if(date===null){
+    return null
+  }
   let today = new Date(date);
   const dd = String(today.getDate()).padStart(2, '0');
   const mm = String(today.getMonth() + 1).padStart(2, '0');
   const yyyy = today.getFullYear();
   today = `${yyyy}-${mm}-${dd}`;
-
+console.log({today})
   return today;
 }
 // get current date
@@ -491,7 +490,17 @@ const selectStartDate = async function (event) {
   const getDate = getDateFormat(event.target.value);
   //console.log(event.target.value)
 
-  startDate = getDate;
+const dateRange = async function (event) {
+  const dateStart = document.querySelector("#startPicker")
+  const dateEnd = document.querySelector("#endPicker")
+  const startDate = getDateFormat (startDatePicker.getFullDate())
+  const endDate = getDateFormat (endDatePicker.getFullDate() || getCurrentDate())
+  console.log(startDate,endDate)
+
+  dateStart.dataset.date = startDate
+  dateEnd.dataset.date = endDate
+console.log(startDate)
+console.log(endDate)
 
    dateStart.dataset.date = event.target.value;
    dateEnd.dataset.date = getCurrentDate();
