@@ -18,17 +18,16 @@ const LoginController = {
       const { userMail, userPass } = req.body;
       /* user form database  */
       const [user] = await LoginModel.getUserMail(userMail)
-      console.log(user)
       // check valid user
       if (user && user.id) {
         const userMailFormDB = user.user_mail;
         const userID = user.id;
         const userName = user.user_name;
-        const userAvatar = user.avatar;
+        const { avatar } = user;
         const userPassFormDB = user.user_pass;
         const userRole = user.user_role;
         const userObject = {
-          userID, userName, userMailFormDB, userRole, userAvatar,
+          userID, userName, userMailFormDB, userRole, avatar,
         }
         const isValidPass = await bcrypt.compare(userPass, userPassFormDB)
         console.log({ isValidPass });
