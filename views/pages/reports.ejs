@@ -134,7 +134,7 @@ input[type="date"]:valid::before {
         />
     <%} else{%>
       <img
-      src="/uploads/avatars/<%userInfo.avatar===null ? 'demo-avatar.png' : userInfo.avatar %> "
+      src="/uploads/avatars/<%userInfo.avatar===null ? 'demo-avatar.png' : userInfo.avatar %>/>"
       <% } %> 
  
   </div>
@@ -435,12 +435,15 @@ input[type="date"]:valid::before {
 
 // getDate format
 function getDateFormat(date) {
+  if(date===null){
+    return null
+  }
   let today = new Date(date);
   const dd = String(today.getDate()).padStart(2, '0');
   const mm = String(today.getMonth() + 1).padStart(2, '0');
   const yyyy = today.getFullYear();
   today = `${yyyy}-${mm}-${dd}`;
-
+console.log({today})
   return today;
 }
 // get current date
@@ -460,6 +463,7 @@ const dateRange = async function (event) {
   const dateEnd = document.querySelector("#endPicker")
   const startDate = getDateFormat (startDatePicker.getFullDate())
   const endDate = getDateFormat (endDatePicker.getFullDate() || getCurrentDate())
+  console.log(startDate,endDate)
 
   dateStart.dataset.date = startDate
   dateEnd.dataset.date = endDate
