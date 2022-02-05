@@ -2,7 +2,8 @@
 <script>
   const searchBtn = document.querySelector("#search-btn");
   const continueBtn = document.querySelector("#continue-btn");
-  const cancleBtn = document.querySelector("#cancle-btn");
+  const btnText = document.querySelector("#btn-Text");
+  const cancelBtn = document.querySelector("#cancel-btn");
   const details = document.getElementById("details");
   const mailInput = document.getElementById("mail-input");
   const errorMsg = document.querySelector("#error-msg");
@@ -36,6 +37,8 @@
         searchBtn.style.display = "none";
         continueBtn.addEventListener("click", async (e) => {
           e.preventDefault();
+          btnText.classList.add("btn-text")
+          continueBtn.classList.add("btn-loading")
           const result = await fetch("/recover", {
             method: "POST",
             headers: {
@@ -43,7 +46,9 @@
             },
             body: JSON.stringify({ email: mail }),
           });
+
           const data = await result.json();
+          
           if (data.result) {
             details.innerText =
               "Please check your emails for a message with your recover password";
@@ -54,7 +59,7 @@
           </div>
       `;
             continueBtn.style.display = "none";
-            cancleBtn.innerText = "Go Back";
+            cancelBtn.innerText = "Go Back";
           }
         });
       } else if (user.errors) {
