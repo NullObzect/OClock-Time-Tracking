@@ -45,8 +45,9 @@ const UserPlatformController = {
           const userMailFormDB = user.user_mail;
           const userName = user.user_name;
           const userRole = user.user_role;
+          const { avatar } = user
           const userObject = {
-            userName, userMailFormDB, userRole,
+            userName, userMailFormDB, userRole, avatar,
           }
           // Create token for user login
           const token = jwt.sign({

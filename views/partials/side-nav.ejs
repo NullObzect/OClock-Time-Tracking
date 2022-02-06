@@ -35,13 +35,19 @@
   <%- include("./more-option"); -%> <%- include("./notification"); -%>
 
   <div class="sidebar-footer">
-    <img
+    <% if(loggedInUser.avatar.match(/([\w+]+\:\/\/)?([\w\d-]+\.)*[\w-]+[\.\:]\w+([\/\?\=\&\#\.]?[\w-]+)*\/?/gm)){ %>
+      <img
       id="notification-btn"
       class="notification-btn"
-      src="/uploads/avatars/<%=loggedInUser.userAvatar== null ? 'demo-avatar.png':loggedInUser.userAvatar
-      %>"
-      alt=""
-    />
+      src="<%= loggedInUser.avatar%>"
+      />
+  <%} else{%>
+    <img
+    id="notification-btn"
+      class="notification-btn"
+    src="/uploads/avatars/<%loggedInUser.avatar===null ? 'demo-avatar.png' : loggedInUser.userAvatar %>" />
+    <% } %> 
+
     <div class="username"><%= loggedInUser.userName %></div>
     <div id="more-btn" class="more">
       <svg

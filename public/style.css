@@ -13,6 +13,7 @@
   --yellow-fade: #fbfff0;
   --fade-purple: #f3f0ff;
   --black: #000000;
+  --font-black: #212D37
   --red: #ff7272;
 }
 
@@ -674,6 +675,62 @@ main {
 .dashboard-reports td .username {
   display: flex;
   text-align: center;
+}
+
+/* Report date range */
+
+#datepicker {
+  border: none;
+  background: none;
+}
+#datepicker:focus {
+  border: none;
+}
+.to {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 30px;
+  color: #9b9b9b;
+  padding: 10px;
+}
+.date-picker {
+  color: var(--font-black);
+  width: 300px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f3f3f3;
+  padding: 10px 10px;
+  border-radius: 8px;
+}
+.date-picker input {
+  border: none;
+  font-size: 16px;
+  font-weight: 500;
+  width: 90px;
+  color: var(--font-black);
+  background: #f3f3f3;
+  cursor: pointer;
+}
+.date-picker input::placeholder {
+  font-size: 18px;
+  background: #f3f3f3;
+  color: #9b9b9b;
+}
+.date-icon {
+  padding: 10px;
+  cursor: pointer;
+}
+.date-icon svg{
+  stroke: #848484;
+}
+.date-icon svg:hover{
+  stroke: var(--primary);
+}
+.date-icon-active svg{
+  stroke: var(--primary);  
+
 }
 
 /* Dashboard start */

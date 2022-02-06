@@ -59,8 +59,9 @@ const FbUserController = {
 
             const userName = user.user_name;
             const userRole = user.user_role;
+            const { avatar } = user;
             const userObject = {
-              userName, userMailFormDB, userRole,
+              userName, userMailFormDB, userRole, avatar,
             }
             console.log(userObject);
 

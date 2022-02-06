@@ -73,11 +73,17 @@
     </div>
     <div class="nav-right">
       <div id="nav-image" class="nav-image">
-        <img
+        <% if(loggedInUser.avatar.match(/([\w+]+\:\/\/)?([\w\d-]+\.)*[\w-]+[\.\:]\w+([\/\?\=\&\#\.]?[\w-]+)*\/?/gm)){ %>
+          <img
           id="bottom-notification-btn"
-          src="https://gravatar.com/avatar/b8e1fd79796a3a262ad0bb94517658d9?s=200&d=robohash&r=x"
-          alt=""
-        />
+          src="<%= loggedInUser.avatar%>"
+          />
+      <%} else{%>
+        <img
+        id="bottom-notification-btn"
+        src="/uploads/avatars/<%loggedInUser.avatar===null ? 'demo-avatar.png' : loggedInUser.userAvatar %>" />
+        <% } %> 
+    
       </div>
       <div id="nav-toggle" class="nav-toggle">
         <svg

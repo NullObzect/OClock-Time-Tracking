@@ -27,6 +27,7 @@ router.use(
 
 )
 router.use('/options', optionsRoute)
+router.use('/options', holidayRouter)
 router.use('/profile', profileRoute)
 
 // exports route

@@ -35,7 +35,6 @@ const HolidayController = {
   },
   holidayList: async (req, res) => {
     try {
-     
       const holidays = await HolidayModel.holidaysList()
       res.render('pages/holiday', { holidays })
     } catch (err) {
