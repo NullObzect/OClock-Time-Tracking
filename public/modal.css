@@ -82,6 +82,23 @@
   border-radius: 12px;
   text-align: center;
 }
+.demo-input{
+  width: 350px;
+  height: 40px;
+  padding: 6px;
+  margin: 12px 0px;
+  font-size: 16px;
+  font-weight: 400;
+  color: #5e5e5e;
+  border: 1px solid #eaeef4;
+  border-radius: 12px;
+  display: inline-block;
+  text-align: center;
+  overflow-y: scroll;
+}
+.demo-input::-webkit-scrollbar {
+  display: none;
+}
 
 .container textarea {
   width: 350px;
@@ -116,6 +133,24 @@
   color: #ffffff;
   cursor: pointer;
 }
+.cancel-btn{
+  width: 350px;
+  height: 40px;
+  padding: 6px;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19px;
+  background: var(--red);
+  border: none;
+  border-radius: 15px;
+  color: #ffffff;
+  display: none;
+  opacity: 0.9;
+  cursor: pointer;
+}
+.cancel-btn:hover {
+  opacity: 1.1;
+}
 .submit-btn:hover {
   background: var(--deep2);
 }
@@ -143,11 +178,17 @@
   .container select {
     width: 90%;
   }
+  .demo-input{
+    width: 90%;
+  }
 
   .container textarea {
     width: 90%;
   }
   .submit-btn {
+    width: 90%;
+  }
+  .cancel-btn{
     width: 90%;
   }
 

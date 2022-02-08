@@ -30,6 +30,15 @@ const ProfileModel = {
       return err;
     }
   },
+  updateProfile: async (avatar, name, phone, password, id) => {
+    try {
+      const updateProfileSql = `UPDATE users SET ${name ? ` user_name = '${name}'` : ''} ${avatar ? `, avatar = '${avatar}'` : ''} ${password ? `, user_pass = '${password}'` : ''} ${phone ? `, user_phone = '${phone}'` : ''}  WHERE id = ${id}`
+      const [row] = await dbConnect.promise().execute(updateProfileSql);
+      return row;
+    } catch (error) {
+      console.log(error)
+    }
+  },
 }
 
 module.exports = ProfileModel;

@@ -1,99 +1,142 @@
 <%- include("../partials/header"); -%>
 
 <style>
-  /* .profile-avatar {
+  .profile-avatar-img{
     position: relative;
-  } */
-  .update-img-btn-gp {
+    margin-bottom: 20px;
+  }
+  .profile-avatar-img img{
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+  }
+ #profile-update-btn{
     position: absolute;
-    margin-left: 52%;
-    margin-top: -6%;
-    cursor: pointer;
-    background:none;
-    border: solid 1px #2e2e2e;
-    max-width: 35px;
-    height: 35px;
-    border-radius: 20px;
+    width: 40px;
+    height: 32px;
     overflow: hidden;
-    gap: 10px;
-    padding: 5px 12px 8px 12px;
-    opacity: 0.9;
-  }
-  .update-img-btn-gp a:nth-child(1) {
-    content: " ";
-    margin-left: -5px;
-  }
-  .update-img-btn-gp a:nth-child(2),
-  a:nth-child(3) {
-    content: " ";
-    margin-left: 10px;
-  }
-  .update-img-btn-gp svg {
-    width: 25px;
-    height: 25px;
-    cursor: pointer;
-  }
-  .update-img-btn-gp:hover {
-    max-width: 180px;
-    opacity: 1;
+    border-radius: 17px;
+    top: 120px;
+    margin-left: -40px;
+    display: inline-block;
+    background: #2E2E2E;
+    transition: 1s ease;
 
-    transition: all 1s;
+  }
+  #profile-update-btn:hover{
+   width: 120px;
+  }
+  #profile-update-btn a{
+    text-decoration: none;
   }
   .update-icon {
     display: inline-block;
+    padding: 2px;
+    transition: 0.2s ease-in-out;
   }
+
   .update-icon svg{
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
     stroke: #FFFFFF;
+    stroke-width: 2;
+    cursor: pointer;
   }
   #profile .social-icon {
     margin-bottom: 10px;
   }
+  .social-icon span{
+    cursor: pointer;
+  }
+  .social-icon svg {
+    stroke: #7B81A2;
+  }
+  .social-box{
+	color: var(--deep2);
+	font-size: 16px;
+  width: 90px;
+  border: 1px solid #E8E8E8;
+  border-radius: 13px;
+	background:#FFFFFF;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+  transition: 1s ease;
+  overflow: hidden;
+  margin: 4px 2px;
+  }
+  .social-box:hover{
+    border: 1px solid var(--red);
+  }
+  .social-icon-active{
+  padding: 6px;
+	border-right: 1px solid rgba(255, 255, 255, 0.16);
+	box-shadow: rgba(0, 0, 0, 0.14) -1px 0px 0px inset;
+  }
+  .social-text{
+    padding: 6px 8px;
+    text-transform: uppercase;
+  }
+  #img{
+
+  }
+
 </style>
 <div id="profile">
   <div class="container">
-    <form action="/user/edit/info" method="post" id="edit-form">
-      <div class="profile-avatar">
-        <% let url = avatar %> <% if(url.search('https://') === -1){ %>
-        <img
-          class="rounded-full h-20 w-20 object-cover"
-          src="/uploads/avatars/<%= avatar %>"
-        />
-        <% } else {%>
-        <img class="rounded-full h-20 w-20 object-cover" src="<%= avatar %>" />
-        <% } %>
-
-        <!-- Markup for update img -->
-        <div class="update-img-btn-gp">
-          <a href="">
-            <div class="update-icon">
-              <label title="upload under 1MB file" for="edit">
-                <%- include("../partials/icons/edit-svg") -%> 
-              </label>
-              <input
-                onchange="readURL(this)"
-                name="avatar"
-                hidden
-                id="edit"
-                type="file"
-                :accept="accept"
-              />
+    <form   id=form">
+      <div class="profile-avatar-img">
+        
+        <% if(avatar !== null && avatar.match(/^(http|https):/g)){ %>
+          <img
+          id="img"
+          src="<%=avatar%>"
+          />
+          <%} else{%>
+            <img
+            id="img"
+            src="/uploads/avatars/<%=avatar != null ? avatar : 'demo-avatar.png' %>" />
+            <% } %> 
+            
+            <!-- Markup for update img -->
+            <div id="profile-update-btn" class="">
+              <div class="update-icon">
+                <label title="upload under 1MB file" for="edit">
+                  <%- include("../partials/icons/edit-svg") -%> 
+                </label>
+                <input
+                  onchange="readURL(this)"
+                  name="avatar"
+                  hidden
+                  id="edit"
+                  type="file"
+                  :accept="accept"
+                />
+              </div>
+      
+              <div class="update-icon">
+                  <% if(platformUser.find(connection => connection.platform ===
+                  'google')) {%>
+                    <span  onclick="imgSet('<%=platformUser.find(connection => connection.platform === 'google').user_avatar%>')" >
+                      <%- include("../partials/icons/google-svg.ejs");  -%>
+                      <%}%>
+                    </span>
+                   
+              </div>
+              <div class="update-icon">
+                  <% if(platformUser.find(connection => connection.platform ===
+                  'facebook')) {%>
+                    <span  onclick="imgSet('<%=platformUser.find(connection => connection.platform === 'facebook').user_avatar%>')" >
+                      <%- include("../partials/icons/facebook-svg.ejs");  -%>
+                      <%}%>
+                    </span>
+              </div>
             </div>
-          </a>
-
-          <a href="">
-            <div class="update-icon">
-              <%- include("../partials/icons/google-svg.ejs"); -%>
-            </div>
-          </a>
-          <a>
-            <div class="update-icon">
-              <%- include("../partials/icons/facebook-svg.ejs"); -%>
-            </div>
-          </a>
-        </div>
+           
+            
       </div>
+      
+      
 
       <!-- Markup for icon -->
 
@@ -102,9 +145,13 @@
           >
           <% if(platformUser.find(connection => connection.platform ===
                   'facebook')) {%>
-          <a title="Remove" class="" href=""
+          <a title="Remove" class="social-box" href="/remove/facebook"
             >
-            <%- include("../partials/icons/facebook-bold-svg") -%> 
+            <span class="social-icon-active"><%- include("../partials/icons/facebook-bold-svg") -%> </span>
+            <span class="social-text">
+              <%=platformUser.find(connection => connection.platform === 'facebook' ).user_name.split(" ").map(s=>s[0]).join('')%>
+%>
+              </span>
           </a>
           <% } else{ %>
             <a title="Connect" href="/auth/facebook">
@@ -116,8 +163,10 @@
           >
           <% if(platformUser.find(connection => connection.platform ===
                   'google')) {%>
-          <a title="Remove" class="social-active" href="" >
-            <%- include("../partials/icons/google-svg") -%> 
+          <a title="Remove" class="social-box" href="/remove/google" >
+           <span class="social-icon-active social-active"><%- include("../partials/icons/google-svg") -%> </span>
+            <span class="social-text"><%= platformUser.find(connection => connection.platform ===
+                  'google').user_name.split(" ").map(s=>s[0]).join('')%></span>
           </a>
           <% }else{%>
             <a title="Connect" href="/auth/google" >
@@ -127,10 +176,11 @@
         </span>
         <span
           >
-          <% if(platformUser.find(connection => connection.platform ===
-                  'twitter')) {%>
-          <a title="Remove" class="social-active">
-            <%- include("../partials/icons/twitter-svg") -%> 
+          <% if(platformUser.find(connection => connection.platform ==='twitter')) {%>
+            <a title="Remove" class="social-box" href="" >
+           <span class="social-icon-active social-active"> <%- include("../partials/icons/twitter-svg") -%> </span>
+            <span class="social-text"><%= platformUser.find(connection => connection.platform ===
+                  'twitter').user_name.split(" ").map(s=>s[0]).join('')%></span>
           </a>
           <% }else{%>
             <a title="Connect" >
@@ -139,24 +189,16 @@
              <% } %>
         </span>
       </div>
-
+      <input hidden name="socialImage" type="text" hidden>
       <label for="name"
         >Name
         <div class="">
           <input value="<%= user_name %>" id="name" name="name" type="text" />
         </div>
       </label>
-      <label for="email">
-        Email
-        <div class="">
-          <input
-            type="email"
-            name="email"
-            id="email"
-            value="<%= user_mail %>"
-          />
+      <div class="demo-input">
+        <%= user_mail %>
         </div>
-      </label>
       <label for="phone">
         Phone
         <div class="">
@@ -167,18 +209,24 @@
       <label for="newPassword">
         Old Password
         <div class="">
-          <input type="password" name="new-password" id="newPassword" />
+          <input type="password" name="oldPassword" id="oldPassword" />
+          <p class="error password-error"></p>
         </div>
       </label>
 
       <label for="oldPassword">
         New Password
         <div class="">
-          <input type="password" name="old-password" id="oldPassword" />
+          <input type="password" name="password" id="password" />
         </div>
       </label>
+      <p class="error avatar-error"></p>
+        <p class="error common-error"></p>
       <div class="">
-        <button id="user-save-btn" class="submit-btn" type="submit">
+        <button id="user-cancel-btn" type="reset" class="cancel-btn" >cancel</button>  
+      </div>
+      <div class="">
+        <button disabled id="user-save-btn" class="submit-btn" type="submit">
           Save
         </button>
       </div>
@@ -186,16 +234,80 @@
   </div>
 </div>
 <script>
-  const name = document.getElementById("name");
-  console.log(name.value);
-  const editFrom = document.querySelector("#edit-form");
+  const form = document.querySelector('form')
+  console.log(form)
+  const userCancelBtn = document.getElementById("user-cancel-btn");
   const userSaveBtn = document.getElementById("user-save-btn");
-
-  userSaveBtn.disabled = true;
-  console.log({ editFrom, userSaveBtn });
-  editFrom.addEventListener("keyup", () => {
-    userSaveBtn.disabled = true ? (userSaveBtn.disabled = false) : "";
-    userSaveBtn.style.background = "green";
+  form.addEventListener("keyup", () => {
+    userSaveBtn.disabled = false
+    userCancelBtn.style.display = "inline";
   });
+</script>
+<script>
+  function readURL(input) {
+          console.log(input)
+    if (input.files && input.files[0]) {
+      userSaveBtn.disabled = false
+      var reader = new FileReader();
+      console.log(reader)
+      reader.onload = function (e) { 
+        console.log(e)
+        document.querySelector('#img').setAttribute("src",e.target.result);
+      };
+      reader.readAsDataURL(input.files[0]); 
+    }
+  }  
+
+  function imgSet(link){
+    document.querySelector("input[name='socialImage'").value = link
+    userSaveBtn.disabled = false
+    document.querySelector('#img').setAttribute("src",link);
+  }
+
+</script>
+<script>
+  const errorPlaceholders = document.querySelectorAll("p.error");
+    for (let i = 0; i < errorPlaceholders.length; i++) {
+      errorPlaceholders[i].style.display = "none";
+    }
+    const inputErrors = document.querySelectorAll("input.error");
+    if (inputErrors.length > 0) {
+      for (let j = 0; j < inputErrors.length; j++) {
+        inputErrors[j].classList.remove("error");
+      }
+    }
+  const submitBtn = document.querySelector("#user-save-btn")
+  submitBtn.addEventListener("click", async(e)=>{
+    const fileField = document.querySelector('input[type="file"]');
+    e.preventDefault()
+    const formdata = new FormData(form)
+      // formdata.append('avatar',fileField.files[0])
+    let response = await fetch("/update-profile", {
+      method: "POST",
+      body: formdata,
+    });
+    const result = await response.json()
+    console.log(result)
+    if (result.errors) {
+      // errors
+      Object.keys(result.errors).forEach((fieldName) => {
+        console.log(fieldName)
+        // add error class to all inputs
+        form[fieldName].classList.add("error");
+        // set all error placeholders (p tag) textContent
+        const errorPlaceholder = document.querySelector(`.${fieldName}-error`);
+        errorPlaceholder.textContent = result.errors[fieldName].msg;
+        // make all placeholders visible
+        errorPlaceholder.style.display = "block";
+      });
+    }else {
+      document.querySelector("p.error").style.display = "none";
+      document.querySelector("#user-cancel-btn").style.display = "none";
+      // reload the page after 1 second
+      setTimeout(() => {
+        location.href = "/profile"
+      }, 1000);
+    }
+  })
 </script>
 <%- include("../partials/footer"); -%>
