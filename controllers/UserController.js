@@ -75,7 +75,7 @@ const UserController = {
           }
         } else {
           try {
-            if (userAvatar !== 'demo_profile.png') {
+            if (userAvatar !== null) {
               unlink(
                 path.join(__dirname, `../public/uploads/avatars/${userAvatar}`), (err) => {
                   console.log(err)

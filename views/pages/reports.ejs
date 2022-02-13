@@ -112,13 +112,13 @@
 
   <div class="avatar">
 
-    <% if(userInfo.avatar.match(/([\w+]+\:\/\/)?([\w\d-]+\.)*[\w-]+[\.\:]\w+([\/\?\=\&\#\.]?[\w-]+)*\/?/gm)){ %>
+    <% if(userInfo.avatar !== null && userInfo.avatar.match(/^(http|https):/g)){ %>
         <img
         src="<%= userInfo.avatar%>"
         />
     <%} else{%>
       <img
-      src="/uploads/avatars/<%userInfo.avatar===null ? 'demo-avatar.png' : userInfo.avatar %>" />
+      src="/uploads/avatars/<%=userInfo.avatar===null ? 'demo-avatar.png' : userInfo.avatar %>" />
       <% } %> 
  
   </div>
