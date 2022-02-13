@@ -29,14 +29,14 @@ const Formater = {
     const month = today.getMonth() + 1
     const year = today.getFullYear()
     const day = today.getDate() < 10 ? `0${today.getDate()}` : today.getDate()
-    const getDate = `${year}-${month}-${day}`;
+    const getDate = `${year}-${month < 10 ? `0${month}` : month}-${day}`;
 
     return getDate;
   },
   // function for working hour
   timeFormateForReport: (time) => {
     if (time == null) {
-      return '0'
+      return ' '
     }
     const s = time.split(':')
     const hour = `${s[0]}`
@@ -48,7 +48,7 @@ const Formater = {
   },
 
   workHourFormateForReport: (time) => {
-    if (time == null) return '0'
+    if (time == null) return ''
     const s = time.split(':')
     const hour = `${s[0]}`
     const isZero = hour[0]
@@ -61,7 +61,7 @@ const Formater = {
 
   timeToHourWithoutMint: (time) => {
     if (time == null) {
-      return '0'
+      return ''
     }
     const s = time.split(':')
     const hour = `${s[0]}`
@@ -70,7 +70,6 @@ const Formater = {
 
     return result
   },
-
 
 }
 

@@ -101,9 +101,9 @@
   
 }
 
-
-
 </style>
+
+
 
 <!--  Markup for an  employee report-->
 <div class="reports-container">
@@ -111,12 +111,6 @@
 <div class="profile">
 
   <div class="avatar">
-<% let profileUrl = userInfo.avatar %>
-<% if(profileUrl.search('https://') === -1) {%>
-  <img
-   
-    src="/uploads/avatars/<%= userInfo.avatar%>"
-  />
 
     <% if(userInfo.avatar.match(/([\w+]+\:\/\/)?([\w\d-]+\.)*[\w-]+[\.\:]\w+([\/\?\=\&\#\.]?[\w-]+)*\/?/gm)){ %>
         <img
@@ -231,15 +225,17 @@
         <table>
           <tr>
             <td>Workday:</td>
-            <td> <%=monthReportDetails.day %>/6 day</td>
+            <td> <%=monthReportDetails.totalWorkingDays %>/<%= monthReportDetails.fixedWorkdays %> day <span class="<%= monthReportDetails.classLowOrHighForDay %>"><%=monthReportDetails.daysIsLowOrHigh %></span></td>
           </tr>
           <tr>
             <td>Work hour:</td>
-            <td><%=monthReportDetails.workHour  + '/' + monthReportDetails.fixedTotalHour %> hr</td>
+            <td><%=monthReportDetails.workingTotalHr  + '/' + monthReportDetails.fixedTotalHr %> hr<span class="<%= monthReportDetails.classLowOrHighForHr %>"><%=
+              monthReportDetails.isTotalExtraOrLessHr %></span> </td>
           </tr>
           <tr>
             <td>Avg Work:</td>
-            <td><%=monthReportDetails.avgWorkHour %> hr</td>
+            <td><%=monthReportDetails.avgWorkHr %> hr <span class="<%= monthReportDetails.classLowOrHighForHr %>" ><%=
+              monthReportDetails.isAvgExtraOrLessHr %></span></td>
           </tr>
           <tr>
             <td>Avg Start:</td>
@@ -258,15 +254,17 @@
         <table>
           <tr>
             <td>Workday:</td>
-            <td><%= yearReportDetails.day %>/6 day</td>
+            <td> <%=yearReportDetails.totalWorkingDays %>/<%= yearReportDetails.fixedWorkdays %> day <span class="<%= yearReportDetails.classLowOrHighForDay %>"><%=yearReportDetails.daysIsLowOrHigh %></span></td>
           </tr>
           <tr>
             <td>Work hour:</td>
-            <td><%=yearReportDetails.workHour  + '/' + yearReportDetails.fixedTotalHour %> hr</td>
+            <td><%=yearReportDetails.workingTotalHr  + '/' + yearReportDetails.fixedTotalHr %> hr<span class="<%= yearReportDetails.classLowOrHighForHr %>"><%=
+              yearReportDetails.isTotalExtraOrLessHr %></span> </td>
           </tr>
           <tr>
             <td>Avg Work:</td>
-            <td><%=yearReportDetails.avgWorkHour %> hr</td>
+            <td><%=yearReportDetails.avgWorkHr %> hr <span class="<%= yearReportDetails.classLowOrHighForHr %>" ><%=
+              yearReportDetails.isAvgExtraOrLessHr %></span></td>
           </tr>
           <tr>
             <td>Avg Start:</td>
@@ -370,9 +368,8 @@
         <td> <%= el.start  %> </td>
         <td><%=  el.end %></td>
         <td><%= el.day === 'Friday' ? 'Off day' : el.type %></td>
-        <% let isZero = el.fixed_time[0]  %> 
 
-        <td><%= el.day === 'Friday' ? '0' : el.fixed_time.replace(isZero, ' ')  %>  hr</td>
+        <td><%= el.day === 'Friday' ? '0' : el.fixed_time %>  hr</td>
         <td><%= el.working_time %></td>
         <td>
           <%= el.type !== 'regular'  ? '00:00:00' : el.time_count %>
@@ -434,12 +431,15 @@ function iconCheck(e){
 
 // getDate format
 function getDateFormat(date) {
+  if(date===null){
+    return null
+  }
   let today = new Date(date);
   const dd = String(today.getDate()).padStart(2, '0');
   const mm = String(today.getMonth() + 1).padStart(2, '0');
   const yyyy = today.getFullYear();
   today = `${yyyy}-${mm}-${dd}`;
-
+console.log({today})
   return today;
 }
 // get current date
@@ -454,13 +454,17 @@ function getDateFormat(date) {
   }
 
 
-  startDate = getDate;
 const dateRange = async function (event) {
   const dateIcon = document.querySelector("#date-icon")
   const dateStart = document.querySelector("#startPicker")
   const dateEnd = document.querySelector("#endPicker")
   const startDate = getDateFormat (startDatePicker.getFullDate())
   const endDate = getDateFormat (endDatePicker.getFullDate() || getCurrentDate())
+  console.log(startDate,endDate)
+
+  dateStart.dataset.date = startDate
+  dateEnd.dataset.date = endDate
+
   if(dateStart.dataset.date=='null'){
     return alert('date not select')
   }
@@ -468,9 +472,11 @@ const dateRange = async function (event) {
   const data = await fetch(
     `${baseUrl}/reports/between/two-date?startDate=${startDate}&endDate=${endDate}`,
   );
+  const getObjects = await data.json(); 
   // let isZero;
   const {dateRangeReport,pageNumber,pageLength,page,numberOfPage} = getObjects.reports
   console.log({pageNumber,page,pageLength,numberOfPage})
+  console.log(dateRangeReport)
   const reportTableBody = document.querySelector('#an-user-report')
   reportShow(reportTableBody,dateRangeReport)
   pagination(pageNumber,numberOfPage,page)
