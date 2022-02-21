@@ -13,7 +13,7 @@ const LeaveModel = require('../models/LeaveModel');
 
 // grobal variable  multiple date
 const holidaysArray = [];
-const leaveDaysArray = [];
+let leaveDaysArray = [];
 let holidayAndLeavedaysDateRange = []
 
 // sum fixedTime
@@ -119,54 +119,106 @@ const ReportController = {
       checkHolidaysAndLeavedays(reportStringify, margeHolidaysAndLeaveDays)
       console.log({ margeHolidaysAndLeaveDays });
 
-      //  =============== report for today
+      /* ======================================================== */
+      /* ==========TODO:  report for this today  start ========== */
+      /* ======================================================== */
       const [{ start }] = await AttendanceModel.todayStartTime(userId)
       const [{ end }] = await AttendanceModel.todayEndTime(userId)
       const [tTotal] = await AttendanceModel.todayTotal(userId)
       const [{ totalExtrOrLess }] = await AttendanceModel.todayTotal(userId)
-      let extraWorkHour; let lessWorkHour;
-      if (totalExtrOrLess === null) {
-        extraWorkHour = '00:00';
-        lessWorkHour = '00:00';
-      } else if (totalExtrOrLess[0] === '-') {
-        lessWorkHour = totalExtrOrLess;
-      } else {
-        extraWorkHour = totalExtrOrLess;
-      }
+      const todayExtraOrLessHr = chckTotalWorkTimeExtraOrLess(totalExtrOrLess)
+
       const platformUser = await ProfileModel.userConnectionDetailsUniqueInfo(userId)
       const today = await AttendanceModel.getToday(userId)
       const { todayTotal } = tTotal
-
       const breakTime = today.length
-      // console.log({ totalExtrOrLess })
-
       const todayReportDetails = new TodayReportDetails(
         todayTotal,
         start,
         end,
         breakTime,
-        extraWorkHour,
-        lessWorkHour,
-      )
-      // ==================== report for this week
-      const [{
-        weekDay, weekFixedTotal, weekTotalHr, weekAvgTotal, weekTotalExtrOrLess,
-      }] = await AttendanceModel.weekDayAndWorkTime(userId)
+        todayExtraOrLessHr,
+        todayExtraOrLessHr,
 
-      const [{ weekAvgStartTime, weekAvgEndTime }] = await AttendanceModel.weekAvgStartEnd(userId)
-      let weekExtraWorkHour; let weekLessWorkHour;
-      chckTotalWorkTimeExtraOrLess(weekTotalExtrOrLess, weekExtraWorkHour, weekLessWorkHour)
+      )
+      console.log({ todayReportDetails });
+
+      /* ======================================================== */
+      /* ==========FIXME:  report for this today  END ========== */
+      /* ======================================================== */
+
+      /* ======================================================== */
+      /* ==========TODO:  report for this week  start ========== */
+      /* ======================================================== */
+
+      const [{ weekCurrentName, weekCurrentDate }] = await AttendanceModel.weekCurrentNameAndDate()
+      console.log({ weekCurrentName, weekCurrentDate });
+
+      let getThisWeekNumberOfday;
+
+      if (weekCurrentName === 'Saturday') {
+        getThisWeekNumberOfday = 1;
+      } else if (weekCurrentName === 'Sunday') {
+        getThisWeekNumberOfday = 2;
+      } else if (weekCurrentName === 'Monday') {
+        getThisWeekNumberOfday = 3;
+      } else if (weekCurrentName === 'Tuesday') {
+        getThisWeekNumberOfday = 4;
+      } else if (weekCurrentName === 'Wednesday') {
+        getThisWeekNumberOfday = 5;
+      } else if (weekCurrentName === 'Thursday') {
+        getThisWeekNumberOfday = 6;
+      } else if (weekCurrentName === 'Friday') {
+        getThisWeekNumberOfday = 7;
+      }
+      console.log({ getThisWeekNumberOfday });
+      const [{ weekStartDate }] = await AttendanceModel.getWeekStartDate(getThisWeekNumberOfday)
+      console.log({ weekStartDate });
+      const [{ isFriday }] = await AttendanceModel.thisWeekFridayDate(weekStartDate)
+      const thisWeekHolidays = await HolidayModel.thisWeekHolidays(weekStartDate)
+      // console.log({ thisWeekHolidays });
+      const thiWeekLeavedays = await LeaveModel.thisWeekLeavedays(weekStartDate, userId)
+      // console.log({ thiWeekLeavedays });
+      const getWeekTotalHolidays = []
+      thisWeekHolidays.forEach((el) => { multipleDatesGenerateOnArray(el.countHolidays, el.holidayStartDate, getWeekTotalHolidays) })
+      const getWeekTotalLeavedays = []
+      thiWeekLeavedays.forEach((el) => { multipleDatesGenerateOnArray(el.countDays, el.stratDate, getWeekTotalLeavedays) })
+      const margeThisWeekHolidayAndLeavedays = [isFriday, ...getWeekTotalHolidays, ...getWeekTotalLeavedays]
+
+      const thisWeekTotalHolidayAndLeavedays = [...new Set(margeThisWeekHolidayAndLeavedays)]
+      const countThisWeekHolidaysAndLeavedays = thisWeekTotalHolidayAndLeavedays.filter((el) => el != null)
+      const weekTotallOffday = countThisWeekHolidaysAndLeavedays.length
+      console.log({ weekTotallOffday });
+
+      // FIXME:
+
+      //
+      const [{
+        thisWeekTotalWorkingDays, weekFixedTotalHr, weekWorkTotalHr, weekAvgTotalHr, weekAvgStartTime, weekAvgEndTime, thisWeekAvgLessOrExtra, weekTotalExtrOrLess,
+      }] = await AttendanceModel.weekDayAndWorkTime(userId, weekStartDate, weekCurrentDate)
+
+      getThisWeekNumberOfday === 7 ? (getThisWeekNumberOfday - 1) : getThisWeekNumberOfday;
+      const thisWeekEtraOrLessHr = chckTotalWorkTimeExtraOrLess(weekTotalExtrOrLess)
       const weekReportDetails = new ReportDetails(
-        weekDay,
-        weekFixedTotal,
-        weekTotalHr,
-        weekAvgTotal,
+        thisWeekTotalWorkingDays,
+        getThisWeekNumberOfday - weekTotallOffday,
+        weekFixedTotalHr,
+        weekWorkTotalHr,
+        weekAvgTotalHr,
         weekAvgStartTime,
         weekAvgEndTime,
-        weekExtraWorkHour,
-        weekLessWorkHour,
+        thisWeekAvgLessOrExtra,
+        thisWeekEtraOrLessHr,
+        isLowOrHighClassForday((getThisWeekNumberOfday - weekTotallOffday), thisWeekTotalWorkingDays),
+        showDaysIsLowOrHigh((getThisWeekNumberOfday - weekTotallOffday), thisWeekTotalWorkingDays),
+        isLowOrHighClassForHr(thisWeekAvgLessOrExtra),
       )
-      // console.log({ weekReportDetails })
+      console.log('sssssssss', { weekReportDetails })
+
+      /* ======================================================== */
+      /* ==========FIXME:  report for this today  END ========== */
+      /* ======================================================== */
+
       /* ======================================================== */
       /* ==========TODO:  report for this month  start ========== */
       /* ======================================================== */
@@ -174,10 +226,10 @@ const ReportController = {
       const [{ thisMonthOffdays }] = await AttendanceModel.thisMonthOffdays()
       const isOffdaysInHolidaysThisMonth = await HolidayModel.thisMonthOffdaysInHolidays()
       const isOffdaysInLeaveadaysThisMonth = await LeaveModel.thisMonthOffdaysInLeavedays(userId)
-      console.log({ thisMonthOffdays });
+      // console.log({ thisMonthOffdays });
 
       const thisMonthTotalOffdaysInHolidaysAndLeavedays = countNumberOfOffdaysInHolidayAndLevedays(isOffdaysInHolidaysThisMonth, isOffdaysInLeaveadaysThisMonth)
-      console.log({ thisMonthTotalOffdaysInHolidaysAndLeavedays });
+      // console.log({ thisMonthTotalOffdaysInHolidaysAndLeavedays });
 
       // const yyy = generateWeekNames('Thursday', 5)
       // console.log({ yyy })
@@ -213,7 +265,7 @@ const ReportController = {
         isLowOrHighClassForHr(thisMonthAvgLessOrExtra),
 
       )
-      console.log({ monthReportDetails })
+      // console.log({ monthReportDetails })
       /* ======================================================== */
       /* ==========FIXME:  report for this month  END ========== */
       /* ======================================================== */
@@ -284,6 +336,8 @@ const ReportController = {
       sumSevendaysFixedTime = 0
 
       // console.log({ userReport });
+      // console.log({ holidaysArray });
+      // console.log({ leaveDaysArray });
 
       res.render('pages/reports', {
         platformUser,
@@ -307,22 +361,44 @@ const ReportController = {
   // return data AJAX for date range input
   reportBetweenTwoDate: async (req, res) => {
     try {
-      const userId = req.user.id;
-      // const { user } = req
+      // const userId = req.user.id;
 
-      // let userId;
-      // if (req.params.id) {
-      //   userId = req.params.id;
-      // } else {
-      //   userId = user.id;
-      // }
+      const { user } = req
+
+      let userId;
+      if (req.params.id) {
+        userId = req.params.id;
+      } else {
+        userId = user.id;
+      }
 
       const { startDate, endDate } = req.query;
+      console.log({ startDate, endDate });
+
       const getData = await AttendanceModel.anEmployeeReportBetweenTwoDate(
         userId, startDate, endDate,
       );
+
+      leaveDaysArray = [];
+
+      // console.log({ leaveDaysArray });
+
+      const betweenTowDatesHoliday = await HolidayModel.betweenTwoDatesHolidays(startDate, endDate)
+
+      const betweenTwoDatesLeavedays = await LeaveModel.betweenTwoDatesLeavedays(startDate, endDate, userId)
+
+      // console.log({ betweenTwoDatesLeavedays });
+
       const getBetweenTowDateTotal = await AttendanceModel.reportBetweenTwoDateTotal(userId, startDate, endDate)
       const betweenTowDateTotalToJson = JSON.parse(JSON.stringify(getBetweenTowDateTotal))
+      const [{ startDayName, totalDay }] = betweenTowDateTotalToJson;
+      // console.log({ startDayName, totalDay });
+
+      const getOffdays = generateWeekNames(startDayName, totalDay)
+      // console.log({ getOffdays });
+
+      // FIXME:  use multipleDatesGenerateOnArray funciton in two date
+      // console.log({ betweenTowDateTotalToJson });
 
       const dataToJson = JSON.parse(JSON.stringify(getData))
       // console.log({ dataToJson });
@@ -352,8 +428,6 @@ const ReportController = {
         el.fixed_total = el.day * el.fixedTime;
         el.totalLessORExtra = calculateTime(el.fixed_total, el.total_seconds)
       })
-
-  
 
       // count time total extar or less
       // return res.json(dataToJson)
@@ -545,12 +619,14 @@ function isLowOrHighClassForday(fixedTotal, workingTotal) {
   return '';
 }
 function isLowOrHighClassForHr(workingTotal) {
-  if (workingTotal === null) return null;
+  if (workingTotal === null || workingTotal === '') return '';
   if (workingTotal[0] === '-') {
     return 'low';
-  } if (workingTotal[0] !== '-') {
+  }
+  if (workingTotal[0] !== '-') {
     return 'high';
   }
+
   return '';
 }
 function showDaysIsLowOrHigh(fixedTotal, workingTotal) {
@@ -562,12 +638,14 @@ function showDaysIsLowOrHigh(fixedTotal, workingTotal) {
   return '';
 }
 function showWorkHrIsLowOrHigh(totalWorkTime) {
-  if (totalWorkTime === null) return null;
-  if (totalWorkTime[0] === '-') {
+  if (totalWorkTime === null || totalWorkTime === ':undefined') {
+    return null;
+  } if (totalWorkTime[0] === '-') {
     return totalWorkTime;
   } if (totalWorkTime === '') {
     return ''
   }
+
   return (`+${totalWorkTime}`);
 }
 // constructor function for report details
@@ -578,26 +656,26 @@ function ReportDetails(
   avgEndTime, isAvgExtraOrLessHr, isTotalExtraOrLessHr,
   classLowOrHighForDay, daysIsLowOrHigh, classLowOrHighForHr,
 ) {
-  this.totalWorkingDays = totalWorkingDays || '0'
-  this.fixedWorkdays = fixedWorkdays || '0'
-  this.fixedTotalHr = fixedTotalHr || '0'
-  this.workingTotalHr = workHourFormateForReport(workingTotalHr) || '0'
+  this.totalWorkingDays = totalWorkingDays || 0
+  this.fixedWorkdays = fixedWorkdays || 0
+  this.fixedTotalHr = fixedTotalHr || 0
+  this.workingTotalHr = workHourFormateForReport(workingTotalHr) || 0
   this.avgWorkHr = workHourFormateForReport(avgWorkHr) || '0'
-  this.avgStartTime = timeFormateForReport(avgStartTime) || '0'
-  this.avgEndTime = timeFormateForReport(avgEndTime) || '0'
-  this.isAvgExtraOrLessHr = showWorkHrIsLowOrHigh(workHourFormateForReport(isAvgExtraOrLessHr))
-  this.isTotalExtraOrLessHr = showWorkHrIsLowOrHigh(workHourFormateForReport(isTotalExtraOrLessHr))
+  this.avgStartTime = (avgStartTime) || '0'
+  this.avgEndTime = (avgEndTime) || '0'
+  this.isAvgExtraOrLessHr = showWorkHrIsLowOrHigh(workHourFormateForReport(isAvgExtraOrLessHr)) || ''
+  this.isTotalExtraOrLessHr = showWorkHrIsLowOrHigh(workHourFormateForReport(isTotalExtraOrLessHr)) || ''
   this.classLowOrHighForDay = classLowOrHighForDay;
   this.daysIsLowOrHigh = daysIsLowOrHigh;
   this.classLowOrHighForHr = classLowOrHighForHr;
 }
 
-function TodayReportDetails(todayTotal, start, end, breakTime, totalExtra, totalLess) {
-  this.todayTotal = timeFormateForReport(todayTotal)
+function TodayReportDetails(todayTotal, start, end, breakTime, isTotalExtraOrLessHr, isLowOrHighClassForToday) {
+  this.todayTotal = (todayTotal) || '0'
   this.start = start
   this.end = end
   this.breakTime = breakTime
-  this.totalExtra = timeToHourWithoutMint(totalExtra)
-  this.totalLess = timeToHourWithoutMint(totalLess)
+  this.isTotalExtraOrLessHr = showWorkHrIsLowOrHigh((isTotalExtraOrLessHr))
+  this.isLowOrHighClassForToday = isLowOrHighClassForHr(isLowOrHighClassForToday)
 }
 module.exports = ReportController;

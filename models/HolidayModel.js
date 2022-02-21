@@ -31,6 +31,12 @@ const HolidayModel = {
     const [row] = await dbConnect.promise().execute(deleteSql, value)
     return row.affectedRows;
   },
+  // this week holiday
+  thisWeekHolidays: async (saturdayDate) => {
+    const query = `SELECT DATE_FORMAT(start,'%Y-%m-%d') AS holidayStartDate, DATEDIFF(end,start) + 1 countHolidays FROM holidays AS h  WHERE DATE(H.start) BETWEEN '${saturdayDate}' AND DATE(NOW()-1)`
+    const [rows] = await dbConnect.promise().execute(query);
+    return rows;
+  },
   thisMonthOffdaysInHolidays: async () => {
     const query = 'SELECT DAYNAME(H.start) AS stratDayName, DATEDIFF(end,start) + 1 countDays FROM holidays AS h  WHERE  DATE(H.start) BETWEEN date( CURRENT_DATE - INTERVAL  DAYOFMONTH(CURRENT_DATE)-1 DAY) and date(CURRENT_DATE)'
     const [rows] = await dbConnect.promise().execute(query);
@@ -47,6 +53,13 @@ const HolidayModel = {
   thisYearOffdaysInHolidays: async () => {
     const query = 'SELECT DAYNAME(H.start) AS stratDayName, DATEDIFF(end,start) + 1 countDays FROM holidays AS h  WHERE  DATE(H.start) BETWEEN date( CURRENT_DATE - INTERVAL  DAYOFYEAR(CURRENT_DATE)-1 DAY) and date(CURRENT_DATE)'
     const [rows] = await dbConnect.promise().execute(query);
+    return rows;
+  },
+  //  between two dates holidays
+  betweenTwoDatesHolidays: async (startDate, endDate) => {
+    const query = "SELECT DATE_FORMAT(start,'%Y-%m-%d') AS holidayStartDate, DATEDIFF(end,start) + 1 countHolidays FROM holidays AS h  WHERE DATE(H.start) BETWEEN ? AND ?"
+    const values = [startDate, endDate]
+    const [rows] = await dbConnect.promise().execute(query, values);
     return rows;
   },
 

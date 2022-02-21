@@ -176,7 +176,7 @@
         <table class="work">
           <tr>
             <td>Work:</td>
-            <td><%= todayReportDetails.todayTotal || "00:00" %> hr <span class="high">+ 15</span></td>
+            <td><%= todayReportDetails.todayTotal || "00:00" %> hr <span class="<%= todayReportDetails.isLowOrHighClassForToday  %>"><%= todayReportDetails.isTotalExtraOrLessHr  %></span></td>
           </tr>
           <tr>
             <td>Time:</td>
@@ -198,15 +198,15 @@
         <table>
           <tr>
             <td>Workday:</td>
-            <td><%= weekReportDetails.day %>/6 day <span class="low">- 2</span></td>
+            <td><%= weekReportDetails.totalWorkingDays %>/<%= weekReportDetails.fixedWorkdays %> day <span class="<%= weekReportDetails.classLowOrHighForDay %>"><%= weekReportDetails.daysIsLowOrHigh %></span></td>
           </tr>
           <tr>
             <td>Work hour:</td>
-            <td><%= weekReportDetails.workHour%>/<%= weekReportDetails.fixedTotalHour   %> hr</td>
+            <td><%= weekReportDetails.workingTotalHr %>/<%= weekReportDetails.fixedTotalHr   %> hr <span class="<%= weekReportDetails.classLowOrHighForHr || '' %>"><%= weekReportDetails.isTotalExtraOrLessHr %></span></td>
           </tr>
           <tr>
             <td>Avg Work:</td>
-            <td> <%= weekReportDetails.avgWorkHour %> hr</td>
+            <td> <%= weekReportDetails.avgWorkHr %> hr <span class="<%= weekReportDetails.classLowOrHighForHr %>"><%= weekReportDetails.isAvgExtraOrLessHr %></span></td>
           </tr>
           <tr>
             <td>Avg Start:</td>
@@ -219,6 +219,7 @@
         </table>
       </div>
     </div>
+    <!--  Markup for report week box  -->
     <div class="month box">
       <h2>This Month</h2>
       <div class="details">

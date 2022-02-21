@@ -48,14 +48,22 @@ const Formater = {
   },
 
   workHourFormateForReport: (time) => {
-    if (time == null) return ''
+    if (time === null || time === undefined) return ''
+
     const s = time.split(':')
+
     const hour = `${s[0]}`
-    const isZero = hour[0]
+
+    const isZero = hour[0] === undefined ? ' ' : hour[0]
+
     const minutes = `${s[1]}`
+
     const result = `${isZero === '0' ? hour.replace(isZero, ' ') : hour}:${minutes}`
+
     const mintIsZeor = result.slice(2, 5)
+
     const withOutZeroResult = result.replace(mintIsZeor, ' ')
+
     return (mintIsZeor === ':00') ? withOutZeroResult : result;
   },
 

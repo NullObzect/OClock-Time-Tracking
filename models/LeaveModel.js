@@ -1,4 +1,5 @@
-const dbConnect = require('../config/database')
+const dbConnect = require('../config/database');
+const { userId } = require('./ProfileModel');
 
 const LeaveModel = {
   addLeaveday: async (userId, start, end, reason) => {
@@ -45,12 +46,26 @@ const LeaveModel = {
     const [rows] = await dbConnect.promise().execute(query, value);
     return rows;
   },
+  // this week leave day
+  thisWeekLeavedays: async (saturdayDate, userId) => {
+    const query = `SELECT DATE(EL.start) AS stratDate, DATEDIFF(end,start) + 1 countDays FROM employee_leaves AS EL   WHERE   DATE(EL.start) BETWEEN  '${saturdayDate}' AND DATE(NOW()-1) AND  EL.user_id = ${userId}`
+    const [rows] = await dbConnect.promise().execute(query);
+    return rows;
+  },
   //  this month employee leave days
   thisYearOffdaysInLeavedays: async (userId) => {
     const query = 'SELECT DAYNAME(EL.start) AS stratDayName, DATEDIFF(end,start) + 1 countDays FROM employee_leaves AS EL   WHERE   DATE(EL.start) BETWEEN date( CURRENT_DATE - INTERVAL  DAYOFYEAR(CURRENT_DATE)-1 DAY) and date(CURRENT_DATE) AND  EL.user_id = ?'
 
     const value = [userId]
     const [rows] = await dbConnect.promise().execute(query, value);
+    return rows;
+  },
+  // between two dates leave days
+  // eslint-disable-next-line no-shadow
+  betweenTwoDatesLeavedays: async (startDate, endDate, userId) => {
+    const query = 'SELECT DAYNAME(EL.start) AS stratDayName, DATEDIFF(end,start) + 1 countDays FROM employee_leaves AS EL   WHERE   DATE(EL.start) BETWEEN ? AND ? AND  EL.user_id = ?'
+    const values = [startDate, endDate, userId]
+    const [rows] = await dbConnect.promise().execute(query, values);
     return rows;
   },
 
