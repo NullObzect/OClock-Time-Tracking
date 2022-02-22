@@ -10,7 +10,7 @@ const {
 const HolidayModel = require('../models/HolidayModel');
 const LeaveModel = require('../models/LeaveModel');
 //
-
+let isUserId;
 // grobal variable  multiple date
 const holidaysArray = [];
 let leaveDaysArray = [];
@@ -55,6 +55,7 @@ const ReportController = {
       let userId;
       if (req.params.id) {
         userId = req.params.id;
+        isUserId = req.params.id;
       } else {
         userId = user.id;
       }
@@ -284,6 +285,7 @@ const ReportController = {
       const thisYearTotalOffdaysInHolidaysAndLeavedays = countNumberOfOffdaysInHolidayAndLevedays(isOffdaysInHolidaysThisYear, isOffdaysInLeaveadaysThisYear)
 
       const getTotalOffdaysThisYear = (thisYearOffdays + thisYearTotalOffdaysInHolidaysAndLeavedays);
+
       // this year total workdays
       const thisYearTotalWorkdays = generateAllOffdaysToWorkdays(getTotalOffdaysThisYear, getThisYearLeavedays, getThisYearHolidays, getThisYearDates)
 
@@ -361,20 +363,15 @@ const ReportController = {
   // return data AJAX for date range input
   reportBetweenTwoDate: async (req, res) => {
     try {
-      // const userId = req.user.id;
-
       const { user } = req
-
       let userId;
-      if (req.params.id) {
-        userId = req.params.id;
+      if (isUserId) {
+        userId = isUserId;
       } else {
         userId = user.id;
       }
-
       const { startDate, endDate } = req.query;
-      console.log({ startDate, endDate });
-
+      // console.log({ startDate, endDate });
       const getData = await AttendanceModel.anEmployeeReportBetweenTwoDate(
         userId, startDate, endDate,
       );
@@ -383,11 +380,13 @@ const ReportController = {
 
       // console.log({ leaveDaysArray });
 
-      const betweenTowDatesHoliday = await HolidayModel.betweenTwoDatesHolidays(startDate, endDate)
+      const isOffdaysInBetweenTowDatesHoliday = await HolidayModel.betweenTwoDatesHolidays(startDate, endDate)
 
-      const betweenTwoDatesLeavedays = await LeaveModel.betweenTwoDatesLeavedays(startDate, endDate, userId)
+      const isOffdaysInBetweenTwoDatesLeavedays = await LeaveModel.betweenTwoDatesLeavedays(startDate, endDate, userId)
+      const totalOffdaysInBetweenTwoDates = countNumberOfOffdaysInHolidayAndLevedays(isOffdaysInBetweenTowDatesHoliday, isOffdaysInBetweenTwoDatesLeavedays)
 
-      // console.log({ betweenTwoDatesLeavedays });
+
+      console.log({ totalOffdaysInBetweenTwoDates });
 
       const getBetweenTowDateTotal = await AttendanceModel.reportBetweenTwoDateTotal(userId, startDate, endDate)
       const betweenTowDateTotalToJson = JSON.parse(JSON.stringify(getBetweenTowDateTotal))
@@ -398,7 +397,7 @@ const ReportController = {
       // console.log({ getOffdays });
 
       // FIXME:  use multipleDatesGenerateOnArray funciton in two date
-      // console.log({ betweenTowDateTotalToJson });
+      console.log({ betweenTowDateTotalToJson });
 
       const dataToJson = JSON.parse(JSON.stringify(getData))
       // console.log({ dataToJson });
@@ -453,55 +452,6 @@ const ReportController = {
     }
   },
 
-  // return data AJAX for date range input
-  reportBetweenTwoDateForAdmin: async (req, res) => {
-    try {
-      const { startDate, endDate } = req.query;
-      console.log(startDate, endData);
-
-      const getData = await AttendanceModel.anEmployeeReportBetweenTwoDate(
-        getId, startDate, endDate,
-      );
-      const getBetweenTowDateTotal = await AttendanceModel.reportBetweenTwoDateTotal(getId, startDate, endDate)
-      const betweenTowDateTotalToJson = JSON.parse(JSON.stringify(getBetweenTowDateTotal))
-      console.log({ betweenTowDateTotalToJson });
-
-      const dataToJson = JSON.parse(JSON.stringify(getData))
-
-      for (let i = 0; i < dataToJson.length; i += 1) {
-        // eslint-disable-next-line no-undef
-        for (let j = 0; j < holidayAndLeavedaysDateRange.length; j += 1) {
-          if (dataToJson[i].date_for_holiday === holidayAndLeavedaysDateRange[j].h_date) {
-            dataToJson[i].type = holidayAndLeavedaysDateRange[j].type
-            dataToJson[i].fixed_time = holidayAndLeavedaysDateRange[j].fixed_time
-
-            break;
-          } else if (dataToJson[i].date_for_holiday === holidayAndLeavedaysDateRange[j].l_date) {
-            dataToJson[i].type = holidayAndLeavedaysDateRange[j].type
-            dataToJson[i].fixed_time = holidayAndLeavedaysDateRange[j].fixed_time
-
-            break;
-          }
-        }
-      }
-
-      // console.log({dataToJson, betweenTowDateTotalToJson});
-
-      betweenTowDateTotalToJson.forEach((el) => {
-        el.fixed_total = el.day * el.fixedTime;
-        el.totalLessORExtra = calculateTime(el.fixed_total, el.total_seconds)
-      })
-
-      // return res.json(dataToJson)
-      res.json({
-        reports: { dataToJson },
-        reportDateRangeTotal: { betweenTowDateTotalToJson },
-      })
-    } catch (err) {
-      console.log('====>Error form ReportController/reportEmployees', err);
-      return err;
-    }
-  },
 }
 /* ======================================================== */
 /* =====FIXME:  report controller all helper  functions ==== */

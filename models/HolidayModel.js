@@ -57,7 +57,7 @@ const HolidayModel = {
   },
   //  between two dates holidays
   betweenTwoDatesHolidays: async (startDate, endDate) => {
-    const query = "SELECT DATE_FORMAT(start,'%Y-%m-%d') AS holidayStartDate, DATEDIFF(end,start) + 1 countHolidays FROM holidays AS h  WHERE DATE(H.start) BETWEEN ? AND ?"
+    const query = 'SELECT DAYNAME(start) AS stratDayName, DATEDIFF(end,start) + 1 countHolidays FROM holidays AS h  WHERE DATE(H.start) BETWEEN ? AND ?'
     const values = [startDate, endDate]
     const [rows] = await dbConnect.promise().execute(query, values);
     return rows;
