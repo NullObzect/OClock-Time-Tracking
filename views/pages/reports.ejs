@@ -101,6 +101,26 @@
   
 }
 
+.filtered-report{
+  background: #f3f3f3;
+  border-radius: 22px;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  display: none;
+
+}
+.filtered-report .box{
+  background-color: #f3f3f3;
+  border: none;
+}
+
+.test{
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
 </style>
 
 
@@ -280,13 +300,34 @@
     </div>
   </div>
 
+  <!-- Markup for filtered  report   box -->
+
+<div class="filtered-report">
+
+   
+ <div class="week box">
+   <h2>Filtered by</h2>
+   <div class="details">
+     <table id="total-report">
+     
+     </table>
+   </div>
+
+
+ </div>
+
+ <div class="filtered-date">
+   <p><span class="select-start-date">11/01/2022</span> to  <span class="select-end-date">11/01/2022</span> </p>
+ </div>
+</div>
+
 
 <!-- Markup Date range for employee-->
 
 <div class="date-range-input">
   <div class="report-title-container">
     <h4>Reports</h4>
-    <p>Last seven days.</p>
+    <p class="report-title">Last seven days.</p>
   </div>
   <div  class="date-picker">
       <div  class="start-date">
@@ -347,8 +388,6 @@
 
        
       <% userReport.map(el => {%>
-        <%# console.log('holiday',el.date_for_holiday) %> 
-        <%#console.log('day',el.day) %> 
       <tr
         class="
           <%=
@@ -391,7 +430,7 @@
         <td class="p-3"><%= el.avgStartTime  || '00' %> </td>
         <td class="p-3"><%= el.avgEndTime  || '00'%> </td>
         <td class="p-3"></td>
-        <td class="p-3"><%= el.fixed_total + 'hr' || '00'  %></td>
+        <td class="p-3"><%= el.fixed_total || '00' + 'hr'   %></td>
         <td class="p-3"><%= el.weekTotal || '00' %> </td>
         <td class="p-3"><%= el.totalLessORExtra === 'NaN:NaN:NaN' ? '00' : el.totalLessORExtra %></td> 
       </tr>
@@ -440,7 +479,6 @@ function getDateFormat(date) {
   const mm = String(today.getMonth() + 1).padStart(2, '0');
   const yyyy = today.getFullYear();
   today = `${yyyy}-${mm}-${dd}`;
-console.log({today})
   return today;
 }
 // get current date
@@ -484,6 +522,66 @@ const dateRange = async function (event) {
   dateIcon.classList.add("date-icon-active")
   // const pagination = document.querySelector('#pagination')
   // pagination.innerHTML = pageNumber.map(p =>`<a class=${ page==p ? 'page-active' : ''} ><li onclick="page(${p})">  ${p}  </li></a>`).join('')
+
+  const dateRangeTotalBox = getObjects.dateRangeReportBox;
+  const {betweenTwoDatesReportDetails} = dateRangeTotalBox;
+  const totalReport = document.getElementById("total-report");
+  const filteredReport = document.querySelector('.filtered-report');
+  const selectStartDate = document.querySelector('.select-start-date');
+  const selectEndDate = document.querySelector('.select-end-date');
+  const reportTitle = document.querySelector('.report-title');
+
+  // report total between to date total 
+  const reportBetweenTwoDateTotal = document.getElementById('last-seven-days-total')
+
+
+   if(dateRangeTotalBox === null){
+        filteredReport.style.display = 'none !important';
+   }else{
+     filteredReport.style.display = 'block';
+     filteredReport.style.display = 'flex';
+     selectStartDate.textContent = startDate
+      selectEndDate.textContent = endDate|| getCurrentDate()
+      reportTitle.innerHTML = `Report between <b>${startDate}</b> and <b>${endDate}</b>`
+  totalReport.innerHTML = `
+          <tr>
+            <td>Workday:</td>
+            <td> ${betweenTwoDatesReportDetails.totalWorkingDays }/${ betweenTwoDatesReportDetails.fixedWorkdays} day <span class="${ betweenTwoDatesReportDetails.classLowOrHighForDay }">${betweenTwoDatesReportDetails.daysIsLowOrHigh }</span></td>
+          </tr>
+          <tr>
+            <td>Work hour:</td>
+            <td>${betweenTwoDatesReportDetails.workingTotalHr  + '/' + betweenTwoDatesReportDetails.fixedTotalHr } hr<span class="${ betweenTwoDatesReportDetails.classLowOrHighForHr }">${
+              betweenTwoDatesReportDetails.isTotalExtraOrLessHr }</span> </td>
+          </tr>
+          <tr>
+            <td>Avg Work:</td>
+              <td>${betweenTwoDatesReportDetails.avgWorkHr} hr <span class="${ betweenTwoDatesReportDetails.classLowOrHighForHr }">${
+                betweenTwoDatesReportDetails.isAvgExtraOrLessHr}</span></td>
+          </tr>
+          <tr>
+            <td>Avg Start:</td>
+            <td>${ betweenTwoDatesReportDetails.avgStartTime } </td>
+          </tr>
+          <tr>
+            <td>Avg End:</td>
+            <td>${ betweenTwoDatesReportDetails.avgEndTime }</td>
+          </tr>
+       
+  `
+      }
+      reportBetweenTwoDateTotal.innerHTML = 
+      `
+      <tr>
+        <td colspan="2">Total = ${ 'Present' + ' ' + betweenTwoDatesReportDetails.totalWorkingDays + '/' + betweenTwoDatesReportDetails.fixedWorkdays}  </td>
+        <td class="p-3">${ betweenTwoDatesReportDetails.avgStartTime || '0' }</td>
+        <td class="p-3">${ betweenTwoDatesReportDetails.avgEndTime || '0' }</td>
+        <td class="p-3"></td>
+        <td class="p-3">${ betweenTwoDatesReportDetails.fixedTotalHr + ' ' + 'hr'|| '00' }</td>
+        <td class="p-3">${ betweenTwoDatesReportDetails.workingTotalHr  || '00'}</td>
+        <td class="p-3">${ betweenTwoDatesReportDetails.isTotalExtraOrLessHr || '00'}</td> 
+      </tr>
+      `
+
 }
 
 async function page(pageNo){

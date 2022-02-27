@@ -63,7 +63,7 @@ const LeaveModel = {
   // between two dates leave days
   // eslint-disable-next-line no-shadow
   betweenTwoDatesLeavedays: async (startDate, endDate, userId) => {
-    const query = 'SELECT DAYNAME(EL.start) AS stratDayName, DATEDIFF(end,start) + 1 countDays FROM employee_leaves AS EL   WHERE   DATE(EL.start) BETWEEN ? AND ? AND  EL.user_id = ?'
+    const query = 'SELECT DAYNAME(EL.start) AS stratDayName, DATEDIFF(end,start) + 1 countDays, DATE_FORMAT(start, "%Y-%m-%d") AS leaveStartDate, DATEDIFF(end,start) + 1 AS countLeaveDays  FROM employee_leaves AS EL   WHERE   DATE(EL.start) BETWEEN ? AND ? AND  EL.user_id = ?'
     const values = [startDate, endDate, userId]
     const [rows] = await dbConnect.promise().execute(query, values);
     return rows;

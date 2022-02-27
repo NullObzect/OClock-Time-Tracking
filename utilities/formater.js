@@ -12,6 +12,7 @@ const Formater = {
   // functin for total time count
 
   calculateTime: (fixedTime, workingTotalSec) => {
+    if (fixedTime === null || workingTotalSec === null) return null;
     const getFixedSec = Number(fixedTime * 60 * 60);
     let getTotalSec = getFixedSec - workingTotalSec
     getTotalSec = getFixedSec === 0 ? workingTotalSec - getFixedSec : getFixedSec - workingTotalSec

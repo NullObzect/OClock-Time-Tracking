@@ -5,7 +5,7 @@ const UserModel = require('../models/UserModel')
 const ProfileModel = require('../models/ProfileModel')
 const { pageNumbers } = require('../utilities/pagination')
 const {
-  timeToHour, calculateTime, dateFormate, timeFormateForReport, workHourFormateForReport, timeToHourWithoutMint,
+  timeToHour, calculateTime, dateFormate, workHourFormateForReport,
 } = require('../utilities/formater');
 const HolidayModel = require('../models/HolidayModel');
 const LeaveModel = require('../models/LeaveModel');
@@ -51,11 +51,12 @@ const ReportController = {
 
   userReport: async (req, res) => {
     try {
+      isUserId = null;
       const { user } = req
       let userId;
       if (req.params.id) {
         userId = req.params.id;
-        isUserId = req.params.id;
+        isUserId = userId;
       } else {
         userId = user.id;
       }
@@ -89,16 +90,16 @@ const ReportController = {
       // check employee work in holiday
 
       const employeeWorkInHoliday = holidaysArray.filter((el) => lastSevenDaysReportDates.includes(el))
-      console.log({ employeeWorkInHoliday })
+      // console.log({ employeeWorkInHoliday })
       const holidayObject = [];
       employeeWorkInHoliday.forEach((el) => {
         holidayObject.push({ h_date: el, type: 'holiday', fixed_time: '0' })
       })
-      console.log({ holidayObject });
+      // console.log({ holidayObject });
 
       // =========for employee leave date
       const employeeLeaveDates = await AttendanceModel.employeeLeaveDates(userId)
-      console.log({ employeeLeaveDates });
+      // console.log({ employeeLeaveDates });
 
       employeeLeaveDates.forEach((el) => {
         multipleLeaveDates(el.count_leave_day, el.leave_start)
@@ -115,10 +116,10 @@ const ReportController = {
       const margeHolidaysAndLeaveDays = [...holidayObject, ...leaveDayObject]
 
       holidayAndLeavedaysDateRange = margeHolidaysAndLeaveDays;
-      console.log({ holidayAndLeavedaysDateRange });
+      // console.log({ holidayAndLeavedaysDateRange });
       // check holiday and leave day then change type
       checkHolidaysAndLeavedays(reportStringify, margeHolidaysAndLeaveDays)
-      console.log({ margeHolidaysAndLeaveDays });
+      // console.log({ margeHolidaysAndLeaveDays });
 
       /* ======================================================== */
       /* ==========TODO:  report for this today  start ========== */
@@ -142,7 +143,7 @@ const ReportController = {
         todayExtraOrLessHr,
 
       )
-      console.log({ todayReportDetails });
+      // console.log({ todayReportDetails });
 
       /* ======================================================== */
       /* ==========FIXME:  report for this today  END ========== */
@@ -153,7 +154,7 @@ const ReportController = {
       /* ======================================================== */
 
       const [{ weekCurrentName, weekCurrentDate }] = await AttendanceModel.weekCurrentNameAndDate()
-      console.log({ weekCurrentName, weekCurrentDate });
+      // console.log({ weekCurrentName, weekCurrentDate });
 
       let getThisWeekNumberOfday;
 
@@ -172,9 +173,9 @@ const ReportController = {
       } else if (weekCurrentName === 'Friday') {
         getThisWeekNumberOfday = 7;
       }
-      console.log({ getThisWeekNumberOfday });
+      // console.log({ getThisWeekNumberOfday });
       const [{ weekStartDate }] = await AttendanceModel.getWeekStartDate(getThisWeekNumberOfday)
-      console.log({ weekStartDate });
+      // console.log({ weekStartDate });
       const [{ isFriday }] = await AttendanceModel.thisWeekFridayDate(weekStartDate)
       const thisWeekHolidays = await HolidayModel.thisWeekHolidays(weekStartDate)
       // console.log({ thisWeekHolidays });
@@ -189,7 +190,7 @@ const ReportController = {
       const thisWeekTotalHolidayAndLeavedays = [...new Set(margeThisWeekHolidayAndLeavedays)]
       const countThisWeekHolidaysAndLeavedays = thisWeekTotalHolidayAndLeavedays.filter((el) => el != null)
       const weekTotallOffday = countThisWeekHolidaysAndLeavedays.length
-      console.log({ weekTotallOffday });
+      // console.log({ weekTotallOffday });
 
       // FIXME:
 
@@ -214,7 +215,7 @@ const ReportController = {
         showDaysIsLowOrHigh((getThisWeekNumberOfday - weekTotallOffday), thisWeekTotalWorkingDays),
         isLowOrHighClassForHr(thisWeekAvgLessOrExtra),
       )
-      console.log('sssssssss', { weekReportDetails })
+      // console.log('sssssssss', { weekReportDetails })
 
       /* ======================================================== */
       /* ==========FIXME:  report for this today  END ========== */
@@ -227,21 +228,15 @@ const ReportController = {
       const [{ thisMonthOffdays }] = await AttendanceModel.thisMonthOffdays()
       const isOffdaysInHolidaysThisMonth = await HolidayModel.thisMonthOffdaysInHolidays()
       const isOffdaysInLeaveadaysThisMonth = await LeaveModel.thisMonthOffdaysInLeavedays(userId)
-      // console.log({ thisMonthOffdays });
 
       const thisMonthTotalOffdaysInHolidaysAndLeavedays = countNumberOfOffdaysInHolidayAndLevedays(isOffdaysInHolidaysThisMonth, isOffdaysInLeaveadaysThisMonth)
-      // console.log({ thisMonthTotalOffdaysInHolidaysAndLeavedays });
 
-      // const yyy = generateWeekNames('Thursday', 5)
-      // console.log({ yyy })
-
-      const getTotalOffdays = (thisMonthOffdays + thisMonthTotalOffdaysInHolidaysAndLeavedays);
+      const getTotalOffdays = (thisMonthOffdays - thisMonthTotalOffdaysInHolidaysAndLeavedays);
       const getThiMontHolidayDates = await AttendanceModel.thisMonthHolidays()
       const getThisMonthLeaveDates = await AttendanceModel.thisMonthLeaveDays(userId)
+
       const getThisMonthdays = await AttendanceModel.thisMonthDates()
       const thisMonthTotalWorkdays = generateAllOffdaysToWorkdays(getTotalOffdays, getThisMonthLeaveDates, getThiMontHolidayDates, getThisMonthdays)
-
-      // console.log({ getTotalOffdays, thisMonthTotalWorkdays });
 
       const [{
         thisMonthTotalWorkingDays, monthFixedTotalHr, monthWorkTotalHr, monthAvgTotalHr, thisMonthAvgLessOrExtra, monthTotalExtrOrLess,
@@ -266,7 +261,7 @@ const ReportController = {
         isLowOrHighClassForHr(thisMonthAvgLessOrExtra),
 
       )
-      // console.log({ monthReportDetails })
+      console.log({ monthReportDetails })
       /* ======================================================== */
       /* ==========FIXME:  report for this month  END ========== */
       /* ======================================================== */
@@ -284,12 +279,12 @@ const ReportController = {
 
       const thisYearTotalOffdaysInHolidaysAndLeavedays = countNumberOfOffdaysInHolidayAndLevedays(isOffdaysInHolidaysThisYear, isOffdaysInLeaveadaysThisYear)
 
-      const getTotalOffdaysThisYear = (thisYearOffdays + thisYearTotalOffdaysInHolidaysAndLeavedays);
+      const getTotalOffdaysThisYear = (thisYearOffdays - thisYearTotalOffdaysInHolidaysAndLeavedays);
 
       // this year total workdays
       const thisYearTotalWorkdays = generateAllOffdaysToWorkdays(getTotalOffdaysThisYear, getThisYearLeavedays, getThisYearHolidays, getThisYearDates)
 
-      console.log({ thisYearTotalWorkdays });
+      // console.log({ thisYearTotalWorkdays });
 
       const [{
         thisYearTotalWorkingDays, yearFixedTotalHr, yearWorkTotalHr, yearAvgTotalHr, thisYearAvgLessOrExtra, yearTotalExtrOrLess,
@@ -324,7 +319,7 @@ const ReportController = {
       reportStringify.forEach((el) => {
         sumSevendaysFixedTime = totalFixedTime(el.day, el.fixed_time, el.type)
       })
-      console.log({ sumSevendaysFixedTime });
+      // console.log({ sumSevendaysFixedTime });
 
       // last seven days total reports for employee
       const employeeLastSevendaysReportTotal = await AttendanceModel.reportLastSevendaysTotalForEmployee(userId)
@@ -336,6 +331,9 @@ const ReportController = {
       const userReport = [...reportStringify]
       sumFixedTime = 0;
       sumSevendaysFixedTime = 0
+
+      const [{ present }] = employeeLastSevendaysReportTotal
+      console.log(present === 0);
 
       // console.log({ userReport });
       // console.log({ holidaysArray });
@@ -363,73 +361,65 @@ const ReportController = {
   // return data AJAX for date range input
   reportBetweenTwoDate: async (req, res) => {
     try {
+      // isUserId = null
       const { user } = req
+
       let userId;
       if (isUserId) {
         userId = isUserId;
       } else {
         userId = user.id;
       }
+
       const { startDate, endDate } = req.query;
-      // console.log({ startDate, endDate });
       const getData = await AttendanceModel.anEmployeeReportBetweenTwoDate(
         userId, startDate, endDate,
       );
 
       leaveDaysArray = [];
-
-      // console.log({ leaveDaysArray });
-
       const isOffdaysInBetweenTowDatesHoliday = await HolidayModel.betweenTwoDatesHolidays(startDate, endDate)
-
       const isOffdaysInBetweenTwoDatesLeavedays = await LeaveModel.betweenTwoDatesLeavedays(startDate, endDate, userId)
       const totalOffdaysInBetweenTwoDates = countNumberOfOffdaysInHolidayAndLevedays(isOffdaysInBetweenTowDatesHoliday, isOffdaysInBetweenTwoDatesLeavedays)
-
-
-      console.log({ totalOffdaysInBetweenTwoDates });
-
       const getBetweenTowDateTotal = await AttendanceModel.reportBetweenTwoDateTotal(userId, startDate, endDate)
       const betweenTowDateTotalToJson = JSON.parse(JSON.stringify(getBetweenTowDateTotal))
       const [{ startDayName, totalDay }] = betweenTowDateTotalToJson;
       // console.log({ startDayName, totalDay });
 
-      const getOffdays = generateWeekNames(startDayName, totalDay)
-      // console.log({ getOffdays });
+      const getWeeksNameBetweenTwoDates = generateWeekNames(startDayName, totalDay)
 
+      const getOffdays = getWeeksNameBetweenTwoDates.reduce((acc, el) => acc + (el === 'Friday'), 0)
+
+      const totalOffdays = getOffdays - totalOffdaysInBetweenTwoDates;
       // FIXME:  use multipleDatesGenerateOnArray funciton in two date
-      console.log({ betweenTowDateTotalToJson });
+
+      const betweenTwoDatesTotalWorkdays = generateAllOffdaysToWorkdays(totalOffdays, isOffdaysInBetweenTwoDatesLeavedays, isOffdaysInBetweenTowDatesHoliday, betweenTowDateTotalToJson)
+
+      const [{
+        attendDay, fixedTotal, workTotalHr, avgTotalHr, avgLessOrExtra, avgStartTime, avgEndTime, totalExtrOrLess,
+      }] = betweenTowDateTotalToJson;
+      const betweenTwoDatesExtraOrLessHr = chckTotalWorkTimeExtraOrLess(totalExtrOrLess)
+
+      console.log({ betweenTwoDatesTotalWorkdays });
+
+      const betweenTwoDatesReportDetails = new ReportDetails(
+        attendDay,
+        betweenTwoDatesTotalWorkdays,
+        fixedTotal,
+        workTotalHr,
+        avgTotalHr,
+        avgStartTime,
+        avgEndTime,
+        avgLessOrExtra,
+        betweenTwoDatesExtraOrLessHr,
+        isLowOrHighClassForday(betweenTwoDatesTotalWorkdays, attendDay),
+        showDaysIsLowOrHigh(betweenTwoDatesTotalWorkdays, attendDay),
+        isLowOrHighClassForHr(betweenTwoDatesExtraOrLessHr),
+
+      )
+      // console.log({ betweenTwoDatesReportDetails });
+      // console.log({ isUserId });
 
       const dataToJson = JSON.parse(JSON.stringify(getData))
-      // console.log({ dataToJson });
-      // console.log({ holidayAndLeavedaysDateRange });
-
-      for (let i = 0; i < dataToJson.length; i += 1) {
-        // eslint-disable-next-line no-undef
-        for (let j = 0; j < holidayAndLeavedaysDateRange.length; j += 1) {
-          if (dataToJson[i].date_for_holiday === holidayAndLeavedaysDateRange[j].h_date) {
-            dataToJson[i].type = holidayAndLeavedaysDateRange[j].type
-            dataToJson[i].fixed_time = holidayAndLeavedaysDateRange[j].fixed_time
-
-            break;
-          } else if (dataToJson[i].date_for_holiday === holidayAndLeavedaysDateRange[j].l_date) {
-            dataToJson[i].type = holidayAndLeavedaysDateRange[j].type
-            dataToJson[i].fixed_time = holidayAndLeavedaysDateRange[j].fixed_time
-
-            break;
-          }
-        }
-      }
-      let dateRangeFixedTime = 0;
-
-      //  store fixed time with date range
-
-      betweenTowDateTotalToJson.forEach((el) => {
-        el.fixed_total = el.day * el.fixedTime;
-        el.totalLessORExtra = calculateTime(el.fixed_total, el.total_seconds)
-      })
-
-      // count time total extar or less
-      // return res.json(dataToJson)
       const page = Number(req.query.page) || 1
       const limit = Number(req.query.limit) || 4
       const startIndex = (page - 1) * limit
@@ -444,8 +434,8 @@ const ReportController = {
           dateRangeReport, pageNumber, numberOfPage, pageLength, page,
         },
         reportDateRangeTotal: { betweenTowDateTotalToJson },
+        dateRangeReportBox: { betweenTwoDatesReportDetails },
       })
-      dateRangeFixedTime = 0;
     } catch (err) {
       console.log('====>Error form ReportController/reportBetweenTwoDate', err);
       return err;
@@ -500,11 +490,15 @@ function generateAllOffdaysToWorkdays(offdays, leavedays, holidays, allDates) {
   const getHolidaysArray = [];
   const getAllDatesArray = [];
 
-  leavedays.forEach((el) => { multipleDatesGenerateOnArray(el.countThisMonthWorkday, el.thisMonthStartDate, getLeavedaysArray) })
+  leavedays.forEach((el) => { multipleDatesGenerateOnArray(el.countLeaveDays, el.leaveStartDate, getLeavedaysArray) })
 
   holidays.forEach((el) => { multipleDatesGenerateOnArray(el.countHolidays, el.holidayStartDate, getHolidaysArray) })
 
-  allDates.forEach((el) => { multipleDatesGenerateOnArray(el.countWorkday, el.tartDate, getAllDatesArray) })
+  allDates.forEach((el) => { multipleDatesGenerateOnArray(el.countWorkday, el.startDate, getAllDatesArray) })
+
+  // console.log({
+  //   offdays, leavedays, holidays, allDates,
+  // });
 
   return generateTotalWorkdays(offdays, getLeavedaysArray, getHolidaysArray, getAllDatesArray);
 }
@@ -515,9 +509,16 @@ function generateTotalWorkdays(offdays, leavedays, holidays, allDates) {
   if (leavedays == null) return null;
   if (holidays == null) return null;
   if (allDates == null) return null;
+  // console.log('leev', leavedays.length);
+
   const margedArr = [...leavedays, ...holidays];
+  // console.log(margedArr.length);
+
   const uniqueArray = [...new Set(margedArr)]
+  // console.log(uniqueArray.length);
+
   const fixedWorkdays = allDates.filter((el) => !uniqueArray.includes(el))
+  // console.log('vvvv', fixedWorkdays.length);
 
   return fixedWorkdays.length - offdays;
 }

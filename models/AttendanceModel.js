@@ -110,7 +110,7 @@ const AttendanceModel = {
   //   return rows;
   // },
   thisMonthOffdays: async () => {
-    const query = "select ceiling((day(now()) - (6 - weekday(date_format(now(),'%Y-%m-01'))))/7)  + case when 6 - weekday(date_format(now(),'%Y-%m-01'))> 0  then 1 else 0 end thisMonthOffdays"
+    const query = "select ceiling((day(now() -1) - (7 - weekday(date_format(now() -1,'%Y-%m-01'))))/7)  + case when 7 - weekday(date_format(now() -1,'%Y-%m-01'))> 0  then 1 else 0 end thisMonthOffdays"
     const [rows] = await dbConnect.promise().execute(query);
     return rows;
   },
@@ -135,7 +135,7 @@ const AttendanceModel = {
     return rows;
   },
   monthDayAndWorkTime: async (userId) => {
-    const query = "SELECT COUNT(DISTINCT DATE(create_at)) AS thisMonthTotalWorkingDays, TIME_FORMAT( O.option_value, '%h') * COUNT(DISTINCT DATE(create_at)) AS monthFixedTotalHr, TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) as monthWorkTotalHr,  SEC_TO_TIME(TIME_TO_SEC(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start))))) / COUNT(DISTINCT DATE(create_at)))   AS monthAvgTotalHr, SUBTIME(SEC_TO_TIME(TIME_TO_SEC(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start))))) / COUNT(DISTINCT DATE(create_at))), TIME(O.option_value)) AS thisMonthAvgLessOrExtra, SUBTIME(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))),SEC_TO_TIME(((O.option_value) * COUNT(DISTINCT DATE(create_at)) * 60) *60)) AS monthTotalExtrOrLess FROM attendance JOIN options AS O ON o.option_title = 'fixed time'  WHERE user_id = ? AND END IS NOT NULL AND Date(create_at) BETWEEN date( CURRENT_DATE - INTERVAL  DAYOFMONTH(CURRENT_DATE) -1 DAY) and date(CURRENT_DATE)"
+    const query = "SELECT COUNT(DISTINCT DATE(create_at)) AS thisMonthTotalWorkingDays, TIME_FORMAT( O.option_value, '%h') * COUNT(DISTINCT DATE(create_at)) AS monthFixedTotalHr, TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) as monthWorkTotalHr,  SEC_TO_TIME(TIME_TO_SEC(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start))))) / COUNT(DISTINCT DATE(create_at)))   AS monthAvgTotalHr, SUBTIME(SEC_TO_TIME(TIME_TO_SEC(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start))))) / COUNT(DISTINCT DATE(create_at))), TIME(O.option_value)) AS thisMonthAvgLessOrExtra, SUBTIME(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))),SEC_TO_TIME(((O.option_value) * COUNT(DISTINCT DATE(create_at)) * 60) *60)) AS monthTotalExtrOrLess FROM attendance JOIN options AS O ON o.option_title = 'fixed time'  WHERE user_id = ? AND END IS NOT NULL AND Date(create_at) BETWEEN date( CURRENT_DATE - INTERVAL  DAYOFMONTH(CURRENT_DATE) -1 DAY) and date(CURRENT_DATE) -1"
     const value = [userId]
     const [rows] = await dbConnect.promise().execute(query, value);
     return rows;
@@ -163,7 +163,7 @@ const AttendanceModel = {
   },
 
   yearDayAndWorkTime: async (userId) => {
-    const query = "SELECT COUNT(DISTINCT DATE(create_at)) AS thisYearTotalWorkingDays, TIME_FORMAT( O.option_value, '%h') * COUNT(DISTINCT DATE(create_at)) AS yearFixedTotalHr, TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) as yearWorkTotalHr,  SEC_TO_TIME(TIME_TO_SEC(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start))))) / COUNT(DISTINCT DATE(create_at)))   AS yearAvgTotalHr, SUBTIME(SEC_TO_TIME(TIME_TO_SEC(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start))))) / COUNT(DISTINCT DATE(create_at))), TIME(O.option_value)) AS thisYearAvgLessOrExtra, SUBTIME(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))),SEC_TO_TIME(((O.option_value) * COUNT(DISTINCT DATE(create_at)) * 60) *60)) AS yearTotalExtrOrLess FROM attendance JOIN options AS O ON o.option_title = 'fixed time'  WHERE user_id = ? AND END IS NOT NULL AND Date(create_at) BETWEEN date( CURRENT_DATE - INTERVAL  DAYOFYEAR(CURRENT_DATE) -1 DAY) and date(CURRENT_DATE)"
+    const query = "SELECT COUNT(DISTINCT DATE(create_at)) AS thisYearTotalWorkingDays, TIME_FORMAT( O.option_value, '%h') * COUNT(DISTINCT DATE(create_at)) AS yearFixedTotalHr, TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) as yearWorkTotalHr,  SEC_TO_TIME(TIME_TO_SEC(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start))))) / COUNT(DISTINCT DATE(create_at)))   AS yearAvgTotalHr, SUBTIME(SEC_TO_TIME(TIME_TO_SEC(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start))))) / COUNT(DISTINCT DATE(create_at))), TIME(O.option_value)) AS thisYearAvgLessOrExtra, SUBTIME(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))),SEC_TO_TIME(((O.option_value) * COUNT(DISTINCT DATE(create_at)) * 60) *60)) AS yearTotalExtrOrLess FROM attendance JOIN options AS O ON o.option_title = 'fixed time'  WHERE user_id = ? AND END IS NOT NULL AND Date(create_at) BETWEEN date( CURRENT_DATE - INTERVAL  DAYOFYEAR(CURRENT_DATE) -1 DAY) and date(CURRENT_DATE) -1"
     const value = [userId]
     const [rows] = await dbConnect.promise().execute(query, value);
     return rows;
@@ -291,8 +291,8 @@ const AttendanceModel = {
   reportBetweenTwoDateTotal: async (userId, startDate, endDate) => {
     console.log({ userId, startDate, endDate });
 
-    const getTotal = `SELECT DAYNAME('${startDate}') startDayName, DATEDIFF('${endDate}', '${startDate}')  AS totalDay, COUNT(DISTINCT DATE(create_at)) AS attendDay,  TIME_FORMAT(O.option_value, "%h")  AS fixedTimeHr, o.option_value * COUNT(DISTINCT Date(create_at)) AS fixedTotal,TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) as workTotalHr,
-    SEC_TO_TIME(TIME_TO_SEC(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start))))) / COUNT(DISTINCT DATE(create_at)))   AS avgTotalHr,  SUBTIME(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))),SEC_TO_TIME(((O.option_value) * COUNT(DISTINCT DATE(create_at)) * 60) *60)) AS totalExtrOrLess,
+    const getTotal = `SELECT DATE_FORMAT('${startDate}', '%Y-%m-%d') AS startDate, DATEDIFF('${endDate}', '${startDate}')  AS countWorkday, DAYNAME('${startDate}') startDayName, DATEDIFF('${endDate}', '${startDate}')  AS totalDay, COUNT(DISTINCT DATE(create_at)) AS attendDay,  TIME_FORMAT(O.option_value, "%h")  AS fixedTimeHr, o.option_value * COUNT(DISTINCT Date(create_at)) AS fixedTotal,TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) as workTotalHr,
+    SEC_TO_TIME(TIME_TO_SEC(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start))))) / COUNT(DISTINCT DATE(create_at)))   AS avgTotalHr,  SUBTIME(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))),SEC_TO_TIME(((O.option_value) * COUNT(DISTINCT DATE(create_at)) * 60) *60)) AS totalExtrOrLess,SUBTIME(SEC_TO_TIME(TIME_TO_SEC(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start))))) / COUNT(DISTINCT DATE(create_at))), TIME(O.option_value)) AS avgLessOrExtra,
    TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(start))),"%h:%i %p") AS avgStartTime, TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(end))),"%h:%i %p") AS avgEndTime FROM attendance JOIN options AS o WHERE o.option_title = "fixed time"  AND user_id = ? AND DATE(create_at) BETWEEN ? AND  ? `
     const values = [userId, startDate, endDate];
     const [rows] = await dbConnect.promise().execute(getTotal, values);
@@ -315,28 +315,3 @@ const AttendanceModel = {
   },
 }
 module.exports = AttendanceModel;
-
-// SELECT    SUM(DATEDIFF(H.end, H.start) + 1)  AS numOfHoliday   FROM `attendance` AS A JOIN holidays AS H  ON DATE(A.create_at)   IN    (DATE(H.start))
-
-// WHERE A.user_id = 18 AND   Date(create_at)   BETWEEN date( CURRENT_DATE - INTERVAL 300 day) and date(CURRENT_DATE)
-
-// SELECT  SUM( DISTINCT DATEDIFF(EL.end, EL.start) + 1) AS numOfLeaveDay,  sum(DATEDIFF(H.end, H.start) + 1 ) AS numOfHoliday  FROM `attendance` AS A  JOIN holidays AS H  ON DATE(A.create_at)   IN    (DATE(H.start))    JOIN employee_leaves AS EL ON DATE(A.create_at) IN (DATE(EL.start))
-
-// WHERE A.user_id = 18 AND   Date(create_at)   BETWEEN date( CURRENT_DATE - INTERVAL 300 day) and date(CURRENT_DATE)
-
-// function generateTotalOffdays(fridays, leavedays, holidays){
-
-//   if(fridays == null)  return null;
-//   if(leavedays == null)  return null;
-//   if(holidays == null)  return null;
-//   const margedArr = [...fridays, ...leavedays, ...holidays];
-//   const uniqueArray = [... new Set(margedArr)]
-
-//    return uniqueArray.length;
-
-// }
-// console.log(generateTotalOffdays(fridays,leavedays,holidays))
-
-// SELECT   DATE_FORMAT(NOW() - interval (DAY(NOW()) -1) DAY, "%Y-%m-%d") AS thisMonthStartDate,  DATEDIFF(CURRENT_DATE,  NOW() - INTERVAL (DAY(now())-1) DAY) AS countThisMonthWorkday
-
-// const query = "SELECT COUNT(DISTINCT DATE(create_at)) AS weekDay, TIME_FORMAT( O.option_value, '%h') * COUNT(DISTINCT DATE(create_at)) AS weekFixedTotal, TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) as weekTotalHr,  SEC_TO_TIME(TIME_TO_SEC(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start))))) / COUNT(DISTINCT DATE(create_at)))   AS weekAvgTotal, SUBTIME(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))),SEC_TO_TIME(((O.option_value) * COUNT(DISTINCT DATE(create_at)) * 60) *60)) AS weekTotalExtrOrLess FROM attendance JOIN options AS O ON o.option_title = 'fixed time'   WHERE user_id = ? AND END IS NOT NULL and Date(create_at) BETWEEN date( CURRENT_DATE - INTERVAL 6 day) and date(CURRENT_DATE)"
