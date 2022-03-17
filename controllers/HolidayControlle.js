@@ -1,9 +1,12 @@
 const HolidayModel = require('../models/HolidayModel');
 const UserModel = require('../models/UserModel')
 
-const helperJs = require('../public/js/halper')
+// const helperJs = require('../public/js/halper')
 const Flash = require('../utilities/Flash')
 // console.log(helperJs)
+const {
+  dateFormate,
+} = require('../utilities/formater');
 
 const HolidayController = {
 
@@ -27,7 +30,7 @@ const HolidayController = {
       if (inserted.errno) {
         res.send('Error')
       } else {
-        res.redirect('/')
+        res.redirect('/options/holiday')
       }
     } catch (err) {
       console.log('====>Error form HolidayControlle/addHoliday', err);
@@ -49,19 +52,22 @@ const HolidayController = {
     res.render('pages/editHoliday', { holidayData })
   },
   getUpdateHoliday: async (req, res) => {
-    const id = hId;
-    const { title, start, end } = req.body
+    const {
+      title, start, end, id,
+    } = req.body
+    console.log(req.body);
+
     const isUpdate = await HolidayModel.updateHoliday(
       id,
       title,
-      helperJs.getDateFormat(start),
-      helperJs.getDateFormat(end),
-      hId,
+      dateFormate(start),
+      dateFormate(end),
+
     )
     if (isUpdate.errno) {
       res.send('Have Error')
     } else {
-      res.redirect('/holiday-list')
+      res.redirect('/options/holiday')
     }
   },
   getDeleteHoliday: async (req, res) => {
@@ -70,7 +76,7 @@ const HolidayController = {
     if (isDelete.errno) {
       res.send('Have Error')
     } else {
-      res.redirect('/holiday-list')
+      res.redirect('/options/holiday')
     }
   },
   employeeSeeHolidays: async (req, res) => {
