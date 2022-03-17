@@ -56,12 +56,15 @@ const selectStartDate = async (event) => {
     `${baseUrl}/reports/between/two-date?startDate=${startDate}&endDate=${getCurrentDate()}`,
   );
   const getObjects = await data.json();
+  console.log({ getObjects });
+
   const getReports = getObjects.reports.dataToJson
+  console.log({ getReports });
 
   // between to data total
   const dateRangeTotalTr = document.getElementById('last-seven-days-total')
 
-  const getReportsTotal = getObjects.reportDateRangeTotal.betweenTowDateTotalToJson
+  /* const getReportsTotal = getObjects.reportDateRangeTotal.betweenTowDateTotalToJson
   console.log({ getReportsTotal });
   dateRangeTotalTr.innerHTML = getReportsTotal.map((el) => `
     
@@ -74,7 +77,7 @@ const selectStartDate = async (event) => {
   <td class="p-3"> ${el.weekTotal || '00'} </td>
   <td class="p-3">${el.totalLessORExtra || '00'}</td>
   </tr>
-    `)
+    `) */
 
   reportData.push(getReports)
   // console.log('start', jsonData)
@@ -92,7 +95,7 @@ const selectEndDate = async (event) => {
   );
   const getObjects = await data.json();
   const getReports = getObjects.reports.dataToJson
-
+/* 
   const dateRangeTotalTr = document.getElementById('last-seven-days-total')
 
   const getReportsTotal = getObjects.reportDateRangeTotal.betweenTowDateTotalToJson
@@ -109,7 +112,7 @@ const selectEndDate = async (event) => {
   <td class="p-3"> ${el.weekTotal || '00'} </td>
   <td class="p-3">${el.totalLessORExtra || '00'}</td>
   </tr>
-    `)
+    `) */
 
   endData.push(getReports)
   show(getReports)
