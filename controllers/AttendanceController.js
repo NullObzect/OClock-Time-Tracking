@@ -8,10 +8,22 @@ const AttendanceController = {
     const { projectId, workDetails } = req.body
     try {
       const { id } = req.user
-      const insertedAttendanceStart = await AttendanceModel.setAttendanceStart(id, projectId, workDetails)
+      const [{ inTime }] = await AttendanceModel.getInTime()
+      const [{ outTime }] = await AttendanceModel.getOutTime()
+      // const isId = await AttendanceModel.getCurrentDateUserId(id);
+      // const isUserId = isId
+      // console.log({ isUserId });
+
+      // console.log('xxx', isUserId === undefined);
+      // if (!isUserId) {
+      //   await AttendanceModel.setAttendanceStart(id, inTime, outTime, projectId, workDetails)
+      // } else if (isUserId) {
+      //   await AttendanceModel.setAttendanceEnd(id)
+      // }
+      const insertedAttendanceStart = await AttendanceModel.setAttendanceStart(id, inTime, outTime, projectId, workDetails)
       const [result] = await AttendanceModel.getRunStartData(id)
       const { start } = result
-      if (insertedAttendanceStart.errno) {
+      if (!insertedAttendanceStart) {
         return res.send('Error')
       }
       return res.json(start)
@@ -24,8 +36,31 @@ const AttendanceController = {
   attendanceEnd: async (req, res) => {
     try {
       const { id } = req.user
+      const isId = await AttendanceModel.getCurrentDateUserId(id);
+      const isUserId = isId
+      console.log({ isUserId });
       const [{ start }] = await AttendanceModel.todayStartTime(id)
       const insertedAttendanceEnd = await AttendanceModel.setAttendanceEnd(id)
+      // count today total work time and store in database
+      const isWorkTime = await AttendanceModel.getCurrentDateWorkTime(id)
+      const { totalWorkTime } = JSON.parse(JSON.stringify(isWorkTime))
+      console.log(typeof totalWorkTime);
+      console.log({ totalWorkTime });
+
+      // const totalWorkTime = (isWorkTime);
+      // console.log(typeof totalWorkTime);
+
+      if (isUserId === undefined) {
+        await AttendanceModel.insertLog(id)
+      } else if (isUserId) {
+        await AttendanceModel.updateLog(id)
+        await AttendanceModel.updateLogTotalWorkTime(id, totalWorkTime)
+      }
+
+      if (!insertedAttendanceEnd) {
+        return res.send('Error')
+      }
+
       const getTodayData = await AttendanceModel.getToday(id)
       const [todayTotalData] = await AttendanceModel.todayTotal(id)
       const [weekTotalData] = await AttendanceModel.weekTotal(id)
@@ -33,15 +68,25 @@ const AttendanceController = {
       const [{ end }] = await AttendanceModel.currentEndTime()
       const breakTime = getTodayData.length
 
-      if (insertedAttendanceEnd.errno) {
-        return res.send('Error')
-      }
       return res.json({
         start, end, breakTime, getTodayData, todayTotalData, weekTotalData, getWeekData,
       })
     } catch (err) {
       console.log('====>Error form AttendanceController/userAttendance', err);
       return err;
+    }
+  },
+  updateEndTime: async (req, res) => {
+    try {
+      const { uId, endDate, endTime } = req.body
+      const timeStamp = JSON.parse(JSON.stringify(`${endDate} ${endTime}`))
+      await AttendanceModel.updateEndTime(uId, timeStamp)
+      const isWorkTime = await AttendanceModel.getUpdateEndTimeWorkTime(uId, endDate)
+      const { totalWorkTime } = JSON.parse(JSON.stringify(isWorkTime))
+      await AttendanceModel.setLogTotalWorkTimeAdmin(uId, totalWorkTime, endDate)
+      res.redirect('/dashboard')
+    } catch (err) {
+      console.log('====>Error form AttendanceController', err);
     }
   },
 
