@@ -39,6 +39,24 @@ const OptionsModel = {
     const [rows] = await dbConnect.promise().execute(contactAdminSql, values)
     return rows
   },
+  updateOptionValue: async (optionValue, optionId) => {
+    const query = `UPDATE options SET option_value = '${optionValue}' WHERE id = ${optionId}`
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows
+  },
+  updateProjectValue: async (projectName, projectDetails, projectId) => {
+    console.log('hellow')
+    console.log(projectName, projectDetails, projectId);
+    const query = `UPDATE projects SET project_name = '${projectName}', project_details = '${projectDetails}' WHERE id = ${projectId}`;
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows.affectedRows;
+  },
+
+  deleteProject: async (projectId) => {
+    const query = `DELETE FROM projects WHERE id = ${projectId}`
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows.affectedRows
+  },
 
 }
 
