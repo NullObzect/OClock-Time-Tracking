@@ -8,7 +8,7 @@ router.get('/holiday', decorateHtmlResponse('Holiday'), checkLogin, HolidayContr
 router.get('/add-holiday', decorateHtmlResponse('Add Holiday'), HolidayController.getAddHolidayPage)
 router.post('/add-holiday', decorateHtmlResponse('Add Holiday'), HolidayController.addHoliday)
 router.get('/edit/holiday/:id', decorateHtmlResponse('Edit Holiday'), HolidayController.getEditHolidayPage)
-router.post('/edit/holiday', decorateHtmlResponse('Edit Holiday'), HolidayController.getUpdateHoliday)
+router.post('/holiday/edit/holiday', decorateHtmlResponse('Edit Holiday'), HolidayController.getUpdateHoliday)
 
 router.get('/delete/holiday/:id', HolidayController.getDeleteHoliday)
 
