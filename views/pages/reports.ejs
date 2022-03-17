@@ -60,7 +60,7 @@
 
 .an-employee-report tbody {
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--deep2);
 }
 
@@ -74,25 +74,20 @@
 .an-employee-report td {
   width: 300px;
 }
-.an-employee-report tfoot tr td {
-  padding-top: 30px;
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--deep-gray);
-}
+
 .date-to{
   font-size: 16px;
   font-weight: 500;
   padding-top:  6px;
 }
   .bg-red-200 {
-    color: #fecaca;
+    color: #f81919;
   }
   .bg-red-400 {
-    color: #f87171;
+    color: orangered;
   }
   .bg-yellow-200 {
-    color: #fef08a;
+    color: tomato;
   }
   #reports input:focus {
   outline: none !important;
@@ -120,6 +115,9 @@
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
+}
+#an-user-report span, table thead span{
+  font-size: 10px;
 }
 </style>
 
@@ -186,6 +184,8 @@
     </div>
   </div>
 </div>
+
+ <% if(checkUserReportEmptyOrNot.length !== 0){ %>
   <!-- Markup for employee work details  -->
 
   <div class="work-details">
@@ -373,69 +373,50 @@
   <table>
     <thead>
       <tr>
-        <th>Day</th>
         <th>Date</th>
-        <th>In</th>
-        <th>Out</th>
         <th>Type</th>
-        <th>Fixed Time</th>
-        <th>Working Time</th>
-        <th>Less / Extra</th>
+        <th>Start time </th>
+        <th>End time</th>
+        <th>Work hour</th>
       </tr>
     </thead>
 
     <tbody id="an-user-report">
 
        
-      <% userReport.map(el => {%>
+      <% lastSevenDaysReports.map(el => {%>
       <tr
         class="
           <%=
-          el.day===
-          "Friday"
+          el.dayType===
+          "offday"
           ?
-          "bg-red-200": el.type === "holiday"
+          "bg-red-200": el.dayType === "holiday"
          
-          ? "bg-yellow-200" : el.type === "leave" ? "bg-red-400"  :  "bg-blue-200"
+          ? "bg-yellow-200" : el.dayType === "leave" ? "bg-red-400"  :  "bg-blue-200"
           
           
           %>
           text-black
         "
       >
-        <td><%= el.day %></td>
-        <td><%= el.date  %></td>
-        <td> <%= el.start  %> </td>
-        <td><%=  el.end %></td>
-        <td><%= el.day === 'Friday' ? 'Off day' : el.type %></td>
+        <td><%= el.date  %> <br> <%= el.day %></td>
+        <td> <%= el.dayType  %> </td>
+        <%= console.log(el.outTimeExtraOrLess.slice(1,5)) %>
+        <%= console.log(el.inTimeExtraOrLess.split('').indexOf(':')) %>
+        <td><%=  el.start %> <span class="<%= el.inTimeExtraOrLess.length - 1 === 5 ? 'low' : 'high'  %>" >[<%= el.inTimeExtraOrLess.length - 1 === 4 ? '+' + el.inTimeExtraOrLess : el.inTimeExtraOrLess   %>]</span> </td>
 
-        <td><%= el.day === 'Friday' ? '0' : el.fixed_time %>  hr</td>
-        <td><%= el.working_time %></td>
-        <td>
-          <%= el.type !== 'regular'  ? '00:00:00' : el.time_count %>
-        </td>
+        <td><%=  el.end %><span class="<%= el.outTimeExtraOrLess.length - 1 === 5 ? 'high' : 'low'  %>" >[<%= el.outTimeExtraOrLess.length - 1 === 4 ? '-' + el.outTimeExtraOrLess.slice(1,5) : '+' + el.outTimeExtraOrLess   %>]</span> </td>
+        
+        <td><%= el.workTime + ' / ' + el.workHr + ' hr' %><span class="<%= el.totalTimeExtraOrLess.length - 1 === 5 ? 'low' : 'high'  %>" >[<%= el.totalTimeExtraOrLess.length - 1 === 4 ? '+' + el.totalTimeExtraOrLess : el.totalTimeExtraOrLess   %>]</span></td>
+      
         
       </tr>
       <% }) %>
 
       
     </tbody>
-    <!-- Table footer -->
-    <tfoot id="last-seven-days-total" class="an-employee-report">
-      <% employeeLastSevendaysReportTotal.map(el => {%> 
-     
 
-      <tr class="bg-blue-500 text-center text-white font-bold">
-        <td colspan="2">Total = <%= 'Present' + ' ' + el.present + '/' + '7'%>  </td>
-        <td class="p-3"><%= el.avgStartTime  || '00' %> </td>
-        <td class="p-3"><%= el.avgEndTime  || '00'%> </td>
-        <td class="p-3"></td>
-        <td class="p-3"><%= el.fixed_total || '00' + 'hr'   %></td>
-        <td class="p-3"><%= el.weekTotal || '00' %> </td>
-        <td class="p-3"><%= el.totalLessORExtra === 'NaN:NaN:NaN' ? '00' : el.totalLessORExtra %></td> 
-      </tr>
-    <% })  %> 
-    </tfoot>
   </table>
 </div>
 
@@ -445,7 +426,10 @@
 
   </ul>
 </div>
-
+<% } else{ %> 
+<div class="no-report">
+  <h2>No report found</h2>
+  <% } %>
 <script>
   const baseUrl = 'http://localhost:5000';
 
@@ -531,8 +515,6 @@ const dateRange = async function (event) {
   const selectEndDate = document.querySelector('.select-end-date');
   const reportTitle = document.querySelector('.report-title');
 
-  // report total between to date total 
-  const reportBetweenTwoDateTotal = document.getElementById('last-seven-days-total')
 
 
    if(dateRangeTotalBox === null){
@@ -569,18 +551,6 @@ const dateRange = async function (event) {
        
   `
       }
-      reportBetweenTwoDateTotal.innerHTML = 
-      `
-      <tr>
-        <td colspan="2">Total = ${ 'Present' + ' ' + betweenTwoDatesReportDetails.totalWorkingDays + '/' + betweenTwoDatesReportDetails.fixedWorkdays}  </td>
-        <td class="p-3">${ betweenTwoDatesReportDetails.avgStartTime || '0' }</td>
-        <td class="p-3">${ betweenTwoDatesReportDetails.avgEndTime || '0' }</td>
-        <td class="p-3"></td>
-        <td class="p-3">${ betweenTwoDatesReportDetails.fixedTotalHr + ' ' + 'hr'|| '00' }</td>
-        <td class="p-3">${ betweenTwoDatesReportDetails.workingTotalHr  || '00'}</td>
-        <td class="p-3">${ betweenTwoDatesReportDetails.isTotalExtraOrLessHr || '00'}</td> 
-      </tr>
-      `
 
 }
 
@@ -600,31 +570,37 @@ async function page(pageNo){
 
 function reportShow(reportTableBody,dateRangeReport){
  return reportTableBody.innerHTML = dateRangeReport.map(el=>
-   ` <tr
-        class="
-          ${el.day ===
-          "Friday"
-          ?
-          "bg-red-200": el.type === "holiday"
+   ` 
          
-          ? "bg-yellow-200" : el.type === "leave" ? "bg-red-400"  :  "bg-blue-200"
+   <tr
+        class="
+          <${
+          el.dayType===
+          "offday"
+          ?
+          "bg-red-200": el.dayType === "holiday"
+         
+          ? "bg-yellow-200" : el.dayType === "leave" ? "bg-red-400"  :  "bg-blue-200"
+          
           
           }
           text-black
         "
       >
-        <td>${el.day}</td>
-        <td>${el.date}</td>
-        <td> ${ el.start  } </td>
-        <td>${el.end }</td>
-        <td>${ el.day === 'Friday' ? 'Off day' : el.type }</td>
-        <td>${ el.fixed_time } hr</td>
-        <td>${ el.working_time }</td>
+        <td>${ el.date  } <br> ${ el.day }</td>
+        <td> ${ el.dayType  } </td>
+       
+        <td>${  el.start } <span class="${ el.inTimeExtraOrLess.length - 1 === 5 ? 'low' : 'high'  }" >[${ el.inTimeExtraOrLess.length - 1 === 4 ? '+' + el.inTimeExtraOrLess : el.inTimeExtraOrLess   }]</span> </td>
+
+        <td>${  el.end }<span class="${ el.outTimeExtraOrLess.length - 1 === 5 ? 'high' : 'low'  }" >[${ el.outTimeExtraOrLess.length - 1 === 4 ? '-' + el.outTimeExtraOrLess.slice(1,5) : '+' + el.outTimeExtraOrLess   }]</span> </td>
         
-        <td>
-          ${ el.type !== 'regular'  ? '00:00:00' : el.time_count }
-        </td>
-      </tr>`
+        <td>${ el.workTime + ' / ' + el.workHr + ' hr' }<span class="${ el.totalTimeExtraOrLess.length - 1 === 5 ? 'low' : 'high'  }" >[${ el.totalTimeExtraOrLess.length - 1 === 4 ? '+' + el.totalTimeExtraOrLess : el.totalTimeExtraOrLess   }]</span></td>
+      
+        
+      </tr> 
+   
+
+   `
   ).join('')
 
 }
