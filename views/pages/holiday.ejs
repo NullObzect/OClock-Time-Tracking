@@ -1,50 +1,224 @@
 <%- include("../partials/header"); -%>
 
-      <div id="project">
-        <div class="text-head">
-         <div class="text-title">
-          Holidays
-         </div>
-         <div class="add-button">
-           <button class="add-btn"><span class="add-icon">
-            <%- include("../partials/icons/add-svg"); -%>
-            </span> <span .add-btn-text>Add Holiday</span></button>
-          </div>
-        </div>
-        <%- include("../partials/add-holiday-modal"); -%>
-        <table class="project-table"> 
-          <thead >
-            <tr>
-              <td class="project-table-title">Holiday Name</td>
-              <td>Date</td>
-            </tr>
-          </thead>
-          <tbody >
-              <tr>
-              <td class="project-table-title">Independent Day</td>
-              <td>26/03/2021</td>
-              <td  class="user-more"><svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="40" height="40" rx="15" />
-                <circle cx="10" cy="20" r="2" fill="#4A4A4A"/>
-                <circle cx="20" cy="20" r="2" fill="#4A4A4A"/>
-                <circle cx="30" cy="20" r="2" fill="#4A4A4A"/>
-                </svg>
-                
-                </td>
-            </tr>
-            <tr>
-              <td class="project-table-title">Victory Day</td>
-              <td>16/12/2021</td>
-              <td  class="user-more"><svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="40" height="40" rx="15" />
-                <circle cx="10" cy="20" r="2" fill="#4A4A4A"/>
-                <circle cx="20" cy="20" r="2" fill="#4A4A4A"/>
-                <circle cx="30" cy="20" r="2" fill="#4A4A4A"/>
-                </svg>
-                
-                </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+<style>
+  .holiday-table,
+  tbody td {
+    margin-bottom: -1px;
+  }
+  .holiday-table input[type="text"] {
+    outline: none !important;
+    border-radius: 10px;
+  }
+  .holiday-table thead td:nth-child(1) {
+    min-width: 60px;
+  }
+  .holiday-table a {
+    text-decoration: none;
+  }
+
+  @media screen and (min-device-width: 380px) and (max-device-width: 768px) {
+    .holiday-table {
+      overflow-x: scroll !important;
+    }
+  }
+  .action-btn,
+  .update-btn,
+  .delete-btn,
+  .save-btn {
+    background-color: #103047;
+    border-radius: 10px;
+    color: #fff;
+    padding: 8px 12px;
+    border: none;
+    outline: none;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+  }
+  .save-btn {
+    background-color: rgb(17, 221, 17);
+  }
+  .delete-btn {
+    background-color: rgb(255, 0, 0);
+  }
+  .action-btn,
+  .save-btn {
+    width: 60px;
+  }
+  .update-btn,
+  .delete-btn,
+  .save-btn {
+    display: none;
+  }
+  .btn-group {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+  }
+
+  .set-styles {
+    border-bottom: 3px solid #ccc;
+    gap: 5px;
+  }
+</style>
+<div id="project">
+  <div class="text-head">
+    <div class="text-title">Holidays</div>
+    <div class="add-button">
+      <button class="add-btn">
+        <span class="add-icon">
+          <%- include("../partials/icons/add-svg"); -%>
+        </span>
+        <span .add-btn-text>Add Holiday</span>
+      </button>
+    </div>
+  </div>
+  <%- include("../partials/add-holiday-modal"); -%>
+
+  <table class="project-table holiday-table">
+    <thead>
+      <tr>
+        <td>SL</td>
+        <td class="project-table-title">Holiday Title</td>
+        <td>Start Date</td>
+        <td>End Date</td>
+        <td>Duration</td>
+        <!-- <td>Action</td> -->
+      </tr>
+    </thead>
+    <tbody>
+      <% holidays.map((day,idx) =>{ %>
+
+      <tr>
+        <td class=""><%= idx + 1 %></td>
+        <td class="title-value"><%= day.title %></td>
+        <td class="start-date-value"><%= day.start %></td>
+        <td class="end-date-value"><%= day.end %></td>
+        <td class=""><%= day.duration + ' ' + 'day' %></td>
+
+        <%if(loggedInUser.userRole==='admin'){ %>
+
+        <td class="btn-group">
+          <button type="text" class="action-btn">Action</button>
+          <button type="text" class="update-btn">Update</button>
+          <button type="text" class="save-btn">Save</button>
+
+          <a
+            onclick=" return confirm('Are you Sure???')"
+            href="/delete/holiday/<%= day.id %>"
+          >
+            <button type="text" class="delete-btn">Delete</button>
+          </a>
+          <input type="hidden" class="holiday-id" value="<%= day.id %>" />
+          <% } %>
+
+          <!-- <a href="/edit/holiday/<%# day.id %>"
+            ><button class="p-2 bg-green-300 rounded-lg">Edit</button>
+          </a>
+          <a
+            onclick=" return confirm('Are you Sure???')"
+            href="/delete/holiday/<%# day.id %>"
+            ><button>Delete</button>
+          </a> -->
+        </td>
+      </tr>
+
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  const actionBtn = document.querySelectorAll(".action-btn");
+  const updateBtn = document.querySelectorAll(".update-btn");
+  const deleteBtn = document.querySelectorAll(".delete-btn");
+  const saveBtn = document.querySelectorAll(".save-btn");
+
+  //
+  const titleValue = document.querySelectorAll(".title-value");
+  const startDateValue = document.querySelectorAll(".start-date-value");
+  const endDateValue = document.querySelectorAll(".end-date-value");
+  const holidayId = document.querySelectorAll(".holiday-id");
+
+  for (let i = 0; i < actionBtn.length; i++) {
+    actionBtn[i].addEventListener("click", () => {
+      updateBtn[i].style.display = "block";
+      deleteBtn[i].style.display = "block";
+      actionBtn[i].style.display = "none";
+    });
+  }
+  for (let i = 0; i < updateBtn.length; i++) {
+    updateBtn[i].addEventListener("click", () => {
+      updateBtn[i].style.display = "none";
+      deleteBtn[i].style.display = "none";
+      saveBtn[i].style.display = "block";
+      actionBtn[i].style.display = "none";
+
+      titleValue[i].setAttribute("contenteditable", "true");
+      startDateValue[i].setAttribute("contenteditable", "true");
+      endDateValue[i].setAttribute("contenteditable", "true");
+      titleValue[i].focus();
+    });
+  }
+
+  // when save button is clicked
+  for (let i = 0; i < saveBtn.length; i++) {
+    saveBtn[i].addEventListener("click", () => {
+      let title = titleValue[i].innerText.trim();
+      let start = startDateValue[i].textContent.trim();
+      let end = endDateValue[i].textContent.trim();
+      let id = holidayId[i].value;
+      if (title === "" || start === "" || end === "" || id === "") {
+        alert("Please fill all the fields");
+        return;
+      }
+      const data = {
+        title,
+        start,
+        end,
+        id,
+      };
+      console.log(data);
+      aJAXPostRequest("/options/holiday/edit/holiday", data);
+      // titleValue[i] = data.title;
+      // startDateValue[i] = data.start;
+      // endDateValue[i] = data.end;
+      // saveBtn[i].style.display = "none";
+      // actionBtn[i].style.display = "block";
+    });
+  }
+
+  //
+  function dateFormate(date) {
+    const today = new Date(date);
+    const month = today.getMonth() + 1;
+    const year = today.getFullYear();
+    const day = today.getDate() < 10 ? `0${today.getDate()}` : today.getDate();
+    const getDate = `${year}-${month < 10 ? `0${month}` : month}-${day}`;
+
+    return getDate;
+  }
+  //  AJAX post request function
+  function aJAXPostRequest(url, data) {
+    return new Promise((resolve, reject) => {
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log({ data });
+          if (data.success) {
+            alert("Option Value Updated");
+          }
+        })
+        .catch((err) => console.log(err));
+      return window.location.replace("/options/holiday");
+    });
+  }
+</script>
 <%- include("../partials/footer"); -%>
