@@ -79,6 +79,14 @@ const Formater = {
 
     return result
   },
+  timeFormatForUpdateTime: (time) => {
+    if (time === null || time === undefined) return ''
+    const s = time.split(':')
+    const hour = `${s[0]}`
+    const minutes = `${s[1]}`
+    const result = `${hour}:${minutes}`
+    return result;
+  },
 
 }
 
