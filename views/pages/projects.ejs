@@ -1,5 +1,49 @@
 <%- include("../partials/header"); -%>
 
+<style>
+  .project-table thead td:nth-child(1) {
+    min-width: 60px;
+  }
+  .project-table tbody td {
+    margin-bottom: -1px;
+  }
+
+  .action-btn,
+  .update-btn,
+  .delete-btn,
+  .save-btn {
+    background-color: #103047;
+    border-radius: 10px;
+    color: #fff;
+    padding: 8px 12px;
+    border: none;
+    outline: none;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+  }
+  .save-btn {
+    background-color: rgb(17, 221, 17);
+  }
+  .delete-btn {
+    background-color: rgb(255, 0, 0);
+  }
+  .action-btn,
+  .save-btn {
+    width: 60px;
+  }
+  .update-btn,
+  .delete-btn,
+  .save-btn {
+    display: none;
+  }
+  .btn-group {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+  }
+</style>
 <div id="project">
   <div class="text-head">
     <div class="text-title">Projects</div>
@@ -16,32 +60,31 @@
   <table class="project-table">
     <thead>
       <tr>
+        <td>SL</td>
         <td class="project-table-title">Project Name</td>
         <td>Project Details</td>
       </tr>
     </thead>
     <tbody>
-      <% projects.map(project=>{ %>
+      <% projects.map((project,idx)=>{ %>
       <tr>
-        <td class="project-table-title"><%= project.project_name %></td>
-        <td><%= project.project_details %></td>
-        <td class="user-more">
-          <svg
-            width="40"
-            height="40"
-            viewBox="0 0 40 40"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <rect width="40" height="40" rx="15" />
-            <circle cx="10" cy="20" r="2" fill="#4A4A4A" />
-            <circle cx="20" cy="20" r="2" fill="#4A4A4A" />
-            <circle cx="30" cy="20" r="2" fill="#4A4A4A" />
-          </svg>
+        <td><%= idx + 1 %></td>
+        <td class="project-table-title title-value">
+          <%= project.project_name %>
+        </td>
+        <td class="project-details"><%= project.project_details %></td>
+        <td class="btn-group">
+          <button type="button" class="action-btn">Action</button>
+          <button type="button" class="update-btn">Update</button>
+          <button type="button" class="delete-btn">Delete</button>
+          <button type="button" class="save-btn">Save</button>
+          <input type="hidden" class="project-id" value="<%= project.id %>" />
         </td>
       </tr>
       <%}) %>
     </tbody>
   </table>
 </div>
+
+<script type="module" src="<%= baseUrl %>/js/project.js"></script>
 <%- include("../partials/footer"); -%>
