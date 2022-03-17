@@ -14,7 +14,7 @@ const LeaveModel = {
     return rows;
   },
   getEmployeeLeaveList: async () => {
-    const leaveListSql = "SELECT L.id AS id, U.user_name AS name, L.reason AS reason, DATE_FORMAT(L.start, '%d %b %y') AS start, DATE_FORMAT(L.end, '%d %b %y') AS end, DATEDIFF(L.end, L.start) + 1 AS duration FROM `employee_leaves` AS  L JOIN users AS U ON U.id = L.user_id"
+    const leaveListSql = "SELECT L.id AS id, U.user_name AS name, L.reason AS reason, U.user_role, U.avatar, DATE_FORMAT(L.start, '%d %b %y') AS start, DATE_FORMAT(L.end, '%d %b %y') AS end, DATEDIFF(L.end, L.start) + 1 AS duration FROM `employee_leaves` AS  L JOIN users AS U ON U.id = L.user_id WHERE DATE(start) BETWEEN DATE(CURRENT_DATE - INTERVAL DAYOFYEAR(CURRENT_DATE)  DAY) AND start"
     const [rows] = await dbConnect.promise().execute(leaveListSql)
     return rows;
   },
@@ -29,44 +29,6 @@ const LeaveModel = {
     const values = [id, userId, start, end, reason, lId];
     const [row] = await dbConnect.promise().execute(setData, values)
     return row.affectedRows;
-  },
-  //  this month employee leave days
-  thisMonthOffdaysInLeavedays: async (userId) => {
-    const query = 'SELECT DAYNAME(EL.start) AS stratDayName, DATEDIFF(end,start) + 1 countDays FROM employee_leaves AS EL   WHERE   DATE(EL.start) BETWEEN date( CURRENT_DATE - INTERVAL  DAYOFMONTH(CURRENT_DATE)-1 DAY) and date(CURRENT_DATE) AND  EL.user_id = ?'
-
-    const value = [userId]
-    const [rows] = await dbConnect.promise().execute(query, value);
-    return rows;
-  },
-  // this year employee leave days
-  thisYearLeaveDays: async (userId) => {
-    const query = "SELECT DATE_FORMAT(start, '%Y-%m-%d') AS leaveStartDate, DATEDIFF(end,start) + 1 AS countLeaveDays  FROM `employee_leaves` AS el WHERE DATE(el.start) BETWEEN date( CURRENT_DATE - INTERVAL  DAYOFYEAR(CURRENT_DATE)-1 DAY) and date(CURRENT_DATE) AND user_id  = ?"
-
-    const value = [userId]
-    const [rows] = await dbConnect.promise().execute(query, value);
-    return rows;
-  },
-  // this week leave day
-  thisWeekLeavedays: async (saturdayDate, userId) => {
-    const query = `SELECT DATE(EL.start) AS stratDate, DATEDIFF(end,start) + 1 countDays FROM employee_leaves AS EL   WHERE   DATE(EL.start) BETWEEN  '${saturdayDate}' AND DATE(NOW()-1) AND  EL.user_id = ${userId}`
-    const [rows] = await dbConnect.promise().execute(query);
-    return rows;
-  },
-  //  this month employee leave days
-  thisYearOffdaysInLeavedays: async (userId) => {
-    const query = 'SELECT DAYNAME(EL.start) AS stratDayName, DATEDIFF(end,start) + 1 countDays FROM employee_leaves AS EL   WHERE   DATE(EL.start) BETWEEN date( CURRENT_DATE - INTERVAL  DAYOFYEAR(CURRENT_DATE)-1 DAY) and date(CURRENT_DATE) AND  EL.user_id = ?'
-
-    const value = [userId]
-    const [rows] = await dbConnect.promise().execute(query, value);
-    return rows;
-  },
-  // between two dates leave days
-  // eslint-disable-next-line no-shadow
-  betweenTwoDatesLeavedays: async (startDate, endDate, userId) => {
-    const query = 'SELECT DAYNAME(EL.start) AS stratDayName, DATEDIFF(end,start) + 1 countDays, DATE_FORMAT(start, "%Y-%m-%d") AS leaveStartDate, DATEDIFF(end,start) + 1 AS countLeaveDays  FROM employee_leaves AS EL   WHERE   DATE(EL.start) BETWEEN ? AND ? AND  EL.user_id = ?'
-    const values = [startDate, endDate, userId]
-    const [rows] = await dbConnect.promise().execute(query, values);
-    return rows;
   },
 
 }

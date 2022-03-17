@@ -1,10 +1,10 @@
 const LeaveModel = require('../models/LeaveModel');
-const helperJs = require('../public/js/halper')
+//const helperJs = require('../public/js/halper')
 
 const LeaveController = {
   getAddLeavedayPage: async (req, res) => {
     const selectEmployee = await LeaveModel.selectEmployee();
-    res.render('pages/addLeavedays', { selectEmployee })
+    res.render('partials/add-leaveday-modal', { selectEmployee })
   },
   addLeaveday: async (req, res) => {
     try {
@@ -16,7 +16,7 @@ const LeaveController = {
       if (insertedLeaveday.errno) {
         res.send('Error')
       } else {
-        res.redirect('/')
+        res.redirect('/options/leavedays')
       }
     } catch (err) {
       console.log('====>Error form  LeaveController/addLeaveday', err)
@@ -25,7 +25,9 @@ const LeaveController = {
   employeeLeavedaysList: async (req, res) => {
     try {
       const employeeLeaveList = await LeaveModel.getEmployeeLeaveList()
-      res.render('pages/leavedays', { employeeLeaveList })
+      const selectEmployee = await LeaveModel.selectEmployee();
+
+      res.render('pages/leavedays', { employeeLeaveList, selectEmployee })
     } catch (err) {
       console.log('====>Error form LeaveController ', err);
     }
