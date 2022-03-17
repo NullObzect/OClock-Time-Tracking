@@ -1,79 +1,189 @@
 <%- include("../partials/header"); -%>
 
 <style>
-  .table-leave {
-    border-spacing: 0 15px;
-    width: 700px;
+  /* .leaveday-table input[type="text"] {
+    outline: none !important;
+    border-radius: 10px;
+  } */
+
+  .leaveday-table th,
+  .leaveday-table td {
+    width: 158px !important;
+  }
+  .leaveday-table a {
+    text-decoration: none;
+  }
+  .action-btn,
+  .update-btn,
+  .delete-btn,
+  .save-btn {
+    background-color: #103047;
+    border-radius: 10px;
+    color: #fff;
+    padding: 8px 12px;
+    border: none;
+    outline: none;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+  }
+  .save-btn {
+    background-color: rgb(17, 221, 17);
+  }
+  .delete-btn {
+    background-color: rgb(255, 0, 0);
+  }
+  .action-btn,
+  .save-btn {
+    width: 50%;
+  }
+  .update-btn,
+  .delete-btn,
+  .save-btn {
+    display: none;
+  }
+  .btn-group {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    width: 150px;
   }
 
-  .table-leave tr {
-    border-radius: 20px;
-  }
-
-  .table-leave tr td:nth-child(n + 7),
-  .table-leave tr th:nth-child(n + 7) {
-    border-radius: 0 0.625rem 0.625rem 0;
-  }
-
-  .table-leave tr td:nth-child(1),
-  tr th:nth-child(1) {
-    border-radius: 0.625rem 0 0 0.625rem;
+  .set-styles {
+    border-bottom: 3px solid #ccc;
+    gap: 5px;
   }
 </style>
 
-<div class="flex justify-start">
-  <a href="/add-leaveday"
-    ><button class="p-2 bg-blue-500 rounded-lg text-white font-medium ml-4">
-      Add Leaveday
-    </button>
-  </a>
-</div>
-
-<div class="bg-white flex justify-center mt-4">
-  <div class="col-span-12">
-    <div class="overflow-auto lg:overflow-visible">
-      <table
-        class="table-leave text-gray-400 border-separate space-y-6 text-sm"
-      >
-        <thead class="bg-blue-500 text-white">
-          <tr>
-            <th class="p-3">SL</th>
-            <th class="p-3">E. Name</th>
-
-            <th class="p-3">Leave Reason</th>
-            <th class="p-3 text-left">Start Date</th>
-            <th class="p-3 text-left">End Date</th>
-            <th class="p-3 text-left">Duration</th>
-            <th class="p-3 text-left">Action</th>
-          </tr>
-        </thead>
-        <tbody id="holiday-list">
-          <% employeeLeaveList.map((day,idx) =>{ %>
-
-          <tr class="bg-blue-200 text-black">
-            <td class="p-2"><%= idx + 1 %></td>
-            <td class="p-2"><%= day.name %></td>
-            <td class="p-2"><%= day.reason %></td>
-            <td class="p-2"><%= day.start %></td>
-            <td class="p-2"><%= day.end %></td>
-            <td class="p-2"><%= day.duration + ' ' + 'day' %></td>
-            <td class="p-2">
-              <a href="/edit/leaveday/<%=day.id %>"
-                ><button class="p-2 bg-green-300 rounded-lg">Edit</button>
-              </a>
-              <a
-                onclick=" return confirm('Are you Sure???')"
-                href="/delete/leave/<%= day.id %>"
-                ><button class="p-2 bg-red-300 rounded-lg">Delete</button>
-              </a>
-            </td>
-          </tr>
-
-          <% }) %>
-        </tbody>
-      </table>
+<div id="users">
+  <div class="text-head">
+    <div class="text-title">Leave days</div>
+    <div class="add-button">
+      <button class="add-btn">
+        <span class="add-icon">
+          <%- include("../partials/icons/add-svg"); -%>
+        </span>
+        <span .add-btn-text>Add Leave </span>
+      </button>
     </div>
   </div>
+  <%- include("../partials/add-leaveday-modal"); -%>
+  <table class="table leaveday-table">
+    <thead>
+      <tr>
+        <td class="table-img td-width-zero"></td>
+
+        <td>Name</td>
+        <td class="project-table-title">Leave Reason</td>
+        <td>Start Date</td>
+        <td>End Date</td>
+        <td>Duration</td>
+      </tr>
+    </thead>
+    <tbody>
+      <% employeeLeaveList.map((user,idx) =>{ %>
+      <tr>
+        <td class="table-img td-width-zero">
+          <img
+            src="/uploads/avatars/<%=user.avatar== null ? 'demo-avatar.png':user.avatar
+              %> "
+            alt="Profile"
+          />
+        </td>
+        <td>
+          <div class="username"><%=user.name%></div>
+          <span id="role"><%= user.user_role==='admin'? 'admin' : ''%> </span>
+        </td>
+        <td class="reason-val"><%= user.reason %></td>
+        <td class="start-val"><%= user.start %></td>
+        <td class="end-val"><%= user.end %></td>
+        <td class=""><%= user.duration + ' ' + 'day' %></td>
+        <td class="">
+          <div class="btn-group">
+            <button type="button" class="action-btn">Action</button>
+            <button type="button" class="update-btn">Update</button>
+            <button type="button" class="save-btn">Save</button>
+            <input type="hidden" class="leave-id" value="<%= user.id %>" />
+            <a
+              onclick=" return confirm('Are you Sure???')"
+              href="/delete/leave/<%= user.id %>"
+              ><button class="delete-btn">Delete</button>
+            </a>
+          </div>
+
+          <!-- <a href="/edit/leaveday/<%#user.id %>"
+            ><button class="">Edit</button>
+          </a>
+          <a
+            onclick=" return confirm('Are you Sure???')"
+            href="/delete/leave/<%# user.id %>"
+            ><button class="p-2 bg-red-300 rounded-lg">Delete</button>
+          </a> -->
+        </td>
+      </tr>
+
+      <% }) %>
+    </tbody>
+  </table>
 </div>
+
+<script>
+  const actionBtn = document.querySelectorAll(".action-btn");
+  const updateBtn = document.querySelectorAll(".update-btn");
+  const saveBtn = document.querySelectorAll(".save-btn");
+  const deleteBtn = document.querySelectorAll(".delete-btn");
+  const leaveId = document.querySelectorAll(".leave-id");
+  const reasonVal = document.querySelectorAll(".reason-val");
+  const startVal = document.querySelectorAll(".start-val");
+  const endVal = document.querySelectorAll(".end-val");
+  //
+
+  for (let i = 0; i < actionBtn.length; i++) {
+    actionBtn[i].addEventListener("click", () => {
+      actionBtn[i].style.display = "none";
+      updateBtn[i].style.display = "block";
+      deleteBtn[i].style.display = "block";
+    });
+  }
+
+  // when click on update button
+  for (let i = 0; i < updateBtn.length; i++) {
+    updateBtn[i].addEventListener("click", () => {
+      updateBtn[i].style.display = "none";
+      saveBtn[i].style.display = "block";
+      deleteBtn[i].style.display = "none";
+
+      reasonVal[i].setAttribute("contenteditable", "true");
+      startVal[i].setAttribute("contenteditable", "true");
+      endVal[i].setAttribute("contenteditable", "true");
+
+      reasonVal[i].focus();
+    });
+  }
+  // when click on save button
+  for (let i = 0; i < saveBtn.length; i++) {
+    saveBtn[i].addEventListener("click", () => {
+      //saveBtn[i].style.display = "none";
+
+      let reason = reasonVal[i].innerText.trim();
+      let start = startVal[i].innerText.trim();
+      let end = endVal[i].innerText.trim();
+      let id = leaveId[i].value;
+      console.log(id);
+      if (reason === "" || start === "" || end === "") {
+        alert("Please fill all the fields");
+        return;
+      }
+      let data = {
+        reason: reason,
+        start: start,
+        end: end,
+        id: id,
+      };
+      console.log(data);
+    });
+  }
+</script>
 
 <%- include("../partials/footer"); -%>
