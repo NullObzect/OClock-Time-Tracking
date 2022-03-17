@@ -8,17 +8,23 @@
     </div>
     <div class="modal-content">
       <div class="container">
-        <form action="">
+        <form action="/add-holiday" method="post">
           <label for="name"
             >Holiday Name
             <div class="">
-              <input id="name" name="name" type="text" />
+              <input id="name" name="title" type="text" />
             </div>
           </label>
           <label for="projectDetails">
-            Project Details
+            Select Start Date
             <div class="">
-              <input type="date" />
+              <input type="date" name="start" />
+            </div>
+          </label>
+          <label for="projectDetails">
+            Select End Date
+            <div class="">
+              <input type="date" name="end" />
             </div>
           </label>
           <div class="">
