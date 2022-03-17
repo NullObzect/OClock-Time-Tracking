@@ -5,5 +5,7 @@ const { checkLogin } = require('../middleware/common/AuthMiddleware')
 
 router.get('/dashboard', decorateHtmlResponse('Dashboard'), checkLogin, DashboardController.getDashboard)
 router.get('/get-start-data', DashboardController.getRunStartData)
+router.post('/update-option-value', DashboardController.getUpdateOptionValues)
+
 
 module.exports = router

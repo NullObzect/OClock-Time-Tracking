@@ -1,12 +1,32 @@
 <%- include("../partials/header"); -%>
 
+<style>
+  .title-for-cnt-ely{
+    font-size: 14px;
+    font-weight: bold;
+    color: #000;
+    margin: 10px 0px;
+  }
+  .cnt-working-emy-list{
+    position: relative;
+  }
+  .modal-cont{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: none;
+  }
+</style>
+
+
 <div id="dashboard">
   <div class="dashboard-head">
     <div class="oclock-box">
       <div class="time-box">
         <div class="current-time">
           12:00
-          <span class="time-meridiem">AM</span>
+          <span class="time-meridiem"></span>
         </div>
         <div class="current-date">Mon 22 Oct</div>
       </div>
@@ -42,13 +62,10 @@
       </div>
     </div>
   </div>
+
+  <% console.log('dashboard',checkTodayReportEmptyOrNot.length) %> <%
+  if(checkTodayReportEmptyOrNot.length !== 0){ %>
   <div class="dashboard-info">
-    <% console.log(Object.keys(today).length === 0) %> <%
-    if(Object.keys(today).length === 0){ %>
-
-    <h4>No data</h4>
-    <% } else{ %>
-
     <table class="dashboard-reports">
       <thead>
         <tr>
@@ -76,8 +93,167 @@
       </tbody>
     </table>
 
-    <%} %>
+    <% } else{ %>
+
+    <h5>Today's report is empty now !</h5>
+    <% } %>
   </div>
+
+  <!-- Markup for current working user details -->
+
+  <div class="dashboard-info cnt-working-emy-list">
+
+    <h4 class="title-for-cnt-ely">Employees Working now ! </h4>
+    <table class="table">
+      <thead>
+        <tr>
+          <td class="table-img td-width-zero"></td>
+          <td>Name</td>
+          <td class="user-phone">Date</td>
+          <td class="user-email">Start Time</td>
+          <td class="user-status">End Time</td>
+        </tr>
+      </thead>
+      <tbody>
+        <% isEndTimeNull.map(user=>{%>
+        <tr>
+          <td class="table-img td-width-zero">
+            <img
+              src="/uploads/avatars/<%=user.img == null ? 'demo-avatar.png':user.img
+              %> "
+              alt=""
+            />
+          </td>
+          <td>
+            <div class="username"><%=user.name%></div>
+            <span id="role"><%= user.userRole==='admin'? 'admin' : ''%> </span>
+          </td>
+          <td class="user-date"> <%= user.curDate %></td>
+          <td class="user-phone"><%= user.startTime %></td>
+          <td class="user-end-time">  <%= user.endTime || 'Empty' %> </td>
+       
+          </td>
+
+
+          <td>
+            <button class="update-btn">Update</button>
+
+
+                  <!-- Modal for update end time -->
+                <div  class="modal-cont">
+                <div class="modal">
+                  <div class="modal-head">
+                    <div class="modal-title">Update End Time</div>
+                    <div class="modal-close-btn modal-close">
+                      <%- include("../partials/icons/close-svg"); -%>
+                    </div>
+                  </div>
+                  <div class="modal-content">
+                    <div class="container">
+                      <form action="/update-end-time" method="post">
+                        <label for="projectDetails">
+                          Start Date
+                          <div class="">
+                            <input type="text" name="endDate" value="<%= user.curDate %>" />
+                          </div>
+                        </label>
+
+                        <label for="name"
+                          >End time
+                          <div class="">
+                            <input id="time" name="endTime" type="time"  />
+                          </div>
+                        </label>
+
+                        <input type="hidden" name="uId" value="<%= user.userId %>" />
+                        <div class="">
+                          <button class="submit-btn" type="submit">Save</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- End modal -->
+
+            </td>
+            
+        </tr>
+
+        <%}) %>
+
+     
+
+      </tbody>
+    </table>
+  </div>
+
 </div>
 
-<%- include("../partials/footer.ejs"); -%>
+
+
+<script>
+
+  
+    const getCurrentDate = () => {
+      const date = new Date();
+      let options = {
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+      };
+      return date.toLocaleDateString("en-us", options);
+    };
+    const clock = () => {
+      const date = new Date();
+      let options = {
+        hour: "2-digit",
+        minute: "2-digit",
+      };
+      return date.toLocaleTimeString("en-us", options);
+    };
+    const currentDate = document.querySelector(".current-date");
+    const showCurrentTime = document.querySelector(".current-time");
+    const timeMeridiem = document.querySelector(".time-meridiem");
+    console.log((showCurrentTime.childNodes[1].textContent = "kk"));
+
+    showCurrentTime.getElementsByTagName("span")[0].textContent = "dd";
+    currentDate.innerText = getCurrentDate();
+    showCurrentTime.innerText = clock().slice(0, 5);
+    //timeMeridiem.textContent = clock().slice(6, 8);
+    console.log(clock().slice(6, 8));
+    console.log(timeMeridiem.textContent);
+
+
+    // update end time 
+    document.addEventListener('DOMContentLoaded', function () {
+
+    console.log('update end time');
+    let updateEndTimeModal = document.getElementsByClassName("modal-cont");
+    let updateBtn = document.getElementsByClassName("update-btn");
+    console.log(updateBtn);
+
+     for(let i = 0; i < updateBtn.length; i++) {
+      updateBtn[i].addEventListener("click", () => {
+        updateEndTimeModal[i].style.display = "block";
+      });
+    }
+    
+    let closeBtn = document.getElementsByClassName("modal-close-btn");
+
+    for(let j = 0; j < closeBtn.length; j++) {
+      closeBtn[j].addEventListener('click', () => {
+        console.log("close");
+        
+        
+        updateEndTimeModal[j].style.display = "none";
+      });
+    }
+  })
+
+
+  </script>
+
+ 
+
+ <%- include("../partials/footer.ejs"); -%>
