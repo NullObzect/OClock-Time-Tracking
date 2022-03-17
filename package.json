@@ -8,9 +8,8 @@
     "clean-install": "rimraf node_modules package-lock.json && npm i",
     "build-dev": "webpack --mode development -w",
     "start": "NODE_ENV=development nodemon  app.js",
-    "production": "NODE_ENV=production node app.js",
-    "build-css": "postcss ./src/tailwind.css -o ./public/css/styles.css -w",
-    "prod": "NODE_ENV=production postcss ./src/tailwind.css -o ./public/css/styles.css"
+    "production": "NODE_ENV=production node app.js"
+  
   },
   "author": "",
   "license": "ISC",
@@ -37,10 +36,8 @@
     "passport": "^0.4.1",
     "passport-facebook": "^3.0.0",
     "passport-google-oauth20": "^2.0.0",
-    "postcss-cli": "^8.3.1",
     "rimraf": "^3.0.2",
     "sequelize": "^6.12.0-alpha.1",
-    "tailwindcss": "^2.2.9",
     "win-node-env": "^0.4.0"
   },
   "devDependencies": {
