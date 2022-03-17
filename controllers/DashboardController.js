@@ -1,5 +1,5 @@
 const AttendanceModel = require('../models/AttendanceModel')
-const UserModel = require('../models/UserModel')
+const LogModel = require('../models/LogModel')
 const OptionsModel = require('../models/OptionsModel')
 const { timeToHour } = require('../utilities/formater')
 const OptionsController = require('./OptionsController')
@@ -8,6 +8,9 @@ const DashboardController = {
   // Get today , this week history & today, this week total value from database
   getDashboard: async (req, res) => {
     const { user } = req
+
+    const checkTodayReportEmptyOrNot = await LogModel.checkTodayReportEmptyOrNot(user.id);
+    console.log('checkTodayReportEmptyOrNot', checkTodayReportEmptyOrNot.length);
     // const [user] = await UserModel.findUserByEmail(req.user.user_mail)
     const [{ start }] = await AttendanceModel.todayStartTime(user.id)
     const [{ end }] = await AttendanceModel.todayEndTime(user.id)
@@ -20,9 +23,23 @@ const DashboardController = {
     const { weekTotal } = wTotal
     todayTotal = timeToHour(todayTotal)
     const breakTime = today.length
+
+    // is end time null
+    const isEndTimeNull = await AttendanceModel.getEndTimeIsNull()
+    console.log({ isEndTimeNull });
+
     console.log(req.loggedInUser)
     res.render('pages/dashboard', {
-      start, end, breakTime, weekHistory, today, todayTotal, weekTotal, projects,
+      start,
+      end,
+      breakTime,
+      weekHistory,
+      today,
+      todayTotal,
+      weekTotal,
+      projects,
+      checkTodayReportEmptyOrNot,
+      isEndTimeNull,
     })
   },
   getRunStartData: async (req, res) => {
@@ -31,6 +48,22 @@ const DashboardController = {
       res.json(start)
     } catch (err) {
       res.json(0)
+    }
+  },
+  getUpdateOptionValues: async (req, res) => {
+    try {
+      console.log(req.body);
+
+      const { optionId, optionValue } = req.body;
+      console.log(optionId, optionValue);
+      const isUpdate = await OptionsModel.updateOptionValue(optionValue, optionId)
+      if (isUpdate.errno) {
+        res.send('Error')
+      } else {
+        res.redirect('/options')
+      }
+    } catch (err) {
+      console.log('====>Error form OptionsController updateOptionValues', err);
     }
   },
 }
