@@ -4,8 +4,11 @@ const userModel = require('../models/UserModel')
 const OptionsController = {
 
   getOptionsList: async (req, res) => {
-    // const optionList = await OptionsModel.options()
     res.render('pages/options')
+  },
+  getOptionValues: async (req, res) => {
+    const optionList = await OptionsModel.options()
+    res.render('pages/option-values', { optionList })
   },
   getProjects: async (req, res) => {
     try {
@@ -54,18 +57,48 @@ const OptionsController = {
     const result = await OptionsModel.contactAdmin(userId, senderId, noticeDetails)
     res.redirect('/options/notice')
   },
-  updateFixedTime: async (req, res) => {
-    console.log(req.body);
+  getUpdateOptionValues: async (req, res) => {
+    try {
+      console.log(req.body);
 
-    const { optionId, fixedTime } = req.body;
-    const id = optionId;
-    console.log(id);
+      const { optionId, optionValue } = req.body;
+      console.log(optionId, optionValue);
+      const isUpdate = await OptionsModel.updateOptionValue(optionValue, optionId)
+      if (isUpdate.errno) {
+        res.send('Error')
+      } else {
+        res.redirect('/options')
+      }
+    } catch (err) {
+      console.log('====>Error form OptionsController updateOptionValues', err);
+    }
+  },
+  getUpdateProject: async (req, res) => {
+    try {
+      console.log('adsfasdf', req.body);
 
-    const isUpdate = await OptionsModel.editWorkingFixedTime(optionId, fixedTime, id)
-    if (isUpdate.errno) {
-      res.send('Error')
-    } else {
-      res.redirect('/options')
+      const { pName, pDetails, pId } = req.body
+      const isUpdate = await OptionsModel.updateProjectValue(pName, pDetails, pId)
+      if (isUpdate.errno) {
+        res.send('Error')
+      } else {
+        res.redirect('/options/projects')
+      }
+    } catch (err) {
+      console.log('====>Error form', err);
+    }
+  },
+  getDeleteProject: async (req, res) => {
+    try {
+      const { pId } = req.body
+      const isDelete = await OptionsModel.deleteProject(pId)
+      if (isDelete.errno) {
+        res.send('Error')
+      } else {
+        res.redirect('/options/projects')
+      }
+    } catch (err) {
+      console.log('====>Error form', err);
     }
   },
 
