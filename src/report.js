@@ -24,7 +24,7 @@ function calculateTime(fixedTime, workingTotalSec) {
 
 // get start date
 let startDate;
-
+const reportBetweenTwoDate = document.getElementById('an-user-report')
 // getDate format
 function getDateFormat(date) {
   let today = new Date(date);
@@ -40,6 +40,7 @@ const selectStartDate = async (event) => {
   const getDate = getDateFormat(event.target.value);
 
   startDate = getDate;
+  console.log(reportBetweenTwoDate);
 
   // get current date
   function getCurrentDate() {
@@ -58,24 +59,6 @@ const selectStartDate = async (event) => {
   const getObjects = await data.json();
   const getReports = getObjects.reports.dataToJson
 
-  // between to data total
-  const dateRangeTotalTr = document.getElementById('last-seven-days-total')
-
-  const getReportsTotal = getObjects.reportDateRangeTotal.betweenTowDateTotalToJson
-  console.log({ getReportsTotal });
-  dateRangeTotalTr.innerHTML = getReportsTotal.map((el) => `
-    
-    <tr class="bg-blue-500 text-center text-white font-bold">
-    <td colspan="2">Total =  ${el.present} </td>
-  <td class="p-3">${el.avgStartTime || '00'} </td>
-  <td class="p-3">${el.avgEndTime || '00'} </td>
-  <td class="p-3"></td>
-  <td class="p-3"> ${el.fixed_total || '00'}hr</td>
-  <td class="p-3"> ${el.weekTotal || '00'} </td>
-  <td class="p-3">${el.totalLessORExtra || '00'}</td>
-  </tr>
-    `)
-
   reportData.push(getReports)
   // console.log('start', jsonData)
   show(getReports)
@@ -92,24 +75,7 @@ const selectEndDate = async (event) => {
   );
   const getObjects = await data.json();
   const getReports = getObjects.reports.dataToJson
-
-  const dateRangeTotalTr = document.getElementById('last-seven-days-total')
-
-  const getReportsTotal = getObjects.reportDateRangeTotal.betweenTowDateTotalToJson
-  console.log({ getReportsTotal });
-
-  dateRangeTotalTr.innerHTML = getReportsTotal.map((el) => `
-    
-    <tr class="bg-blue-500 text-center text-white font-bold">
-    <td colspan="2">Total =  ${el.present} </td>
-  <td class="p-3">${el.avgStartTime || '00'} </td>
-  <td class="p-3">${el.avgEndTime || '00'} </td>
-  <td class="p-3"></td>
-  <td class="p-3"> ${el.fixed_total || '00'}hr</td>
-  <td class="p-3"> ${el.weekTotal || '00'} </td>
-  <td class="p-3">${el.totalLessORExtra || '00'}</td>
-  </tr>
-    `)
+  console.log('end', getReports);
 
   endData.push(getReports)
   show(getReports)
@@ -121,6 +87,8 @@ function show(data) {
   const viewPerPage = 4
   const paginationBtn = 5
   const reports = data
+  console.log('reports', reports);
+
   const pageCount = Math.ceil(reports.length / viewPerPage)
 
   // Pagination Button
@@ -156,9 +124,12 @@ function show(data) {
     const paginateItems = items.slice(start, end)
     for (let i = 0; i < paginateItems.length; i++) {
       const el = paginateItems[i]
+
+      /*
       const content = document.createElement('tr')
-      content.className = `${el.day === 'Friday' ? 'bg-red-200'
-        : el.type === 'holiday' ? 'bg-yellow-200' : el.type === 'leave' ? 'bg-red-400' : 'bg-blue-200'} lg:text-black`
+      content.className = `${el.dayType === 'offday' ? 'bg-red-200'
+        : el.dayType === 'holiday' ? 'bg-yellow-200' : el.dayType === 'leave' ? 'bg-red-400' : 'bg-blue-200'}`
+
       const workDay = document.createElement('td')
       workDay.className = 'p-3'
       workDay.textContent = el.day
@@ -193,6 +164,7 @@ function show(data) {
       content.appendChild(workTime)
       content.appendChild(workResult)
       wapper.append(content)
+      */
     }
   }
 }
