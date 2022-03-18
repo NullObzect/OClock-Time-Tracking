@@ -101,9 +101,9 @@
   
 }
 
-
-
 </style>
+
+
 
 <!--  Markup for an  employee report-->
 <div class="reports-container">
@@ -225,15 +225,17 @@
         <table>
           <tr>
             <td>Workday:</td>
-            <td> <%=monthReportDetails.day %>/6 day</td>
+            <td> <%=monthReportDetails.totalWorkingDays %>/<%= monthReportDetails.fixedWorkdays %> day <span class="<%= monthReportDetails.classLowOrHighForDay %>"><%=monthReportDetails.daysIsLowOrHigh %></span></td>
           </tr>
           <tr>
             <td>Work hour:</td>
-            <td><%=monthReportDetails.workHour  + '/' + monthReportDetails.fixedTotalHour %> hr</td>
+            <td><%=monthReportDetails.workingTotalHr  + '/' + monthReportDetails.fixedTotalHr %> hr<span class="<%= monthReportDetails.classLowOrHighForHr %>"><%=
+              monthReportDetails.isTotalExtraOrLessHr %></span> </td>
           </tr>
           <tr>
             <td>Avg Work:</td>
-            <td><%=monthReportDetails.avgWorkHour %> hr</td>
+            <td><%=monthReportDetails.avgWorkHr %> hr <span class="<%= monthReportDetails.classLowOrHighForHr %>" ><%=
+              monthReportDetails.isAvgExtraOrLessHr %></span></td>
           </tr>
           <tr>
             <td>Avg Start:</td>
@@ -252,15 +254,17 @@
         <table>
           <tr>
             <td>Workday:</td>
-            <td><%= yearReportDetails.day %>/6 day</td>
+            <td> <%=yearReportDetails.totalWorkingDays %>/<%= yearReportDetails.fixedWorkdays %> day <span class="<%= yearReportDetails.classLowOrHighForDay %>"><%=yearReportDetails.daysIsLowOrHigh %></span></td>
           </tr>
           <tr>
             <td>Work hour:</td>
-            <td><%=yearReportDetails.workHour  + '/' + yearReportDetails.fixedTotalHour %> hr</td>
+            <td><%=yearReportDetails.workingTotalHr  + '/' + yearReportDetails.fixedTotalHr %> hr<span class="<%= yearReportDetails.classLowOrHighForHr %>"><%=
+              yearReportDetails.isTotalExtraOrLessHr %></span> </td>
           </tr>
           <tr>
             <td>Avg Work:</td>
-            <td><%=yearReportDetails.avgWorkHour %> hr</td>
+            <td><%=yearReportDetails.avgWorkHr %> hr <span class="<%= yearReportDetails.classLowOrHighForHr %>" ><%=
+              yearReportDetails.isAvgExtraOrLessHr %></span></td>
           </tr>
           <tr>
             <td>Avg Start:</td>
@@ -364,9 +368,8 @@
         <td> <%= el.start  %> </td>
         <td><%=  el.end %></td>
         <td><%= el.day === 'Friday' ? 'Off day' : el.type %></td>
-        <% let isZero = el.fixed_time[0]  %> 
 
-        <td><%= el.day === 'Friday' ? '0' : el.fixed_time.replace(isZero, ' ')  %>  hr</td>
+        <td><%= el.day === 'Friday' ? '0' : el.fixed_time %>  hr</td>
         <td><%= el.working_time %></td>
         <td>
           <%= el.type !== 'regular'  ? '00:00:00' : el.time_count %>
