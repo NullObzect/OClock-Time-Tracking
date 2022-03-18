@@ -11,6 +11,7 @@ function decorateHtmlResponse(pageTitle) {
     res.locals.auth = false
     res.locals.alert = {}
     res.locals.loggedInUser = {}
+    res.locals.profile = {}
     res.locals.signIn = false
     res.locals.addUser = false
     res.locals.flashMessage = Flash.getMessage(req)
