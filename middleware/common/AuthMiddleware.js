@@ -13,6 +13,7 @@ const checkLogin = (req, res, next) => {
       const { userObject } = jwt.verify(token, process.env.JWT_SECRET)
       if (res.locals.html) {
         res.locals.loggedInUser = userObject
+        res.locals.profile = req.user
         console.log(userObject)
       }
       next()

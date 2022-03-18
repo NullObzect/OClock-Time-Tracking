@@ -11,7 +11,7 @@
         <span class="link-name"> Dashboard </span>
       </a>
     </li>
-    <%if(loggedInUser.userRole==='admin'){ %>
+    <%if(profile.user_role==='admin'){ %>
     <li>
       <a href="/users">
         <%- include("./icons/users-svg.ejs"); -%>
@@ -33,22 +33,22 @@
     </li>
   </ul>
   <%- include("./more-option"); -%> <%- include("./notification"); -%>
-
   <div class="sidebar-footer">
-    <% if(loggedInUser.avatar.match(/([\w+]+\:\/\/)?([\w\d-]+\.)*[\w-]+[\.\:]\w+([\/\?\=\&\#\.]?[\w-]+)*\/?/gm)){ %>
+    <% console.log('profie',profile.avatar)%>
+    <% if(profile.avatar !== null && profile.avatar.match(/^(http|https):/g)){ %>
       <img
       id="notification-btn"
       class="notification-btn"
-      src="<%= loggedInUser.avatar%>"
+      src="<%= profile.avatar%>"
       />
   <%} else{%>
     <img
     id="notification-btn"
       class="notification-btn"
-    src="/uploads/avatars/<%loggedInUser.avatar===null ? 'demo-avatar.png' : loggedInUser.userAvatar %>" />
+    src="/uploads/avatars/<%=profile.avatar != null ?  profile.avatar : 'demo-avatar.png' %>" />
     <% } %> 
 
-    <div class="username"><%= loggedInUser.userName %></div>
+    <div class="username"><%= profile.user_name %></div>
     <div id="more-btn" class="more">
       <svg
         width="13"

@@ -1,0 +1,76 @@
+.profile-avatar-img{
+  position: relative;
+  margin-bottom: 20px;
+}
+.profile-avatar-img img{
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+}
+#profile-update-btn{
+  position: absolute;
+  width: 40px;
+  height: 32px;
+  overflow: hidden;
+  border-radius: 17px;
+  top: 120px;
+  margin-left: -40px;
+  display: inline-block;
+  background: #2E2E2E;
+  transition: 1s ease;
+
+}
+#profile-update-btn:hover{
+ width: 120px;
+}
+#profile-update-btn a{
+  text-decoration: none;
+}
+.update-icon {
+  display: inline-block;
+  padding: 2px;
+  transition: 0.2s ease-in-out;
+}
+
+.update-icon svg{
+  width: 28px;
+  height: 28px;
+  stroke: #FFFFFF;
+  stroke-width: 2;
+  cursor: pointer;
+}
+#profile .social-icon {
+  margin-bottom: 10px;
+}
+.social-icon span{
+  cursor: pointer;
+}
+.social-icon svg {
+  stroke: #7B81A2;
+}
+.social-box{
+color: var(--deep2);
+font-size: 16px;
+width: 90px;
+border: 1px solid #E8E8E8;
+border-radius: 13px;
+background:#FFFFFF;
+cursor: pointer;
+display: inline-flex;
+align-items: center;
+transition: 1s ease;
+overflow: hidden;
+margin: 4px 2px;
+}
+.social-box:hover{
+  border: 1px solid var(--red);
+}
+.social-icon-active{
+padding: 6px;
+border-right: 1px solid rgba(255, 255, 255, 0.16);
+box-shadow: rgba(0, 0, 0, 0.14) -1px 0px 0px inset;
+}
+.social-text{
+  padding: 6px 8px;
+  text-transform: uppercase;
+}

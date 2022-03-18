@@ -73,15 +73,15 @@
     </div>
     <div class="nav-right">
       <div id="nav-image" class="nav-image">
-        <% if(loggedInUser.avatar.match(/([\w+]+\:\/\/)?([\w\d-]+\.)*[\w-]+[\.\:]\w+([\/\?\=\&\#\.]?[\w-]+)*\/?/gm)){ %>
+        <% if(profile.avatar !== null && profile.avatar.match(/^(http|https):/g)){ %>
           <img
           id="bottom-notification-btn"
-          src="<%= loggedInUser.avatar%>"
+          src="<%= profile.avatar%>"
           />
       <%} else{%>
         <img
         id="bottom-notification-btn"
-        src="/uploads/avatars/<%loggedInUser.avatar===null ? 'demo-avatar.png' : loggedInUser.userAvatar %>" />
+        src="/uploads/avatars/<%=profile.avatar != null ?  profile.avatar : 'demo-avatar.png' %>" />
         <% } %> 
     
       </div>
