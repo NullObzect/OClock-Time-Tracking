@@ -38,15 +38,12 @@ const AttendanceController = {
       const { id } = req.user
       const isId = await AttendanceModel.getCurrentDateUserId(id);
       const isUserId = isId
-      console.log({ isUserId });
       const [{ start }] = await AttendanceModel.todayStartTime(id)
-      const insertedAttendanceEnd = await AttendanceModel.setAttendanceEnd(id)
+
+      await AttendanceModel.setAttendanceEnd(id)
       // count today total work time and store in database
       const isWorkTime = await AttendanceModel.getCurrentDateWorkTime(id)
       const { totalWorkTime } = JSON.parse(JSON.stringify(isWorkTime))
-      console.log(typeof totalWorkTime);
-      console.log({ totalWorkTime });
-
       // const totalWorkTime = (isWorkTime);
       // console.log(typeof totalWorkTime);
 
@@ -55,10 +52,6 @@ const AttendanceController = {
       } else if (isUserId) {
         await AttendanceModel.updateLog(id)
         await AttendanceModel.updateLogTotalWorkTime(id, totalWorkTime)
-      }
-
-      if (!insertedAttendanceEnd) {
-        return res.send('Error')
       }
 
       const getTodayData = await AttendanceModel.getToday(id)

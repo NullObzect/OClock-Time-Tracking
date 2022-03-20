@@ -60,8 +60,10 @@ endBtn.addEventListener('click', async (event) => {
     method: 'POST',
     headers: { 'Content-type': 'application/json; charset=UTF-8' },
   })
+  console.log('end12')
   const data = await response.json()
   startBtn.style.display = 'inline'
+  console.log('end')
   endBtn.style.display = 'none'
   // // Destructuring data
   const {
