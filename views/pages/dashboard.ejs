@@ -76,9 +76,8 @@
     </div>
   </div>
 
-  <% console.log('dashboard',checkTodayReportEmptyOrNot.length) %> <%
-  if(checkTodayReportEmptyOrNot.length !== 0){ %>
-  <div class="dashboard-info">
+  <% console.log('dashboard',checkTodayReportEmptyOrNot.length) %>
+  <div id="dashboard-info" class="dashboard-info <%=checkTodayReportEmptyOrNot.length !== 0 ? '' : 'dashboard-none' %>">
     <table class="dashboard-reports">
       <thead>
         <tr>
@@ -91,6 +90,9 @@
       </thead>
 
       <tbody id="todayReport" class="dashboard-reports-tbody">
+
+        <!---- Today details condition check --> 
+
         <% today.map(today=>{ %>
         <tr>
           <td class="project-name"><%= today.project_name%></td>
@@ -105,12 +107,13 @@
         <%}) %>
       </tbody>
     </table>
-
-    <% } else{ %>
-
-    <h5>Today's report is empty now !</h5>
-    <% } %>
   </div>
+
+  <%if(checkTodayReportEmptyOrNot.length === 0){ %>
+    <div id="hidden-data">
+    <h5>Today's report is empty now !</h5>
+    </div>
+  <% } %>
 
   <!-- Markup for current working user details -->
 

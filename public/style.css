@@ -568,6 +568,9 @@ main {
   align-items: center;
   justify-content: center;
 }
+.dashboard-none{
+  display: none;
+}
 
 .oclock-box {
   width: 860px;

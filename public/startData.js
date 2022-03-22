@@ -52,6 +52,11 @@ startData.addEventListener('submit', async (e) => {
 // End button click event function
 endBtn.addEventListener('click', async (event) => {
   event.preventDefault()
+  const hiddenData = document.getElementById('hidden-data')
+  const dashboardInfo = document.getElementById('dashboard-info')
+  if (dashboardInfo.classList.contains('dashboard-none')) {
+    dashboardInfo.classList.remove('dashboard-none')
+  }
   // Stop counting
   clearInterval(intervalId)
   document.getElementById('elapsedTime').textContent = '00:00:00'
@@ -60,8 +65,10 @@ endBtn.addEventListener('click', async (event) => {
     method: 'POST',
     headers: { 'Content-type': 'application/json; charset=UTF-8' },
   })
+  console.log('end12')
   const data = await response.json()
   startBtn.style.display = 'inline'
+  console.log('end')
   endBtn.style.display = 'none'
   // // Destructuring data
   const {
@@ -73,14 +80,19 @@ endBtn.addEventListener('click', async (event) => {
   lastData = getTodayData[getTodayData.length - 1]
   console.log(start)
   // Update today history table
-  setTodayReport(lastData.project_name, lastData.work_details, lastData.start, lastData.end, lastData.total)
+  if (hiddenData) {
+    console.log('hidden data')
+    hiddenData.style.display = 'none'
+  }
   setTodayDetails(start, end, totalWorkTime, breakTime)
+  setTodayReport(lastData.project_name, lastData.work_details, lastData.start, lastData.end, lastData.total)
 })
 function setTodayDetails(start, end, total, breaktime) {
   const todayStart = document.getElementById('todayStart')
   const todayEnd = document.getElementById('todayEnd')
   const todayTotal = document.getElementById('todayTotal')
   const breakTime = document.getElementById('breakTime')
+  console.log(start)
   todayStart.innerText = start
   todayEnd.innerText = end
   todayTotal.innerText = total

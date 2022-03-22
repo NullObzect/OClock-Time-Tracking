@@ -3,8 +3,9 @@ const dbConnect = require('../config/database');
 
 const AttendanceModel = {
   todayStartTime: async (id) => {
-    const getStartSql = 'SELECT  Time_format(MIN(Time(start)),"%h:%i% %p") as start FROM attendance ,projects WHERE user_id = ? and end IS NOT NULL and Date(create_at)= Date(CURRENT_DATE);'
+    const getStartSql = 'SELECT  Time_format(MIN(Time(start)),"%h:%i% %p") as start FROM attendance ,projects WHERE user_id = ? and Date(create_at) = Date(CURRENT_DATE);'
     const [rows] = await dbConnect.promise().execute(getStartSql, [id]);
+    console.log('start modal', rows)
     return rows;
   },
   todayEndTime: async (id) => {
