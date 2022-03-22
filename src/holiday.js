@@ -101,7 +101,7 @@ dateIcon.addEventListener('click', async () => {
   }
 
   const {
-    dateRangeReport, pageNumber, pageLength, page, numberOfPage,
+    dateRangeReport, pageNumber,  numberOfPage,
   } = holidays.reports
   const holidayTable = document.querySelector('#holiday-table');
 
