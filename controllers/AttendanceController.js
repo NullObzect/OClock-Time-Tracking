@@ -60,7 +60,8 @@ const AttendanceController = {
       const getWeekData = await AttendanceModel.getWeekHistory(id)
       const [{ end }] = await AttendanceModel.currentEndTime()
       const breakTime = getTodayData.length
-
+      console.log('sss', start)
+      console.log('today total', todayTotalData)
       return res.json({
         start, end, breakTime, getTodayData, todayTotalData, weekTotalData, getWeekData,
       })
