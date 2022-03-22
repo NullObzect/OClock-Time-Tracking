@@ -15,7 +15,7 @@ const DashboardController = {
     const [{ start }] = await AttendanceModel.todayStartTime(user.id)
     const [{ end }] = await AttendanceModel.todayEndTime(user.id)
     const projects = await OptionsModel.getProjects()
-    const weekHistory = await AttendanceModel.getWeekHistory(user.id)
+    /// const weekHistory = await AttendanceModel.getWeekHistory(user.id)
     const today = await AttendanceModel.getToday(user.id)
     const [tTotal] = await AttendanceModel.todayTotal(user.id)
     const [wTotal] = await AttendanceModel.weekTotal(user.id)
@@ -28,12 +28,11 @@ const DashboardController = {
     const isEndTimeNull = await AttendanceModel.getEndTimeIsNull()
     console.log({ isEndTimeNull });
 
-    console.log(req.loggedInUser)
+    //console.log(req.loggedInUser)
     res.render('pages/dashboard', {
       start,
       end,
       breakTime,
-      weekHistory,
       today,
       todayTotal,
       weekTotal,
@@ -52,7 +51,6 @@ const DashboardController = {
   },
   getUpdateOptionValues: async (req, res) => {
     try {
-      console.log(req.body);
 
       const { optionId, optionValue } = req.body;
       console.log(optionId, optionValue);

@@ -14,4 +14,7 @@ router.get('/delete/holiday/:id', HolidayController.getDeleteHoliday)
 
 router.get('/employee-see/holidays', decorateHtmlResponse('Holidays'), checkLogin, HolidayController.employeeSeeHolidays)
 
+//
+router.get('/holiday/between-two-date', HolidayController.getHolidayListBetweenTwoDate)
+
 module.exports = router

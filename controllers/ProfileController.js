@@ -41,7 +41,6 @@ const ProfileController = {
   changeProfile: async (req, res) => {
     const { user } = req
     try {
-      console.log(req.url);
       const token = req.signedCookies.Oclock;
       const { userMailFormDB } = cookieVerifier(token)
 

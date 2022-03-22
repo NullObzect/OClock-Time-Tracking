@@ -60,13 +60,13 @@ const LogModel = {
   },
 
   lastSevenDaysReports: async (userId) => {
-    const query = `SELECT  DAYNAME(create_at) AS day, DATE_FORMAT(create_at,'%d-%m-%Y') AS date,  day_type AS dayType, TIME_FORMAT(start,'%h:%i %p') AS start, TIME_FORMAT(TIMEDIFF(TIME(in_time), TIME(start)), '%h:%i') AS inTimeExtraOrLess, TIME_FORMAT(end,'%h:%i %p') AS end, TIME_FORMAT(TIMEDIFF(TIME(out_time), TIME(end)), '%h:%i') AS outTimeExtraOrLess, TIME_FORMAT(work_time,'%H:%i') AS workTime, REPLACE(TIME_FORMAT( work_hour , '%h'),'0', '') AS workHr, TIME_FORMAT(TIMEDIFF(work_time, work_hour), '%H
+    const query = `SELECT  DAYNAME(create_at) AS day, DATE_FORMAT(create_at,'%d-%m-%Y') AS date,  day_type AS dayType, TIME_FORMAT(start,'%h:%i %p') AS start, TIME_FORMAT(TIMEDIFF(TIME(in_time), TIME(start)), '%H:%i') AS inTimeExtraOrLess, TIME_FORMAT(end,'%h:%i %p') AS end, TIME_FORMAT(TIMEDIFF(TIME(out_time), TIME(end)), '%H:%i') AS outTimeExtraOrLess, TIME_FORMAT(work_time,'%H:%i') AS workTime, REPLACE(TIME_FORMAT( work_hour , '%h'),'0', '') AS workHr, TIME_FORMAT(TIMEDIFF(work_time, work_hour), '%H
     :%i') AS totalTimeExtraOrLess FROM log WHERE  user_id = ${userId} AND create_at >  now() - INTERVAL 7 DAY`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
   reportDetailsBetweenTwoDate: async (userId, startDate, endDate) => {
-    const query = `SELECT  DAYNAME(create_at) AS day, DATE_FORMAT(create_at,'%d %b %y') AS date,  day_type AS dayType, TIME_FORMAT(start,'%h:%i %p') AS start, TIME_FORMAT(TIMEDIFF(TIME(in_time), TIME(start)), '%h:%i') AS inTimeExtraOrLess, TIME_FORMAT(end,'%h:%i %p') AS end, TIME_FORMAT(TIMEDIFF(TIME(out_time), TIME(end)), '%h:%i') AS outTimeExtraOrLess, TIME_FORMAT(work_time,'%H:%i') AS workTime, REPLACE(TIME_FORMAT( work_hour , '%h'),'0', '') AS workHr, TIME_FORMAT(TIMEDIFF(work_time, work_hour), '%h:%i') AS totalTimeExtraOrLess FROM log WHERE  user_id = ${userId} AND  DATE(create_at) BETWEEN '${startDate}' AND '${endDate}'`
+    const query = `SELECT  DAYNAME(create_at) AS day, DATE_FORMAT(create_at,'%d %b %y') AS date,  day_type AS dayType, TIME_FORMAT(start,'%h:%i %p') AS start, TIME_FORMAT(TIMEDIFF(TIME(in_time), TIME(start)), '%H:%i') AS inTimeExtraOrLess, TIME_FORMAT(end,'%h:%i %p') AS end, TIME_FORMAT(TIMEDIFF(TIME(out_time), TIME(end)), '%H:%i') AS outTimeExtraOrLess, TIME_FORMAT(work_time,'%H:%i') AS workTime, REPLACE(TIME_FORMAT( work_hour , '%h'),'0', '') AS workHr, TIME_FORMAT(TIMEDIFF(work_time, work_hour), '%H:%i') AS totalTimeExtraOrLess FROM log WHERE  user_id = ${userId} AND  DATE(create_at) BETWEEN '${startDate}' AND '${endDate}'`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },

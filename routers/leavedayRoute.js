@@ -9,7 +9,7 @@ const decorateHtmlResponse = require('../middleware/common/decorateHtmlResponse'
 router.post('/add-leaveday', decorateHtmlResponse('Add Leaveday'), LeaveController.addLeaveday)
 router.get('/leavedays', decorateHtmlResponse('Leavedays'), checkLogin, LeaveController.employeeLeavedaysList)
 
-router.get('/edit/leaveday/:id', decorateHtmlResponse('Edit Leavedays'), LeaveController.getEditLeavePage)
-router.post('/edit/leaveday', LeaveController.setLeaveData)
+router.post('/leavedays/update', LeaveController.setLeaveData)
+router.get('/leavedays/delete/:id', LeaveController.getDeleteLeaveday)
 
 module.exports = router

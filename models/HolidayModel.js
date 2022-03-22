@@ -13,6 +13,11 @@ const HolidayModel = {
     const [rows] = await dbConnect.promise().execute(getList)
     return rows;
   },
+  holidaysListBetweenTowDate: async (startDate, endDate) => {
+    const getList = `SELECT H.id AS id, H.title AS title, DATE_FORMAT(start,'%Y/%m/%d') AS start, DATE_FORMAT(end, '%Y/%m/%d') AS end, DATEDIFF(end,start) + 1 AS duration  FROM holidays AS H WHERE DATE(start) BETWEEN  '${startDate}' AND '${endDate}'`;
+    const [rows] = await dbConnect.promise().execute(getList)
+    return rows;
+  },
   getHolidayData: async (id) => {
     const getData = "SELECT H.title AS title, DATE_FORMAT(start, '%m/%d/%Y') AS start, DATE_FORMAT(end, '%m/%d/%Y') AS end FROM `holidays` AS H WHERE id = ?";
     const value = [id];

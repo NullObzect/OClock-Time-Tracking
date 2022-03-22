@@ -1,6 +1,18 @@
 <%- include("../partials/header"); -%>
 
 <style>
+  .holiday-table input[type="text"] {
+    outline: none;
+    border-radius: 10px;
+    border: none;
+    padding: 6px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .holiday-table input[type="text"]:focus {
+    outline: none;
+    border: none;
+  }
   .holiday-table,
   tbody td {
     margin-bottom: -1px;
@@ -61,10 +73,42 @@
     border-bottom: 3px solid #ccc;
     gap: 5px;
   }
+  /* style for the date range holiday  same css  */
+  .date-range-input {
+    display: flex;
+    justify-content: space-between;
+    margin: 30px 40px;
+  }
+  .date-range-input-container {
+    background: #f3f3f3;
+    border-radius: 8px;
+    padding: 5px 10px;
+    height: 45px;
+  }
+
+  .date-input {
+    background: #f3f3f3;
+    width: 150px;
+    padding: 6px;
+    font-size: 16px;
+    font-weight: 400;
+    color: #5e5e5e;
+    border: none;
+    outline: none;
+    /* border: 1px solid #EAEEF4;
+  border-radius: 12px; */
+    text-align: left;
+  }
+  .date-input:focus,
+  input[type="data"]:focus {
+    border: none;
+    outline: none !important;
+  }
 </style>
 <div id="project">
   <div class="text-head">
     <div class="text-title">Holidays</div>
+    <% if(loggedInUser.userRole === 'admin'){ %>
     <div class="add-button">
       <button class="add-btn">
         <span class="add-icon">
@@ -73,8 +117,49 @@
         <span .add-btn-text>Add Holiday</span>
       </button>
     </div>
+    <% } %>
   </div>
   <%- include("../partials/add-holiday-modal"); -%>
+  <!-- Markup Date range for employee-->
+
+  <div class="date-range-input">
+    <div class="report-title-container">
+      <h4>Reports</h4>
+      <p class="report-title">In this year.</p>
+    </div>
+    <div class="date-picker">
+      <div class="start-date">
+        <input id="startPicker" type="text" placeholder="-- / -- / ----" />
+      </div>
+      <div class="to">to</div>
+      <div class="end-date">
+        <input id="endPicker" placeholder="-- / -- / ----" />
+      </div>
+      <div id="date-icon" class="date-icon">
+        <svg
+          width="26"
+          height="30"
+          viewBox="0 0 26 30"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M7.66667 1.66675V5.66675V1.66675ZM18.3333 1.66675V5.66675V1.66675ZM1.66667 11.1201H24.3333H1.66667ZM25 10.3334V21.6667C25 25.6667 23 28.3334 18.3333 28.3334H7.66667C3 28.3334 1 25.6667 1 21.6667V10.3334C1 6.33341 3 3.66675 7.66667 3.66675H18.3333C23 3.66675 25 6.33341 25 10.3334Z"
+            stroke-width="2"
+            stroke-miterlimit="10"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M8.05859 21.2666H8.07193M17.9266 17.2666H17.9386H17.9266ZM17.9266 21.2666H17.9386H17.9266ZM12.9933 17.2666H13.0066H12.9933ZM12.9933 21.2666H13.0066H12.9933ZM8.05859 17.2666H8.07193H8.05859Z"
+            stroke-width="2.66667"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+    </div>
+  </div>
 
   <table class="project-table holiday-table">
     <thead>
@@ -87,15 +172,25 @@
         <!-- <td>Action</td> -->
       </tr>
     </thead>
-    <tbody>
+    <tbody id="holiday-table">
       <% holidays.map((day,idx) =>{ %>
 
       <tr>
         <td class=""><%= idx + 1 %></td>
-        <td class="title-value"><%= day.title %></td>
-        <td class="start-date-value"><%= day.start %></td>
-        <td class="end-date-value"><%= day.end %></td>
-        <td class=""><%= day.duration + ' ' + 'day' %></td>
+        <td>
+          <input class="title-value" type="text" value="<%= day.title %>" />
+        </td>
+        <td>
+          <input
+            class="start-date-value"
+            type="text"
+            value="<%= day.start %>"
+          />
+        </td>
+        <td>
+          <input class="end-date-value" type="text" value="<%= day.end %>" />
+        </td>
+        <td class="duration"><%= day.duration + ' ' + 'day' %></td>
 
         <%if(loggedInUser.userRole==='admin'){ %>
 
@@ -112,113 +207,125 @@
           </a>
           <input type="hidden" class="holiday-id" value="<%= day.id %>" />
           <% } %>
-
-          <!-- <a href="/edit/holiday/<%# day.id %>"
-            ><button class="p-2 bg-green-300 rounded-lg">Edit</button>
-          </a>
-          <a
-            onclick=" return confirm('Are you Sure???')"
-            href="/delete/holiday/<%# day.id %>"
-            ><button>Delete</button>
-          </a> -->
         </td>
       </tr>
 
       <% }) %>
     </tbody>
   </table>
+
+  <!--- Markup for pagination -->
+
+  <div class="pagination">
+    <ul id="pagination"></ul>
+  </div>
 </div>
-
 <script>
-  const actionBtn = document.querySelectorAll(".action-btn");
-  const updateBtn = document.querySelectorAll(".update-btn");
-  const deleteBtn = document.querySelectorAll(".delete-btn");
-  const saveBtn = document.querySelectorAll(".save-btn");
+  const baseUrl = "<%= baseUrl %>";
+  const loggedInUser = "<%= loggedInUser.userRole %>";
+  /* 
+  const holidayTable = document.querySelector("#holiday-table");
+  // Date change to date icon active remove
 
-  //
-  const titleValue = document.querySelectorAll(".title-value");
-  const startDateValue = document.querySelectorAll(".start-date-value");
-  const endDateValue = document.querySelectorAll(".end-date-value");
-  const holidayId = document.querySelectorAll(".holiday-id");
-
-  for (let i = 0; i < actionBtn.length; i++) {
-    actionBtn[i].addEventListener("click", () => {
-      updateBtn[i].style.display = "block";
-      deleteBtn[i].style.display = "block";
-      actionBtn[i].style.display = "none";
-    });
+  function iconCheck(e) {
+    const dateIcon = document.querySelector("#date-icon");
+    const data = dateIcon.classList.contains("date-icon-active");
+    if (data) {
+      return dateIcon.classList.remove("date-icon-active");
+    }
   }
-  for (let i = 0; i < updateBtn.length; i++) {
-    updateBtn[i].addEventListener("click", () => {
-      updateBtn[i].style.display = "none";
-      deleteBtn[i].style.display = "none";
-      saveBtn[i].style.display = "block";
-      actionBtn[i].style.display = "none";
-
-      titleValue[i].setAttribute("contenteditable", "true");
-      startDateValue[i].setAttribute("contenteditable", "true");
-      endDateValue[i].setAttribute("contenteditable", "true");
-      titleValue[i].focus();
-    });
+  // getDate format
+  function getDateFormat(date) {
+    if (date === null) {
+      return null;
+    }
+    let today = new Date(date);
+    const dd = String(today.getDate()).padStart(2, "0");
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const yyyy = today.getFullYear();
+    today = `${yyyy}-${mm}-${dd}`;
+    return today;
   }
+  // get current date
+  function getCurrentDate() {
+    let today = new Date();
+    const dd = String(today.getDate()).padStart(2, "0");
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const yyyy = today.getFullYear();
+    today = `${yyyy}-${mm}-${dd}`;
 
-  // when save button is clicked
-  for (let i = 0; i < saveBtn.length; i++) {
-    saveBtn[i].addEventListener("click", () => {
-      let title = titleValue[i].innerText.trim();
-      let start = startDateValue[i].textContent.trim();
-      let end = endDateValue[i].textContent.trim();
-      let id = holidayId[i].value;
-      if (title === "" || start === "" || end === "" || id === "") {
-        alert("Please fill all the fields");
-        return;
-      }
-      const data = {
-        title,
-        start,
-        end,
-        id,
-      };
-      console.log(data);
-      aJAXPostRequest("/options/holiday/edit/holiday", data);
-      // titleValue[i] = data.title;
-      // startDateValue[i] = data.start;
-      // endDateValue[i] = data.end;
-      // saveBtn[i].style.display = "none";
-      // actionBtn[i].style.display = "block";
-    });
+    return today;
   }
 
-  //
-  function dateFormate(date) {
-    const today = new Date(date);
-    const month = today.getMonth() + 1;
-    const year = today.getFullYear();
-    const day = today.getDate() < 10 ? `0${today.getDate()}` : today.getDate();
-    const getDate = `${year}-${month < 10 ? `0${month}` : month}-${day}`;
+  async function dateRange(event) {
+    const dateIcon = document.querySelector("#date-icon");
+    const dateStart = document.querySelector("#startPicker");
+    const dateEnd = document.querySelector("#endPicker");
+    const startDate = getDateFormat(startDatePicker.getFullDate());
+    const endDate = getDateFormat(
+      endDatePicker.getFullDate() || getCurrentDate()
+    );
 
-    return getDate;
-  }
-  //  AJAX post request function
-  function aJAXPostRequest(url, data) {
-    return new Promise((resolve, reject) => {
-      fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log({ data });
-          if (data.success) {
-            alert("Option Value Updated");
-          }
-        })
-        .catch((err) => console.log(err));
-      return window.location.replace("/options/holiday");
-    });
-  }
+    dateStart.dataset.date = startDate;
+    dateEnd.dataset.date = endDate;
+
+    if (dateStart.dataset.date === "null") {
+      return alert("date not select");
+    }
+
+    console.log(startDate, endDate);
+
+    const data = await fetch(
+      `${baseUrl}/options/holiday/between-two-date?startDate=${startDate}&endDate=${endDate}`
+    );
+
+    const holidays = await data.json();
+    console.log(holidays);
+
+    if (holidays.length === 0) {
+      return alert("No Holiday Found");
+    }
+    holidayTable.innerHTML = holidays.map(
+      (day, idx) =>
+        `
+
+      <tr>
+        <td class="">${idx + 1}</td>
+        <td>
+          <input class="title-value" type="text" value="${day.title}" />
+        </td>
+        <td>
+          <input
+            class="start-date-value"
+            type="text"
+            value="${day.start}"
+          />
+        </td>
+        <td>
+          <input class="end-date-value" type="text" value="${day.end}" />
+        </td>
+        <td class="duration">${day.duration + " " + "day"}</td>
+
+        <td class="btn-group">
+          <button   class="action-btn">Action</button>
+          <button  class="update-btn">Update</button>
+          <button  class="save-btn">Save</button>
+
+          <a
+            onclick=" return confirm('Are you Sure???')"
+            href="/delete/holiday/${day.id}"
+          >
+            <button type="text" class="delete-btn">Delete</button>
+          </a>
+          <input type="hidden" class="holiday-id" value="${day.id}" />
+          
+        </td>
+      </tr>
+      `
+    );
+
+    // add action code here
+  } */
 </script>
+<script src="<%=baseUrl%>/js/holiday.js"></script>
 <%- include("../partials/footer"); -%>

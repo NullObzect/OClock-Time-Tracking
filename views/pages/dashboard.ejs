@@ -17,6 +17,19 @@
     right: 0;
     display: none;
   }
+  .dashboard-update-btn {
+    background-color: #103047;
+    border-radius: 10px;
+    color: #fff;
+    padding: 8px 12px;
+    border: none;
+    outline: none;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    width: 70px;
+    text-align: center;
+  }
 </style>
 
 
@@ -25,7 +38,7 @@
     <div class="oclock-box">
       <div class="time-box">
         <div class="current-time">
-          12:00
+          <h4 class="time">12:00</h4>
           <span class="time-meridiem"></span>
         </div>
         <div class="current-date">Mon 22 Oct</div>
@@ -101,6 +114,8 @@
 
   <!-- Markup for current working user details -->
 
+  <%if(loggedInUser.userRole==='admin'){ %>
+
   <div class="dashboard-info cnt-working-emy-list">
 
     <h4 class="title-for-cnt-ely">Employees Working now ! </h4>
@@ -118,11 +133,14 @@
         <% isEndTimeNull.map(user=>{%>
         <tr>
           <td class="table-img td-width-zero">
-            <img
-              src="/uploads/avatars/<%=user.img == null ? 'demo-avatar.png':user.img
-              %> "
-              alt=""
-            />
+            <% if(user.avatar !== null && user.avatar.match(/^(http|https):/g)){
+          %>
+          <img src="<%= user.avatar%>" />
+          <%} else{%>
+          <img
+            src="/uploads/avatars/<%=user.avatar != null ?  user.avatar : 'demo-avatar.png' %>"
+          />
+          <% } %>
           </td>
           <td>
             <div class="username"><%=user.name%></div>
@@ -136,7 +154,7 @@
 
 
           <td>
-            <button class="update-btn">Update</button>
+            <button class="dashboard-update-btn ">Update</button>
 
 
                   <!-- Modal for update end time -->
@@ -187,6 +205,7 @@
       </tbody>
     </table>
   </div>
+  <%} %>
 
 </div>
 
@@ -214,13 +233,14 @@
     };
     const currentDate = document.querySelector(".current-date");
     const showCurrentTime = document.querySelector(".current-time");
+    const time = document.querySelector(".time");
     const timeMeridiem = document.querySelector(".time-meridiem");
-    console.log((showCurrentTime.childNodes[1].textContent = "kk"));
 
-    showCurrentTime.getElementsByTagName("span")[0].textContent = "dd";
+   // showCurrentTime.getElementsByTagName("span")[0].textContent = "dd";
     currentDate.innerText = getCurrentDate();
-    showCurrentTime.innerText = clock().slice(0, 5);
-    //timeMeridiem.textContent = clock().slice(6, 8);
+    // showCurrentTime.innerText = clock().slice(0, 5);
+    time.innerText = clock().slice(0, 5);
+    timeMeridiem.textContent = clock().slice(6, 8);
     console.log(clock().slice(6, 8));
     console.log(timeMeridiem.textContent);
 
@@ -230,7 +250,7 @@
 
     console.log('update end time');
     let updateEndTimeModal = document.getElementsByClassName("modal-cont");
-    let updateBtn = document.getElementsByClassName("update-btn");
+    let updateBtn = document.getElementsByClassName("dashboard-update-btn");
     console.log(updateBtn);
 
      for(let i = 0; i < updateBtn.length; i++) {
@@ -255,5 +275,6 @@
   </script>
 
  
+  <script src="<%=baseUrl%>/startData.js"></script>
 
  <%- include("../partials/footer.ejs"); -%>

@@ -1,10 +1,15 @@
 <%- include("../partials/header"); -%>
 
 <style>
-  /* .leaveday-table input[type="text"] {
-    outline: none !important;
+  .leaveday-table input[type="text"] {
+    outline: none;
     border-radius: 10px;
-  } */
+    border: none;
+    padding: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    width: 90%;
+  }
 
   .leaveday-table th,
   .leaveday-table td {
@@ -54,11 +59,46 @@
     border-bottom: 3px solid #ccc;
     gap: 5px;
   }
+
+  /* style for the date range holiday  same css  */
+  .date-range-input {
+    display: flex;
+    justify-content: space-between;
+    margin: 30px 40px;
+  }
+  .date-range-input-container {
+    background: #f3f3f3;
+    border-radius: 8px;
+    padding: 5px 10px;
+    height: 45px;
+  }
+
+  .date-input {
+    background: #f3f3f3;
+    width: 150px;
+    padding: 6px;
+    font-size: 16px;
+    font-weight: 400;
+    color: #5e5e5e;
+    border: none;
+    outline: none;
+    /* border: 1px solid #EAEEF4;
+  border-radius: 12px; */
+    text-align: left;
+  }
+  .date-input:focus,
+  input[type="data"]:focus {
+    border: none;
+    outline: none !important;
+  }
 </style>
 
 <div id="users">
   <div class="text-head">
     <div class="text-title">Leave days</div>
+
+    <%if(loggedInUser.userRole==='admin'){ %>
+
     <div class="add-button">
       <button class="add-btn">
         <span class="add-icon">
@@ -67,8 +107,61 @@
         <span .add-btn-text>Add Leave </span>
       </button>
     </div>
+    <%}%>
   </div>
   <%- include("../partials/add-leaveday-modal"); -%>
+
+  <!-- Markup Date range for employee-->
+
+  <div class="date-range-input">
+    <div class="report-title-container">
+      <h4>Reports</h4>
+      <p class="report-title">In this year.</p>
+    </div>
+    <div class="date-picker">
+      <div class="start-date">
+        <input
+          onblur="iconCheck()"
+          id="startPicker"
+          type="text"
+          placeholder="-- / -- / ----"
+        />
+      </div>
+      <div class="to">to</div>
+      <div class="end-date">
+        <input
+          onblur="iconCheck()"
+          id="endPicker"
+          placeholder="-- / -- / ----"
+        />
+      </div>
+      <div id="date-icon" onclick="dateRange()" class="date-icon">
+        <svg
+          width="26"
+          height="30"
+          viewBox="0 0 26 30"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M7.66667 1.66675V5.66675V1.66675ZM18.3333 1.66675V5.66675V1.66675ZM1.66667 11.1201H24.3333H1.66667ZM25 10.3334V21.6667C25 25.6667 23 28.3334 18.3333 28.3334H7.66667C3 28.3334 1 25.6667 1 21.6667V10.3334C1 6.33341 3 3.66675 7.66667 3.66675H18.3333C23 3.66675 25 6.33341 25 10.3334Z"
+            stroke-width="2"
+            stroke-miterlimit="10"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M8.05859 21.2666H8.07193M17.9266 17.2666H17.9386H17.9266ZM17.9266 21.2666H17.9386H17.9266ZM12.9933 17.2666H13.0066H12.9933ZM12.9933 21.2666H13.0066H12.9933ZM8.05859 17.2666H8.07193H8.05859Z"
+            stroke-width="2.66667"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Markup for leave days table  -->
   <table class="table leaveday-table">
     <thead>
       <tr>
@@ -82,23 +175,31 @@
       </tr>
     </thead>
     <tbody>
-      <% employeeLeaveList.map((user,idx) =>{ %>
+      <%if(loggedInUser.userRole==='admin'){ %> <%
+      employeeLeaveList.map((user,idx) =>{ %>
       <tr>
         <td class="table-img td-width-zero">
+          <% if(user.avatar !== null && user.avatar.match(/^(http|https):/g)){
+          %>
+          <img src="<%= user.avatar%>" />
+          <%} else{%>
           <img
-            src="/uploads/avatars/<%=user.avatar== null ? 'demo-avatar.png':user.avatar
-              %> "
-            alt="Profile"
+            src="/uploads/avatars/<%=user.avatar != null ?  user.avatar : 'demo-avatar.png' %>"
           />
+          <% } %>
         </td>
         <td>
           <div class="username"><%=user.name%></div>
           <span id="role"><%= user.user_role==='admin'? 'admin' : ''%> </span>
         </td>
-        <td class="reason-val"><%= user.reason %></td>
-        <td class="start-val"><%= user.start %></td>
-        <td class="end-val"><%= user.end %></td>
-        <td class=""><%= user.duration + ' ' + 'day' %></td>
+        <td>
+          <input class="reason-val" type="text" value="<%=user.reason %>" />
+        </td>
+        <td>
+          <input class="start-val" type="text" value="<%=user.start%> " />
+        </td>
+        <td><input class="end-val" type="text" value="<%=user.end%>" /></td>
+        <td class="duration"><%= user.duration + ' ' + 'day' %></td>
         <td class="">
           <div class="btn-group">
             <button type="button" class="action-btn">Action</button>
@@ -107,23 +208,40 @@
             <input type="hidden" class="leave-id" value="<%= user.id %>" />
             <a
               onclick=" return confirm('Are you Sure???')"
-              href="/delete/leave/<%= user.id %>"
+              href="leavedays/delete/<%= user.id %>"
               ><button class="delete-btn">Delete</button>
             </a>
           </div>
-
-          <!-- <a href="/edit/leaveday/<%#user.id %>"
-            ><button class="">Edit</button>
-          </a>
-          <a
-            onclick=" return confirm('Are you Sure???')"
-            href="/delete/leave/<%# user.id %>"
-            ><button class="p-2 bg-red-300 rounded-lg">Delete</button>
-          </a> -->
         </td>
       </tr>
 
-      <% }) %>
+      <% }) %> <%}else{%> <% anEmployeeLeavedaysList.map((user,idx) =>{ %>
+      <tr>
+        <td class="table-img td-width-zero">
+          <% if(user.avatar !== null && user.avatar.match(/^(http|https):/g)){
+          %>
+          <img src="<%= user.avatar%>" />
+          <%} else{%>
+          <img
+            src="/uploads/avatars/<%=user.avatar != null ?  user.avatar : 'demo-avatar.png' %>"
+          />
+          <% } %>
+        </td>
+        <td>
+          <div class="username"><%=user.name%></div>
+          <span id="role"><%= user.user_role==='admin'? 'admin' : ''%> </span>
+        </td>
+        <td>
+          <input class="reason-val" type="text" value="<%=user.reason %>" />
+        </td>
+        <td>
+          <input class="start-val" type="text" value="<%=user.start%> " />
+        </td>
+        <td><input class="end-val" type="text" value="<%=user.end%>" /></td>
+        <td class="duration"><%= user.duration + ' ' + 'day' %></td>
+      </tr>
+
+      <% }) %> <% } %>
     </tbody>
   </table>
 </div>
@@ -137,6 +255,7 @@
   const reasonVal = document.querySelectorAll(".reason-val");
   const startVal = document.querySelectorAll(".start-val");
   const endVal = document.querySelectorAll(".end-val");
+  const duration = document.querySelectorAll(".duration");
   //
 
   for (let i = 0; i < actionBtn.length; i++) {
@@ -154,10 +273,6 @@
       saveBtn[i].style.display = "block";
       deleteBtn[i].style.display = "none";
 
-      reasonVal[i].setAttribute("contenteditable", "true");
-      startVal[i].setAttribute("contenteditable", "true");
-      endVal[i].setAttribute("contenteditable", "true");
-
       reasonVal[i].focus();
     });
   }
@@ -166,9 +281,9 @@
     saveBtn[i].addEventListener("click", () => {
       //saveBtn[i].style.display = "none";
 
-      let reason = reasonVal[i].innerText.trim();
-      let start = startVal[i].innerText.trim();
-      let end = endVal[i].innerText.trim();
+      let reason = reasonVal[i].value.trim();
+      let start = startVal[i].value.trim();
+      let end = endVal[i].value.trim();
       let id = leaveId[i].value;
       console.log(id);
       if (reason === "" || start === "" || end === "") {
@@ -182,6 +297,43 @@
         id: id,
       };
       console.log(data);
+      aJAXPostRequest("/options/leavedays/update", data);
+      reasonVal[i].value = data.reason;
+      startVal[i].value = data.start;
+      endVal[i].value = data.end;
+      duration[i].innerText = dateDiff(data.start, data.end) + " day";
+      saveBtn[i].style.display = "none";
+      actionBtn[i].style.display = "block";
+    });
+  }
+
+  // function for date diff
+  function dateDiff(dateOne, dateTwo) {
+    const date1 = new Date(dateOne);
+    const date2 = new Date(dateTwo);
+    const diffTime = Math.abs(date2 - date1);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+    return diffDays;
+  }
+  //  AJAX post request function
+  function aJAXPostRequest(url, data) {
+    return new Promise((resolve, reject) => {
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log({ data });
+          if (data.success) {
+            alert("Option Value Updated");
+          }
+        })
+        .catch((err) => console.log(err));
+      // return window.location.replace("/options/holiday");
     });
   }
 </script>

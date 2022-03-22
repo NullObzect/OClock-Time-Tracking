@@ -131,12 +131,12 @@ const AttendanceModel = {
     const [rows] = await dbConnect.promise().execute(getRunStartSql, value);
     return rows;
   },
-  getWeekHistory: async (userId) => {
-    const getWeekHistory = 'SELECT date_format((create_at),"%d %b %y") as date, TIME_FORMAT(SEC_TO_TIME(min(TIME_TO_SEC(start))),"%h:%i% %p") as start ,TIME_FORMAT(SEC_TO_TIME(max(TIME_TO_SEC(end))),"%h:%i% %p") as end ,TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(end)))), SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(start))))) as total FROM attendance WHERE user_id = ? AND end IS NOT NULL and date(create_at) BETWEEN date( CURRENT_DATE - INTERVAL 7 day) and date(CURRENT_DATE) GROUP BY date(create_at) ORDER BY date(create_at) ASC'
-    const value = [userId]
-    const [rows] = await dbConnect.promise().execute(getWeekHistory, value);
-    return rows;
-  },
+  // getWeekHistory: async (userId) => {
+  //   const getWeekHistory = 'SELECT date_format((create_at),"%d %b %y") as date, TIME_FORMAT(SEC_TO_TIME(min(TIME_TO_SEC(start))),"%h:%i% %p") as start ,TIME_FORMAT(SEC_TO_TIME(max(TIME_TO_SEC(end))),"%h:%i% %p") as end ,TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(end)))), SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(start))))) as total FROM attendance WHERE user_id = ? AND end IS NOT NULL and date(create_at) BETWEEN date( CURRENT_DATE - INTERVAL 7 day) and date(CURRENT_DATE) GROUP BY date(create_at) ORDER BY date(create_at) ASC'
+  //   const value = [userId]
+  //   const [rows] = await dbConnect.promise().execute(getWeekHistory, value);
+  //   return rows;
+  // },
 
   // report for today
   /* ======= report model  for this week ========= */
@@ -341,7 +341,7 @@ const AttendanceModel = {
   },
   // if end time is null
   getEndTimeIsNull: async () => {
-    const query = "SELECT  A.user_id AS userId , DATE_FORMAT(A.create_at, '%Y-%m-%d') AS curDate,U.user_name AS name, U.avatar AS img, TIME_FORMAT(SEC_TO_TIME(SUM(TIME_TO_SEC(A.start))),'%h:%i %p') AS startTime,  END AS endTime,U.user_role AS userRole FROM attendance AS A JOIN users AS U ON U.id IN( A.user_id ) WHERE end IS NULL GROUP BY A.user_id"
+    const query = "SELECT  A.user_id AS userId , DATE_FORMAT(A.create_at, '%Y-%m-%d') AS curDate,U.user_name AS name, U.avatar AS avatar, TIME_FORMAT(SEC_TO_TIME(SUM(TIME_TO_SEC(A.start))),'%h:%i %p') AS startTime,  END AS endTime,U.user_role AS userRole FROM attendance AS A JOIN users AS U ON U.id IN( A.user_id ) WHERE end IS NULL GROUP BY A.user_id"
     const [rows] = await dbConnect.promise().execute(query)
     return rows
   },

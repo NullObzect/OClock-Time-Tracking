@@ -13,7 +13,7 @@
   --yellow-fade: #fbfff0;
   --fade-purple: #f3f0ff;
   --black: #000000;
-  --font-black: #212D37;
+  --font-black: #212d37;
   --red: #ff7272;
 }
 
@@ -722,15 +722,14 @@ main {
   padding: 10px;
   cursor: pointer;
 }
-.date-icon svg{
+.date-icon svg {
   stroke: #848484;
 }
-.date-icon svg:hover{
+.date-icon svg:hover {
   stroke: var(--primary);
 }
-.date-icon-active svg{
-  stroke: var(--primary);  
-
+.date-icon-active svg {
+  stroke: var(--primary);
 }
 
 /* Dashboard start */

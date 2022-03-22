@@ -43,6 +43,13 @@ const ReportController = {
         const reportStringify = await LogModel.lastSevenDaysReports(userId)
 
         const lastSevenDaysReports = JSON.parse(JSON.stringify(reportStringify))
+
+        lastSevenDaysReports.forEach((el) => {
+          el.inTimeExtraOrLess.split('').filter((x) => x === '0').length === 4 ? el.inTimeExtraOrLess = '' : el.inTimeExtraOrLess;
+
+          el.outTimeExtraOrLess.split('').filter((x) => x === '0').length === 4 ? el.outTimeExtraOrLess = '' : el.outTimeExtraOrLess;
+        })
+        // .split('').filter((el) => el === '0').length === 4 ? el.inTimeExtraOrLess = '' : inTimeExtraOrLess
         // console.log({ lastSevenDaysReports });
 
         /* ======================================================== */
@@ -284,12 +291,19 @@ const ReportController = {
       // log end
 
       const dataToJson = JSON.parse(JSON.stringify(getData))
+
+      dataToJson.forEach((el) => {
+        el.inTimeExtraOrLess.split('').filter((x) => x === '0').length === 4 ? el.inTimeExtraOrLess = '' : el.inTimeExtraOrLess;
+
+        el.outTimeExtraOrLess.split('').filter((x) => x === '0').length === 4 ? el.outTimeExtraOrLess = '' : el.outTimeExtraOrLess;
+      })
       console.log({ dataToJson })
       const page = Number(req.query.page) || 1
       const limit = Number(req.query.limit) || 4
       const startIndex = (page - 1) * limit
       const endIndex = page * limit
       const dateRangeReport = dataToJson.slice(startIndex, endIndex)
+
       console.log({ dateRangeReport });
 
       const pageLength = dataToJson.length / limit

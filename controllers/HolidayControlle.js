@@ -1,5 +1,8 @@
+/* eslint-disable max-len */
+/* eslint-disable no-undef */
 const HolidayModel = require('../models/HolidayModel');
 const UserModel = require('../models/UserModel')
+const { pageNumbers } = require('../utilities/pagination')
 
 // const helperJs = require('../public/js/halper')
 const Flash = require('../utilities/Flash')
@@ -17,15 +20,15 @@ const HolidayController = {
   addHoliday: async (req, res) => {
     try {
       const { title, start, end } = req.body
-      if (req.body.title == '') {
+      if (req.body.title === '') {
         console.log('tittle error')
         req.flash('fail', 'please input fill up')
         res.redirect('/add-holiday')
       }
       const inserted = await HolidayModel.addHoliday(
         title,
-        helperJs.getDateFormat(start),
-        helperJs.getDateFormat(end),
+        dateFormate(start),
+        dateFormate(end),
       )
       if (inserted.errno) {
         res.send('Error')
@@ -44,6 +47,39 @@ const HolidayController = {
       console.log('====>Error form HolidayControlle/holidayList', err);
     }
   },
+  getHolidayListBetweenTwoDate: async (req, res) => {
+    try {
+      const { startDate, endDate } = req.query;
+      console.log('startDate', startDate, endDate)
+
+      const holidays = await HolidayModel.holidaysListBetweenTowDate(startDate, endDate)
+      const getHoliday = JSON.parse(JSON.stringify(holidays))
+      // for pagination
+      const page = Number(req.query.page) || 1
+      const limit = Number(req.query.limit) || 2
+      const startIndex = (page - 1) * limit
+      const endIndex = page * limit
+      const dateRangeReport = getHoliday.slice(startIndex, endIndex)
+
+      console.log({ dateRangeReport });
+      const pageLength = getHoliday.length / limit
+
+      const numberOfPage = Number.isInteger(pageLength) ? Math.floor(pageLength) : Math.floor(pageLength) + 1
+      const pageNumber = pageNumbers(numberOfPage, 2, page)
+
+      res.json({
+        reports: {
+          dateRangeReport, pageNumber, numberOfPage, pageLength, page,
+        },
+      })
+
+      //
+      // return res.json(getHoliday)
+    } catch (err) {
+      console.log('====>Error form HolidayControlle/holidayList', err);
+    }
+  },
+
   getEditHolidayPage: async (req, res) => {
     global.hId = req.params.id;
     const holidayData = await HolidayModel.getHolidayData(hId)
