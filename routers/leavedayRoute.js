@@ -11,5 +11,6 @@ router.get('/leavedays', decorateHtmlResponse('Leavedays'), checkLogin, LeaveCon
 
 router.post('/leavedays/update', LeaveController.setLeaveData)
 router.get('/leavedays/delete/:id', LeaveController.getDeleteLeaveday)
+router.get('/leavedays/between-two-date', LeaveController.getLeavedayListBetweenTwoDate)
 
 module.exports = router

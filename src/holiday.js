@@ -1,16 +1,91 @@
+/* eslint-disable no-shadow */
 /* eslint-disable no-return-assign */
 import {
-  aJAXPostRequest, dateDiff, dateFormate, getCurrentDate, test
+  aJAXPostRequest, dateDiff, dateFormate, getCurrentDate
 } from './helper.js';
 
-// const helper = require('./halper.js');
+function pagination(pageNumber, numberOfPage, page) {
+  const pagination = document.querySelector('#pagination')
+  pagination.innerHTML = `<li class="first page" > </li>
+ <li class="prev page"></li>
+ ${pageNumber.map((p) => `<a class=${page == p ? 'page-active' : ''} ><li class='page-li'>  ${p}  </li></a>`).join('')}
+ <li class="next page"></li>
+ <li class="last page"></li>
+ `
+  // eslint-disable-next-line no-use-before-define
+  loader(numberOfPage, page)
+}
 
-// console.log({ helper })
+function loader(numberOfPage, pageNO) {
+  async function page(pageNo) {
+    const startDate = document.querySelector('#startPicker').dataset.date
+    const endDate = document.querySelector('#endPicker').dataset.date
+    const data = await fetch(
+      `${baseUrl}/options/holiday/between-two-date?startDate=${startDate}&endDate=${endDate}&page=${pageNo}`,
+    );
+    const holidays = await data.json();
+    if (holidays.length === 0) {
+      return alert('No Holiday Found');
+    }
+    console.log('page report', holidays.reports)
 
-console.log('hello');
-console.log('teest', test())
+    const {
+      dateRangeReport, pageNumber, numberOfPage,
+    } = holidays.reports
+    const holidayTable = document.querySelector('#holiday-table');
 
-actions()
+    reportHolidayShow(holidayTable, dateRangeReport)
+    pagination(pageNumber, numberOfPage, pageNo)
+
+    await actions();
+  }
+  const pageClassFirst = document.querySelector('.first')
+  pageClassFirst.addEventListener('click', () => {
+    if (pageNO > 1) {
+      page(Number(1))
+    }
+  })
+  const pageClassPrev = document.querySelector('.prev')
+  pageClassPrev.addEventListener('click', () => {
+    if (pageNO > 1) {
+      page(Number(pageNO - 1))
+    }
+  })
+  const pageClassNext = document.querySelector('.next')
+  pageClassNext.addEventListener('click', () => {
+    if (pageNO < numberOfPage) {
+      page(Number(pageNO + 1))
+    }
+  })
+  const pageClassLast = document.querySelector('.last')
+  pageClassLast.addEventListener('click', () => {
+    if (pageNO < numberOfPage) {
+      page(Number(numberOfPage))
+    }
+  })
+  const pageLi = document.getElementsByClassName('page-li')
+  for (let i = 0; i < pageLi.length; i++) {
+    pageLi[i].addEventListener('click', () => {
+      page(i + 1)
+    })
+  }
+}
+
+document.getElementById('startPicker').addEventListener('blur', () => {
+  iconCheck()
+})
+document.getElementById('endPicker').addEventListener('blur', () => {
+  iconCheck()
+})
+function iconCheck(e) {
+  const dateIcon = document.querySelector('#date-icon')
+  const data = dateIcon.classList.contains('date-icon-active')
+  if (data) {
+    return dateIcon.classList.remove('date-icon-active')
+  }
+}
+
+
 async function actions() {
   const actionBtn = document.querySelectorAll('.action-btn');
   const updateBtn = document.querySelectorAll('.update-btn');
@@ -101,14 +176,16 @@ dateIcon.addEventListener('click', async () => {
   }
 
   const {
-    dateRangeReport, pageNumber,  numberOfPage,
+    dateRangeReport, pageNumber, numberOfPage, page,
   } = holidays.reports
   const holidayTable = document.querySelector('#holiday-table');
 
   reportHolidayShow(holidayTable, dateRangeReport)
-  pagination(pageNumber, numberOfPage)
-
-  await actions();
+  if(numberOfPage>1){
+    pagination(pageNumber, numberOfPage, page)
+  }
+  dateIcon.classList.add('date-icon-active')
+  // await actions();
   // iconCheck(e);
   // console.log('icon', iconCheck(e))
 })
@@ -152,37 +229,3 @@ function reportHolidayShow(holidayTable, dateRangeReport) {
 
   ).join('');
 }
-
-function pagination(pageNumber, numberOfPage, page) {
-  const pagination = document.querySelector('#pagination')
-  return pagination.innerHTML = `<li class="first"  onclick="page(${1})"> </li> 
- <li class="prev" ${Number(page === 1) ? "onclick='this.disabled=true'" : `onclick=page(${Number(page - 1)})`}></li> 
- ${pageNumber.map((p) => `<a class=${page == p ? 'page-active' : ''} ><li onclick="page(${p})">  ${p}  </li></a>`).join('')}
- <li class="next" ${Number(page === numberOfPage) ? "onclick='this.disabled=true'" : `onclick=page(${Number(page + 1)})`}></li> 
- <li class="last" onclick="page(${numberOfPage})"></li> 
- `
-}
-console.log('end of script file');
-/*
-async function page(pageNo) {
-  const data = await fetch(
-    `${baseUrl}/options/holiday/between-two-date?startDate=${startDate}&endDate=${endDate}&pageNo=${pageNo}`,
-  );
-
-  const holidays = await data.json();
-  console.log(holidays);
-
-  if (holidays.length === 0) {
-    return alert('No Holiday Found');
-  }
-
-  const {
-    dateRangeReport, pageNumber, numberOfPage,
-  } = holidays.reports
-  const holidayTable = document.querySelector('#holiday-table');
-
-  reportHolidayShow(holidayTable, dateRangeReport)
-  pagination(pageNumber, numberOfPage, pageNo)
-
-  await actions();
-} */

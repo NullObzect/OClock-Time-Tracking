@@ -13,7 +13,7 @@ const UserController = {
   getUsers: async (req, res) => {
     const user = await UserModel.getAllUsersList()
     const page = Number(req.query.page) || 1
-    const limit = Number(req.query.limit) || 4
+    const limit = Number(req.query.limit) || 10
     const startIndex = (page - 1) * limit
     const endIndex = page * limit
     const users = user.slice(startIndex, endIndex)
@@ -410,44 +410,26 @@ const UserController = {
 
   // update user
   updateUser: async (req, res) => {
-    const userInfo = await UserModel.getUpdateUserInfo(req.params.id)
-    global.userId = userInfo[0].id
-
-    res.render('pages/updateUser', { userInfo })
+    try {
+      const [findIdFormUser] = await UserModel.getUpdateUserInfo(req.params.id)
+      const {
+        id, user_name, user_phone, user_mail, status,
+      } = findIdFormUser
+      const { avatar } = findIdFormUser
+      const userAvatar = avatar
+      res.render('pages/updateUser', {
+        id, user_name, user_phone, user_mail, status, userAvatar,
+      })
+    } catch (err) {
+      console.log('====>Error form userProfile Controller', err);
+    }
   },
   // update user post
   updateUserPush: async (req, res) => {
-    const id = userId
-    const {
-      userName, userPhone, userRole, userMail, userPass,
-    } = req.body;
-    const hashPass = await bcrypt.hash(userPass, 10)
-    const isUpdate = await UserModel.adminCanUpdateUser(
-      id,
-      userName,
-      userPhone,
-      userRole,
-      userMail,
-      hashPass,
-      userId,
-    )
-    if (isUpdate.errno) {
-      res.send('Error')
-    } else {
-      res.redirect('/all-users')
-    }
-  },
-  userCanEditName: async (req, res) => {
-    const uId = req.user.id;
-    const id = uId
-    console.log('user name', req.body);
-    const { name, number, email } = req.body;
-    const isEdit = await UserModel.getUserEditInfo(uId, name, number, email, id);
-    if (isEdit.errno) {
-      res.send('Error')
-    } else {
-      res.redirect('/profile')
-    }
+    const { id, email } = req.body
+    console.log('update',req.body)
+     await UserModel.adminCanUpdateUser(id, email)
+     res.redirect('/users')
   },
 };
 

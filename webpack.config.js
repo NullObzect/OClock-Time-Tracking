@@ -1,13 +1,11 @@
 const path = require('path');
 
-const source = path.resolve(__dirname, 'src');
 const config = {
   entry: {
     index: './src/index.js',
     // test: './src/test.js',
-    // reports: ['./src/reports.js'],
+    report: ['@babel/polyfill', './src/report.js'],
     timeTracking: ['@babel/polyfill', './src/timeTracking.js'],
-
     holiday: ['@babel/polyfill', './src/holiday.js'],
   },
   output: {
@@ -19,8 +17,6 @@ const config = {
     rules: [
       {
         test: /\.js$/,
-        exclude: /node_modules/,
-
         use: {
           loader: 'babel-loader',
           options: {

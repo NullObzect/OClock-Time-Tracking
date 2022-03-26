@@ -3,10 +3,11 @@ const UserController = require('../controllers/UserController');
 const decorateHtmlResponse = require('../middleware/common/decorateHtmlResponse');
 const { checkLogin, requireRole } = require('../middleware/common/AuthMiddleware')
 const { userValidator, addUserValidationHandler } = require('../middleware/user/userValidator');
+const { updateUserValidator, updateUserValidationHandler } = require('../middleware/user/updateUserValidator');
 const avatarUpload = require('../middleware/user/avatarUpload');
 
 router.get('/users', decorateHtmlResponse('Add User'), checkLogin, requireRole(['admin']), UserController.getUsers);
-router.post('/add-user', decorateHtmlResponse('Add User'), avatarUpload, userValidator,addUserValidationHandler, UserController.addUser);
+router.post('/add-user', decorateHtmlResponse('Add User'), avatarUpload, userValidator, addUserValidationHandler, UserController.addUser);
 router.get('/users', decorateHtmlResponse('Users'), checkLogin, requireRole(['admin']), UserController.allUsersList)
 router.get('/users-list', checkLogin, requireRole(['admin']), UserController.usersList)
 router.get('/admin-list', checkLogin, requireRole(['admin']), UserController.adminList)
@@ -47,9 +48,9 @@ router.get('/user-verify/:token', UserController.userVerifySet)
 router.post('/user-avatar-change', decorateHtmlResponse('Update User'), avatarUpload, UserController.avatarChange)
 
 // admin can update user
-router.get('/update-user/:id', decorateHtmlResponse('Update User'), UserController.updateUser)
-router.post('/update-user', decorateHtmlResponse('Update User'), UserController.updateUserPush)
+router.get('/update-user/:id', decorateHtmlResponse('Update User'), checkLogin, requireRole(['admin']), UserController.updateUser)
+router.post('/update-user', decorateHtmlResponse('Update User'),UserController.updateUserPush)
 // user or employee edit name
-router.post('/user/edit/info', UserController.userCanEditName)
+// router.post('/user/edit/info', UserController.userCanEditName)
 
 module.exports = router;

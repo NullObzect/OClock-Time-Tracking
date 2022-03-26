@@ -328,7 +328,6 @@
   <div  class="date-picker">
       <div  class="start-date">
         <input
-        onblur="iconCheck()"
           id="startPicker"
           type="text"
           placeholder="-- / -- / ----"
@@ -336,9 +335,9 @@
       </div>
       <div class="to">to</div>
       <div class="end-date">
-        <input onblur="iconCheck()" id="endPicker" placeholder="-- / -- / ----" />
+        <input id="endPicker" placeholder="-- / -- / ----" />
       </div>
-      <div id="date-icon" onclick="dateRange()" class="date-icon">
+      <div id="date-icon" class="date-icon">
         <svg
           width="26"
           height="30"
@@ -431,5 +430,5 @@
   const baseUrl = '<%= baseUrl %>';
  
 </script>
-<script src="<%=baseUrl%>/report.js"></script>
+<script src="<%=baseUrl%>/js/report.js"></script>
 <%- include("../partials/footer"); -%>

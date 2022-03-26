@@ -165,15 +165,12 @@ const UserModel = {
     const [rows] = await dbConnect.promise().execute(getEdit, values)
     return rows.affectedRows;
   },
-  adminCanUpdateUser: async (id, userName, userPhone, userRole, userMail, userPass, userId) => {
-  // UPDATE `users` SET `id`=?,`user_name`= ?,`user_phone`=?,`user_role`=?,
-  // `user_mail`=?,`user_pass`=?,`avatar`=?,`status`=? WHERE id =?
-
-    const updateSql = 'UPDATE `users` SET `id`=?,`user_name`= ?,`user_phone`=?,`user_role`=?,`user_mail`=?, `user_pass`=? WHERE id =?'
-    const values = [id, userName, userPhone, userRole, userMail, userPass, userId]
-
+  adminCanUpdateUser: async (id, userMail) => {
+    const updateSql = 'UPDATE `users` SET `user_mail`= ?,`status`= 2  WHERE id = ?'
+    const values = [userMail, id]
     const [rows] = await dbConnect.promise().execute(updateSql, values)
-    return rows.affectedRows
+    console.log(rows)
+    return rows
   },
 
 }
