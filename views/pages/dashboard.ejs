@@ -1,21 +1,43 @@
 <%- include("../partials/header"); -%>
 
 <style>
+  .table input {
+    outline: none !important;
+    border-radius: 10px;
+    
+  }
+  .table input{
+    border: none;
+    background-color: transparent;
+    padding: 6px;
+    outline: none;
+  }
+  .table input:focus {
+    outline: none;
+    border: none;
+    border-radius: 10px;
+
+
+  }
+  .table th , .table td {
+    width: 160px;
+  }
   .title-for-cnt-ely{
     font-size: 14px;
     font-weight: bold;
     color: #000;
     margin: 10px 0px;
   }
-  .cnt-working-emy-list{
+  /* .cnt-working-emy-list{
     position: relative;
-  }
+  } */
   .modal-cont{
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     display: none;
+    margin-top: 10%;
   }
   .dashboard-update-btn {
     background-color: #103047;
@@ -29,6 +51,31 @@
     cursor: pointer;
     width: 70px;
     text-align: center;
+  }
+  .update-start-time, .update-end-time, .update-btn, .save-btn,.save-btn-for-end-time {
+    background-color: #103047;
+    border-radius: 10px;
+    color: #fff;
+    padding: 8px 12px;
+    border: none;
+    outline: none;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .save-btn, .save-btn-for-end-time {
+    background-color: rgb(17, 221, 17);
+  }
+  .update-start-time, .update-end-time, .save-btn,.save-btn-for-end-time {
+    
+    display: none;
+  }
+
+  .btn-group {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    margin-top: 15px;
   }
 </style>
 
@@ -76,7 +123,6 @@
     </div>
   </div>
 
-  <% console.log('dashboard',checkTodayReportEmptyOrNot.length) %>
   <div id="dashboard-info" class="dashboard-info <%=checkTodayReportEmptyOrNot.length !== 0 ? '' : 'dashboard-none' %>">
     <table class="dashboard-reports">
       <thead>
@@ -128,6 +174,7 @@
           <td class="table-img td-width-zero"></td>
           <td>Name</td>
           <td class="user-phone">Date</td>
+          <td>Work Details</td>
           <td class="user-email">Start Time</td>
           <td class="user-status">End Time</td>
         </tr>
@@ -149,53 +196,21 @@
             <div class="username"><%=user.name%></div>
             <span id="role"><%= user.userRole==='admin'? 'admin' : ''%> </span>
           </td>
-          <td class="user-date"> <%= user.curDate %></td>
-          <td class="user-phone"><%= user.startTime %></td>
-          <td class="user-end-time">  <%= user.endTime || 'Empty' %> </td>
-       
+          <td class="user-date "><input class="get-date" name="date" type="text" value=" <%= user.curDate %>"></td>
+          <td class="user-work"> <%= user.work_details %></td>
+          <td class="user-phone"><input type="text" class="update-start-time-val" name="startDate" value="<%= user.minStartTime %>"></td>
+          <td class="user-end-time">  <input type="text" name="endTime" class="update-end-time-val" value="<%= user.endTime || 'Empty' %>"></td>
+          <input type="hidden" name="userId" class="userId" value="<%= user.userId %>" />
           </td>
 
 
-          <td>
-            <button class="dashboard-update-btn ">Update</button>
+          <td class="btn-group">
+            <button class="update-btn ">Update</button>
+            <button class="update-start-time ">Start</button>
+            <button class="update-end-time ">End</button>
+            <button class="save-btn">Save</button>
+            <button class="save-btn-for-end-time">Save</button>
 
-
-                  <!-- Modal for update end time -->
-                <div  class="modal-cont">
-                <div class="modal">
-                  <div class="modal-head">
-                    <div class="modal-title">Update End Time</div>
-                    <div class="modal-close-btn modal-close">
-                      <%- include("../partials/icons/close-svg"); -%>
-                    </div>
-                  </div>
-                  <div class="modal-content">
-                    <div class="container">
-                      <form action="/update-end-time" method="post">
-                        <label for="projectDetails">
-                          Start Date
-                          <div class="">
-                            <input type="text" name="endDate" value="<%= user.curDate %>" />
-                          </div>
-                        </label>
-
-                        <label for="name"
-                          >End time
-                          <div class="">
-                            <input id="time" name="endTime" type="time"  />
-                          </div>
-                        </label>
-
-                        <input type="hidden" name="uId" value="<%= user.userId %>" />
-                        <div class="">
-                          <button class="submit-btn" type="submit">Save</button>
-                        </div>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- End modal -->
 
             </td>
             
@@ -274,6 +289,109 @@
     }
   })
 
+  // for update start and end time 
+   
+
+  const updateStartTime = document.querySelectorAll(".update-start-time");
+  const updateEndTime = document.querySelectorAll(".update-end-time");
+  const updateBtn = document.querySelectorAll(".update-btn");
+  const saveBtn = document.querySelectorAll(".save-btn");
+  const updateStartTimeVal = document.querySelectorAll(".update-start-time-val");
+  const updateEndTimeVal = document.querySelectorAll(".update-end-time-val");
+  const userId = document.querySelectorAll(".userId");
+  const getDate = document.querySelectorAll(".get-date");
+  const saveBtnForEndTime = document.querySelectorAll(".save-btn-for-end-time");
+
+  //
+  for(let i = 0; i < updateStartTime.length; i++) {
+    updateBtn[i].addEventListener("click", () => {
+      
+     
+      updateBtn[i].style.display = "none";
+      updateStartTime[i].style.display = "block";
+      updateEndTime[i].style.display = "block";
+    });
+  }
+  for(let i =0; i< updateStartTime.length; i++) {
+    updateStartTime[i].addEventListener("click", () => {
+      updateStartTime[i].style.display = "none";
+      updateEndTime[i].style.display = "none";
+      saveBtn[i].style.display = "block";
+      updateStartTimeVal[i].type = "time";
+      updateStartTimeVal[i].focus(); 
+    });
+    saveBtn[i].addEventListener("click", () => {
+      
+
+      if(updateStartTimeVal[i].value === ""){
+        alert("Please enter start time");
+        updateStartTimeVal[i].focus();
+      }
+      let data = {
+        userId: userId[i].value,
+        startTime: updateStartTimeVal[i].value,
+        date: getDate[i].value
+      }
+      console.log(data);
+      aJAXPostRequest("/update-start-time", data)
+      saveBtn[i].style.display = "none";
+        updateBtn[i].style.display = "block";
+    });
+  }
+
+  // update end time
+  for(let i = 0; i < updateEndTime.length; i++){
+    updateEndTime[i].addEventListener("click", () => {
+      updateEndTime[i].style.display = "none";
+      saveBtnForEndTime[i].style.display = "block";
+      updateStartTime[i].style.display = "none";
+      updateEndTimeVal[i].type = "time";
+      updateEndTimeVal[i].focus();
+      let data = {
+        userId: userId[i].value,
+        endTime: updateEndTimeVal[i].value,
+        date: getDate[i].value
+      }
+      console.log(data);
+    });
+    saveBtnForEndTime[i].addEventListener("click", () => {
+      if(updateEndTimeVal[i].value === ""){
+        alert("Please enter end time");
+        updateEndTimeVal[i].focus();
+      }
+      let data = {
+        userId: userId[i].value,
+        endTime: updateEndTimeVal[i].value,
+        date: getDate[i].value
+      }
+      console.log(data);
+      aJAXPostRequest("/update-end-time", data)
+      saveBtnForEndTime[i].style.display = "none";
+        updateBtn[i].style.display = "block";
+        return window.location.replace("/dashboard");
+    });
+  }
+
+
+  //  AJAX post request function
+const aJAXPostRequest = (url, values) => new Promise((resolve, reject) => {
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(values),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log({ data });
+      if (data.success) {
+        alert('Option Value Updated');
+      }
+    })
+    .catch((err) => console.log(err));
+  // return window.location.replace('/options/holiday');
+})
 
   </script>
 
