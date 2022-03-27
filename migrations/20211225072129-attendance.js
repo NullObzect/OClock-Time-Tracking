@@ -11,6 +11,23 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER,
       },
+      in_time: {
+        allowNull: false,
+        type: Sequelize.STRING(10),
+      },
+      out_time: {
+        allowNull: false,
+        type: Sequelize.STRING(10),
+      },
+      project_id: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+      },
+      work_details: {
+        allowNull: false,
+        type: Sequelize.STRING(255),
+      },
+
       start: {
         allowNull: false,
         type: Sequelize.DATE,
