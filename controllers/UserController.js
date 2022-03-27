@@ -283,7 +283,7 @@ const UserController = {
       if (isUserDelete.errno) {
         res.send('Error')
       } else {
-        res.redirect('/all-users')
+        res.redirect('/users')
       }
     } catch (err) {
       console.log('====>Error form Delet controller', err);

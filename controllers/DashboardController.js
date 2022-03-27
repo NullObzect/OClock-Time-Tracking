@@ -24,11 +24,14 @@ const DashboardController = {
     todayTotal = timeToHour(todayTotal)
     const breakTime = today.length
 
+   
+    console.log('xxxxx', req.params.id)
+
     // is end time null
     const isEndTimeNull = await AttendanceModel.getEndTimeIsNull()
     console.log({ isEndTimeNull });
 
-    //console.log(req.loggedInUser)
+    // console.log(req.loggedInUser)
     res.render('pages/dashboard', {
       start,
       end,
@@ -51,7 +54,6 @@ const DashboardController = {
   },
   getUpdateOptionValues: async (req, res) => {
     try {
-
       const { optionId, optionValue } = req.body;
       console.log(optionId, optionValue);
       const isUpdate = await OptionsModel.updateOptionValue(optionValue, optionId)
