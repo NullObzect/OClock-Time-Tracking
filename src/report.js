@@ -197,7 +197,7 @@ function reportShow(reportTableBody, dateRangeReport) {
          
    <tr
         class="
-          <${
+          ${
   el.dayType
           === 'offday'
     ? 'bg-red-200' : el.dayType === 'holiday'
@@ -213,9 +213,9 @@ function reportShow(reportTableBody, dateRangeReport) {
        
         <td>${el.start} <span class="${el.inTimeExtraOrLess.length === 6 ? 'low' : el.inTimeExtraOrLess === '' ? ' ' : 'high'}" >${el.inTimeExtraOrLess.length === 5 ? `+${el.inTimeExtraOrLess}` : el.inTimeExtraOrLess}</span> </td>
 
-        <td>${el.end}<span class="${el.outTimeExtraOrLess.length === 5 ? 'low' : el.outTimeExtraOrLess === '' ? ' ' : 'high'}" >${el.outTimeExtraOrLess.length === 5 ? `-${el.outTimeExtraOrLess}` : `+${el.outTimeExtraOrLess}`}</span> </td>
+        <td>${el.end}<span class="${el.outTimeExtraOrLess.length === 6 ? 'low' : el.outTimeExtraOrLess === '' ? ' ' : 'high'}" >${el.outTimeExtraOrLess.length === 5 ? `+${el.outTimeExtraOrLess}` : `${el.outTimeExtraOrLess}`}</span> </td>
         
-        <td>${`${el.workTime} / ${el.workHr} hr`}<span class="${el.totalTimeExtraOrLess.length - 1 === 5 ? 'low' : 'high'}" >${el.totalTimeExtraOrLess.length - 1 === 4 ? `+${el.totalTimeExtraOrLess}` : el.totalTimeExtraOrLess}</span></td>
+        <td>${`${el.workTime} / ${el.workHr} hr`}<span class="${el.totalTimeExtraOrLess.length == '0' ? '' : el.totalTimeExtraOrLess[0] !==  '-' ? 'high' : 'low'}" >${el.totalTimeExtraOrLess.length - 1 === 4 ? `+${el.totalTimeExtraOrLess}` : el.totalTimeExtraOrLess}</span></td>
       
         
       </tr> 
