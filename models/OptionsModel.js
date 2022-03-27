@@ -7,7 +7,7 @@ const OptionsModel = {
     return rows
   },
   getProjects: async () => {
-    const getProjectSql = 'SELECT * FROM `projects`'
+    const getProjectSql = "SELECT id, project_name, project_details, DATE_FORMAT(create_at, '%d/%m/%Y') AS date FROM `projects`"
     const [rows] = await dbConnect.promise().execute(getProjectSql)
     return rows
   },

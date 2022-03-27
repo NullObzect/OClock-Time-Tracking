@@ -85,7 +85,6 @@ function iconCheck(e) {
   }
 }
 
-
 async function actions() {
   const actionBtn = document.querySelectorAll('.action-btn');
   const updateBtn = document.querySelectorAll('.update-btn');
@@ -144,6 +143,7 @@ async function actions() {
     });
   }
 }
+actions();
 
 // const holidayTable = document.querySelector('#holiday-table');
 
@@ -176,12 +176,12 @@ dateIcon.addEventListener('click', async () => {
   }
 
   const {
-    dateRangeReport, pageNumber, numberOfPage, page,
+    dateRangeReport, pageNumber, numberOfPage,
   } = holidays.reports
   const holidayTable = document.querySelector('#holiday-table');
 
   reportHolidayShow(holidayTable, dateRangeReport)
-  if(numberOfPage>1){
+  if (numberOfPage > 1) {
     pagination(pageNumber, numberOfPage, page)
   }
   dateIcon.classList.add('date-icon-active')
@@ -228,4 +228,52 @@ function reportHolidayShow(holidayTable, dateRangeReport) {
       `,
 
   ).join('');
+}
+
+// function pagination(pageNumber, numberOfPage, page) {
+//   const pagination = document.querySelector('#pagination')
+//   return pagination.innerHTML = `<li class="first"  onclick="page(${1})"> </li>
+//  <li class="prev" ${Number(page === 1) ? "onclick='this.disabled=true'" : `onclick=page(${Number(page - 1)})`}></li>
+//  ${pageNumber.map((p) => `<a class=${page == p ? 'page-active' : ''} ><li onclick="page(${p})">  ${p}  </li></a>`).join('')}
+//  <li class="next" ${Number(page === numberOfPage) ? "onclick='this.disabled=true'" : `onclick=page(${Number(page + 1)})`}></li>
+//  <li class="last" onclick="page(${numberOfPage})"></li>
+//  `
+// }
+console.log('end of script file');
+
+// const btn = document.querySelector('#btn');
+// btn.addEventListener('onclick', () => {
+//   alert('hello');
+// })
+
+async function page(pageNo) {
+  const dateStart = document.querySelector('#startPicker')
+  const dateEnd = document.querySelector('#endPicker')
+  const startDate = dateFormate(startDatePicker.getFullDate())
+  const endDate = dateFormate(endDatePicker.getFullDate() || getCurrentDate())
+  dateStart.dataset.date = startDate
+  dateEnd.dataset.date = endDate
+
+  console.log(startDate, endDate)
+
+  const data = await fetch(
+    `${baseUrl}/options/holiday/between-two-date?startDate=${startDate}&endDate=${endDate}&pageNo=${pageNo}`,
+  );
+
+  const holidays = await data.json();
+  console.log(holidays);
+
+  if (holidays.length === 0) {
+    return alert('No Holiday Found');
+  }
+
+  const {
+    dateRangeReport, pageNumber, numberOfPage,
+  } = holidays.reports
+  const holidayTable = document.querySelector('#holiday-table');
+
+  reportHolidayShow(holidayTable, dateRangeReport)
+  pagination(pageNumber, numberOfPage, pageNo)
+
+  await actions();
 }

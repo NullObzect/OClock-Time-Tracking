@@ -8,6 +8,21 @@ const OptionsController = {
   },
   getOptionValues: async (req, res) => {
     const optionList = await OptionsModel.options()
+    // console.log({ optionList })
+    optionList.forEach((el) => {
+      if (el.option_title === 'in-time') {
+        console.log(el.option_value)
+        el.option_value = time24HrTo12Hr(el.option_value)
+      }
+      if (el.option_title === 'out-time') {
+        el.option_value = time24HrTo12Hr(el.option_value)
+      }
+      if (el.option_title === 'off-day') {
+        el.option_value = getNumToDay(el.option_value)
+      }
+    })
+    // console.log({ optionList })
+
     res.render('pages/option-values', { optionList })
   },
   getProjects: async (req, res) => {
@@ -63,12 +78,30 @@ const OptionsController = {
 
       const { optionId, optionValue } = req.body;
       console.log(optionId, optionValue);
-      const isUpdate = await OptionsModel.updateOptionValue(optionValue, optionId)
-      if (isUpdate.errno) {
-        res.send('Error')
-      } else {
-        res.redirect('/options')
+
+      if (optionValue[0] === 'F' || optionValue[0] === 'S' || optionValue[0] === 'M' || optionValue[0] === 'T' || optionValue[0] === 'W') {
+        const isUpdate = await OptionsModel.updateOptionValue(getDayNameToNum(optionValue), optionId)
+        if (isUpdate.errno) {
+          res.send('Error')
+        } else {
+          res.redirect('/options')
+        }
+      } if (optionValue[0] !== 'F') {
+        const isUpdate = await OptionsModel.updateOptionValue(time12HrTo24Hr(optionValue), optionId)
+        if (isUpdate.errno) {
+          res.send('Error')
+        } else {
+          res.redirect('/options')
+        }
       }
+
+      // console.log('xxx', optionValue);
+      // const isUpdate = await OptionsModel.updateOptionValue(time12HrTo24Hr(optionValue), optionId)
+      // if (isUpdate.errno) {
+      //   res.send('Error')
+      // } else {
+      //   res.redirect('/options')
+      // }
     } catch (err) {
       console.log('====>Error form OptionsController updateOptionValues', err);
     }
@@ -102,6 +135,87 @@ const OptionsController = {
     }
   },
 
+}
+
+// helper function
+//
+function time12HrTo24Hr(timeStr) {
+  const [time, modifier] = timeStr.split(' ');
+  let [hours, minutes] = time.split(':');
+  if (hours > '12') {
+    return hours = '00:00';
+  }
+  if (hours === '12') {
+    hours = '00';
+  }
+  if (modifier === 'PM') {
+    hours = parseInt(hours, 10) + 12;
+  }
+  return `${hours}:${minutes}`;
+}
+function time24HrTo12Hr(time) {
+  // Check correct time format and split into components
+  time = time.toString().match(/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+
+  if (time.length > 1) { // If time format correct
+    time = time.slice(1); // Remove full string match value
+    time[5] = +time[0] < 12 ? ' AM' : ' PM'; // Set AM/PM
+    time[0] = +time[0] % 12 || 12; // Adjust hours
+  }
+  // return adjusted time or original string
+  const getTime = time.join('')
+  if (getTime.length === 7) {
+    return `0${getTime}`
+  }
+  return `${getTime}`;
+}
+function timeToHr(hr) {
+  String(hr)
+  if (hr.length > 3) {
+    return `0${hr}`
+  }
+  if (hr < 10) {
+    return `0${hr}:00`
+  } {
+    return `${hr}:00`
+  }
+}
+
+// for  off day
+const offDaysObj = {
+  Fri: 4,
+  Sat: 5,
+  Sun: 6,
+  Mon: 0,
+  Tue: 1,
+  Wed: 2,
+  Thr: 3,
+}
+function numToDay(obj, num) {
+  return Object.keys(obj).find((key) => obj[key] === num)
+}
+function dayToNum(obj, name) {
+  return obj[name]
+}
+// console.log(numToDay(offDaysObj, 4))
+
+function getNumToDay(num) {
+  const dayName = []
+  num.split(',').forEach((el) => {
+    dayName.push(numToDay(offDaysObj, Number(el)))
+  })
+  return dayName.toString()
+}
+//
+
+function getDayNameToNum(names) {
+  const dayNum = []
+  names.split(',').forEach((el) => {
+    console.log({ el })
+    dayNum.push(dayToNum(offDaysObj, el))
+    // console.log(dayNum)
+  })
+  return dayNum.toString()
 }
 
 module.exports = OptionsController

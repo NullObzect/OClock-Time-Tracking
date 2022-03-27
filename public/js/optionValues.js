@@ -1,5 +1,5 @@
 // const helperJs = require('../public/js/halper')
-import { aJAXPostRequest } from './halper.js';
+// import { aJAXPostRequest } from './halper.js';
 
 const optionValueChangeBtn = document.querySelectorAll('.opt-val-change-btn');
 const optionValueInput = document.querySelectorAll('.option-value');
@@ -20,6 +20,7 @@ for (let i = 0; i < optionValueSaveBtn.length; i += 1) {
   optionValueSaveBtn[i].addEventListener('click', (e) => {
     e.preventDefault();
     const optionValue = optionValueInput[i].value;
+
     const optionId = optionIdInput[i].value;
     if (optionValue === '') {
       alert('Please enter option value');
@@ -37,6 +38,27 @@ for (let i = 0; i < optionValueSaveBtn.length; i += 1) {
     optionValueInput[i].textContent = data.optionValue;
   });
 }
+
+console.log('hello');
+//  AJAX post request function
+const aJAXPostRequest = (url, values) => new Promise((resolve, reject) => {
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(values),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log({ data });
+      if (data.success) {
+        alert('Option Value Updated');
+      }
+    })
+    .catch((err) => console.log(err));
+  // return window.location.replace('/options/holiday');
+})
 
 /*
       fetch("/options/option-values/update-option-value", {
