@@ -45,9 +45,18 @@ const ReportController = {
         const lastSevenDaysReports = JSON.parse(JSON.stringify(reportStringify))
 
         lastSevenDaysReports.forEach((el) => {
+          console.log('start', el.outTimeExtraOrLess);
+          if (el.dayType !== 'regular') {
+            el.inTimeExtraOrLess = ''
+            el.outTimeExtraOrLess = ''
+            el.workHr = '0'
+            el.totalTimeExtraOrLess = ''
+          }
           el.inTimeExtraOrLess.split('').filter((x) => x === '0').length === 4 ? el.inTimeExtraOrLess = '' : el.inTimeExtraOrLess;
 
           el.outTimeExtraOrLess.split('').filter((x) => x === '0').length === 4 ? el.outTimeExtraOrLess = '' : el.outTimeExtraOrLess;
+          el.outTimeExtraOrLess[0] === '-' ? el.outTimeExtraOrLess = el.outTimeExtraOrLess.slice(1) : el.outTimeExtraOrLess;
+          // console.log('end', el.totalTimeExtraOrLess[1]);
         })
         // .split('').filter((el) => el === '0').length === 4 ? el.inTimeExtraOrLess = '' : inTimeExtraOrLess
         // console.log({ lastSevenDaysReports });
@@ -75,7 +84,7 @@ const ReportController = {
           todayExtraOrLessHr,
 
         )
-        // console.log({ todayReportDetails });
+        console.log({ todayReportDetails });
 
         /* ======================================================== */
         /* ==========FIXME:  report for this today  END ========== */
@@ -293,11 +302,21 @@ const ReportController = {
       const dataToJson = JSON.parse(JSON.stringify(getData))
 
       dataToJson.forEach((el) => {
+        if (el.dayType !== 'regular') {
+          el.inTimeExtraOrLess = ''
+          el.outTimeExtraOrLess = ''
+          el.workHr = '0'
+          el.totalTimeExtraOrLess = ''
+        }
         el.inTimeExtraOrLess.split('').filter((x) => x === '0').length === 4 ? el.inTimeExtraOrLess = '' : el.inTimeExtraOrLess;
 
         el.outTimeExtraOrLess.split('').filter((x) => x === '0').length === 4 ? el.outTimeExtraOrLess = '' : el.outTimeExtraOrLess;
+
+        el.outTimeExtraOrLess[0] === '-' ? el.outTimeExtraOrLess = el.outTimeExtraOrLess.slice(1) : el.outTimeExtraOrLess;
       })
       console.log({ dataToJson })
+
+      // pagination
       const page = Number(req.query.page) || 1
       const limit = Number(req.query.limit) || 4
       const startIndex = (page - 1) * limit
@@ -310,6 +329,8 @@ const ReportController = {
       // eslint-disable-next-line max-len
       const numberOfPage = Number.isInteger(pageLength) ? Math.floor(pageLength) : Math.floor(pageLength) + 1
       const pageNumber = pageNumbers(numberOfPage, 2, page)
+
+      //
       res.json({
         reports: {
           dateRangeReport, pageNumber, numberOfPage, pageLength, page,
@@ -380,7 +401,6 @@ function showWorkHrIsLowOrHigh(totalWorkTime) {
   return (`+${totalWorkTime}`);
 }
 function countUserJoinDate(joinDay, currentDay) {
-  console.log({ joinDay, currentDay });
 
   if (joinDay === null || joinDay === undefined) {
     return false;

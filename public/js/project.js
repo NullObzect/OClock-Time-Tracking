@@ -1,6 +1,3 @@
-/* eslint-disable no-loop-func */
-import { aJAXPostRequest } from './halper.js';
-
 const actionBtn = document.querySelectorAll('.action-btn');
 const updateBtn = document.querySelectorAll('.update-btn');
 const deleteBtn = document.querySelectorAll('.delete-btn');
@@ -60,3 +57,23 @@ for (let i = 0; i < saveBtn.length; i++) {
     projectDetails[i].setAttribute('contenteditable', 'false');
   });
 }
+
+//  AJAX post request function
+const aJAXPostRequest = (url, values) => new Promise((resolve, reject) => {
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(values),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log({ data });
+      if (data.success) {
+        alert('Option Value Updated');
+      }
+    })
+    .catch((err) => console.log(err));
+  // return window.location.replace('/options/holiday');
+})

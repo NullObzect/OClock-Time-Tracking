@@ -568,7 +568,7 @@ main {
   align-items: center;
   justify-content: center;
 }
-.dashboard-none{
+.dashboard-none {
   display: none;
 }
 
@@ -914,9 +914,9 @@ main {
   color: #3d4e5e;
 }
 .box {
-  width: 250px;
+  width: 251px;
   height: 150px;
-  padding: 12px;
+  padding: 9px;
   border: 1px solid #e6e6e6;
   border-radius: 15px;
   margin: 6px;
@@ -1385,3 +1385,5 @@ main {
     font-size: 26px;
   }
 }
+
+/* Report page css */

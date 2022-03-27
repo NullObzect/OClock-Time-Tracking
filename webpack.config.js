@@ -21,7 +21,9 @@ const config = {
           loader: 'babel-loader',
           options: {
             presets: ['@babel/preset-env'],
-            plugins: ['@babel/plugin-transform-async-to-generator', '@babel/plugin-transform-modules-commonjs'],
+            plugins: ['@babel/plugin-transform-async-to-generator', '@babel/plugin-transform-modules-commonjs',
+            ],
+
           },
         },
       },

@@ -37,6 +37,7 @@
   margin: auto;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   background: var(--white);
+  
 }
 .modal-head {
   display: flex;
@@ -82,7 +83,7 @@
   border-radius: 12px;
   text-align: center;
 }
-.demo-input{
+.demo-input {
   width: 350px;
   height: 40px;
   padding: 6px;
@@ -133,7 +134,7 @@
   color: #ffffff;
   cursor: pointer;
 }
-.cancel-btn{
+.cancel-btn {
   width: 350px;
   height: 40px;
   padding: 6px;
@@ -178,7 +179,7 @@
   .container select {
     width: 90%;
   }
-  .demo-input{
+  .demo-input {
     width: 90%;
   }
 
@@ -188,7 +189,7 @@
   .submit-btn {
     width: 90%;
   }
-  .cancel-btn{
+  .cancel-btn {
     width: 90%;
   }
 

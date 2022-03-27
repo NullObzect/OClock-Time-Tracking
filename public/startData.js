@@ -28,6 +28,11 @@ let intervalId;
 
 startData.addEventListener('submit', async (e) => {
   e.preventDefault()
+
+  debounce(todoStart(), delay = 1000)
+})
+
+async function todoStart() {
   const projectName = document.querySelector('#projectName')
   const projectDetails = document.querySelector('#projectDetails')
   const modal = document.querySelector('#myModal')
@@ -47,11 +52,15 @@ startData.addEventListener('submit', async (e) => {
   if (todayStart.innerText == '00 : 00') {
     todayStart.innerText = currentTime()
   }
-})
-
+}
 // End button click event function
 endBtn.addEventListener('click', async (event) => {
   event.preventDefault()
+
+  debounce(todoEnd(), delay = 1000)
+})
+//
+async function todoEnd() {
   const hiddenData = document.getElementById('hidden-data')
   const dashboardInfo = document.getElementById('dashboard-info')
   if (dashboardInfo.classList.contains('dashboard-none')) {
@@ -85,8 +94,12 @@ endBtn.addEventListener('click', async (event) => {
     hiddenData.style.display = 'none'
   }
   setTodayDetails(start, end, totalWorkTime, breakTime)
-  setTodayReport(lastData.project_name, lastData.work_details, lastData.start, lastData.end, lastData.total)
-})
+  // setTodayReport(lastData.project_name, lastData.work_details, lastData.start, lastData.end, lastData.total)
+
+  debounce(setTodayReport(lastData.project_name, lastData.work_details, lastData.start, lastData.end, lastData.total), delay = 1000)
+}
+
+//
 function setTodayDetails(start, end, total, breaktime) {
   const todayStart = document.getElementById('todayStart')
   const todayEnd = document.getElementById('todayEnd')
@@ -154,4 +167,18 @@ function currentTime() {
   const time = new Date();
   const startTime = time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
   return startTime
+}
+// debounce handler
+
+function debounce(fn, delay = 1000) {
+  let timeoutId;
+  return function () {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    timeoutId = setTimeout(() => {
+      // fn.apply(this, args);
+      fn();
+    }, delay);
+  }
 }

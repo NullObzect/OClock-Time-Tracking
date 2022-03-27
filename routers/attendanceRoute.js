@@ -7,6 +7,7 @@ const decorateHtmlResponse = require('../middleware/common/decorateHtmlResponse'
 router.post('/attendance-start', AttendanceController.attendanceStart)
 router.post('/attendance-end', AttendanceController.attendanceEnd)
 router.post('/update-end-time', AttendanceController.updateEndTime)
+router.post('/update-start-time', AttendanceController.updateStartTime)
 
 // router.get('/start-time', AttendanceController.startTime)
 

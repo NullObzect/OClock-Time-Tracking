@@ -1,7 +1,7 @@
 const router = require('express').Router()
 const ProfileController = require('../controllers/ProfileController');
 const decorateHtmlResponse = require('../middleware/common/decorateHtmlResponse');
-const { passwordValidator ,passwordValidationHandler } = require('../middleware/user/updateProfileValidation')
+const { passwordValidator, passwordValidationHandler } = require('../middleware/user/updateProfileValidation')
 
 const { checkLogin } = require('../middleware/common/AuthMiddleware');
 const avatarUpload = require('../middleware/user/avatarUpload');

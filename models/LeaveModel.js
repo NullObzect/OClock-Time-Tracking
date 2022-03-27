@@ -40,7 +40,7 @@ const LeaveModel = {
     return rows;
   },
   anEmployeeLeaveList: async (id) => {
-    const query = `SELECT  U.user_role, U.avatar, EL.user_id AS id, EL.reason AS reason, DATE_FORMAT(start,'%Y/%m/%d') AS start, DATE_FORMAT(end, '%Y/%m/%d') AS end, DATEDIFF(end,start) + 1 AS duration  FROM employee_leaves AS EL JOIN users AS U ON U.id = EL.user_id WHERE EL.user_id = ${id}`;
+    const query = `SELECT U.user_name,  U.user_role, U.avatar, EL.user_id AS id, EL.reason AS reason, DATE_FORMAT(start,'%Y/%m/%d') AS start, DATE_FORMAT(end, '%Y/%m/%d') AS end, DATEDIFF(end,start) + 1 AS duration  FROM employee_leaves AS EL JOIN users AS U ON U.id = EL.user_id WHERE EL.user_id = ${id}`;
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
