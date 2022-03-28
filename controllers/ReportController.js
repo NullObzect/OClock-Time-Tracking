@@ -25,7 +25,7 @@ const ReportController = {
       }
 
       const checkUserReportEmptyOrNot = await LogModel.isUserIdInLog(userId)
-      // console.log({ checkUserReportEmptyOrNot });
+      console.log({ checkUserReportEmptyOrNot });
       // console.log('dddd', checkUserReportEmptyOrNot.length);
 
       const platformUser = await ProfileModel.userConnectionDetailsUniqueInfo(userId)
@@ -43,6 +43,7 @@ const ReportController = {
         const reportStringify = await LogModel.lastSevenDaysReports(userId)
 
         const lastSevenDaysReports = JSON.parse(JSON.stringify(reportStringify))
+        console.log({ lastSevenDaysReports });
 
         lastSevenDaysReports.forEach((el) => {
           console.log('start', el.outTimeExtraOrLess);
@@ -54,8 +55,15 @@ const ReportController = {
           }
           el.inTimeExtraOrLess.split('').filter((x) => x === '0').length === 4 ? el.inTimeExtraOrLess = '' : el.inTimeExtraOrLess;
 
-          el.outTimeExtraOrLess.split('').filter((x) => x === '0').length === 4 ? el.outTimeExtraOrLess = '' : el.outTimeExtraOrLess;
-          el.outTimeExtraOrLess[0] === '-' ? el.outTimeExtraOrLess = el.outTimeExtraOrLess.slice(1) : el.outTimeExtraOrLess;
+          if (el.end !== null) {
+            el.outTimeExtraOrLess.split('').filter((x) => x === '0').length === 4 ? el.outTimeExtraOrLess = '' : el.outTimeExtraOrLess;
+            // el.outTimeExtraOrLess[0] === '-' ? el.outTimeExtraOrLess = el.outTimeExtraOrLess.slice(1) : el.outTimeExtraOrLess;
+          } else {
+            el.outTimeExtraOrLess = ''
+            el.totalTimeExtraOrLess = ''
+            el.workTime = '0'
+          }
+
           // console.log('end', el.totalTimeExtraOrLess[1]);
         })
         // .split('').filter((el) => el === '0').length === 4 ? el.inTimeExtraOrLess = '' : inTimeExtraOrLess
@@ -310,9 +318,15 @@ const ReportController = {
         }
         el.inTimeExtraOrLess.split('').filter((x) => x === '0').length === 4 ? el.inTimeExtraOrLess = '' : el.inTimeExtraOrLess;
 
-        el.outTimeExtraOrLess.split('').filter((x) => x === '0').length === 4 ? el.outTimeExtraOrLess = '' : el.outTimeExtraOrLess;
+        if (el.end !== null) {
+          el.outTimeExtraOrLess.split('').filter((x) => x === '0').length === 4 ? el.outTimeExtraOrLess = '' : el.outTimeExtraOrLess;
+        } else {
+          el.outTimeExtraOrLess = ''
+          el.totalTimeExtraOrLess = ''
+          el.workTime = '0'
+        }
 
-        el.outTimeExtraOrLess[0] === '-' ? el.outTimeExtraOrLess = el.outTimeExtraOrLess.slice(1) : el.outTimeExtraOrLess;
+        // el.outTimeExtraOrLess[0] === '-' ? el.outTimeExtraOrLess = el.outTimeExtraOrLess.slice(1) : el.outTimeExtraOrLess;
       })
       console.log({ dataToJson })
 
@@ -401,7 +415,6 @@ function showWorkHrIsLowOrHigh(totalWorkTime) {
   return (`+${totalWorkTime}`);
 }
 function countUserJoinDate(joinDay, currentDay) {
-
   if (joinDay === null || joinDay === undefined) {
     return false;
   }
