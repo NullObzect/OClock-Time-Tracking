@@ -74,6 +74,7 @@ const LeaveController = {
 
       const leavedays = await LeaveModel.leavedaysListBetweenTowDate(startDate, endDate)
       const getLeavedays = JSON.parse(JSON.stringify(leavedays))
+      console.log({ getLeavedays });
       return res.json(getLeavedays)
     } catch (err) {
       console.log('====>Error form LeaveController/getLeavedayListBetweenTwoDate', err);
