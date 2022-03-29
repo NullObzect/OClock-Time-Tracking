@@ -44,9 +44,8 @@ console.log('hello');
 const aJAXPostRequest = (url, values) => new Promise((resolve, reject) => {
   fetch(url, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: { 'Content-type': 'application/json; charset=UTF-8' },
+
     body: JSON.stringify(values),
   })
     .then((res) => res.json())

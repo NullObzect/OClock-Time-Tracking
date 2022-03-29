@@ -397,7 +397,6 @@
       >
         <td><%= el.date  %> <br> <%= el.day %></td>
         <td> <%= el.dayType  %> </td>
-     <% console.log('xxxx',el.totalTimeExtraOrLess.length) %>
         <td><%=  el.start %> <span class="<%= el.inTimeExtraOrLess.length  === 6 ? 'low' : el.inTimeExtraOrLess === '' ? ' ' : 'high'   %>" ><%= el.inTimeExtraOrLess.length === 5 ? '+' + el.inTimeExtraOrLess : el.inTimeExtraOrLess   %></span> </td>
         <td><%=  el.end %><span class="<%= el.outTimeExtraOrLess.length  === 5 ? 'low' :  el.outTimeExtraOrLess === '' ? ' ' : 'high'  %>" ><%= el.outTimeExtraOrLess.length  === 5 ?  '-' + el.outTimeExtraOrLess : el.outTimeExtraOrLess === '' ? ' ' :  '+' + el.outTimeExtraOrLess.slice(1)   %></span> </td>
         <td><%= el.workTime + ' / ' + el.workHr + ' hr' %><span class="<%= el.totalTimeExtraOrLess.length  == '0' ? '' :   el.totalTimeExtraOrLess[0] !== '-' ? 'high' : 'low'  %>" ><%= el.totalTimeExtraOrLess.length  === 5 ? '+' + el.totalTimeExtraOrLess : el.totalTimeExtraOrLess   %></span></td>
