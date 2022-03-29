@@ -20,6 +20,9 @@ const OptionsController = {
       if (el.option_title === 'off-day') {
         el.option_value = getNumToDay(el.option_value)
       }
+      if (el.option_title === 'fixed time') {
+        el.option_value = timeToHr(el.option_value)
+      }
     })
     // console.log({ optionList })
 
@@ -88,6 +91,13 @@ const OptionsController = {
         }
       } if (optionValue[0] !== 'F') {
         const isUpdate = await OptionsModel.updateOptionValue(time12HrTo24Hr(optionValue), optionId)
+        if (isUpdate.errno) {
+          res.send('Error')
+        } else {
+          res.redirect('/options')
+        }
+      } if (checkInputFixedHr(optionValue) === true) {
+        const isUpdate = await OptionsModel.updateOptionValue(hrToTime(optionValue), optionId)
         if (isUpdate.errno) {
           res.send('Error')
         } else {
@@ -169,17 +179,6 @@ function time24HrTo12Hr(time) {
   }
   return `${getTime}`;
 }
-function timeToHr(hr) {
-  String(hr)
-  if (hr.length > 3) {
-    return `0${hr}`
-  }
-  if (hr < 10) {
-    return `0${hr}:00`
-  } {
-    return `${hr}:00`
-  }
-}
 
 // for  off day
 const offDaysObj = {
@@ -216,6 +215,39 @@ function getDayNameToNum(names) {
     // console.log(dayNum)
   })
   return dayNum.toString()
+}
+
+//
+
+function hrToTime(hr) {
+  const regEx = /\d+/
+  const getHr = hr.match(regEx).join()
+  if (getHr.length > 3) {
+    return `0${hr}`
+  }
+  if (getHr < 10) {
+    return `0${getHr}:00`
+  } {
+    return `${getHr}:00`
+  }
+}
+
+// console.log(hrToTime('8 hr'))
+
+function timeToHr(time) {
+  const regEx = /\d+/
+  const getHr = time.match(regEx)
+  const res = getHr.join()
+  const finalRes = res[0] === '0' ? res.slice(1) : res
+  return `${finalRes} Hours`;
+}
+// console.log(timeToHr('8:00'))
+
+function checkInputFixedHr(hr) {
+  const matchHr = 'Hours'
+
+  const getHr = hr.includes(matchHr)
+  return getHr
 }
 
 module.exports = OptionsController
