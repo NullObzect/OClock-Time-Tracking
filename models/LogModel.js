@@ -89,7 +89,7 @@ const LogModel = {
     return rows;
   },
   checkTodayReportEmptyOrNot: async (userId) => {
-    const query = `SELECT DISTINCT user_id FROM log WHERE DATE(create_at) = DATE(CURRENT_DATE) AND user_id = ${userId}`
+    const query = `SELECT DISTINCT user_id, end FROM log WHERE DATE(create_at) = DATE(CURRENT_DATE) AND user_id = ${userId} AND end is NOT NULL`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },

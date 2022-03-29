@@ -282,8 +282,6 @@
     for(let j = 0; j < closeBtn.length; j++) {
       closeBtn[j].addEventListener('click', () => {
         console.log("close");
-        
-        
         updateEndTimeModal[j].style.display = "none";
       });
     }
@@ -396,6 +394,6 @@ const aJAXPostRequest = (url, values) => new Promise((resolve, reject) => {
   </script>
 
  
-  <script src="<%=baseUrl%>/startData.js"></script>
+  <script src="<%=baseUrl%>/js/startData.js"></script>
 
  <%- include("../partials/footer.ejs"); -%>
