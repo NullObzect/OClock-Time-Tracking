@@ -7,6 +7,8 @@ const config = {
     report: ['@babel/polyfill', './src/report.js'],
     timeTracking: ['@babel/polyfill', './src/timeTracking.js'],
     holiday: ['@babel/polyfill', './src/holiday.js'],
+    startData: './src/startData.js',
+    leaveday: ['@babel/polyfill', './src/leaveday.js'],
   },
   output: {
     path: path.resolve(__dirname, 'public/js/'),
