@@ -1,4 +1,4 @@
-<%- include("../partials/header"); -%>
+.<%- include("../partials/header"); -%>
 
 <style>
   .leaveday-table input[type="text"] {
@@ -153,7 +153,7 @@
   </div>
 
   <!-- Markup for leave days table  -->
-  <table class="table leaveday-table">
+  <table id="leaveday-table" class="table leaveday-table">
     <thead>
       <tr>
         <td class="table-img td-width-zero"></td>
@@ -235,156 +235,164 @@
       <% }) %> <% } %>
     </tbody>
   </table>
+  
+  <!--- Markup for pagination -->
+
+  <div class="pagination">
+    <ul id="pagination"></ul>
+  </div>
+</div>
 </div>
 
 <script>
   const baseUrl = "<%= baseUrl %>";
   const loggedInUser = "<%= loggedInUser.userRole %>";
   //
-  const actionBtn = document.querySelectorAll(".action-btn");
-  const updateBtn = document.querySelectorAll(".update-btn");
-  const saveBtn = document.querySelectorAll(".save-btn");
-  const deleteBtn = document.querySelectorAll(".delete-btn");
-  const leaveId = document.querySelectorAll(".leave-id");
-  const reasonVal = document.querySelectorAll(".reason-val");
-  const startVal = document.querySelectorAll(".start-val");
-  const endVal = document.querySelectorAll(".end-val");
-  const duration = document.querySelectorAll(".duration");
-  //
+  // const actionBtn = document.querySelectorAll(".action-btn");
+  // const updateBtn = document.querySelectorAll(".update-btn");
+  // const saveBtn = document.querySelectorAll(".save-btn");
+  // const deleteBtn = document.querySelectorAll(".delete-btn");
+  // const leaveId = document.querySelectorAll(".leave-id");
+  // const reasonVal = document.querySelectorAll(".reason-val");
+  // const startVal = document.querySelectorAll(".start-val");
+  // const endVal = document.querySelectorAll(".end-val");
+  // const duration = document.querySelectorAll(".duration");
+  // //
 
-  for (let i = 0; i < actionBtn.length; i++) {
-    actionBtn[i].addEventListener("click", () => {
-      actionBtn[i].style.display = "none";
-      updateBtn[i].style.display = "block";
-      deleteBtn[i].style.display = "block";
-    });
-  }
+  // for (let i = 0; i < actionBtn.length; i++) {
+  //   actionBtn[i].addEventListener("click", () => {
+  //     actionBtn[i].style.display = "none";
+  //     updateBtn[i].style.display = "block";
+  //     deleteBtn[i].style.display = "block";
+  //   });
+  // }
 
-  // when click on update button
-  for (let i = 0; i < updateBtn.length; i++) {
-    updateBtn[i].addEventListener("click", () => {
-      updateBtn[i].style.display = "none";
-      saveBtn[i].style.display = "block";
-      deleteBtn[i].style.display = "none";
+  // // when click on update button
+  // for (let i = 0; i < updateBtn.length; i++) {
+  //   updateBtn[i].addEventListener("click", () => {
+  //     updateBtn[i].style.display = "none";
+  //     saveBtn[i].style.display = "block";
+  //     deleteBtn[i].style.display = "none";
 
-      reasonVal[i].focus();
-    });
-  }
-  // when click on save button
-  for (let i = 0; i < saveBtn.length; i++) {
-    saveBtn[i].addEventListener("click", () => {
-      //saveBtn[i].style.display = "none";
+  //     reasonVal[i].focus();
+  //   });
+  // }
+  // // when click on save button
+  // for (let i = 0; i < saveBtn.length; i++) {
+  //   saveBtn[i].addEventListener("click", () => {
+  //     //saveBtn[i].style.display = "none";
 
-      let reason = reasonVal[i].value.trim();
-      let start = startVal[i].value.trim();
-      let end = endVal[i].value.trim();
-      let id = leaveId[i].value;
-      console.log(id);
-      if (reason === "" || start === "" || end === "") {
-        alert("Please fill all the fields");
-        return;
-      }
-      let data = {
-        reason: reason,
-        start: start,
-        end: end,
-        id: id,
-      };
-      console.log(data);
-      aJAXPostRequest("/options/leavedays/update", data);
-      reasonVal[i].value = data.reason;
-      startVal[i].value = data.start;
-      endVal[i].value = data.end;
-      duration[i].innerText = dateDiff(data.start, data.end) + " day";
-      saveBtn[i].style.display = "none";
-      actionBtn[i].style.display = "block";
-    });
-  }
+  //     let reason = reasonVal[i].value.trim();
+  //     let start = startVal[i].value.trim();
+  //     let end = endVal[i].value.trim();
+  //     let id = leaveId[i].value;
+  //     console.log(id);
+  //     if (reason === "" || start === "" || end === "") {
+  //       alert("Please fill all the fields");
+  //       return;
+  //     }
+  //     let data = {
+  //       reason: reason,
+  //       start: start,
+  //       end: end,
+  //       id: id,
+  //     };
+  //     console.log(data);
+  //     aJAXPostRequest("/options/leavedays/update", data);
+  //     reasonVal[i].value = data.reason;
+  //     startVal[i].value = data.start;
+  //     endVal[i].value = data.end;
+  //     duration[i].innerText = dateDiff(data.start, data.end) + " day";
+  //     saveBtn[i].style.display = "none";
+  //     actionBtn[i].style.display = "block";
+  //   });
+  // }
 
-  // function for date diff
-  function dateDiff(dateOne, dateTwo) {
-    const date1 = new Date(dateOne);
-    const date2 = new Date(dateTwo);
-    const diffTime = Math.abs(date2 - date1);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-    return diffDays;
-  }
-  //  AJAX post request function
-  function aJAXPostRequest(url, data) {
-    return new Promise((resolve, reject) => {
-      fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log({ data });
-          if (data.success) {
-            alert("Option Value Updated");
-          }
-        })
-        .catch((err) => console.log(err));
-      // return window.location.replace("/options/holiday");
-    });
-  }
+  // // function for date diff
+  // function dateDiff(dateOne, dateTwo) {
+  //   const date1 = new Date(dateOne);
+  //   const date2 = new Date(dateTwo);
+  //   const diffTime = Math.abs(date2 - date1);
+  //   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+  //   return diffDays;
+  // }
+  // //  AJAX post request function
+  // function aJAXPostRequest(url, data) {
+  //   return new Promise((resolve, reject) => {
+  //     fetch(url, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(data),
+  //     })
+  //       .then((res) => res.json())
+  //       .then((data) => {
+  //         console.log({ data });
+  //         if (data.success) {
+  //           alert("Option Value Updated");
+  //         }
+  //       })
+  //       .catch((err) => console.log(err));
+  //     // return window.location.replace("/options/holiday");
+  //   });
+  // }
 
-  // pagination
-  const dateIcon = document.querySelector("#date-icon");
-  dateIcon.addEventListener("click", async () => {
-    const dateStart = document.querySelector("#startPicker");
-    const dateEnd = document.querySelector("#endPicker");
-    const startDate = dateFormate(startDatePicker.getFullDate());
-    const endDate = dateFormate(
-      endDatePicker.getFullDate() || getCurrentDate()
-    );
-    dateStart.dataset.date = startDate;
-    dateEnd.dataset.date = endDate;
+  // // pagination
+  // const dateIcon = document.querySelector("#date-icon");
+  // dateIcon.addEventListener("click", async () => {
+  //   const dateStart = document.querySelector("#startPicker");
+  //   const dateEnd = document.querySelector("#endPicker");
+  //   const startDate = dateFormate(startDatePicker.getFullDate());
+  //   const endDate = dateFormate(
+  //     endDatePicker.getFullDate() || getCurrentDate()
+  //   );
+  //   dateStart.dataset.date = startDate;
+  //   dateEnd.dataset.date = endDate;
 
-    console.log(startDate, endDate);
+  //   console.log(startDate, endDate);
 
-    if (dateStart.dataset.date === "null") {
-      return alert("date not select");
-    }
+  //   if (dateStart.dataset.date === "null") {
+  //     return alert("date not select");
+  //   }
 
-    const data = await fetch(
-      `${baseUrl}/options/leavedays/between-two-date?startDate=${startDate}&endDate=${endDate}`
-    );
+  //   const data = await fetch(
+  //     `${baseUrl}/options/leavedays/between-two-date?startDate=${startDate}&endDate=${endDate}`
+  //   );
 
-    const leavedays = await data.json();
-    console.log(leavedays);
+  //   const leavedays = await data.json();
+  //   console.log(leavedays);
 
-    if (leavedays.length === 0) {
-      return alert("No Holiday Found");
-    }
-  });
+  //   if (leavedays.length === 0) {
+  //     return alert("No Holiday Found");
+  //   }
+  // });
 
-  // helper function
-  //
-  const dateFormate = (date) => {
-    if (date === null) {
-      return null;
-    }
-    const today = new Date(date);
-    const month = today.getMonth() + 1;
-    const year = today.getFullYear();
-    const day = today.getDate() < 10 ? `0${today.getDate()}` : today.getDate();
-    const getDate = `${year}-${month < 10 ? `0${month}` : month}-${day}`;
+  // // helper function
+  // //
+  // const dateFormate = (date) => {
+  //   if (date === null) {
+  //     return null;
+  //   }
+  //   const today = new Date(date);
+  //   const month = today.getMonth() + 1;
+  //   const year = today.getFullYear();
+  //   const day = today.getDate() < 10 ? `0${today.getDate()}` : today.getDate();
+  //   const getDate = `${year}-${month < 10 ? `0${month}` : month}-${day}`;
 
-    return getDate;
-  };
+  //   return getDate;
+  // };
 
-  // get current date
-  const getCurrentDate = () => {
-    const today = new Date();
-    const dd = String(today.getDate()).padStart(2, "0");
-    const mm = String(today.getMonth() + 1).padStart(2, "0");
-    const yyyy = today.getFullYear();
+  // // get current date
+  // const getCurrentDate = () => {
+  //   const today = new Date();
+  //   const dd = String(today.getDate()).padStart(2, "0");
+  //   const mm = String(today.getMonth() + 1).padStart(2, "0");
+  //   const yyyy = today.getFullYear();
 
-    return `${yyyy}-${mm}-${dd}`;
-  };
+  //   return `${yyyy}-${mm}-${dd}`;
+  // };
 </script>
+<script src="<%=baseUrl%>/js/leaveday.js"></script>
 
 <%- include("../partials/footer"); -%>
