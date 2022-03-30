@@ -12,8 +12,7 @@ import {
  `
   // eslint-disable-next-line no-use-before-define
   loader(numberOfPage, page)
- // console.log('action', await actions())
-  //actions()
+  actions()
 }
 
 function loader(numberOfPage, pageNO) {
@@ -36,9 +35,6 @@ function loader(numberOfPage, pageNO) {
 
     reportHolidayShow(holidayTable, dateRangeReport)
     pagination(pageNumber, numberOfPage, pageNo)
-
-    // actions();
-    // console.log('action', actions())
   }
   const pageClassFirst = document.querySelector('.first')
   pageClassFirst.addEventListener('click', () => {

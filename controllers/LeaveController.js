@@ -39,20 +39,24 @@ const LeaveController = {
   },
 
   setLeaveData: async (req, res) => {
-    const {
-      id, start, end, reason,
-    } = req.body;
-    const isEdit = await LeaveModel.setLeaveEditData(
+    try {
+      const {
+        id, start, end, reason,
+      } = req.body;
+      const isEdit = await LeaveModel.setLeaveEditData(
 
-      dateFormate(start),
-      dateFormate(end),
-      reason,
-      id,
-    )
-    if (isEdit.errno) {
-      res.send('Have an Error')
-    } else {
-      res.redirect('/options/leavedays')
+        dateFormate(start),
+        dateFormate(end),
+        reason,
+        id,
+      )
+      if (isEdit.errno) {
+        res.send('Have an Error')
+      } else {
+        res.redirect('/options/leavedays')
+      }
+    } catch (error) {
+      console.log('lea err', error)
     }
   },
   getDeleteLeaveday: async (req, res) => {

@@ -27,7 +27,7 @@ const LeaveModel = {
   setLeaveEditData: async (start, end, reason, id) => {
     const query = `UPDATE employee_leaves SET  start = '${start}', end = '${end}', reason = '${reason}' WHERE id =${id}`
     const [row] = await dbConnect.promise().execute(query)
-    return row.affectedRows;
+    return row;
   },
   deleteLeaveday: async (id) => {
     const query = `DELETE FROM employee_leaves WHERE id = ${id}`
@@ -35,7 +35,7 @@ const LeaveModel = {
     return row.affectedRows;
   },
   leavedaysListBetweenTowDate: async (startDate, endDate) => {
-    const getList = `SELECT U.user_name AS name, U.avatar, EL.user_id AS id, EL.reason AS reason, DATE_FORMAT(start,'%Y/%m/%d') AS start, DATE_FORMAT(end, '%Y/%m/%d') AS end, DATEDIFF(end,start) + 1 AS duration  FROM employee_leaves AS EL JOIN users AS U ON U.id  = EL.user_id  WHERE DATE(start) BETWEEN  '${startDate}' AND '${endDate}'`;
+    const getList = `SELECT U.user_name AS name, U.avatar, EL.id AS id, EL.reason AS reason, DATE_FORMAT(start,'%Y/%m/%d') AS start, DATE_FORMAT(end, '%Y/%m/%d') AS end, DATEDIFF(end,start) + 1 AS duration  FROM employee_leaves AS EL JOIN users AS U ON U.id  = EL.user_id  WHERE DATE(start) BETWEEN  '${startDate}' AND '${endDate}'`;
     const [rows] = await dbConnect.promise().execute(getList)
     return rows;
   },

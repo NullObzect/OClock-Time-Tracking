@@ -14,6 +14,7 @@ function pagination(pageNumber, numberOfPage, page) {
  `
   // eslint-disable-next-line no-use-before-define
   loader(numberOfPage, page)
+  actions()
 }
 
 function loader(numberOfPage, pageNO) {
@@ -185,9 +186,6 @@ dateIcon.addEventListener('click', async () => {
     pagination(pageNumber, numberOfPage, page)
   }
   dateIcon.classList.add('date-icon-active')
- // await actions();
-  // iconCheck(e);
-  // console.log('icon', iconCheck(e))
 })
 
 function reportHolidayShow(holidayTable, dateRangeReport) {
@@ -230,21 +228,8 @@ function reportHolidayShow(holidayTable, dateRangeReport) {
   ).join('');
 }
 
-// function pagination(pageNumber, numberOfPage, page) {
-//   const pagination = document.querySelector('#pagination')
-//   return pagination.innerHTML = `<li class="first"  onclick="page(${1})"> </li>
-//  <li class="prev" ${Number(page === 1) ? "onclick='this.disabled=true'" : `onclick=page(${Number(page - 1)})`}></li>
-//  ${pageNumber.map((p) => `<a class=${page == p ? 'page-active' : ''} ><li onclick="page(${p})">  ${p}  </li></a>`).join('')}
-//  <li class="next" ${Number(page === numberOfPage) ? "onclick='this.disabled=true'" : `onclick=page(${Number(page + 1)})`}></li>
-//  <li class="last" onclick="page(${numberOfPage})"></li>
-//  `
-// }
-console.log('end of script file');
 
-// const btn = document.querySelector('#btn');
-// btn.addEventListener('onclick', () => {
-//   alert('hello');
-// })
+console.log('end of script file');
 
 async function page(pageNo) {
   const dateStart = document.querySelector('#startPicker')
@@ -274,6 +259,4 @@ async function page(pageNo) {
 
   reportHolidayShow(holidayTable, dateRangeReport)
   pagination(pageNumber, numberOfPage, pageNo)
-
-  // await actions();
 }
