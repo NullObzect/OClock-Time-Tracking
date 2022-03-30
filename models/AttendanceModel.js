@@ -158,21 +158,14 @@ const AttendanceModel = {
 
   // report for today
   /* ======= report model  for this week ========= */
-  thisWeekFridayDate: async () => {
-    const query = "SELECT CASE WHEN (DAYNAME(NOW() -1) = 'Friday')  THEN DATE(NOW() -1) ELSE null  end AS isFriday"
-    const [rows] = await dbConnect.promise().execute(query)
-    return rows
-  },
-  thisWeekDay: async () => {
-    const query = 'SELECT DAYOFWEEK(CURRENT_DATE()) AS thisWeekDay'
-    const [rows] = await dbConnect.promise().execute(query)
-    return rows
-  },
+
+  // get current week date and name
   weekCurrentNameAndDate: async () => {
     const query = 'SELECT  DAYNAME(DATE_SUB(NOW(), INTERVAL 1 DAY)) AS weekCurrentName, DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 1 DAY),"%Y-%m-%d") AS weekCurrentDate'
     const [rows] = await dbConnect.promise().execute(query)
     return rows
   },
+  // get week start date
   getWeekStartDate: async (val) => {
     const query = `SELECT DATE_FORMAT(DATE_SUB(NOW(), INTERVAL ${val} DAY),'%Y-%m-%d') AS weekStartDate`
     const [rows] = await dbConnect.promise().execute(query)
@@ -180,66 +173,25 @@ const AttendanceModel = {
   },
 
   // day , total work time and average work in week
-  weekDayAndWorkTime: async (userId, weekStartDate, weekCurrentDate) => {
-    const query = "SELECT COUNT(DISTINCT DATE(create_at)) AS thisWeekTotalWorkingDays, TIME_FORMAT( O.option_value, '%h') * COUNT(DISTINCT DATE(create_at)) AS weekFixedTotalHr, TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) as weekWorkTotalHr,  SEC_TO_TIME(TIME_TO_SEC(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start))))) / COUNT(DISTINCT DATE(create_at)))  AS weekAvgTotalHr, TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(start))),'%h:%i %p') AS weekAvgStartTime, TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(end))),'%h:%i %p') AS weekAvgEndTime, SUBTIME(SEC_TO_TIME(TIME_TO_SEC(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start))))) / COUNT(DISTINCT DATE(create_at))), TIME(O.option_value)) AS thisWeekAvgLessOrExtra, SUBTIME(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))),SEC_TO_TIME(((O.option_value) * COUNT(DISTINCT DATE(create_at)) * 60) *60)) AS weekTotalExtrOrLess FROM attendance JOIN options AS O ON o.option_title = 'fixed time'  WHERE user_id = ? AND DATE(create_at) BETWEEN   ? AND ?"
-
-    const value = [userId, weekStartDate, weekCurrentDate]
-    const [rows] = await dbConnect.promise().execute(query, value);
-    return rows;
-  },
+ 
   // average start and end time
-  weekAvgStartEnd: async (userId) => {
-    const query = "SELECT TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(StartTime))),'%h:%i %p') AS weekAvgStartTime, TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(EndTime))),'%h:%i %p') AS weekAvgEndTime FROM (SELECT MIN(time(start)) as StartTime, MAX(time(end)) as EndTime FROM attendance WHERE user_id = ? AND DATE(CURRENT_DATE - INTERVAL 6 day)) attendance"
-    const value = [userId]
-    const [rows] = await dbConnect.promise().execute(query, value);
-    return rows;
-  },
+ 
 
   /* ======= report for this month ======= */
-  // this month off days (friday)
-  // thisMonthOffdays: async () => {
-  //   const query = 'SELECT WEEKOFYEAR(date(CURRENT_DATE - INTERVAL  DAYOFMONTH(CURRENT_DATE)-1 DAY)) AS thisMonthOffdays'
-  //   const [rows] = await dbConnect.promise().execute(query);
-  //   return rows;
-  // },
-  thisMonthOffdays: async () => {
-    const query = "select ceiling((day(CURRENT_DATE - 1) - (7 - weekday(date_format(CURRENT_DATE -1,'%Y-%m-01'))))/7)  + case when 7 - weekday(date_format(CURRENT_DATE -1 ,'%Y-%m-01'))> 0  then 1 else 0 end thisMonthOffdays"
-    const [rows] = await dbConnect.promise().execute(query);
-    return rows;
-  },
-  // this month holidays
-  thisMonthHolidays: async () => {
-    const query = "SELECT DATE_FORMAT(start,'%Y-%m-%d') AS holidayStartDate, DATEDIFF(end,start) + 1 countHolidays FROM holidays AS h  WHERE DATE(H.start) BETWEEN date( CURRENT_DATE - INTERVAL  DAYOFMONTH(CURRENT_DATE)-1 DAY) and date(CURRENT_DATE)"
-    const [rows] = await dbConnect.promise().execute(query);
-    return rows;
-  },
-  // this month employee leave days
-  thisMonthLeaveDays: async (userId) => {
-    const query = "SELECT DATE_FORMAT(start, '%Y-%m-%d') AS leaveStartDate, DATEDIFF(end,start) + 1 AS countLeaveDays  FROM `employee_leaves` AS el WHERE DATE(el.start) BETWEEN date( CURRENT_DATE - INTERVAL  DAYOFMONTH(CURRENT_DATE)-1 DAY) and date(CURRENT_DATE) AND user_id  = ?"
 
-    const value = [userId]
-    const [rows] = await dbConnect.promise().execute(query, value);
-    return rows;
-  },
-  // this month working day
+
+  // this month holidays
+
+  // this month employee leave days
+
+  // this month count  day and start date
   thisMonthDates: async () => {
     const query = 'SELECT   DATE_FORMAT(NOW() - interval (DAYOFMONTH(NOW()) -1) DAY, "%Y-%m-%d") AS monthStartDate,  DATEDIFF(CURRENT_DATE,  NOW() - INTERVAL (DAYOFMONTH(now())-1) DAY) AS countWorkday'
     const [rows] = await dbConnect.promise().execute(query);
     return rows;
   },
-  monthDayAndWorkTime: async (userId) => {
-    const query = "SELECT COUNT(DISTINCT DATE(create_at)) AS thisMonthTotalWorkingDays, TIME_FORMAT( O.option_value, '%h') * COUNT(DISTINCT DATE(create_at)) AS monthFixedTotalHr, TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) as monthWorkTotalHr,  SEC_TO_TIME(TIME_TO_SEC(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start))))) / COUNT(DISTINCT DATE(create_at)))   AS monthAvgTotalHr, SUBTIME(SEC_TO_TIME(TIME_TO_SEC(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start))))) / COUNT(DISTINCT DATE(create_at))), TIME(O.option_value)) AS thisMonthAvgLessOrExtra, SUBTIME(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))),SEC_TO_TIME(((O.option_value) * COUNT(DISTINCT DATE(create_at)) * 60) *60)) AS monthTotalExtrOrLess FROM attendance JOIN options AS O ON o.option_title = 'fixed time'  WHERE user_id = ? AND END IS NOT NULL AND Date(create_at) BETWEEN date( CURRENT_DATE - INTERVAL  DAYOFMONTH(CURRENT_DATE) -1 DAY) and date(CURRENT_DATE) -1"
-    const value = [userId]
-    const [rows] = await dbConnect.promise().execute(query, value);
-    return rows;
-  },
-  monthAvgStartEnd: async (userId) => {
-    const query = "SELECT TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(StartTime))),'%h:%i %p') AS monthAvgStartTime, TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(EndTime))),'%h:%i %p') AS monthAvgEndTime FROM (SELECT MIN(time(start)) as StartTime, MAX(time(end)) as EndTime FROM attendance  WHERE user_id = ? AND DATE(CURRENT_DATE - INTERVAL  DAYOFMONTH(CURRENT_DATE)-1 DAY)) attendance"
 
-    const value = [userId]
-    const [rows] = await dbConnect.promise().execute(query, value);
-    return rows;
-  },
+
   /* ===== report query for  this year ===== */
   // this year off days (friday)
   thisYearOffdays: async () => {
@@ -248,7 +200,7 @@ const AttendanceModel = {
     return rows;
   },
 
-  // count this year  dates
+  // count day & start date 
   thisYearDates: async () => {
     const query = 'SELECT   DATE_FORMAT(NOW() - interval (DAYOFYEAR(NOW()) -1) DAY, "%Y-%m-%d") AS yearStartDate,  DATEDIFF(CURRENT_DATE,  NOW() - INTERVAL (DAYOFYEAR(now())-1) DAY) AS countThisYearWorkday'
     const [rows] = await dbConnect.promise().execute(query);

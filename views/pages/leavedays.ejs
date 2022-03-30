@@ -153,7 +153,7 @@
   </div>
 
   <!-- Markup for leave days table  -->
-  <table id="leaveday-table" class="table leaveday-table">
+  <table  class="table leaveday-table">
     <thead>
       <tr>
         <td class="table-img td-width-zero"></td>
@@ -165,7 +165,7 @@
         <td>Duration</td>
       </tr>
     </thead>
-    <tbody>
+    <tbody id="leaveday-table">
       <%if(loggedInUser.userRole==='admin'){ %> <%
       employeeLeaveList.map((user,idx) =>{ %>
       <tr>

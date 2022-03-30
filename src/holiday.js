@@ -185,7 +185,7 @@ dateIcon.addEventListener('click', async () => {
     pagination(pageNumber, numberOfPage, page)
   }
   dateIcon.classList.add('date-icon-active')
-  // await actions();
+ // await actions();
   // iconCheck(e);
   // console.log('icon', iconCheck(e))
 })
@@ -275,5 +275,5 @@ async function page(pageNo) {
   reportHolidayShow(holidayTable, dateRangeReport)
   pagination(pageNumber, numberOfPage, pageNo)
 
-  await actions();
+  // await actions();
 }

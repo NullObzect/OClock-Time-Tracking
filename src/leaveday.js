@@ -1,8 +1,8 @@
 import {
-  aJAXPostRequest, dateDiff, dateFormate, getCurrentDate,
+  aJAXPostRequest, dateDiff, dateFormate, getCurrentDate
 } from './helper.js';
 
-function pagination(pageNumber, numberOfPage, page) {
+ async function pagination(pageNumber, numberOfPage, page) {
   const pagination = document.querySelector('#pagination')
   pagination.innerHTML = `<li class="first page" > </li>
  <li class="prev page"></li>
@@ -12,6 +12,8 @@ function pagination(pageNumber, numberOfPage, page) {
  `
   // eslint-disable-next-line no-use-before-define
   loader(numberOfPage, page)
+ // console.log('action', await actions())
+  //actions()
 }
 
 function loader(numberOfPage, pageNO) {
@@ -35,7 +37,8 @@ function loader(numberOfPage, pageNO) {
     reportHolidayShow(holidayTable, dateRangeReport)
     pagination(pageNumber, numberOfPage, pageNo)
 
-    await actions();
+    // actions();
+    // console.log('action', actions())
   }
   const pageClassFirst = document.querySelector('.first')
   pageClassFirst.addEventListener('click', () => {
@@ -83,7 +86,7 @@ function iconCheck(e) {
   }
 }
 
-function actions() {
+async function actions() {
   const actionBtn = document.querySelectorAll('.action-btn');
   const updateBtn = document.querySelectorAll('.update-btn');
   const saveBtn = document.querySelectorAll('.save-btn');
@@ -188,40 +191,41 @@ dateIcon.addEventListener('click', async () => {
 function reportHolidayShow(holidayTable, dateRangeReport) {
   console.log(dateRangeReport)
   holidayTable.innerHTML = dateRangeReport.map(
-    (day, idx) => `
+    (day, idx) => ` <tr>
   
-      <tr>
-        <td class="">${idx + 1}</td>
-        <td>
-          <input class="title-value" type="text" value="${day.title}" />
-        </td>
-        <td>
-          <input
-            class="start-date-value"
-            type="text"
-            value="${day.start}"
-          />
-        </td>
-        <td>
-          <input class="end-date-value" type="text" value="${day.end}" />
-        </td>
-        <td class="duration">${day.duration}   day</td>
-         ${loggedInUser === 'admin'
-    ? `<td class="btn-group">
-          <button   class="action-btn">Action</button>
-          <button  class="update-btn">Update</button>
-          <button  class="save-btn">Save</button>
+    <td class="table-img td-width-zero">
+     
+     <img src="/uploads/avatars/${day.avatar != null ? day.avatar : 'demo-avatar.png'}" />
+  </td>
   
-          <a
-            onclick=" return confirm('Are you Sure???')"
-            href="/delete/holiday/${day.id}"
-          >
-            <button type="text" class="delete-btn">Delete</button>
-          </a>
-          <input type="hidden" class="holiday-id" value="${day.id}" />
-  
-        </td>` : ''}  </tr>
-      `,
+    <td>
+      <div class="username">${day.name}</div>
+      <span id="role">${day.user_role === 'admin' ? 'admin' : ''} </span>
+    </td>
+    <td>
+      <input class="reason-val" type="text" value="${day.reason}" />
+    </td>
+    <td>
+      <input class="start-val" type="text" value="${day.start} " />
+    </td>
+    <td><input class="end-val" type="text" value="${day.end}" /></td>
+    <td class="duration">${day.duration}   day</td>
+    <td class="">
+      <div class="btn-group">
+        <button type="button" class="action-btn">Action</button>
+        <button type="button" class="update-btn">Update</button>
+        <button type="button" class="save-btn">Save</button>
+        <input type="hidden" class="leave-id" value="${day.id}" />
+        <a
+          onclick=" return confirm('Are you Sure???')"
+          href="leavedays/delete/${day.id}"
+          ><button class="delete-btn">Delete</button>
+        </a>
+      </div>
+    </td>
+  </tr>
+
+     `,
 
   ).join('');
 }
