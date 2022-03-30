@@ -173,12 +173,10 @@ const AttendanceModel = {
   },
 
   // day , total work time and average work in week
- 
+
   // average start and end time
- 
 
   /* ======= report for this month ======= */
-
 
   // this month holidays
 
@@ -191,7 +189,6 @@ const AttendanceModel = {
     return rows;
   },
 
-
   /* ===== report query for  this year ===== */
   // this year off days (friday)
   thisYearOffdays: async () => {
@@ -200,26 +197,14 @@ const AttendanceModel = {
     return rows;
   },
 
-  // count day & start date 
+  // count day & start date
   thisYearDates: async () => {
     const query = 'SELECT   DATE_FORMAT(NOW() - interval (DAYOFYEAR(NOW()) -1) DAY, "%Y-%m-%d") AS yearStartDate,  DATEDIFF(CURRENT_DATE,  NOW() - INTERVAL (DAYOFYEAR(now())-1) DAY) AS countThisYearWorkday'
     const [rows] = await dbConnect.promise().execute(query);
     return rows;
   },
 
-  yearDayAndWorkTime: async (userId) => {
-    const query = "SELECT COUNT(DISTINCT DATE(create_at)) AS thisYearTotalWorkingDays, TIME_FORMAT( O.option_value, '%h') * COUNT(DISTINCT DATE(create_at)) AS yearFixedTotalHr, TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) as yearWorkTotalHr,  SEC_TO_TIME(TIME_TO_SEC(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start))))) / COUNT(DISTINCT DATE(create_at)))   AS yearAvgTotalHr, SUBTIME(SEC_TO_TIME(TIME_TO_SEC(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start))))) / COUNT(DISTINCT DATE(create_at))), TIME(O.option_value)) AS thisYearAvgLessOrExtra, SUBTIME(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))),SEC_TO_TIME(((O.option_value) * COUNT(DISTINCT DATE(create_at)) * 60) *60)) AS yearTotalExtrOrLess FROM attendance JOIN options AS O ON o.option_title = 'fixed time'  WHERE user_id = ? AND END IS NOT NULL AND Date(create_at) BETWEEN date( CURRENT_DATE - INTERVAL  DAYOFYEAR(CURRENT_DATE) -1 DAY) and date(CURRENT_DATE) -1"
-    const value = [userId]
-    const [rows] = await dbConnect.promise().execute(query, value);
-    return rows;
-  },
-  yearAvgStartEnd: async (userId) => {
-    const query = "SELECT TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(StartTime))),'%h:%i %p') AS yearAvgStartTime, TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(EndTime))),'%h:%i %p') AS yearAvgEndTime FROM (SELECT MIN(time(start)) as StartTime, MAX(time(end)) as EndTime FROM attendance  WHERE user_id = ? AND DATE(CURRENT_DATE - INTERVAL 365 day)) attendance"
 
-    const value = [userId]
-    const [rows] = await dbConnect.promise().execute(query, value);
-    return rows;
-  },
   getToday: async (userId) => {
     const getTodaySql = 'SELECT  project_name,work_details, Time_format(Time(start),"%h:%i% %p") as start , Time_format(Time(end),"%h:%i% %p") as end, timediff(end,start ) as total FROM attendance AS A ,projects WHERE project_id=projects.id AND user_id = ? and end IS NOT NULL and Date(A.create_at)= Date(CURRENT_DATE)'
     const value = [userId]
@@ -245,27 +230,8 @@ const AttendanceModel = {
     return rows;
   },
 
-  // employee average working time Model
-  averageWeekWorkTime: async (userId) => {
-    const avgWeekTotal = 'SELECT TIME(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(end)))), SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(start))))) / 7) as week_avg FROM attendance WHERE user_id = ?';
-    const value = [userId]
-    const [rows] = await dbConnect.promise().execute(avgWeekTotal, value)
-    return rows;
-  },
 
-  // an employee report between to date
-  anEmployeeReportBetweenTwoDate: async (userId, startDate, endDate) => {
-    try {
-      const betweenTowDateSql = "SELECT DAYNAME(create_at) AS day, DATE_FORMAT(create_at, '%Y-%m-%d') AS date_for_holiday, DATE_FORMAT(DATE(create_at),'%d %b %y') AS date, TIME_FORMAT(TIME(MIN(start)),'%h:%i %p') AS start, TIME_FORMAT(TIME(MAX(end)),'%h:%i %p') AS end, TIMEDIFF(MAX(end), MIN(start)) as working_time, SUBTIME(TIMEDIFF(MAX(end), MIN(start)), TIME(o.option_value)) AS time_count,  TIME_FORMAT(o.option_value, '%h')  AS fixed_time, 'regular' AS type FROM attendance JOIN options AS o  WHERE o.option_title = 'fixed time' AND user_id = ? AND  DATE(create_at) BETWEEN ? AND ? GROUP BY DATE(create_at)";
 
-      const values = [userId, startDate, endDate];
-      const [rows] = await dbConnect.promise().execute(betweenTowDateSql, values);
-      return rows;
-    } catch (err) {
-      console.log('====>Error form AttendanceModel/aEmployeeRportBetweenTwoDate', err);
-      return err;
-    }
-  },
   avgStartTime: async (id) => {
     try {
       const avgStartTimeSQL = 'SELECT TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(StartTime))),"%h:%i %p") AS avgStartTime FROM (SELECT min(time(start)) as StartTime FROM attendance WHERE user_id = ? GROUP BY date(create_at)) attendance'
@@ -338,6 +304,3 @@ const AttendanceModel = {
 
 }
 module.exports = AttendanceModel;
-
-// current employee work details
-// SELECT  U.user_name, U.user_role,  A.work_details FROM attendance AS A JOIN users AS U ON U.id = A.user_id WHERE DATE(A.create_at) = DATE(CURRENT_DATE)

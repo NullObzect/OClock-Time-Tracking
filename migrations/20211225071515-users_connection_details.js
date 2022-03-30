@@ -15,6 +15,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
+      unique_info: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
       user_name: {
         allowNull: false,
         type: Sequelize.STRING,

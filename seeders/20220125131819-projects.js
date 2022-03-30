@@ -5,6 +5,10 @@ module.exports = {
         project_name: 'Oclock',
         project_details: 'working for report page',
       },
+      {
+        project_name: 'Others',
+        project_details: 'Others working details',
+      },
     ]);
   },
 
