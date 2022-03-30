@@ -30,8 +30,8 @@ let intervalId;
 startData.addEventListener('submit', async (e) => {
   e.preventDefault()
 
-  debounce(todoStart(), 1000)
-})
+  todoStart()
+}, { once: true })
 
 async function todoStart() {
   const projectName = document.querySelector('#projectName')
@@ -55,11 +55,10 @@ async function todoStart() {
   }
 }
 // End button click event function
-endBtn.addEventListener('click', async(event) => {
+endBtn.addEventListener('click', async (event) => {
   event.preventDefault()
-
-  await debounce(todoEnd(), 1000)
-})
+  todoEnd()
+}, { once: true })
 //
 async function todoEnd() {
   const hiddenData = document.getElementById('hidden-data')
@@ -95,9 +94,7 @@ async function todoEnd() {
     hiddenData.style.display = 'none'
   }
   setTodayDetails(start, end, totalWorkTime, breakTime)
-  // setTodayReport(lastData.project_name, lastData.work_details, lastData.start, lastData.end, lastData.total)
-
-  debounce(setTodayReport(lastData.project_name, lastData.work_details, lastData.start, lastData.end, lastData.total), 1000)
+  setTodayReport(lastData.project_name, lastData.work_details, lastData.start, lastData.end, lastData.total)
 }
 
 //
@@ -121,13 +118,6 @@ function setTodayReport(project, details, start, end, total) {
   <td>${start}</td>
   <td>${end}</td>
   <td>${total}</td>
-  <td class="user-more">
-          <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="40" height="40" rx="15"></rect>
-            <circle cx="10" cy="20" r="2" fill="#4A4A4A"></circle>
-            <circle cx="20" cy="20" r="2" fill="#4A4A4A"></circle>
-            <circle cx="30" cy="20" r="2" fill="#4A4A4A"></circle>
-          </svg>        </td> 
   </tr>`
   todayReport.insertAdjacentHTML('afterend', data)
 }
@@ -168,19 +158,4 @@ function currentTime() {
   const time = new Date();
   const startTime = time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
   return startTime
-}
-// debounce handler
-
-function debounce(fn, delay) {
-  console.log('debounce')
-  let timeoutId;
-  return function () {
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
-    timeoutId = setTimeout(() => {
-      // fn.apply(this, args);
-      fn();
-    }, delay);
-  }
 }

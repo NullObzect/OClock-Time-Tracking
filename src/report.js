@@ -27,7 +27,9 @@ function loader(numberOfPage, pageNO) {
 
     const reportTableBody = document.querySelector('#an-user-report')
     reportShow(reportTableBody, dateRangeReport)
-    pagination(pageNumber, numberOfPage, pageNo)
+    if (numberOfPage > 1) {
+      pagination(pageNumber, numberOfPage, pageNo)
+    }
   }
   const pageClassFirst = document.querySelector('.first')
   pageClassFirst.addEventListener('click', () => {
@@ -126,7 +128,7 @@ async function dateRange(event) {
   } = getObjects.reports
   const reportTableBody = document.querySelector('#an-user-report')
   reportShow(reportTableBody, dateRangeReport)
-  if(numberOfPage>1){
+  if (numberOfPage > 1) {
     pagination(pageNumber, numberOfPage, page)
   }
   dateIcon.classList.add('date-icon-active')
@@ -215,7 +217,7 @@ function reportShow(reportTableBody, dateRangeReport) {
 
         <td>${el.end}<span class="${el.outTimeExtraOrLess.length === 5 ? 'low' : el.outTimeExtraOrLess === '' ? ' ' : 'high'}">${el.outTimeExtraOrLess.length === 5 ? `-${el.outTimeExtraOrLess}` : `${el.outTimeExtraOrLess}` === '' ? ' ' : `+${el.outTimeExtraOrLess.slice(1)}`}</span> </td>
         
-        <td>${`${el.workTime} / ${el.workHr} hr`}<span class="${el.totalTimeExtraOrLess.length == '0' ? '' : el.totalTimeExtraOrLess[0] !==  '-' ? 'high' : 'low'}" >${el.totalTimeExtraOrLess.length - 1 === 4 ? `+${el.totalTimeExtraOrLess}` : el.totalTimeExtraOrLess}</span></td>
+        <td>${`${el.workTime} / ${el.workHr} hr`}<span class="${el.totalTimeExtraOrLess.length == '0' ? '' : el.totalTimeExtraOrLess[0] !== '-' ? 'high' : 'low'}" >${el.totalTimeExtraOrLess.length - 1 === 4 ? `+${el.totalTimeExtraOrLess}` : el.totalTimeExtraOrLess}</span></td>
       
         
       </tr> 
