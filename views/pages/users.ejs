@@ -94,7 +94,7 @@
   .modal-delete-btn {
     background-color: #ff0000;
   }
-  #delete-modal {
+  .delete-modal {
     display: none;
   }
   .red {
@@ -204,7 +204,7 @@
 </div>
 
 <!-- Markup for user delete modal -->
-<div id="delete-modal" class="modal-container">
+<div id="deleteModal" class="modal-container delete-modal">
   <div class="modal">
     <div class="modal-head">
       <div class="modal-title">Confirmation !!!</div>
@@ -263,18 +263,18 @@
 
       currentMenu.classList.toggle("hidden-menu-show");
       userActionBtn[i].classList.toggle("red");
+
+  
     });
   }
 
   //
-
   //
   const deleteUser = document.querySelectorAll(".delete-user");
-  const deleteModal = document.getElementById("delete-modal");
+  const deleteModal = document.querySelector(".delete-modal");
   const deleteId = document.querySelectorAll(".delete-id");
   const deleteBtn = document.querySelectorAll(".modal-delete-btn");
   const cancelBtn = document.querySelectorAll(".modal-cancel-btn");
-  const modalClose = document.querySelector(".modal-close");
   for (let i = 0; i < deleteUser.length; i++) {
     deleteUser[i].addEventListener("click", () => {
       //alert("delete");
@@ -286,10 +286,6 @@
         window.location.href = `/delete/user/${deleteId[i].value}`;
       });
       cancelBtn[0].addEventListener("click", () => {
-        deleteModal.style.display = "none";
-      });
-      modalClose[0].addEventListener("click", () => {
-        alert("close");
         deleteModal.style.display = "none";
       });
     });

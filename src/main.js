@@ -1,7 +1,7 @@
 const navToggle = document.getElementById('nav-toggle')
 const navMenu = document.getElementById('bottom-nav-menu')
 const navClose = document.getElementById('nav-close')
-const modalClose = document.querySelector('.modal-close')
+const modalClose = document.querySelectorAll('.modal-close')
 if (navToggle) {
   navToggle.addEventListener('click', () => {
     navMenu.classList.add('show-menu')
@@ -62,17 +62,26 @@ for (let i = 0; i < bottomNavList.length; i++) {
 
 const addBtn = document.querySelector('.add-button')
 const modal = document.querySelector('#myModal')
+const deleteModal = document.querySelector('#deleteModal')
 
-modalClose.addEventListener('click', () => {
-  modal.style.display = 'none';
-})
+// eslint-disable-next-line no-restricted-syntax
+for (const modals of modalClose) {
+  modals.addEventListener('click', () => {
+    modal.style.display = 'none';
+    if (deleteModal) {
+      deleteModal.style.display = 'none';
+    }
+  })
+}
 
 addBtn.addEventListener('click', () => {
   modal.style.display = 'block';
 })
 
 window.onclick = function (event) {
-  if (event.target == modal) {
+  const { target } = event
+  if (target == modal || target == deleteModal) {
     modal.style.display = 'none';
+    deleteModal.style.display = 'none';
   }
 }
