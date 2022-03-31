@@ -1,12 +1,16 @@
 <%- include("../partials/header"); -%>
 
 <style>
+  .table tbody {
+    position: relative;
+  }
+
   .hidden-menu {
     overflow: hidden;
     max-height: 0;
-    -webkit-transition: max-height 0.4s;
-    -moz-transition: max-height 0.4s;
-    transition: max-height 0.4s;
+    -webkit-transition: min-height 0.4s;
+    -moz-transition: min-height 0.4s;
+    transition: min-height 0.4s;
     position: relative;
     z-index: 1;
   }
@@ -20,13 +24,16 @@
   } */
   .hidden-menu-show {
     position: absolute;
-    max-height: 110px;
+    /* max-height: 110px; */
+    min-height: 110px;
+    overflow: hidden;
+    /* height: 110px; */
+
     width: 130px;
-    height: 110px;
     padding: 6px;
     border-radius: 15px;
     background: #ffffff;
-    z-index: 99;
+    z-index: 1;
     margin-left: -70px;
 
     box-shadow: 0px 0px 35px rgba(0, 0, 0, 0.13),
@@ -35,13 +42,6 @@
       0px 0.750053px 0.0354451px rgba(0, 0, 0, 0.0452935);
   }
 
-  /* content: " ";
-    position: absolute;
-    right: 20px;
-    top: -15px;
-    border-bottom: 15px solid #ffffff;
-    border-right: 15px solid transparent;
-    border-left: 15px solid transparent; */
   .hidden-menu-show li {
     position: relative;
     height: 20px;
@@ -97,6 +97,11 @@
   #delete-modal {
     display: none;
   }
+  .red {
+    fill: #fff;
+    border: 2px solid #103047;
+    border-radius: 30%;
+  }
 </style>
 
 <div id="users">
@@ -146,6 +151,7 @@
         <td class="user-phone"><%=user.user_phone %></td>
         <td class="user-email"><%=user.user_mail %></td>
         <td class="user-status"><span class="status active">Active</span></td>
+
         <td class="user-more td-width-zero user-more-btn">
           <svg
             class="user-action-btn"
@@ -172,7 +178,7 @@
                 <a href="/update-user/<%= user.id %>">
                   <%# include("./icons/logout-svg.ejs"); -%>
                   <span>Update</span>
-                  </a>
+                </a>
               </li>
 
               <li>
@@ -237,19 +243,26 @@
   // const showMenu = document.querySelector(".hidden-menu-show");
 
   const userMoreBtn = document.querySelectorAll(".user-more-btn");
+  const userActionBtn = document.querySelectorAll(".user-action-btn");
 
   for (let i = 0; i < userMoreBtn.length; i++) {
     userMoreBtn[i].addEventListener("click", function () {
       // console.log(this.parentNode.childNodes[11].childNodes[3]);
       const currentMenu = this.childNodes[3];
+
       console.log(currentMenu);
       const showMenu = document.querySelector(".hidden-menu-show");
 
       if (!currentMenu.classList.contains("hidden-menu-show") && showMenu) {
         showMenu.classList.remove("hidden-menu-show");
       }
+      const btnActive = document.querySelector(".red");
+      if (!userActionBtn[i].classList.contains("red") && btnActive) {
+        btnActive.classList.remove("red");
+      }
 
       currentMenu.classList.toggle("hidden-menu-show");
+      userActionBtn[i].classList.toggle("red");
     });
   }
 
@@ -275,7 +288,7 @@
       cancelBtn[0].addEventListener("click", () => {
         deleteModal.style.display = "none";
       });
-      modalClose.addEventListener("click", () => {
+      modalClose[0].addEventListener("click", () => {
         alert("close");
         deleteModal.style.display = "none";
       });
