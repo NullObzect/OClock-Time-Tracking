@@ -1,0 +1,125 @@
+/* Dashboard start */
+
+.dashboard-none {
+  display: none;
+}
+.dashboard-head{
+  display: flex;
+  align-items: center;
+  justify-content: center
+}
+
+.oclock-box {
+  width: 860px;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  margin: 40px 30px;
+  background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.2) 0%,
+      rgba(239, 240, 255, 0.2) 100%
+    ),
+    #ffffff;
+  border: 1px solid #f2f2f2;
+  border-radius: 45px;
+  box-shadow: 0px 21.2322px 50.4791px rgba(5, 51, 143, 0.0749213),
+    0px 12.4912px 20.6513px rgba(5, 51, 143, 0.0778534),
+    0px 6.16275px 7.53556px rgba(5, 51, 143, 0.0661684);
+}
+.time-box {
+  flex-grow: 1;
+}
+.current-time {
+  font-size: 36px;
+  font-weight: 700;
+  padding: 0px 0 0 40px;
+  color: var(--deep);
+}
+.time-meridiem {
+  font-size: 20px;
+}
+.current-date {
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 0 0 40px;
+  color: var(--deep2);
+}
+.start-details {
+  border-left: 1px solid #bdbdbd;
+  flex-grow: 2;
+  font-size: 14px;
+  font-weight: 600;
+  /* height: 80px; */
+  line-height: 22px;
+  padding-left: 20px;
+}
+.start-details tr td:nth-child(1) {
+  padding-right: 10px;
+}
+.counter {
+  width: 160px;
+  font-size: 35px;
+  font-weight: 600;
+  flex-grow: 2;
+}
+.oclock-box .button {
+  flex-grow: 1;
+}
+.button svg {
+  height: 45px;
+  cursor: pointer;
+}
+
+.project-work {
+  padding-right: 10px;
+}
+
+.dashboard-reports {
+  border-collapse: collapse;
+  margin: 25px 40px;
+ 
+}
+.dashboard-reports tbody td {
+  border-bottom: 1px solid #b9b9b9;
+}
+.dashboard-reports thead {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--deep-gray);
+}
+
+.dashboard-reports tbody {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--deep2);
+}
+.dashboard-reports th,
+.dashboard-reports td {
+  max-width: 300px;
+  min-width: 180px;
+  padding: 20px 10px;
+}
+.project-work {
+  max-width: 300px;
+  overflow-wrap: break-word;
+}
+.dashboard-reports td:nth-last-child(1) {
+  width: 0;
+}
+.dashboard-reports td .username {
+  display: flex;
+  text-align: center;
+}
+#hidden-data h5{
+  margin: auto;
+  width: 100%;
+  text-align: center;
+}
+.title-for-cnt-ely{
+  margin: auto;
+  width: 100%;
+  text-align: center;
+}

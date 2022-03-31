@@ -1,0 +1,94 @@
+/* User start */
+#users {
+  width: 100%;
+  min-height: 70vh;
+  margin: auto;
+}
+.text-head {
+  display: flex;
+  justify-content: space-between;
+  margin: 30px 40px;
+}
+.text-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--deep);
+}
+.add-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 16px;
+  background: none;
+  border: 1px solid #c8c8c8;
+  border-radius: 15px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--deep2);
+}
+.add-btn:hover {
+  cursor: pointer;
+  background: #efefef;
+}
+.add-icon {
+  height: 24px;
+  width: 24px;
+  margin: 10px;
+  stroke: var(--deep2);
+}
+.add-icon,
+.add-user-text {
+  display: inline-flex;
+  align-items: center;
+}
+#users .table {
+  border-collapse: collapse;
+  margin: 25px 40px;
+}
+.table tbody tr {
+  border-bottom: 1px solid #b9b9b9;
+}
+.table thead {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--deep-gray);
+}
+.table tbody {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--deep2);
+}
+.table th,
+.table td {
+  max-width: 300px;
+  min-width: 120px;
+  padding: 8px 10px;
+}
+
+.table td .username {
+  display: flex;
+  text-align: center;
+}
+
+#role {
+  color: var(--deep-gray);
+  font-size: 12px;
+}
+.status {
+  border-radius: 15px;
+  padding: 5px 20px;
+}
+.active {
+  background: #e1ebff;
+}
+.user-more svg:hover {
+  cursor: pointer;
+  fill: #efefef;
+}
+.table tbody .table-img img {
+  width: 50px;
+  height: 50px;
+  border: 1px solid #dfdfdf;
+  box-sizing: border-box;
+  border-radius: 19px;
+  margin: 10px 15px 10px 0px;
+}

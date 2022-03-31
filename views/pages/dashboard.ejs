@@ -124,33 +124,34 @@
   </div>
 
   <div id="dashboard-info" class="dashboard-info <%=checkTodayReportEmptyOrNot.length !== 0 ? '' : 'dashboard-none' %>">
-    <table class="dashboard-reports">
-      <thead>
-        <tr>
-          <td class="project-name">Project Name</td>
-          <td class="project-work">Work details</td>
-          <td>Start</td>
-          <td>End</td>
-          <td>Total</td>
-        </tr>
-      </thead>
-
-      <tbody id="todayReport" class="dashboard-reports-tbody">
-
-        <!---- Today details condition check --> 
-
-        <% today.map(today=>{ %>
-        <tr>
-          <td class="project-name"><%= today.project_name%></td>
-          <td class="project-work"><%= today.work_details%></td>
-          <td><%= today.start%></td>
-          <td><%= today.end%></td>
-          <td><%= today.total%></td>
-
-        </tr>
-        <%}) %>
-      </tbody>
-    </table>
+    <div class="scroll-table">
+      <table class="dashboard-reports"  >
+        <thead>
+          <tr>
+            <td class="project-name">Project Name</td>
+            <td class="project-work">Work details</td>
+            <td>Start</td>
+            <td>End</td>
+            <td>Total</td>
+          </tr>
+        </thead>
+  
+        <tbody id="todayReport" class="dashboard-reports-tbody">
+  
+          <!---- Today details condition check --> 
+  
+          <% today.map(today=>{ %>
+          <tr>
+            <td class="project-name"><%= today.project_name%></td>
+            <td class="project-work"><%= today.work_details%></td>
+            <td><%= today.start%></td>
+            <td><%= today.end%></td>
+            <td><%= today.total%></td>
+          </tr>
+          <%}) %>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <%if(checkTodayReportEmptyOrNot.length === 0){ %>

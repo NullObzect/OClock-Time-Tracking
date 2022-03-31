@@ -1,0 +1,310 @@
+.reports-container {
+  margin: 10px 20px;
+}
+.reports-container .profile {
+  display: flex;
+  margin: 10px 0px;
+}
+.avatar img {
+  width: 160px;
+  height: 160px;
+  border: 1px solid #e6e6e6;
+  border-radius: 50%;
+  margin-right: 20px;
+}
+
+#edit-btn {
+  position: relative;
+  right: -40px;
+  bottom: 60px;
+}
+#edit-btn label svg {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+.social-active svg {
+  fill: var(--deep-gray);
+}
+.profile-info {
+  margin: 20px 25px;
+}
+.profile-info .username {
+  color: var(--black);
+  font-size: 20px;
+  font-weight: 700;
+  padding-bottom: 5px;
+}
+.profile-info .role {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--deep2);
+}
+.profile-details {
+  margin-top: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--black);
+}
+.profile-details .email,
+.phone {
+  padding-bottom: 8px;
+}
+.social-icon span svg {
+  height: 22px;
+  width: 22px;
+  text-decoration: none;
+}
+.social-icon span a {
+  text-decoration: none;
+}
+.social-icon span {
+  padding-right: 10px;
+}
+.work-details {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+.box tr td {
+  line-height: 18px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #3d4e5e;
+}
+.box {
+  width: 251px;
+  height: 150px;
+  padding: 9px;
+  border: 1px solid #e6e6e6;
+  border-radius: 15px;
+  margin: 6px;
+}
+.box h2 {
+  padding-bottom: 8px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--deep);
+}
+.box td span {
+  font-size: 12px;
+  width: 500;
+}
+.high::before {
+  content: url("/icons/high.svg");
+  margin: 0px 8px;
+}
+.high {
+  color: #0bd75c;
+}
+.low::before {
+  content: url("/icons/low.svg");
+  margin: 0px 8px;
+}
+.low {
+  color: #ff7272;
+}
+.box tr td:nth-child(1) {
+  padding-right: 10px;
+}
+.box tr td:nth-child(2) {
+  font-size: 12px;
+  font-weight: 600;
+  color: #212d37;
+}
+
+.today {
+  background: var(--prim-fade);
+}
+.week {
+  background: var(--success-fade);
+}
+.month {
+  background: var(--yellow-fade);
+}
+.year {
+  background: var(--fade-purple);
+}
+#profile {
+  width: 100%;
+  position: relative;
+}
+#profile .container {
+}
+.container {
+  text-align: center;
+  align-items: center;
+  padding-top: 20px;
+}
+.profile-avatar {
+  height: 100px;
+  margin-bottom: 20px;
+}
+#edit-btn {
+  position: relative;
+  right: -40px;
+  bottom: 60px;
+}
+#edit-btn label svg {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+.profile-avatar img {
+  width: 180px;
+  height: 180px;
+  margin-bottom: 20px;
+  border: 1px solid #c8c8c8;
+  border-radius: 50%;
+}
+.container input,
+.container select {
+  width: 350px;
+  height: 40px;
+  padding: 6px;
+  margin: 12px 0px;
+  font-size: 16px;
+  font-weight: 400;
+  color: #5e5e5e;
+  border: 1px solid #eaeef4;
+  border-radius: 12px;
+  text-align: center;
+}
+.container label {
+  display: block;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
+  color: var(--black);
+}
+.submit-btn {
+  width: 350px;
+  height: 40px;
+  padding: 6px;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19px;
+  background: #0094ff;
+  margin: 20px 0px;
+  border: none;
+  border-radius: 15px;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.date-range-input {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+.date-range-input-container{
+background: #f3f3f3;
+border-radius: 8px;
+padding: 5px 10px;
+height: 45px;
+}
+.date-input{
+background: #f3f3f3;
+width: 150px;
+padding:  6px;
+font-size: 16px;
+font-weight: 400;
+color: #5E5E5E;
+border: none;
+outline: none;
+/* border: 1px solid #EAEEF4;
+border-radius: 12px; */
+text-align: left;
+}
+.date-input:focus, input[type="data"]:focus{
+border: none;
+outline: none !important;
+
+}
+.report-title-container{
+margin-top: 8px;
+}
+.report-title-container p{
+font-size: 14px;
+font-weight: 500;
+}
+
+.an-employee-report{
+  margin: 20px 0;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #818181;
+  text-transform: capitalize;
+  
+}
+
+
+.an-employee-report tr{
+  text-align: left;
+}
+.an-employee-report thead {
+padding: 40px;
+font-size: 16px;
+font-weight: 700;
+color: var(--deep-gray);
+}
+
+
+.an-employee-report tbody {
+font-size: 14px;
+font-weight: 500;
+color: var(--deep2);
+}
+
+.an-employee-report thead tr th{
+padding-bottom: 25px;
+}
+.an-employee-report tbody tr td {
+padding-top: 20px;
+}
+.an-employee-report th,
+.an-employee-report td {
+width: 300px;
+}
+
+
+.bg-red-200 {
+  color: #f81919;
+}
+.bg-red-400 {
+  color: orangered;
+}
+.bg-yellow-200 {
+  color: tomato;
+}
+#reports input:focus {
+outline: none !important;
+border: none;
+
+
+}
+
+.filtered-report{
+background: #f3f3f3;
+border-radius: 22px;
+padding: 15px 30px;
+display: flex;
+justify-content: space-between;
+margin-top: 20px;
+display: none;
+
+}
+.filtered-report .box{
+background-color: #f3f3f3;
+border: none;
+}
+
+.test{
+display: flex;
+justify-content: space-between;
+margin-top: 20px;
+}
+#an-user-report span, table thead span{
+font-size: 10px;
+}

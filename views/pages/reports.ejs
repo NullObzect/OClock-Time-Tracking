@@ -1,120 +1,6 @@
 <%- include("../partials/header"); -%>
 <style>
-  .date-range-input {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-  }
-.date-range-input-container{
-  background: #f3f3f3;
-  border-radius: 8px;
-  padding: 5px 10px;
-  height: 45px;
-}
-  .date-input{
-  background: #f3f3f3;
-  width: 150px;
-  padding:  6px;
-  font-size: 16px;
-  font-weight: 400;
-  color: #5E5E5E;
-  border: none;
-  outline: none;
-  /* border: 1px solid #EAEEF4;
-  border-radius: 12px; */
-  text-align: left;
-}
-.date-input:focus, input[type="data"]:focus{
-  border: none;
-  outline: none !important;
 
-}
-.report-title-container{
-  margin-top: 8px;
-}
-.report-title-container p{
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.an-employee-report{
-    margin: 20px 0;
-    padding: 20px;
-    border-radius: 12px;
-    border: 1px solid #818181;
-    text-transform: capitalize;
-    
-  }
-
-
-.an-employee-report tr{
-    text-align: left;
-  }
-.an-employee-report thead {
-  padding: 40px;
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--deep-gray);
-}
-
-
-.an-employee-report tbody {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--deep2);
-}
-
-.an-employee-report thead tr th{
-  padding-bottom: 25px;
-}
-.an-employee-report tbody tr td {
-  padding-top: 20px;
-}
-.an-employee-report th,
-.an-employee-report td {
-  width: 300px;
-}
-
-
-  .bg-red-200 {
-    color: #f81919;
-  }
-  .bg-red-400 {
-    color: orangered;
-  }
-  .bg-yellow-200 {
-    color: tomato;
-  }
-  #reports input:focus {
-  outline: none !important;
-  border: none;
-
-  
-}
-
-.filtered-report{
-  background: #f3f3f3;
-  border-radius: 22px;
-  padding: 15px 30px;
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-  display: none;
-
-}
-.filtered-report .box{
-  background-color: #f3f3f3;
-  border: none;
-}
-
-.test{
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-#an-user-report span, table thead span{
-  font-size: 10px;
-}
 </style>
 
 
@@ -365,7 +251,8 @@
 
 <!-- Markup for report table  -->
 <div class="an-employee-report">
-  <table>
+  <div class="scroll-table">
+  <table class="table">
     <thead>
       <tr>
         <th>Date</th>
@@ -409,6 +296,7 @@
     </tbody>
 
   </table>
+</div>
 </div>
 
 </div>

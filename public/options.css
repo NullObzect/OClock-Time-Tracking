@@ -1,0 +1,129 @@
+#options {
+}
+.options-cards {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.options-cards a {
+  text-decoration: none;
+}
+.options-card {
+  width: 200px;
+  height: 200px;
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e8e8e8;
+  border-radius: 20px;
+  padding: 20px;
+  cursor: pointer;
+}
+
+.card-icon {
+  padding: 10px;
+  border-radius: 50%;
+  background: var(--deep);
+}
+.card-icon svg {
+  height: 40px;
+  width: 40px;
+  stroke: var(--white);
+}
+.card-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--deep);
+  padding: 10px 8px;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+}
+.card-text {
+  width: 90%;
+  font-size: 12px;
+  text-align: center;
+  color: var(--deep);
+  font-weight: 400;
+  letter-spacing: 2px;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+.options-card:hover {
+  background: var(--fade-bluish-gray);
+}
+
+.options-card:hover .card-text {
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+.project-table {
+  border-collapse: collapse;
+  margin: 30px 40px;
+}
+.project-table thead {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--deep-gray);
+}
+.project-table thead td {
+  padding-bottom: 20px;
+}
+
+.project-table tbody {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--deep2);
+}
+.project-table thead td {
+  max-width: 300px;
+  min-width: 160px;
+  padding: 20px 10px;
+}
+.project-table tbody td {
+  border-bottom: 1px solid #b9b9b9;
+  max-width: 300px;
+  min-width: 80px;
+  padding: 20px 10px;
+}
+
+.project-table tbody td {
+  margin-bottom: -1px;
+}
+
+.action-btn,
+.update-btn,
+.delete-btn,
+.save-btn {
+  background-color: #103047;
+  border-radius: 10px;
+  color: #fff;
+  padding: 8px 12px;
+  border: none;
+  outline: none;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  width: 100%;
+}
+.save-btn {
+  background-color: rgb(17, 221, 17);
+}
+.delete-btn {
+  background-color: rgb(255, 0, 0);
+}
+.action-btn,
+.save-btn {
+  width: 60px;
+}
+.update-btn,
+.delete-btn,
+.save-btn {
+  display: none;
+}
+.btn-group {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+}
