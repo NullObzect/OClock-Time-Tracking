@@ -257,8 +257,8 @@ main::-webkit-scrollbar-thumb {
   line-height: 54px;
 }
 .nav-list li a svg {
-  width: 34px;
-  height: 34px;
+  width: 24px;
+  height: 24px;
   margin: 0 14px;
 }
 .nav-list li a {
@@ -647,7 +647,7 @@ main {
   margin: 25px 40px;
 }
 .dashboard-reports tbody td {
-  padding-bottom: 10px;
+  padding: 25px 0;
   border-bottom: 1px solid #b9b9b9;
 }
 .dashboard-reports thead {
@@ -657,6 +657,7 @@ main {
 }
 .dashboard-reports thead tr td {
   padding-bottom: 10px;
+  padding-top: 25px;
 }
 
 .dashboard-reports tbody {
@@ -666,9 +667,7 @@ main {
 }
 .dashboard-reports th,
 .dashboard-reports td {
-  width: 200px;
-  padding-top: 25px;
-
+  width: 300px;
 }
 .project-work {
   max-width: 300px;
