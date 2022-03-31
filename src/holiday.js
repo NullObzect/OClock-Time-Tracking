@@ -1,7 +1,7 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-return-assign */
 import {
-  aJAXPostRequest, dateDiff, dateFormate, getCurrentDate
+  aJAXPostRequest, dateDiff, dateFormate, formValidation, getCurrentDate
 } from './helper.js';
 
 function pagination(pageNumber, numberOfPage, page) {
@@ -228,7 +228,6 @@ function reportHolidayShow(holidayTable, dateRangeReport) {
   ).join('');
 }
 
-
 console.log('end of script file');
 
 async function page(pageNo) {
@@ -260,3 +259,6 @@ async function page(pageNo) {
   reportHolidayShow(holidayTable, dateRangeReport)
   pagination(pageNumber, numberOfPage, pageNo)
 }
+// form validation
+
+formValidation()

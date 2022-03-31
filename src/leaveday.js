@@ -1,8 +1,8 @@
 import {
-  aJAXPostRequest, dateDiff, dateFormate, getCurrentDate
+  aJAXPostRequest, dateDiff, dateFormate, getCurrentDate, formValidation,
 } from './helper.js';
 
- async function pagination(pageNumber, numberOfPage, page) {
+async function pagination(pageNumber, numberOfPage, page) {
   const pagination = document.querySelector('#pagination')
   pagination.innerHTML = `<li class="first page" > </li>
  <li class="prev page"></li>
@@ -225,3 +225,6 @@ function reportHolidayShow(holidayTable, dateRangeReport) {
 
   ).join('');
 }
+
+// form validation
+formValidation()

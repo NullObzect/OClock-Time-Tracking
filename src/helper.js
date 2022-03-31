@@ -72,6 +72,58 @@ const iconCheck = (e) => {
   }
 }
 
+function formValidation() {
+  const saveBtn = document.querySelector('.submit-btn');
+  const form = document.querySelector('form');
+  const addModal = document.querySelector('#myModal')
+  saveBtn.addEventListener('click', (e) => {
+    e.preventDefault()
+    const error = []
+    const errorPlaceholders = document.querySelectorAll('p.error');
+    for (let i = 0; i < errorPlaceholders.length; i++) {
+      errorPlaceholders[i].style.display = 'none';
+    }
+    const inputErrors = document.querySelectorAll('input.error');
+    if (inputErrors.length > 0) {
+      for (let j = 0; j < inputErrors.length; j++) {
+        inputErrors[j].classList.remove('error');
+      }
+    }
+    const formData = new FormData(form);
+    // eslint-disable-next-line no-restricted-syntax
+    for (const x of formData.entries()) {
+      if (x[1] === '') {
+        const fieldName = x[0];
+        error.push(fieldName)
+        console.log(error)
+      }
+      // eslint-disable-next-line no-restricted-syntax
+      for (const fieldName of error) {
+        const errorPlaceholder = document.querySelector(`.${fieldName}-error`);
+        errorPlaceholder.textContent = `${fieldName} is required!`;
+        errorPlaceholder.style.display = 'block';
+      }
+    }
+    const select = document.querySelector('select')
+    if (select) {
+      if (document.querySelector('select').options.selectedIndex === 0) {
+        const fieldName = 'select'
+        const errorPlaceholder = document.querySelector(`.${fieldName}-error`);
+        errorPlaceholder.textContent = `${fieldName} is required!`;
+        errorPlaceholder.style.display = 'block';
+        error.push(fieldName)
+      }
+    }
+
+    console.log(error)
+
+    if (error.length === 0) {
+      form.submit()
+      form.reset()
+      addModal.style.display = 'none';
+    }
+  });
+}
 
 // exports.getDateFormat = { getDateFormat, aJAXPostRequest };
 
@@ -83,4 +135,5 @@ export {
   getCurrentDate,
   iconCheck,
   test,
+  formValidation,
 };
