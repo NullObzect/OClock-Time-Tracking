@@ -9,6 +9,8 @@ const config = {
     holiday: ['@babel/polyfill', './src/holiday.js'],
     startData: ['@babel/polyfill', './src/startData.js'],
     leaveday: ['@babel/polyfill', './src/leaveday.js'],
+    project: ['@babel/polyfill', './src/project.js'],
+    main: ['@babel/polyfill', './src/main.js'],
   },
   output: {
     path: path.resolve(__dirname, 'public/js/'),

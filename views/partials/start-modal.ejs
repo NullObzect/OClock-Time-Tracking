@@ -2,7 +2,7 @@
   <div class="modal">
     <div class="modal-head">
       <div class="modal-title">Start Work</div>
-      <div onclick="closeModal()" class="modal-close">
+      <div class="modal-close">
         <%- include("./icons/close-svg"); -%>
       </div>
     </div>
@@ -21,6 +21,7 @@
                 <%}) %>
               </select>
             </div>
+            <p class="error select-error"></p>
           </label>
           <label for="text">
             Work details
@@ -32,6 +33,7 @@
                 rows="3"
               ></textarea>
             </div>
+            <p class="error workDetails-error"></p>
           </label>
           <div class="">
             <button id="start-button" class="submit-btn">
