@@ -26,7 +26,6 @@ const HolidayModel = {
   },
   updateHoliday: async (id, title, start, end) => {
     const getUpdateSql = `UPDATE holidays SET title = '${title}', start = '${start}', end = '${end}' WHERE id = ${id}`;
-    // const value = [hId, title, start, end, id]
     const [row] = await dbConnect.promise().execute(getUpdateSql);
     return row.affectedRows
   },

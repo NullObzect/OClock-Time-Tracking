@@ -249,7 +249,10 @@
     </div>
 </div>
 
-<!-- Markup for report table  -->
+        
+        
+          <!-- Markup for report table  -->
+
 <div class="an-employee-report">
   <div class="scroll-table">
   <table class="table">
@@ -265,7 +268,13 @@
 
     <tbody id="an-user-report">
 
-       
+      <% if(lastSevenDaysReports.length === 0) { %>
+        <tr>
+          
+          <td colspan="5" class="report-not-found">No, report founded !!!</td>
+          
+        </tr>
+      <% } else { %>
       <% lastSevenDaysReports.map(el => {%>
       <tr
         class="
@@ -291,7 +300,7 @@
         
       </tr>
       <% }) %>
-
+      <% } %>
       
     </tbody>
 
@@ -306,8 +315,8 @@
   </ul>
 </div>
 <% } else{ %> 
-<div class="no-report">
-  <h4 >No report found !</h4>
+<div class="report-not-found">
+  <h4 >No, report founded !!!</h4>
   <% } %>
 <script>
   

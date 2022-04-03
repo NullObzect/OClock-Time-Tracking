@@ -1,4 +1,4 @@
-.<%- include("../partials/header"); -%>
+<%- include("../partials/header"); -%>
 
 <style>
   .leaveday-table input[type="text"] {
@@ -167,8 +167,8 @@
       </tr>
     </thead>
     <tbody id="leaveday-table">
-      <%if(loggedInUser.userRole==='admin'){ %> <%
-      employeeLeaveList.map((user,idx) =>{ %>
+      <%if(loggedInUser.userRole==='admin'){ %>
+       <%employeeLeaveList.map((user,idx) =>{ %>
       <tr>
         <td class="table-img td-width-zero">
           <% if(user.avatar !== null && user.avatar.match(/^(http|https):/g)){
@@ -192,15 +192,14 @@
         </td>
         <td><input class="end-val" type="text" value="<%=user.end%>" /></td>
         <td class="duration"><%= user.duration + ' ' + 'day' %></td>
-        <td class="">
+        <td>
           <div class="btn-group">
             <button type="button" class="action-btn">Action</button>
             <button type="button" class="update-btn">Update</button>
             <button type="button" class="save-btn">Save</button>
-            <input type="hidden" class="leave-id" value="<%= user.id %>" />
+            <input type="hidden" class="leave-id delete-id" value="<%= user.id %>" />
             <a
-              onclick=" return confirm('Are you Sure???')"
-              href="leavedays/delete/<%= user.id %>"
+            class="delete-data"
               ><button class="delete-btn">Delete</button>
             </a>
           </div>
@@ -236,8 +235,9 @@
       <% }) %> <% } %>
     </tbody>
   </table>
-</div>
-  
+  <!-- Markup for user delete modal -->
+
+<%- include("../partials/delete-modal.ejs"); -%>
   <!--- Markup for pagination -->
 
   <div class="pagination">

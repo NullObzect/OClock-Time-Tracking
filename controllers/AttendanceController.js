@@ -47,10 +47,6 @@ const AttendanceController = {
       // count today total work time and store in database
       const isWorkTime = await AttendanceModel.getCurrentDateWorkTime(id)
       const { totalWorkTime } = JSON.parse(JSON.stringify(isWorkTime))
-
-      // if (isUserId === undefined) {
-      //   await AttendanceModel.insertLog(id)
-      // } else if (isUserId)
       if (isUserId) {
         await AttendanceModel.updateLog(id)
         await AttendanceModel.updateLogTotalWorkTime(id, totalWorkTime)

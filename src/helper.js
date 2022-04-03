@@ -125,6 +125,30 @@ function formValidation() {
   });
 }
 
+// delete function
+function deleteData(deleteUrl) {
+  const deleteData = document.querySelectorAll('.delete-data');
+  const deleteModal = document.querySelector('.delete-modal');
+  const deleteId = document.querySelectorAll('.delete-id');
+  const deleteBtn = document.querySelectorAll('.modal-delete-btn');
+  const cancelBtn = document.querySelectorAll('.modal-cancel-btn');
+  for (let i = 0; i < deleteData.length; i++) {
+    deleteData[i].addEventListener('click', () => {
+      // alert("delete");
+      deleteModal.style.display = 'block';
+      console.log(deleteId[i].value);
+
+      deleteBtn[0].addEventListener('click', () => {
+        console.log(deleteId[i].value);
+        window.location.href = `${deleteUrl}${deleteId[i].value}`;
+      });
+      cancelBtn[0].addEventListener('click', () => {
+        deleteModal.style.display = 'none';
+      });
+    });
+  }
+}
+
 // exports.getDateFormat = { getDateFormat, aJAXPostRequest };
 
 export {
@@ -136,4 +160,5 @@ export {
   iconCheck,
   test,
   formValidation,
+  deleteData,
 };

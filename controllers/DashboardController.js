@@ -10,12 +10,9 @@ const DashboardController = {
     const { user } = req
 
     const checkTodayReportEmptyOrNot = await LogModel.checkTodayReportEmptyOrNot(user.id);
-    console.log('checkTodayReportEmptyOrNot', checkTodayReportEmptyOrNot.length);
-    // const [user] = await UserModel.findUserByEmail(req.user.user_mail)
     const [{ start }] = await AttendanceModel.todayStartTime(user.id)
     const [{ end }] = await AttendanceModel.todayEndTime(user.id)
     const projects = await OptionsModel.getProjects()
-    /// const weekHistory = await AttendanceModel.getWeekHistory(user.id)
     const today = await AttendanceModel.getToday(user.id)
     const [tTotal] = await AttendanceModel.todayTotal(user.id)
     const [wTotal] = await AttendanceModel.weekTotal(user.id)
@@ -25,13 +22,10 @@ const DashboardController = {
     const breakTime = today.length
 
    
-    console.log('xxxxx', req.params.id)
 
     // is end time null
     const isEndTimeNull = await AttendanceModel.getEndTimeIsNull()
-    console.log({ isEndTimeNull });
 
-    // console.log(req.loggedInUser)
     res.render('pages/dashboard', {
       start,
       end,
@@ -55,7 +49,6 @@ const DashboardController = {
   getUpdateOptionValues: async (req, res) => {
     try {
       const { optionId, optionValue } = req.body;
-      console.log(optionId, optionValue);
       const isUpdate = await OptionsModel.updateOptionValue(optionValue, optionId)
       if (isUpdate.errno) {
         res.send('Error')

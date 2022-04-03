@@ -1,5 +1,5 @@
 import {
-  aJAXPostRequest, dateDiff, dateFormate, getCurrentDate, formValidation,
+  aJAXPostRequest, dateDiff, dateFormate, deleteData, formValidation, getCurrentDate
 } from './helper.js';
 
 async function pagination(pageNumber, numberOfPage, page) {
@@ -206,15 +206,14 @@ function reportHolidayShow(holidayTable, dateRangeReport) {
     </td>
     <td><input class="end-val" type="text" value="${day.end}" /></td>
     <td class="duration">${day.duration}   day</td>
-    <td class="">
+    <td >
       <div class="btn-group">
         <button type="button" class="action-btn">Action</button>
         <button type="button" class="update-btn">Update</button>
         <button type="button" class="save-btn">Save</button>
-        <input type="hidden" class="leave-id" value="${day.id}" />
+        <input type="hidden" class="leave-id delete-id" value="${day.id}" />
         <a
-          onclick=" return confirm('Are you Sure???')"
-          href="leavedays/delete/${day.id}"
+          class="delete-data"
           ><button class="delete-btn">Delete</button>
         </a>
       </div>
@@ -224,7 +223,10 @@ function reportHolidayShow(holidayTable, dateRangeReport) {
      `,
 
   ).join('');
+  deleteData('/leavedays/delete/')
 }
+// delete leave day
+deleteData('/leavedays/delete/')
 
 // form validation
 formValidation()
