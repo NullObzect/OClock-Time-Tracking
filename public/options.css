@@ -4,13 +4,14 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  flex-wrap: wrap;
 }
 .options-cards a {
   text-decoration: none;
 }
 .options-card {
-  width: 200px;
-  height: 200px;
+  width: 160px;
+  height: 160px;
   margin: 20px;
   display: flex;
   flex-direction: column;
@@ -28,12 +29,12 @@
   background: var(--deep);
 }
 .card-icon svg {
-  height: 40px;
-  width: 40px;
+  height: 30px;
+  width: 30px;
   stroke: var(--white);
 }
 .card-title {
-  font-size: 22px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--deep);
   padding: 10px 8px;
@@ -42,13 +43,14 @@
 }
 .card-text {
   width: 90%;
-  font-size: 12px;
+  font-size: 10px;
   text-align: center;
   color: var(--deep);
   font-weight: 400;
   letter-spacing: 2px;
   opacity: 0;
   transition: all 0.3s ease;
+
 }
 .options-card:hover {
   background: var(--fade-bluish-gray);

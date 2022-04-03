@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap");
-@import 'dashboard.css';
 @import 'user.css';
+@import 'dashboard.css';
 @import 'report.css';
 @import 'options.css';
 
@@ -386,6 +386,8 @@ main::-webkit-scrollbar-thumb {
 .nav-list .active svg {
   color: var(--white);
   stroke: var(--white);
+  width: 26px;
+  height: 26px;
 }
 .nav-list .active a span {
   color: var(--white);
@@ -578,8 +580,39 @@ main {
   stroke: var(--primary);
 }
 
-/* Dashboard start */
+/* Report page css */
+/* Modal btn style */
+.modal-btn-container {
+  margin-top: 20px;
+}
 
+.delete-modal {
+  display: none;
+}
+
+/* Report not founded css */
+.report-not-found {
+  margin-top: 50px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--deep);
+}
+.modal-delete-btn,
+.modal-cancel-btn {
+  background-color: #103047;
+  border-radius: 10px;
+  color: #fff;
+  padding: 8px 12px;
+  border: none;
+  outline: none;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.modal-delete-btn {
+  background-color: #ff0000;
+}
 
 
 
@@ -749,6 +782,9 @@ main {
     width: 320px;
     margin: 8px;
   }
+  .options-cards{
+    justify-content: space-around;
+  }
 }
 @media only screen and (max-width: 480px) {
   .oclock-box {
@@ -820,6 +856,41 @@ main {
     padding: 8px;
     border-radius: 13px;
   }
+  .options-card {
+    width: 100px;
+    height: 100px;
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e8e8e8;
+    border-radius: 20px;
+    padding: 20px;
+    cursor: pointer;
+  }
+  
+  .card-icon {
+    padding: 10px;
+    border-radius: 50%;
+    background: var(--deep);
+  }
+  .card-icon svg {
+    height: 20px;
+    width: 20px;
+    stroke: var(--white);
+  }
+  .card-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--deep);
+    padding: 10px 8px;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+  }
+  .card-text {
+    display: none;
+  }
 }
 @media only screen and (max-width: 320px) {
   .oclock-box {
@@ -841,37 +912,6 @@ main {
   .counter {
     font-size: 26px;
   }
+  
 }
 
-/* Report page css */
-/* Modal btn style */
-.modal-btn-container {
-  margin-top: 20px;
-}
-.modal-delete-btn,
-.modal-cancel-btn {
-  background-color: #103047;
-  border-radius: 10px;
-  color: #fff;
-  padding: 8px 12px;
-  border: none;
-  outline: none;
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-}
-.modal-delete-btn {
-  background-color: #ff0000;
-}
-.delete-modal {
-  display: none;
-}
-
-/* Report not founded css */
-.report-not-found {
-  margin-top: 50px;
-  text-align: center;
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--deep);
-}

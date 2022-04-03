@@ -8,7 +8,7 @@ function pagination(pageNumber, numberOfPage, page) {
   const pagination = document.querySelector('#pagination')
   pagination.innerHTML = `<li class="first page" > </li>
  <li class="prev page"></li>
- ${pageNumber.map((p) => `<a class=${page == p ? 'page-active' : ''} ><li class='page-li'>  ${p}  </li></a>`).join('')}
+ ${pageNumber.map((p) => `<a class=${page == p ? 'page-active' : ''} ><li class='page-li' data-page=${p}>  ${p}  </li></a>`).join('')}
  <li class="next page"></li>
  <li class="last page"></li>
  `
@@ -66,9 +66,12 @@ function loader(numberOfPage, pageNO) {
   })
   const pageLi = document.getElementsByClassName('page-li')
   for (let i = 0; i < pageLi.length; i++) {
-    pageLi[i].addEventListener('click', () => {
-      page(i + 1)
-    })
+    const pageNum = pageLi[i].dataset.page
+    if (pageNum !== '...') {
+      pageLi[i].addEventListener('click', () => {
+        page(pageNum)
+      })
+    }
   }
 }
 
