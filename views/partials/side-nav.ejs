@@ -1,11 +1,11 @@
 <div class="sidebar">
   <div class="logo-content">
     <div class="logo">
-      <a href="/"> <img src="/icons/logo.svg" alt="" /></a>
+      <a href="/"> <img width="150px" src="/icons/logo.svg" alt="" /></a>
     </div>
   </div>
   <ul class="nav-list">
-    <li class="">
+    <li class="navli">
       <a href="/dashboard">
         <%- include("./icons/dashboard-svg.ejs"); -%>
         <span class="link-name"> Dashboard </span>
@@ -32,24 +32,20 @@
       </a>
     </li>
   </ul>
-  <%- include("./more-option"); -%> <%- include("./notification"); -%>
+  <%- include("./more-option"); -%>
   <div class="sidebar-footer">
     <% if(profile.avatar !== null && profile.avatar.match(/^(http|https):/g)){
     %>
     <img
-      id="notification-btn"
-      class="notification-btn"
       src="<%= profile.avatar%>"
     />
     <%} else{%>
     <img
-      id="notification-btn"
-      class="notification-btn"
       src="/uploads/avatars/<%=profile.avatar != null ?  profile.avatar : 'demo-avatar.png' %>"
     />
     <% } %>
 
-    <div class="username"><%= profile.user_name %></div>
+    <div class="username"><%= profile.user_name.split(' ')[0] %></div>
     <div id="more-btn" class="more">
       <svg
         width="13"

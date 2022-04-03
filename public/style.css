@@ -249,7 +249,7 @@ main::-webkit-scrollbar-thumb {
 .sidebar {
   position: fixed;
   height: 100vh;
-  width: 240px;
+  width: 220px;
   padding: 32px 22px;
 }
 
@@ -264,11 +264,12 @@ main::-webkit-scrollbar-thumb {
   margin: 0 5px;
   list-style: none;
   line-height: 54px;
+  margin-bottom: 8px;
 }
 .nav-list li a svg {
-  width: 24px;
-  height: 24px;
-  margin: 0 14px;
+  width: 22px;
+  height: 22px;
+  margin: 0 16px;
 }
 .nav-list li a {
   color: var(--deep-gray);
@@ -277,36 +278,38 @@ main::-webkit-scrollbar-thumb {
   align-items: center;
   text-decoration: none;
   font-size: 16px;
-  font-weight: 600;
-  margin: 20px;
+  font-weight: 500;
+  width: 100%;
+  margin: 8px;
 }
 .nav-list li:hover {
   background-color: var(--deep);
   color: var(--white);
-  border-radius: 20px;
+  border-radius: 17px;
 }
 .nav-list li a:hover {
   color: var(--white);
   stroke: var(--white);
 }
+
 .sidebar-footer {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
   position: absolute;
-  bottom: 10px;
-  width: 200px;
-  height: 56px;
+  bottom: 20px;
+  width: 170px;
+  height: 46px;
   border: 1px solid #e8e8e8;
-  border-radius: 17px;
+  border-radius: 12px;
 }
 
 .sidebar-footer img {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   margin: 5px;
   border: 1px solid #e1e0e0;
-  border-radius: 14px;
+  border-radius: 10px;
 }
 .sidebar-footer .username {
   flex-grow: 2;
@@ -321,66 +324,16 @@ main::-webkit-scrollbar-thumb {
 .more:hover {
   stroke: var(--deep-gray);
 }
-.notification {
-  display: none;
-  position: absolute;
-  width: 300px;
-  height: 350px;
-  padding: 10px;
-  border-radius: 15px;
-  background: #ffffff;
-  left: 20px;
-  bottom: 90px;
-  box-shadow: 0px 23px 27px rgba(0, 0, 0, 0.13),
-    0px 6.96494px 6.11893px rgba(0, 0, 0, 0.0847066),
-    0px 2.51788px 1.42419px rgba(0, 0, 0, 0.065),
-    0px 0.750053px 0.0354451px rgba(0, 0, 0, 0.0452935);
-}
-.bottom-notification {
-  display: none;
-  /* bottom: ; */
-}
-.notification:after {
-  content: " ";
-  position: absolute;
-  left: 15px;
-  bottom: -15px;
-  border-top: 15px solid #ffffff;
-  border-right: 15px solid transparent;
-  border-left: 15px solid transparent;
-  border-bottom: none;
-}
-.notification li {
-  overflow: hidden;
-  list-style: none;
-  height: 40px;
-  padding: 5px;
-}
-.notification a {
-  color: var(--deep2);
-  stroke: var(--deep2);
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  height: 50px;
-  font-size: 14px;
-  font-weight: 600;
-  margin: 8px 0px 15px 0px;
-  padding: 5px;
-}
-.notification a:hover {
-  background-color: #f6f6f6;
-  border-radius: 9px;
-}
+
 .more-option {
   display: none;
   position: absolute;
-  width: 180px;
-  height: 80px;
+  width: 170px;
+  height: 70px;
   border-radius: 15px;
   background: #ffffff;
-  left: 48px;
-  bottom: 90px;
+  left: 30px;
+  bottom: 80px;
   box-shadow: 0px 23px 27px rgba(0, 0, 0, 0.13),
     0px 6.96494px 6.11893px rgba(0, 0, 0, 0.0847066),
     0px 2.51788px 1.42419px rgba(0, 0, 0, 0.065),
@@ -393,7 +346,7 @@ main::-webkit-scrollbar-thumb {
   content: " ";
   position: absolute;
   right: 20px;
-  bottom: -15px;
+  bottom: -10px;
   border-top: 15px solid #ffffff;
   border-right: 15px solid transparent;
   border-left: 15px solid transparent;
@@ -407,9 +360,9 @@ main::-webkit-scrollbar-thumb {
   line-height: 20px;
 }
 .more-option .more-icon svg {
-  width: 22px;
-  height: 22px;
-  margin: 0 20px;
+  width: 18px;
+  height: 18px;
+  margin: 0 10px;
 }
 .more-option li a {
   color: var(--deep2);
@@ -417,7 +370,7 @@ main::-webkit-scrollbar-thumb {
   display: flex;
   align-items: center;
   text-decoration: none;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   margin: 8px 0px 15px 0px;
   padding: 5px 0;
@@ -428,7 +381,7 @@ main::-webkit-scrollbar-thumb {
 }
 .nav-list .active {
   background-color: var(--deep);
-  border-radius: 20px;
+  border-radius: 17px;
 }
 .nav-list .active svg {
   color: var(--white);
@@ -559,15 +512,15 @@ main::-webkit-scrollbar-thumb {
 /* Bottom Nav Bar End */
 
 main {
-  width: cal(100% - 300px);
+  width: cal(100% - 210px);
   height: 95vh;
-  margin: 20px 20px 20px 240px;
+  margin: 20px 20px 20px 210px;
   border-radius: 15px;
   background: var(--white);
   /* background: black; */
   overflow: auto;
   z-index: 2;
-  padding: 20px;
+  padding: 0 10px 10px 10px;
 }
 
 /* Report date range */
@@ -712,13 +665,7 @@ main {
     width: 50px;
     height: 50px;
   }
-  .notification {
-    width: 95%;
-    bottom: 90px;
-  }
-  .notification:after {
-    left: 88%;
-  }
+
   .oclock-box {
   }
   .work-details {

@@ -1,4 +1,3 @@
-<%- include("./bottom-notification"); -%>
 <div class="header">
   <div class="nav-container">
     <div class="nav-logo">
@@ -75,12 +74,10 @@
       <div id="nav-image" class="nav-image">
         <% if(profile.avatar !== null && profile.avatar.match(/^(http|https):/g)){ %>
           <img
-          id="bottom-notification-btn"
           src="<%= profile.avatar%>"
           />
       <%} else{%>
         <img
-        id="bottom-notification-btn"
         src="/uploads/avatars/<%=profile.avatar != null ?  profile.avatar : 'demo-avatar.png' %>" />
         <% } %> 
     

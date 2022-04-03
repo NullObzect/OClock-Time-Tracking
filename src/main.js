@@ -16,29 +16,16 @@ if (navClose) {
 const moreButton = document.getElementById('more-btn')
 const moreOption = document.getElementById('more-option')
 if (moreButton) {
-  moreButton.addEventListener('click', () => {
-    moreOption.classList.toggle('show-more')
+  // moreButton.addEventListener('click', () => {
+  //   moreOption.classList.toggle('show-more')
+  // })
+  moreButton.addEventListener('mouseenter', () => {
+    moreOption.classList.add('show-more')
   })
+  // moreButton.addEventListener('mouseout', () => {
+  //   moreOption.classList.remove('show-more')
+  // })
 }
-const notificationButton = document.querySelector('#notification-btn')
-const notification = document.querySelector('#notification')
-if (notificationButton) {
-  notificationButton.addEventListener('click', () => {
-    console.log('ccc')
-    console.log(notification)
-    notification.classList.toggle('show-more')
-  })
-}
-const bottomNotificationButton = document.querySelector('#bottom-notification-btn')
-const notificationShow = document.querySelector('#bottom-notification')
-if (notificationShow) {
-  bottomNotificationButton.addEventListener('click', () => {
-    console.log('ccc')
-    console.log(notification)
-    notificationShow.classList.toggle('show-more')
-  })
-}
-
 const currentLocation = location.href.split('/')[3]
 const navMenuUl = document.querySelector('.nav-list')
 const navList = navMenuUl.querySelectorAll('li')
@@ -80,7 +67,21 @@ addBtn.addEventListener('click', () => {
 
 window.onclick = function (event) {
   const { target } = event
-  if (target == modal || target == deleteModal) {
+
+  if (moreOption) {
+    moreOption.classList.remove('show-more')
+  }
+  // const userMoreBtn = document.querySelector('.hidden-menu-show')
+  // if (userMoreBtn) {
+  //   userMoreBtn.classList.remove('hidden-menu-show')
+  // }
+
+  // if (userMoreBtn) {
+  //   for (const userActiveBtn of userMoreBtn) {
+  //   }
+  // }
+
+  if (target == modal || target == deleteModal || target == moreOption) {
     modal.style.display = 'none';
     deleteModal.style.display = 'none';
   }
