@@ -16,7 +16,7 @@
   \**********************/
 /***/ (() => {
 
-eval("\n\n/* eslint-disable no-restricted-globals */\n\n/* eslint-disable no-plusplus */\nvar menuToggle = document.querySelector('.toggle');\nvar navigation = document.querySelector('.navigation');\nvar container = document.querySelector('.container');\n\nmenuToggle.onclick = function () {\n  menuToggle.classList.toggle('active');\n  navigation.classList.toggle('active');\n  container.classList.toggle('active');\n};\n\nvar nav = document.querySelector('.navigation');\nvar list = document.querySelectorAll('.list');\nvar currentLocation = location.href;\nvar menuItem = nav.querySelectorAll('a');\n\nfor (var i = 0; i < menuItem.length; i++) {\n  if (menuItem[i].href === currentLocation) {\n    list[i].className = 'list active';\n  }\n}\n\n//# sourceURL=webpack://mvc/./src/index.js?");
+eval("/* eslint-disable no-restricted-globals */\n\n/* eslint-disable no-plusplus */\n// const menuToggle = document.querySelector('.toggle')\n// const navigation = document.querySelector('.navigation')\n// const container = document.querySelector('.container')\n// menuToggle.onclick = () => {\n//   menuToggle.classList.toggle('active')\n//   navigation.classList.toggle('active')\n//   container.classList.toggle('active')\n// }\n// const nav = document.querySelector('.navigation')\n// const list = document.querySelectorAll('.list')\n// const currentLocation = location.href\n// const menuItem = nav.querySelectorAll('a')\n// for (let i = 0; i < menuItem.length; i++) {\n//   if (menuItem[i].href === currentLocation) {\n//     list[i].className = 'list active'\n//   }\n// }\n\n\n//# sourceURL=webpack://mvc/./src/index.js?");
 
 /***/ })
 
