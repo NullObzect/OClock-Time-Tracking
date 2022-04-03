@@ -50,7 +50,6 @@ const HolidayController = {
   getHolidayListBetweenTwoDate: async (req, res) => {
     try {
       const { startDate, endDate } = req.query;
-      console.log('startDate', startDate, endDate)
 
       const holidays = await HolidayModel.holidaysListBetweenTowDate(startDate, endDate)
       const getHoliday = JSON.parse(JSON.stringify(holidays))
@@ -61,7 +60,6 @@ const HolidayController = {
       const endIndex = page * limit
       const dateRangeReport = getHoliday.slice(startIndex, endIndex)
 
-      console.log({ dateRangeReport });
       const pageLength = getHoliday.length / limit
 
       const numberOfPage = Number.isInteger(pageLength) ? Math.floor(pageLength) : Math.floor(pageLength) + 1
@@ -72,9 +70,6 @@ const HolidayController = {
           dateRangeReport, pageNumber, numberOfPage, pageLength, page,
         },
       })
-
-      //
-      // return res.json(getHoliday)
     } catch (err) {
       console.log('====>Error form HolidayControlle/holidayList', err);
     }
@@ -83,7 +78,6 @@ const HolidayController = {
   getEditHolidayPage: async (req, res) => {
     global.hId = req.params.id;
     const holidayData = await HolidayModel.getHolidayData(hId)
-    console.log({ holidayData })
 
     res.render('pages/editHoliday', { holidayData })
   },
@@ -91,7 +85,6 @@ const HolidayController = {
     const {
       title, start, end, id,
     } = req.body
-    console.log(req.body);
 
     const isUpdate = await HolidayModel.updateHoliday(
       id,
@@ -117,7 +110,6 @@ const HolidayController = {
   },
   employeeSeeHolidays: async (req, res) => {
     const [user] = await UserModel.findUserByEmail(req.user.userMailFormDB)
-    console.log({ user })
 
     const userId = user.id;
     console.log(userId)

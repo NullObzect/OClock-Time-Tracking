@@ -1,7 +1,7 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-return-assign */
 import {
-  aJAXPostRequest, dateDiff, dateFormate, formValidation, getCurrentDate
+  aJAXPostRequest, dateDiff, dateFormate, deleteData, formValidation, getCurrentDate
 } from './helper.js';
 
 function pagination(pageNumber, numberOfPage, page) {
@@ -215,17 +215,18 @@ function reportHolidayShow(holidayTable, dateRangeReport) {
           <button  class="save-btn">Save</button>
   
           <a
-            onclick=" return confirm('Are you Sure???')"
-            href="/delete/holiday/${day.id}"
+          class="delete-data"
           >
             <button type="text" class="delete-btn">Delete</button>
           </a>
-          <input type="hidden" class="holiday-id" value="${day.id}" />
+          <input type="hidden" class="holiday-id delete-id" value="${day.id}" />
   
         </td>` : ''}  </tr>
       `,
 
   ).join('');
+  actions();
+  deleteData('/delete/holiday/');
 }
 
 console.log('end of script file');
@@ -259,6 +260,9 @@ async function page(pageNo) {
   reportHolidayShow(holidayTable, dateRangeReport)
   pagination(pageNumber, numberOfPage, pageNo)
 }
+
+// delete holiday
+deleteData('/delete/holiday/');
 // form validation
 
 formValidation()

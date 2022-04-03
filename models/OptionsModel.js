@@ -53,6 +53,8 @@ const OptionsModel = {
   },
 
   deleteProject: async (projectId) => {
+    console.log('from model', projectId);
+
     const query = `DELETE FROM projects WHERE id = ${projectId}`
     const [rows] = await dbConnect.promise().execute(query)
     return rows.affectedRows

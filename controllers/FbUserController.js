@@ -10,24 +10,18 @@ const FbUserController = {
   profile: async (req, res) => {
     try {
       console.log('req.user', req.user);
-      // res.redirect('/profile')
 
       const { id } = req.user
       const userName = req.user.displayName
-      // let fbUserMail = req.user.emails[0].value
-      // let fbUserMail = 'xyz@gmail.com';
+
       const picture = req.user.photos[0].value
-      // if (fbUserMail === null) {
-      //   fbUserMail = id;
-      // }
+   
 
       const token = req.signedCookies.Oclock;
-      console.log({ token });
 
       if (token) {
         const isVerify = jwt.verify(token, process.env.JWT_SECRET)
         const { userObject } = isVerify;
-        console.log({ userObject });
 
         //
         const email = userObject.userMailFormDB
@@ -44,7 +38,6 @@ const FbUserController = {
         }
       } else if (!token) {
         const [verify] = await FbUserModel.getFacebookUserUniqueInfoFromUserConnection(id);
-        console.log('verify', verify);
 
         if (verify) {
           const { user_id } = verify;
@@ -52,7 +45,6 @@ const FbUserController = {
           const [user] = await UserModel.findId(user_id)
           await FbUserModel.facebookUserUpdate(userName, picture, id)
 
-          console.log({ user });
 
           if (user) {
             const userMailFormDB = user.user_mail;
@@ -63,7 +55,6 @@ const FbUserController = {
             const userObject = {
               userName, userMailFormDB, userRole, avatar,
             }
-            console.log(userObject);
 
             const tokenTwo = jwt.sign({
               userObject,
@@ -90,11 +81,9 @@ const FbUserController = {
   facebookUserDelete: async (req, res) => {
     try {
       const token = req.signedCookies.Oclock;
-      console.log({ token });
       const verifyPlatformUser = jwt.verify(token, process.env.JWT_SECRET)
       const { userObject } = verifyPlatformUser
       const { userMailFormDB } = userObject
-      console.log({ userMailFormDB });
       const [user] = await UserModel.findUserByEmail(userMailFormDB)
       await FbUserModel.facebookPlatformRemove(user.id)
       res.redirect('/profile')

@@ -39,9 +39,14 @@
         <td class="btn-group">
           <button type="button" class="action-btn">Action</button>
           <button type="button" class="update-btn">Update</button>
-          <button type="button" class="delete-btn">Delete</button>
+          <a class="delete-btn delete-data">
+            <input
+              type="hidden"
+              class="project-id delete-id"
+              value="<%= project.id %>"
+            />Delete</a
+          >
           <button type="button" class="save-btn">Save</button>
-          <input type="hidden" class="project-id" value="<%= project.id %>" />
         </td>
         <% } %>
       </tr>
@@ -49,7 +54,12 @@
     </tbody>
   </table>
 </div>
-</div>
+<!-- Markup for user delete modal -->
 
+<%- include("../partials/delete-modal.ejs"); -%>
+<script>
+  const baseUrl = "<%= baseUrl %>";
+  const loggedInUser = "<%= loggedInUser.userRole %>";
+</script>
 <script src="<%= baseUrl %>/js/project.js"></script>
 <%- include("../partials/footer"); -%>
