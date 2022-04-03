@@ -61,9 +61,11 @@ for (const modals of modalClose) {
   })
 }
 
-addBtn.addEventListener('click', () => {
-  modal.style.display = 'block';
-})
+if (addBtn) {
+  addBtn.addEventListener('click', () => {
+    modal.style.display = 'block';
+  })
+}
 
 window.onclick = function (event) {
   const { target } = event
