@@ -4,14 +4,14 @@ const LogModel = require('../models/LogModel');
 const ProfileModel = require('../models/ProfileModel')
 const { pageNumbers } = require('../utilities/pagination')
 const {
-  timeToHour, calculateTime, dateFormate, workHourFormateForReport,
+  timeToHour, workHourFormateForReport,
 } = require('../utilities/formater');
 
-//
+// get user id
 let isUserId;
 
 const ReportController = {
-
+  // default report page 
   userReport: async (req, res) => {
     try {
       isUserId = null;
@@ -23,11 +23,7 @@ const ReportController = {
       } else {
         userId = user.id;
       }
-
       const checkUserReportEmptyOrNot = await LogModel.isUserIdInLog(userId)
-      console.log({ checkUserReportEmptyOrNot });
-      // console.log('dddd', checkUserReportEmptyOrNot.length);
-
       const platformUser = await ProfileModel.userConnectionDetailsUniqueInfo(userId)
       const userInfo = await AttendanceModel.getEmployeeInfo(userId)
 
@@ -41,10 +37,7 @@ const ReportController = {
 
         //  ============= Start  Reports record for table
         const reportStringify = await LogModel.lastSevenDaysReports(userId)
-
         const lastSevenDaysReports = JSON.parse(JSON.stringify(reportStringify))
-        console.log({ lastSevenDaysReports });
-
         lastSevenDaysReports.forEach((el) => {
           console.log('start', el.outTimeExtraOrLess);
           if (el.dayType !== 'regular') {
@@ -64,10 +57,7 @@ const ReportController = {
             el.workTime = '0'
           }
 
-          // console.log('end', el.totalTimeExtraOrLess[1]);
         })
-        // .split('').filter((el) => el === '0').length === 4 ? el.inTimeExtraOrLess = '' : inTimeExtraOrLess
-        // console.log({ lastSevenDaysReports });
 
         /* ======================================================== */
         /* ==========TODO:  report for this today  start ========== */
@@ -77,11 +67,8 @@ const ReportController = {
         const [tTotal] = await AttendanceModel.todayTotal(userId)
         const [{ totalExtrOrLess }] = await AttendanceModel.todayTotal(userId)
         const todayExtraOrLessHr = chckTotalWorkTimeExtraOrLess(totalExtrOrLess)
-
         const today = await AttendanceModel.getToday(userId)
         const { todayTotal } = tTotal
-        console.log({ todayTotal });
-
         const breakTime = today.length
         const todayReportDetails = new TodayReportDetails(
           todayTotal,
@@ -92,8 +79,6 @@ const ReportController = {
           todayExtraOrLessHr,
 
         )
-        console.log({ todayReportDetails });
-
         /* ======================================================== */
         /* ==========FIXME:  report for this today  END ========== */
         /* ======================================================== */
@@ -119,13 +104,8 @@ const ReportController = {
         } else if (weekCurrentName === 'Friday') {
           getThisWeekNumberOfday = 7;
         }
-        console.log({ getThisWeekNumberOfday });
-
         const [{ weekStartDate }] = await AttendanceModel.getWeekStartDate(getThisWeekNumberOfday)
-        // log  start
         const [{ countJoinIngDate }] = await LogModel.countUserJoiningDate(userId)
-        console.log({ countJoinIngDate });
-
         const weekdaysType = await LogModel.countWorkdaysForWeek(userId, weekStartDate)
         const thisWeekOffdays = weekdaysType.filter((el) => el.workdays === 0).length
         const weekTotalWorkdays = getThisWeekNumberOfday - thisWeekOffdays;
@@ -149,8 +129,6 @@ const ReportController = {
           isLowOrHighClassForHr(weekAvgExtraOrLess),
 
         )
-        // log end
-
         /* ======================================================== */
         /* ==========FIXME:  report for this today  END ========== */
         /* ======================================================== */
@@ -159,7 +137,6 @@ const ReportController = {
         /* ==========TODO:  report for this month  start ========== */
         /* ======================================================== */
 
-        // log start
         const [{ monthStartDate, countWorkday }] = await AttendanceModel.thisMonthDates()
         const monthdaysType = await LogModel.countWorkdaysForMonth(userId, monthStartDate)
         const thisMonthOffdays = monthdaysType.filter((el) => el.workdays === 0).length
@@ -184,7 +161,6 @@ const ReportController = {
           showDaysIsLowOrHigh(countUserJoinDate(countJoinIngDate, monthTotalWorkdays), monthNumberOfWorkingDays),
           isLowOrHighClassForHr(monthAvgExtraOrLess),
         )
-        // log end
 
         /* ======================================================== */
         /* ==========FIXME:  report for this month  END ========== */
@@ -272,18 +248,12 @@ const ReportController = {
       );
 
       // log start
-      console.log({ startDate, endDate });
 
       const [{ days }] = await LogModel.numberOfdaysBetweenTwoDates(startDate, endDate)
-      console.log({ days });
-
       const [{ countJoinIngDate }] = await LogModel.countUserJoiningDate(userId)
-
       const betweenTwoDateTypes = await LogModel.countWorkdaysForBetweenTwoDate(userId, startDate, endDate)
       const betweenTwoDateOffdays = betweenTwoDateTypes.filter((el) => el.workdays === 0).length
       const betweenTwoDateWorkdays = days - betweenTwoDateOffdays;
-      console.log({ betweenTwoDateWorkdays });
-
       const [{
         twoDateNumberOfWorkingDays, twoDateFixedHr, twoDateTotalWorkHr, twoDateTotalExtraOrLess, twoDateAvgWorkTime, twoDateAvgExtraOrLess, twoDateAvgStartTime, twoDateAvgEndTime,
       }] = await LogModel.reportsBewttenTwoDate(userId, startDate, endDate, countUserJoinDate(countJoinIngDate, betweenTwoDateWorkdays))
@@ -304,9 +274,6 @@ const ReportController = {
         isLowOrHighClassForHr(twoDateAvgExtraOrLess),
 
       )
-
-      // log end
-
       const dataToJson = JSON.parse(JSON.stringify(getData))
 
       dataToJson.forEach((el) => {
@@ -325,10 +292,7 @@ const ReportController = {
           el.totalTimeExtraOrLess = ''
           el.workTime = '0'
         }
-
-        // el.outTimeExtraOrLess[0] === '-' ? el.outTimeExtraOrLess = el.outTimeExtraOrLess.slice(1) : el.outTimeExtraOrLess;
       })
-      console.log({ dataToJson })
 
       // pagination
       const page = Number(req.query.page) || 1
@@ -336,8 +300,6 @@ const ReportController = {
       const startIndex = (page - 1) * limit
       const endIndex = page * limit
       const dateRangeReport = dataToJson.slice(startIndex, endIndex)
-
-      console.log({ dateRangeReport });
 
       const pageLength = dataToJson.length / limit
       // eslint-disable-next-line max-len

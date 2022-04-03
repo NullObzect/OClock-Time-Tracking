@@ -317,8 +317,7 @@ const UserController = {
     try {
       const { userName } = req.query
       const isUserSort = await UserModel.getUserSortByAscendingOrder([userName]);
-      // console.log({ userName });
-      // console.log({ isUserSort });
+  
       return res.json(isUserSort)
     } catch (err) {
       console.log('====>Error form userSortByAscendingOrder Controller', err);
@@ -330,8 +329,7 @@ const UserController = {
     try {
       const { userName } = req.query
       const isUserSortByDesc = await UserModel.getUserSortByDescendingOrder([userName]);
-      // console.log({ userName });
-      // console.log({ isUserSortByDesc });
+   
 
       return res.json(isUserSortByDesc)
     } catch (err) {

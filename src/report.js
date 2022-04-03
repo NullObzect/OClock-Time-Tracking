@@ -177,25 +177,16 @@ async function dateRange(event) {
   }
 }
 
-// async function page(pageNo) {
-//   const startDate = document.querySelector('#startPicker').dataset.date
-//   const endDate = document.querySelector('#endPicker').dataset.date
-//   const data = await fetch(
-//     `${baseUrl}/reports/between/two-date?startDate=${startDate}&endDate=${endDate}&page=${pageNo}`,
-//   );
-//   const getObjects = await data.json();
-//   // let isZero;
-//   const {
-//     dateRangeReport, pageNumber, pageLength, page, numberOfPage,
-//   } = getObjects.reports
-
-//   const reportTableBody = document.querySelector('#an-user-report')
-//   reportShow(reportTableBody, dateRangeReport)
-//   pagination(pageNumber, numberOfPage, pageNo)
-// }
-
 function reportShow(reportTableBody, dateRangeReport) {
-  return reportTableBody.innerHTML = dateRangeReport.map((el) => ` 
+  if (dateRangeReport.length === 0) {
+    reportTableBody.innerHTML = `  
+   <tr>
+   
+    <td colspan="5" class="report-not-found">No, report founded !!!</td>
+    
+  </tr>`
+  } else {
+    return reportTableBody.innerHTML = dateRangeReport.map((el) => ` 
          
    <tr
         class="
@@ -224,4 +215,5 @@ function reportShow(reportTableBody, dateRangeReport) {
    
 
    `).join('')
+  }
 }

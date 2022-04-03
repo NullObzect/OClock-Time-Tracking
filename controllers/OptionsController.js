@@ -133,8 +133,11 @@ const OptionsController = {
   },
   getDeleteProject: async (req, res) => {
     try {
-      const { pId } = req.body
-      const isDelete = await OptionsModel.deleteProject(pId)
+      const { id } = req.params
+      console.log(id);
+      console.log('hello delete')
+
+      const isDelete = await OptionsModel.deleteProject(id)
       if (isDelete.errno) {
         res.send('Error')
       } else {

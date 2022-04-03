@@ -199,13 +199,14 @@
           <button type="text" class="update-btn">Update</button>
           <button type="text" class="save-btn">Save</button>
 
-          <a
-            onclick=" return confirm('Are you Sure???')"
-            href="/delete/holiday/<%= day.id %>"
-          >
+          <a class="delete-data">
             <button type="text" class="delete-btn">Delete</button>
           </a>
-          <input type="hidden" class="holiday-id" value="<%= day.id %>" />
+          <input
+            type="hidden"
+            class="holiday-id delete-id"
+            value="<%= day.id %>"
+          />
           <% } %>
         </td>
       </tr>
@@ -214,6 +215,9 @@
     </tbody>
   </table>
 
+  <!-- Markup for user delete modal -->
+
+  <%- include("../partials/delete-modal.ejs"); -%>
   <!--- Markup for pagination -->
 
   <div class="pagination">
@@ -224,6 +228,30 @@
 <script>
   const baseUrl = "<%= baseUrl %>";
   const loggedInUser = "<%= loggedInUser.userRole %>";
+
+  /*  function deleteData(deleteUrl) {
+    const deleteData = document.querySelectorAll(".delete-data");
+    const deleteModal = document.querySelector(".delete-modal");
+    const deleteId = document.querySelectorAll(".delete-id");
+    const deleteBtn = document.querySelectorAll(".modal-delete-btn");
+    const cancelBtn = document.querySelectorAll(".modal-cancel-btn");
+    for (let i = 0; i < deleteData.length; i++) {
+      deleteData[i].addEventListener("click", () => {
+        //alert("delete");
+        deleteModal.style.display = "block";
+        console.log(deleteId[i].value);
+
+        deleteBtn[0].addEventListener("click", () => {
+          console.log(deleteId[i].value);
+          window.location.href = `${deleteUrl}${deleteId[i].value}`;
+        });
+        cancelBtn[0].addEventListener("click", () => {
+          deleteModal.style.display = "none";
+        });
+      });
+    }
+  }
+  deleteData("/delete/holiday/"); */
   /* 
   const holidayTable = document.querySelector("#holiday-table");
   // Date change to date icon active remove

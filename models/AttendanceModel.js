@@ -171,16 +171,7 @@ const AttendanceModel = {
     const [rows] = await dbConnect.promise().execute(query)
     return rows
   },
-
-  // day , total work time and average work in week
-
-  // average start and end time
-
   /* ======= report for this month ======= */
-
-  // this month holidays
-
-  // this month employee leave days
 
   // this month count  day and start date
   thisMonthDates: async () => {

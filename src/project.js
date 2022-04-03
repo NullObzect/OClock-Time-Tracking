@@ -1,6 +1,6 @@
 
 import {
-  aJAXPostRequest, formValidation,
+  aJAXPostRequest, formValidation, deleteData, 
 } from './helper.js';
 const actionBtn = document.querySelectorAll('.action-btn');
 const updateBtn = document.querySelectorAll('.update-btn');
@@ -83,3 +83,5 @@ for (let i = 0; i < saveBtn.length; i++) {
 // })
 
 formValidation()
+// delete project
+deleteData('/projects/delete/');
