@@ -5,17 +5,17 @@
  *
  * Copyright (C) 2018 Varun A P
  */
-
+ /* linear-gradient(135deg, #0094ff, #103047) */
  .toastify {
   padding: 12px 20px;
   color: #ffffff;
   display: inline-block;
   box-shadow: 0 3px 6px -1px rgba(0, 0, 0, 0.12), 0 10px 36px -4px rgba(77, 96, 232, 0.3);
-  background: linear-gradient(135deg, #73a5ff, #5477f5);
+  background:#103047 ;
   position: fixed;
   opacity: 0;
   transition: all 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
-  border-radius: 2px;
+  border-radius: 5px;
   cursor: pointer;
   text-decoration: none;
   max-width: calc(50% - 20px);
