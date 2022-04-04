@@ -123,3 +123,86 @@
   width: 100%;
   text-align: center;
 }
+
+/* Employees Working table */
+
+.table input {
+  outline: none !important;
+  border-radius: 10px;
+  
+}
+.table input{
+  border: none;
+  background-color: transparent;
+  padding: 6px;
+  outline: none;
+}
+.table input:focus {
+  outline: none;
+  border: none;
+  border-radius: 10px;
+
+
+}
+.table th , .table td {
+  width: 160px;
+}
+.title-for-cnt-ely{
+  font-size: 14px;
+  font-weight: bold;
+  color: #000;
+  margin: 10px 0px;
+  text-align: left;
+}
+/* .cnt-working-emy-list{
+  position: relative;
+} */
+.modal-cont{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: none;
+  margin-top: 10%;
+}
+.dashboard-update-btn {
+  background-color: #103047;
+  border-radius: 10px;
+  color: #fff;
+  padding: 8px 12px;
+  border: none;
+  outline: none;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  width: 70px;
+  text-align: center;
+}
+.update-start-time, .update-end-time, .update-btn, .save-btn,.save-btn-for-end-time {
+  background-color: #103047;
+  border-radius: 10px;
+  color: #fff;
+  padding: 8px 12px;
+  border: none;
+  outline: none;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  display: block;
+  width: 70px;
+}
+
+.save-btn, .save-btn-for-end-time {
+  background-color: rgb(17, 221, 17);
+}
+.update-start-time, .update-end-time, .save-btn,.save-btn-for-end-time {
+  
+  display: none;
+}
+
+.btn-group {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  margin-top: 15px;
+}

@@ -103,7 +103,7 @@ const AttendanceController = {
       await AttendanceModel.setStartTime(aId, timeStamp)
       await AttendanceModel.setStartTimeForLog(logUpdateId, timeStamp)
 
-      console.log('timeStamp', timeStamp);
+      res.status(200).json('success')
     } catch (err) {
       console.log('====>Error form AttendanceController', err);
     }
