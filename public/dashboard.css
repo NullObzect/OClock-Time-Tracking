@@ -30,7 +30,7 @@
     0px 6.16275px 7.53556px rgba(5, 51, 143, 0.0661684);
 }
 .time-box {
-  flex-grow: 1;
+  flex-grow:1 ;
 }
 .current-time {
   font-size: 36px;
