@@ -1,4 +1,9 @@
-const test = () => 'test'
+import Toastify from './toastify.js';
+
+const successToast = Toastify({
+  text: 'Change Successfully',
+  className: 'info',
+})
 
 const getDateFormat = (date) => {
   let today = new Date(date);
@@ -18,15 +23,12 @@ const aJAXPostRequest = (url, values) => new Promise((resolve, reject) => {
     },
     body: JSON.stringify(values),
   })
-    .then((res) => res.json())
-    .then((data) => {
-      console.log({ data });
-      if (data.success) {
-        alert('Option Value Updated');
+    .then((res) => {
+      if (res.status === 200) {
+        successToast.showToast()
       }
     })
     .catch((err) => console.log(err));
-  // return window.location.replace('/options/holiday');
 })
 
 // function for date diff
@@ -158,7 +160,6 @@ export {
   dateFormate,
   getCurrentDate,
   iconCheck,
-  test,
   formValidation,
   deleteData,
 };
