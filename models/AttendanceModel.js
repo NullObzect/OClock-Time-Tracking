@@ -100,8 +100,8 @@ const AttendanceModel = {
 
   insertLog: async (userId) => {
     const getRunStartSql = `INSERT INTO log(user_id, in_time, out_time, work_hour, start, end, work_time, day_type) SELECT   user_id AS uId, in_time AS inTime, out_time AS outTime, O.option_value AS workHour,  TIME(MIN(A.start)) AS startTime, NULL,  TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) AS totalWorkTime,CASE WHEN WEEKDAY(CURRENT_DATE) IN  (OP.option_value)  THEN 'offday' WHEN  (SELECT COUNT(H.title) FROM holidays AS H WHERE DATE(CURRENT_DATE) BETWEEN H.start AND  H.end) > 0 THEN 'holiday' WHEN (SELECT COUNT(EL.reason) FROM employee_leaves AS EL WHERE DATE(CURRENT_DATE) BETWEEN EL.start AND EL.end AND A.user_id = EL.user_id) > 0 THEN 'leave' ELSE 'regular' END	dayType FROM attendance AS A JOIN options AS O ON o.option_title = 'fixed time' JOIN options AS OP ON OP.option_title = 'off-day' WHERE DATE(A.create_at) = DATE(CURRENT_DATE) AND user_id = ${userId}`
-    const value = [userId]
-    const [rows] = await dbConnect.promise().execute(getRunStartSql, value);
+
+    const [rows] = await dbConnect.promise().execute(getRunStartSql);
     return rows;
   },
   updateLog: async (userId) => {
@@ -116,7 +116,7 @@ const AttendanceModel = {
     return rows;
   },
   updateEndTimeForLog: async (userId, endTime) => {
-    const getRunStartSql = `UPDATE  log SET  end = '${endTime}' WHERE user_id = ${userId}  AND DATE(create_at) = DATE(CURRENT_DATE)`
+    const getRunStartSql = `UPDATE  log SET  end = '${endTime}' WHERE user_id = ${userId}  AND DATE(create_at) = DATE(start)`
     const [rows] = await dbConnect.promise().execute(getRunStartSql);
     return rows;
   },
@@ -195,7 +195,6 @@ const AttendanceModel = {
     return rows;
   },
 
-
   getToday: async (userId) => {
     const getTodaySql = 'SELECT  project_name,work_details, Time_format(Time(start),"%h:%i% %p") as start , Time_format(Time(end),"%h:%i% %p") as end, timediff(end,start ) as total FROM attendance AS A ,projects WHERE project_id=projects.id AND user_id = ? and end IS NOT NULL and Date(A.create_at)= Date(CURRENT_DATE)'
     const value = [userId]
@@ -220,8 +219,6 @@ const AttendanceModel = {
     const [rows] = await dbConnect.promise().execute(monthTotalSql, value);
     return rows;
   },
-
-
 
   avgStartTime: async (id) => {
     try {
@@ -273,7 +270,7 @@ const AttendanceModel = {
     return rows
   },
   getMinStartTime: async (userId) => {
-    const query = `SELECT MIN(id) as aId FROM attendance WHERE  DATE(CURRENT_DATE) = DATE(create_at) AND user_id = ${userId}`
+    const query = `SELECT MAX(id) as aId FROM attendance WHERE  DATE(start) = DATE(create_at) AND user_id = ${userId}`
     const [rows] = await dbConnect.promise().execute(query)
     return rows[0]
   },
@@ -288,7 +285,7 @@ const AttendanceModel = {
     return rows
   },
   getUpdateLogStartTimeId: async (userId) => {
-    const query = `SELECT id AS logUpdateId FROM log WHERE  DATE(create_at) = DATE(CURRENT_DATE) AND user_id = ${userId}`
+    const query = `SELECT MAX(id) AS logUpdateId FROM log WHERE  DATE(create_at) = DATE(start) AND user_id = ${userId}`
     const [rows] = await dbConnect.promise().execute(query)
     return rows[0]
   },
