@@ -1,8 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap");
-@import 'user.css';
-@import 'dashboard.css';
 @import 'report.css';
 @import 'options.css';
+@import 'dashboard.css';
+@import 'user.css';
 
 :root {
   --white: #ffffff;

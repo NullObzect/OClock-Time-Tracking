@@ -14,6 +14,7 @@ const config = {
     users: ['@babel/polyfill', './src/users.js'],
     optionValues: ['@babel/polyfill', './src/optionValues.js'],
     profile: ['@babel/polyfill', './src/profile.js'],
+    dashboard: ['@babel/polyfill', './src/dashboard.js'],
   },
   output: {
     path: path.resolve(__dirname, 'public/js/'),
