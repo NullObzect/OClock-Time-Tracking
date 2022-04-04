@@ -131,20 +131,27 @@ deleteData('/delete/user/');
 
 // Paginations Functions
 
-function first(e) {
-  const firstPage = Number(e);
-  return (location.href = `/users?page=${firstPage}`);
-}
+// const firstBtn = document.querySelector('.first')
+// const prevBtn = document.querySelector('.prev')
+// const nextBtn = document.querySelector('.next')
+// const lastBtn = document.querySelector('.last')
+// console.log(firstBtn)
+// firstBtn.addEventListener()
 
-function prev(e) {
-  const prevPage = Number(e - 1);
-  return (location.href = `/users?page=${prevPage}`);
-}
-function next(e) {
-  const nextPage = Number(parseInt(e) + 1);
-  return (location.href = `/users?page=${nextPage}`);
-}
-function last(e) {
-  const lastPage = e;
-  return (location.href = `/users?page=${lastPage}`);
-}
+// function first(e) {
+//   const firstPage = Number(e);
+//   return (location.href = `/users?page=${firstPage}`);
+// }
+
+// function prev(e) {
+//   const prevPage = Number(e - 1);
+//   return (location.href = `/users?page=${prevPage}`);
+// }
+// function next(e) {
+//   const nextPage = Number(parseInt(e) + 1);
+//   return (location.href = `/users?page=${nextPage}`);
+// }
+// function last(e) {
+//   const lastPage = e;
+//   return (location.href = `/users?page=${lastPage}`);
+// }

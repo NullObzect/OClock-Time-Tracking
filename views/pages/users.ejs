@@ -15,87 +15,88 @@
   <!-- Add user Modal -->
   <%- include("../partials/add-user-modal"); -%>
   <div class="scroll-table">
-  <table class="table">
-    <thead>
-      <tr>
-        <td class="table-img"></td>
-        <td>Name</td>
-        <td class="user-phone td-width">Phone</td>
-        <td class="user-email td-width">Email</td>
-        <td class="user-status td-width">Status</td>
-        <td class="table-action td-width"></td>
-      </tr>
-    </thead>
-    <tbody>
-      <% users.map(user=>{%>
-        
-      <tr>
-        <td class="table-img">
-          <% if(user.avatar !== null && user.avatar.match(/^(http|https):/g)){
-          %>
-          <img src="<%= user.avatar%>" />
-          <%} else{%>
-          <img
-            src="/uploads/avatars/<%=user.avatar != null ?  user.avatar : 'demo-avatar.png' %>"
-          />
-          <% } %>
-        </td>
-        <td class="td-width">
-          <div class="username"><%=user.user_name%></div>
-          <span id="role"><%= user.user_role==='admin'? 'admin' : ''%> </span>
-        </td>
-        <td class="user-phone td-width"><%=user.user_phone %></td>
-        <td class="user-email td-width"><%=user.user_mail %></td>
-        <td class="user-status td-width"><span class="status active">Active</span></td>
+    <table class="table">
+      <thead>
+        <tr>
+          <td class="table-img"></td>
+          <td>Name</td>
+          <td class="user-phone td-width">Phone</td>
+          <td class="user-email td-width">Email</td>
+          <td class="user-status td-width">Status</td>
+          <td class="table-action td-width"></td>
+        </tr>
+      </thead>
+      <tbody>
+        <% users.map(user=>{%>
 
-        <td class="user-more td-width user-more-btn">
-          <svg
-            class="user-action-btn"
-            width="40"
-            height="40"
-            viewBox="0 0 40 40"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <rect width="40" height="40" rx="15" />
-            <circle cx="10" cy="20" r="2" fill="#4A4A4A" />
-            <circle cx="20" cy="20" r="2" fill="#4A4A4A" />
-            <circle cx="30" cy="20" r="2" fill="#4A4A4A" />
-          </svg>
-          <div class="hidden-menu menu">
-            <ul>
-              <li>
-                <a href="/reports/<%= user.id %>">
-                  <%# include("./icons/profile-svg.ejs"); -%>
-                  <span>Report</span>
-                </a>
-              </li>
-              <li>
-                <a href="/update-user/<%= user.id %>">
-                  <span>Update</span>
-                </a>
-              </li>
+        <tr>
+          <td class="table-img">
+            <% if(user.avatar !== null && user.avatar.match(/^(http|https):/g)){
+            %>
+            <img src="<%= user.avatar%>" />
+            <%} else{%>
+            <img
+              src="/uploads/avatars/<%=user.avatar != null ?  user.avatar : 'demo-avatar.png' %>"
+            />
+            <% } %>
+          </td>
+          <td class="td-width">
+            <div class="username"><%=user.user_name%></div>
+            <span id="role"><%= user.user_role==='admin'? 'admin' : ''%> </span>
+          </td>
+          <td class="user-phone td-width"><%=user.user_phone %></td>
+          <td class="user-email td-width"><%=user.user_mail %></td>
+          <td class="user-status td-width">
+            <span class="status active">Active</span>
+          </td>
 
-              <li>
-                <a class="delete-data">
-                  <input
-                    class="delete-id"
-                    type="hidden"
-                    value="<%= user.id %>"
-                  />
-                  <span>Delete</span>
-                </a>
-              </li>
-            </ul>
-          </div>
+          <td class="user-more td-width user-more-btn">
+            <svg
+              class="user-action-btn"
+              width="40"
+              height="40"
+              viewBox="0 0 40 40"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect width="40" height="40" rx="15" />
+              <circle cx="10" cy="20" r="2" fill="#4A4A4A" />
+              <circle cx="20" cy="20" r="2" fill="#4A4A4A" />
+              <circle cx="30" cy="20" r="2" fill="#4A4A4A" />
+            </svg>
+            <div class="hidden-menu menu">
+              <ul>
+                <li>
+                  <a href="/reports/<%= user.id %>">
+                    <%# include("./icons/profile-svg.ejs"); -%>
+                    <span>Report</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/update-user/<%= user.id %>">
+                    <span>Update</span>
+                  </a>
+                </li>
 
-        </td>
-      </tr>
+                <li>
+                  <a class="delete-data">
+                    <input
+                      class="delete-id"
+                      type="hidden"
+                      value="<%= user.id %>"
+                    />
+                    <span>Delete</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </td>
+        </tr>
 
-      <%}) %>
-    </tbody>
-  </table>
- </div>
+        <%}) %>
+      </tbody>
+    </table>
+  </div>
 </div>
 <!-- Markup for user delete modal -->
 
@@ -105,7 +106,24 @@
 <%- include("../partials/pagination"); -%>
 
 <script>
-  
+  function first(e) {
+  const firstPage = Number(e);
+  return (location.href = `/users?page=${firstPage}`);
+}
+
+function prev(e) {
+  const prevPage = Number(e - 1);
+  return (location.href = `/users?page=${prevPage}`);
+}
+function next(e) {
+  const nextPage = Number(parseInt(e) + 1);
+  return (location.href = `/users?page=${nextPage}`);
+}
+function last(e) {
+  const lastPage = e;
+  return (location.href = `/users?page=${lastPage}`);
+}
+
 </script>
 
 <script src="<%=baseUrl%>/js/users.js"></script>
