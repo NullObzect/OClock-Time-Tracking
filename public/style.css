@@ -704,11 +704,11 @@ main {
   .work-details {
     justify-content: space-around;
   }
-.table th,
-.table td {
+.table th .td-width,
+.table td .td-width {
   min-width: 160px;
 }
-.project-table tbody td {{
+.project-table tbody td  .td-width{
   min-width: 160px;
 }
 }
@@ -760,6 +760,7 @@ main {
   }
   .counter {
     font-size: 28px;
+    width: 80px;
   }
   .button svg {
     height: 30px;
@@ -788,7 +789,7 @@ main {
 }
 @media only screen and (max-width: 480px) {
   .oclock-box {
-    width: 300px;
+    width: 360px;
     padding: 18px;
   }
   .time-box {
@@ -910,7 +911,15 @@ main {
   .current-date {
   }
   .counter {
-    font-size: 26px;
+    font-size: 20px;
+    flex-grow: 3;
+    width: 100px;
+  }
+  .time-box {
+    flex-grow:1 ;
+  }
+  .button{
+    flex-grow: 1;
   }
   
 }
