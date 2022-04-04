@@ -1,87 +1,4 @@
 <%- include("../partials/header"); -%>
-
-<style>
-  .table tbody {
-    position: relative;
-  }
-
-  .hidden-menu {
-    overflow: hidden;
-    max-height: 0;
-    -webkit-transition: min-height 0.4s;
-    -moz-transition: min-height 0.4s;
-    transition: min-height 0.4s;
-    position: relative;
-    z-index: 1;
-  }
-  .hidden-menu ul li a {
-    text-decoration: none !important;
-    color: #000 !important;
-  }
-
-  /* .hidden-menu-show {
-    max-height: 130px;
-  } */
-  .hidden-menu-show {
-    position: absolute;
-    /* max-height: 110px; */
-    min-height: 110px;
-    overflow: hidden;
-    /* height: 110px; */
-
-    width: 130px;
-    padding: 6px;
-    border-radius: 15px;
-    background: #ffffff;
-    z-index: 1;
-    margin-left: -70px;
-
-    box-shadow: 0px 0px 35px rgba(0, 0, 0, 0.13),
-      0px 6.96494px 6.11893px rgba(0, 0, 0, 0.0847066),
-      0px 2.51788px 1.42419px rgba(0, 0, 0, 0.065),
-      0px 0.750053px 0.0354451px rgba(0, 0, 0, 0.0452935);
-  }
-
-  .hidden-menu-show li {
-    position: relative;
-    height: 20px;
-    margin: 0 5px;
-    list-style: none;
-    line-height: 20px;
-    cursor: pointer;
-  }
-
-  .hidden-menu-show li a svg {
-    /* width: 32px;
-  height: 32px; */
-    margin: 0 20px;
-  }
-  .hidden-menu-show li a {
-    color: var(--deep2);
-    stroke: var(--deep2);
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
-    margin: 8px 0px 15px 0px;
-    padding: 5px 0;
-  }
-  .hidden-menu-show li a:hover {
-    background-color: #f6f6f6;
-    border-radius: 9px;
-  }
-  /* #users table tr td:last-child {
-    width: 80px;
-  } */
-
-  .more-active-btn {
-    fill: #fff;
-    border: 2px solid #103047;
-    border-radius: 30%;
-  }
-</style>
-
 <div id="users">
   <div class="text-head">
     <div class="text-title">Users</div>
@@ -98,89 +15,88 @@
   <!-- Add user Modal -->
   <%- include("../partials/add-user-modal"); -%>
   <div class="scroll-table">
-  <table class="table">
-    <thead>
-      <tr>
-        <td class="table-img td-width-zero"></td>
-        <td>Name</td>
-        <td class="user-phone">Phone</td>
-        <td class="user-email">Email</td>
-        <td class="user-status">Status</td>
-        <td class="table-action td-width-zero"></td>
-      </tr>
-    </thead>
-    <tbody>
-      <% users.map(user=>{%>
-        
-      <tr>
-        <td class="table-img td-width-zero">
-          <% if(user.avatar !== null && user.avatar.match(/^(http|https):/g)){
-          %>
-          <img src="<%= user.avatar%>" />
-          <%} else{%>
-          <img
-            src="/uploads/avatars/<%=user.avatar != null ?  user.avatar : 'demo-avatar.png' %>"
-          />
-          <% } %>
-        </td>
-        <td>
-          <div class="username"><%=user.user_name%></div>
-          <span id="role"><%= user.user_role==='admin'? 'admin' : ''%> </span>
-        </td>
-        <td class="user-phone"><%=user.user_phone %></td>
-        <td class="user-email"><%=user.user_mail %></td>
-        <td class="user-status"><span class="status active">Active</span></td>
+    <table class="table">
+      <thead>
+        <tr>
+          <td class="table-img"></td>
+          <td>Name</td>
+          <td class="user-phone td-width">Phone</td>
+          <td class="user-email td-width">Email</td>
+          <td class="user-status td-width">Status</td>
+          <td class="table-action td-width"></td>
+        </tr>
+      </thead>
+      <tbody>
+        <% users.map(user=>{%>
 
-        <td class="user-more td-width-zero user-more-btn">
-          <svg
-            class="user-action-btn"
-            width="40"
-            height="40"
-            viewBox="0 0 40 40"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <rect width="40" height="40" rx="15" />
-            <circle cx="10" cy="20" r="2" fill="#4A4A4A" />
-            <circle cx="20" cy="20" r="2" fill="#4A4A4A" />
-            <circle cx="30" cy="20" r="2" fill="#4A4A4A" />
-          </svg>
-          <div class="hidden-menu menu">
-            <ul>
-              <li>
-                <a href="/reports/<%= user.id %>">
-                  <%# include("./icons/profile-svg.ejs"); -%>
-                  <span>Report</span>
-                </a>
-              </li>
-              <li>
-                <a href="/update-user/<%= user.id %>">
-                  <%# include("./icons/logout-svg.ejs"); -%>
-                  <span>Update</span>
-                </a>
-              </li>
+        <tr>
+          <td class="table-img">
+            <% if(user.avatar !== null && user.avatar.match(/^(http|https):/g)){
+            %>
+            <img src="<%= user.avatar%>" />
+            <%} else{%>
+            <img
+              src="/uploads/avatars/<%=user.avatar != null ?  user.avatar : 'demo-avatar.png' %>"
+            />
+            <% } %>
+          </td>
+          <td class="td-width">
+            <div class="username"><%=user.user_name%></div>
+            <span id="role"><%= user.user_role==='admin'? 'admin' : ''%> </span>
+          </td>
+          <td class="user-phone td-width"><%=user.user_phone %></td>
+          <td class="user-email td-width"><%=user.user_mail %></td>
+          <td class="user-status td-width">
+            <span class="status active">Active</span>
+          </td>
 
-              <li>
-                <a class="delete-data">
-                  <input
-                    class="delete-id"
-                    type="hidden"
-                    value="<%= user.id %>"
-                  />
-                  <span>Delete</span>
-                </a>
-              </li>
-            </ul>
-          </div>
+          <td class="user-more td-width user-more-btn">
+            <svg
+              class="user-action-btn"
+              width="40"
+              height="40"
+              viewBox="0 0 40 40"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect width="40" height="40" rx="15" />
+              <circle cx="10" cy="20" r="2" fill="#4A4A4A" />
+              <circle cx="20" cy="20" r="2" fill="#4A4A4A" />
+              <circle cx="30" cy="20" r="2" fill="#4A4A4A" />
+            </svg>
+            <div class="hidden-menu menu">
+              <ul>
+                <li>
+                  <a href="/reports/<%= user.id %>">
+                    <%# include("./icons/profile-svg.ejs"); -%>
+                    <span>Report</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/update-user/<%= user.id %>">
+                    <span>Update</span>
+                  </a>
+                </li>
 
-          <%# include("../partials/menu-option.ejs"); -%>
-        </td>
-      </tr>
+                <li>
+                  <a class="delete-data">
+                    <input
+                      class="delete-id"
+                      type="hidden"
+                      value="<%= user.id %>"
+                    />
+                    <span>Delete</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </td>
+        </tr>
 
-      <%}) %>
-    </tbody>
-  </table>
- </div>
+        <%}) %>
+      </tbody>
+    </table>
+  </div>
 </div>
 <!-- Markup for user delete modal -->
 
@@ -190,115 +106,26 @@
 <%- include("../partials/pagination"); -%>
 
 <script>
-  /*  function openMenu(menu) {
-    const currentMenu = menu.childNodes[3];
-    console.log(currentMenu);
-    const showMenu = document.querySelector(".hidden-menu-show");
-
-    if (!currentMenu.classList.contains("hidden-menu-show") && showMenu) {
-      showMenu.classList.remove("hidden-menu-show");
-    }
-
-    currentMenu.classList.toggle("hidden-menu-show");
-  } */
-  // const userAction = document.getElementsByClassName("hidden-menu");
-  // const showMenu = document.querySelector(".hidden-menu-show");
-
-  const userMoreBtn = document.querySelectorAll(".user-more-btn");
-  const userActionBtn = document.querySelectorAll(".user-action-btn");
-
-  for (let i = 0; i < userMoreBtn.length; i++) {
-    userMoreBtn[i].addEventListener("click", function () {
-      // console.log(this.parentNode.childNodes[11].childNodes[3]);
-      const currentMenu = this.childNodes[3];
-
-      console.log(currentMenu);
-      const showMenu = document.querySelector(".hidden-menu-show");
-
-      if (!currentMenu.classList.contains("hidden-menu-show") && showMenu) {
-        showMenu.classList.remove("hidden-menu-show");
-      }
-      const btnActive = document.querySelector(".more-active-btn");
-      if (
-        !userActionBtn[i].classList.contains("more-active-btn") &&
-        btnActive
-      ) {
-        btnActive.classList.remove("more-active-btn");
-      }
-
-      currentMenu.classList.toggle("hidden-menu-show");
-      userActionBtn[i].classList.toggle("more-active-btn");
-      //myFun();
-    });
-  }
-
-  const menu = document.querySelectorAll(".menu");
-  console.log(menu);
-  function myFun() {
-    window.addEventListener("click", (e) => {
-      console.log("hello");
-      const showMenu = document.querySelector(".hidden-menu-show");
-
-      menu.forEach((item) => {
-        console.log(item.classList.contains("hidden-menu-show") && showMenu);
-        // if (item.classList.contains("hidden-menu-show") == true) {
-        //   item.classList.remove("hidden-menu-show");
-        // }
-      });
-      //console.log(e.target.classList.contains("hidden-menu-show"));
-    });
-  }
-  myFun();
-  //
-  //
-
-  function deleteData(deleteUrl) {
-    const deleteData = document.querySelectorAll(".delete-data");
-    const deleteModal = document.querySelector(".delete-modal");
-    const deleteId = document.querySelectorAll(".delete-id");
-    const deleteBtn = document.querySelectorAll(".modal-delete-btn");
-    const cancelBtn = document.querySelectorAll(".modal-cancel-btn");
-    for (let i = 0; i < deleteData.length; i++) {
-      deleteData[i].addEventListener("click", () => {
-        //alert("delete");
-        deleteModal.style.display = "block";
-        console.log(deleteId[i].value);
-
-        deleteBtn[0].addEventListener("click", () => {
-          console.log(deleteId[i].value);
-          window.location.href = `${deleteUrl}${deleteId[i].value}`;
-        });
-        cancelBtn[0].addEventListener("click", () => {
-          deleteModal.style.display = "none";
-        });
-      });
-    }
-  }
-  deleteData("/delete/user/");
-</script>
-
-<script>
-  // Paginations Functions
-
   function first(e) {
-    const firstPage = Number(e);
-    return (location.href = `/users?page=${firstPage}`);
-  }
+  const firstPage = Number(e);
+  return (location.href = `/users?page=${firstPage}`);
+}
 
-  function prev(e) {
-    const prevPage = Number(e - 1);
-    return (location.href = `/users?page=${prevPage}`);
-  }
-  function next(e) {
-    const nextPage = Number(parseInt(e) + 1);
-    console.log(nextPage);
-    return (location.href = `/users?page=${nextPage}`);
-  }
-  function last(e) {
-    const lastPage = e;
-    return (location.href = `/users?page=${lastPage}`);
-  }
+function prev(e) {
+  const prevPage = Number(e - 1);
+  return (location.href = `/users?page=${prevPage}`);
+}
+function next(e) {
+  const nextPage = Number(parseInt(e) + 1);
+  return (location.href = `/users?page=${nextPage}`);
+}
+function last(e) {
+  const lastPage = e;
+  return (location.href = `/users?page=${lastPage}`);
+}
+
 </script>
-<script src="/js/allUsers.js"></script>
+
+<script src="<%=baseUrl%>/js/users.js"></script>
 
 <%- include("../partials/footer"); -%>

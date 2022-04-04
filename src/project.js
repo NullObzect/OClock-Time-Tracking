@@ -84,4 +84,4 @@ for (let i = 0; i < saveBtn.length; i++) {
 
 formValidation()
 // delete project
-deleteData('/projects/delete/');
+deleteData('/options/projects/delete/');

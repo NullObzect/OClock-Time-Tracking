@@ -2,7 +2,7 @@ import Toastify from './toastify.js';
 
 const dateNullToast = Toastify({
   text: 'Date not select',
-  className: 'info',
+  className: 'warning',
 })
 // Date change to date icon active remove
 

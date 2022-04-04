@@ -15,7 +15,7 @@
   position: fixed;
   opacity: 0;
   transition: all 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
-  border-radius: 5px;
+  border-radius: 10px;
   cursor: pointer;
   text-decoration: none;
   max-width: calc(50% - 20px);
@@ -66,6 +66,9 @@
   max-width: -webkit-fit-content;
   max-width: fit-content;
   max-width: -moz-fit-content;
+}
+.warning{
+  background:#d4992b ;
 }
 
 @media only screen and (max-width: 360px) {

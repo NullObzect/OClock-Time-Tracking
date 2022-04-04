@@ -198,7 +198,7 @@ function reportHolidayShow(holidayTable, dateRangeReport) {
   holidayTable.innerHTML = dateRangeReport.map(
     (day, idx) => ` <tr>
   
-    <td class="table-img td-width-zero">
+    <td class="table-img">
      
      <img src="/uploads/avatars/${day.avatar != null ? day.avatar : 'demo-avatar.png'}" />
   </td>

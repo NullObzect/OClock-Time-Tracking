@@ -101,7 +101,7 @@ const OptionsController = {
         if (isUpdate.errno) {
           res.send('Error')
         } else {
-          res.redirect('/options')
+          res.status(200).json('success')
         }
       }
 
