@@ -9,14 +9,12 @@ let intervalId;
 (async () => {
   const response = await fetch('/get-start-data')
   const data = await response.json()
-  console.log(data)
   const startRuntTime = data
   if (startRuntTime != 0) {
     const startNow = startRuntTime
     startCounting(startNow)
     startBtn.style.display = 'none'
     endBtn.style.display = 'inline'
-    console.log(startRuntTime)
     const todayStart = document.getElementById('todayStart')
     if (todayStart.innerText == '00 : 00') {
       const startRunTime = new Date(data)
@@ -38,7 +36,6 @@ startData.addEventListener('submit', async (e) => {
     if (x[1] === '') {
       const fieldName = x[0];
       error.push(fieldName)
-      console.log(error)
     }
     // eslint-disable-next-line no-restricted-syntax
     for (const fieldName of error) {
@@ -104,10 +101,8 @@ async function todoEnd() {
     method: 'POST',
     headers: { 'Content-type': 'application/json; charset=UTF-8' },
   })
-  console.log('end12')
   const data = await response.json()
   startBtn.style.display = 'inline'
-  console.log('end')
   endBtn.style.display = 'none'
   // // Destructuring data
   const {
@@ -117,12 +112,11 @@ async function todoEnd() {
   const totalWorkTime = timeToHour(todayTotal)
   // Last index data
   const lastData = getTodayData[getTodayData.length - 1]
-  console.log(start)
   // Update today history table
   if (hiddenData) {
-    console.log('hidden data')
     hiddenData.style.display = 'none'
   }
+
   setTodayDetails(start, end, totalWorkTime, breakTime)
   setTodayReport(lastData.project_name, lastData.work_details, lastData.start, lastData.end, lastData.total)
 }
@@ -133,7 +127,6 @@ function setTodayDetails(start, end, total, breaktime) {
   const todayEnd = document.getElementById('todayEnd')
   const todayTotal = document.getElementById('todayTotal')
   const breakTime = document.getElementById('breakTime')
-  console.log(start)
   todayStart.innerText = start
   todayEnd.innerText = end
   todayTotal.innerText = total
