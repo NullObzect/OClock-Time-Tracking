@@ -11,6 +11,9 @@ const config = {
     leaveday: ['@babel/polyfill', './src/leaveday.js'],
     project: ['@babel/polyfill', './src/project.js'],
     main: ['@babel/polyfill', './src/main.js'],
+    users: ['@babel/polyfill', './src/users.js'],
+    optionValues: ['@babel/polyfill', './src/optionValues.js'],
+    profile: ['@babel/polyfill', './src/profile.js'],
   },
   output: {
     path: path.resolve(__dirname, 'public/js/'),
