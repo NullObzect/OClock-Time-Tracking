@@ -160,61 +160,61 @@
       </div>
     </div>
   </div>
-<div class="scroll-table">
-  <table class="project-table holiday-table">
-    <thead>
-      <tr>
-        <td>SL</td>
-        <td class="project-table-title">Holiday Title</td>
-        <td>Start Date</td>
-        <td>End Date</td>
-        <td>Duration</td>
-        <!-- <td>Action</td> -->
-      </tr>
-    </thead>
-    <tbody id="holiday-table">
-      <% holidays.map((day,idx) =>{ %>
+  <div class="scroll-table">
+    <table class="project-table holiday-table">
+      <thead>
+        <tr>
+          <td>SL</td>
+          <td class="project-table-title">Holiday Title</td>
+          <td>Start Date</td>
+          <td>End Date</td>
+          <td>Duration</td>
+          <!-- <td>Action</td> -->
+        </tr>
+      </thead>
+      <tbody id="holiday-table">
+        <% holidays.map((day,idx) =>{ %>
 
-      <tr>
-        <td class=""><%= idx + 1 %></td>
-        <td>
-          <input class="title-value" type="text" value="<%= day.title %>" />
-        </td>
-        <td>
-          <input
-            class="start-date-value"
-            type="text"
-            value="<%= day.start %>"
-          />
-        </td>
-        <td>
-          <input class="end-date-value" type="text" value="<%= day.end %>" />
-        </td>
-        <td class="duration"><%= day.duration + ' ' + 'day' %></td>
+        <tr>
+          <td class=""><%= idx + 1 %></td>
+          <td>
+            <input class="title-value" type="text" value="<%= day.title %>" />
+          </td>
+          <td>
+            <input
+              class="start-date-value"
+              type="text"
+              value="<%= day.start %>"
+            />
+          </td>
+          <td>
+            <input class="end-date-value" type="text" value="<%= day.end %>" />
+          </td>
+          <td class="duration"><%= day.duration + ' ' + 'day' %></td>
 
-        <%if(loggedInUser.userRole==='admin'){ %>
+          <%if(loggedInUser.userRole==='admin'){ %>
 
-        <td class="btn-group">
-          <button type="text" class="action-btn">Action</button>
-          <button type="text" class="update-btn">Update</button>
-          <button type="text" class="save-btn">Save</button>
+          <td class="btn-group">
+            <button type="text" class="action-btn">Action</button>
+            <button type="text" class="update-btn">Update</button>
+            <button type="text" class="save-btn">Save</button>
 
-          <a class="delete-data">
-            <button type="text" class="delete-btn">Delete</button>
-          </a>
-          <input
-            type="hidden"
-            class="holiday-id delete-id"
-            value="<%= day.id %>"
-          />
-          <% } %>
-        </td>
-      </tr>
+            <a class="delete-data">
+              <button type="text" class="delete-btn">Delete</button>
+            </a>
+            <input
+              type="hidden"
+              class="holiday-id delete-id"
+              value="<%= day.id %>"
+            />
+            <% } %>
+          </td>
+        </tr>
 
-      <% }) %>
-    </tbody>
-  </table>
-</div>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
 
   <!-- Markup for user delete modal -->
 
@@ -229,133 +229,6 @@
 <script>
   const baseUrl = "<%= baseUrl %>";
   const loggedInUser = "<%= loggedInUser.userRole %>";
-
-  /*  function deleteData(deleteUrl) {
-    const deleteData = document.querySelectorAll(".delete-data");
-    const deleteModal = document.querySelector(".delete-modal");
-    const deleteId = document.querySelectorAll(".delete-id");
-    const deleteBtn = document.querySelectorAll(".modal-delete-btn");
-    const cancelBtn = document.querySelectorAll(".modal-cancel-btn");
-    for (let i = 0; i < deleteData.length; i++) {
-      deleteData[i].addEventListener("click", () => {
-        //alert("delete");
-        deleteModal.style.display = "block";
-        console.log(deleteId[i].value);
-
-        deleteBtn[0].addEventListener("click", () => {
-          console.log(deleteId[i].value);
-          window.location.href = `${deleteUrl}${deleteId[i].value}`;
-        });
-        cancelBtn[0].addEventListener("click", () => {
-          deleteModal.style.display = "none";
-        });
-      });
-    }
-  }
-  deleteData("/delete/holiday/"); */
-  /* 
-  const holidayTable = document.querySelector("#holiday-table");
-  // Date change to date icon active remove
-
-  function iconCheck(e) {
-    const dateIcon = document.querySelector("#date-icon");
-    const data = dateIcon.classList.contains("date-icon-active");
-    if (data) {
-      return dateIcon.classList.remove("date-icon-active");
-    }
-  }
-  // getDate format
-  function getDateFormat(date) {
-    if (date === null) {
-      return null;
-    }
-    let today = new Date(date);
-    const dd = String(today.getDate()).padStart(2, "0");
-    const mm = String(today.getMonth() + 1).padStart(2, "0");
-    const yyyy = today.getFullYear();
-    today = `${yyyy}-${mm}-${dd}`;
-    return today;
-  }
-  // get current date
-  function getCurrentDate() {
-    let today = new Date();
-    const dd = String(today.getDate()).padStart(2, "0");
-    const mm = String(today.getMonth() + 1).padStart(2, "0");
-    const yyyy = today.getFullYear();
-    today = `${yyyy}-${mm}-${dd}`;
-
-    return today;
-  }
-
-  async function dateRange(event) {
-    const dateIcon = document.querySelector("#date-icon");
-    const dateStart = document.querySelector("#startPicker");
-    const dateEnd = document.querySelector("#endPicker");
-    const startDate = getDateFormat(startDatePicker.getFullDate());
-    const endDate = getDateFormat(
-      endDatePicker.getFullDate() || getCurrentDate()
-    );
-
-    dateStart.dataset.date = startDate;
-    dateEnd.dataset.date = endDate;
-
-    if (dateStart.dataset.date === "null") {
-      return alert("date not select");
-    }
-
-    console.log(startDate, endDate);
-
-    const data = await fetch(
-      `${baseUrl}/options/holiday/between-two-date?startDate=${startDate}&endDate=${endDate}`
-    );
-
-    const holidays = await data.json();
-    console.log(holidays);
-
-    if (holidays.length === 0) {
-      return alert("No Holiday Found");
-    }
-    holidayTable.innerHTML = holidays.map(
-      (day, idx) =>
-        `
-
-      <tr>
-        <td class="">${idx + 1}</td>
-        <td>
-          <input class="title-value" type="text" value="${day.title}" />
-        </td>
-        <td>
-          <input
-            class="start-date-value"
-            type="text"
-            value="${day.start}"
-          />
-        </td>
-        <td>
-          <input class="end-date-value" type="text" value="${day.end}" />
-        </td>
-        <td class="duration">${day.duration + " " + "day"}</td>
-
-        <td class="btn-group">
-          <button   class="action-btn">Action</button>
-          <button  class="update-btn">Update</button>
-          <button  class="save-btn">Save</button>
-
-          <a
-            onclick=" return confirm('Are you Sure???')"
-            href="/delete/holiday/${day.id}"
-          >
-            <button type="text" class="delete-btn">Delete</button>
-          </a>
-          <input type="hidden" class="holiday-id" value="${day.id}" />
-          
-        </td>
-      </tr>
-      `
-    );
-
-    // add action code here
-  } */
 </script>
 
 <script src="<%=baseUrl%>/js/holiday.js"></script>

@@ -1,5 +1,5 @@
 import {
-  aJAXPostRequest, dateDiff, dateFormate, deleteData, formValidation, getCurrentDate
+  aJAXPostRequest, dateDiff, dateFormate, deleteData, formValidation, getCurrentDate, setReportTitle
 } from './helper.js';
 
 async function pagination(pageNumber, numberOfPage, page) {
@@ -14,15 +14,21 @@ async function pagination(pageNumber, numberOfPage, page) {
   loader(numberOfPage, page)
   actions()
 }
+// console.log('xxx', setReportTitle())
 
 function loader(numberOfPage, pageNO) {
   async function page(pageNo) {
     const startDate = document.querySelector('#startPicker').dataset.date
     const endDate = document.querySelector('#endPicker').dataset.date
+    // setReportTitle(startDate, endDate);
+    console.log('xxx', setReportTitle(startDate, endDate));
+
     const data = await fetch(
       `${baseUrl}/options/leavedays/between-two-date?startDate=${startDate}&endDate=${endDate}&page=${pageNo}`,
     );
+
     const holidays = await data.json();
+
     if (holidays.length === 0) {
       return alert('No Holiday Found');
     }

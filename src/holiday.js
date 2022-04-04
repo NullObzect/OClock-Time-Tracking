@@ -1,7 +1,7 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-return-assign */
 import {
-  aJAXPostRequest, dateDiff, dateFormate, deleteData, formValidation, getCurrentDate
+  aJAXPostRequest, dateDiff, dateFormate, deleteData, formValidation, getCurrentDate, setReportTitle
 } from './helper.js';
 
 function pagination(pageNumber, numberOfPage, page) {
@@ -149,8 +149,6 @@ async function actions() {
 }
 actions();
 
-// const holidayTable = document.querySelector('#holiday-table');
-
 // action buttons
 const dateIcon = document.querySelector('#date-icon');
 
@@ -172,6 +170,7 @@ dateIcon.addEventListener('click', async () => {
     `${baseUrl}/options/holiday/between-two-date?startDate=${startDate}&endDate=${endDate}`,
   );
 
+  setReportTitle(startDate, endDate)
   const holidays = await data.json();
   console.log(holidays);
 

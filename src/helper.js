@@ -148,7 +148,11 @@ function deleteData(deleteUrl) {
     });
   }
 }
-
+// fuction for dynamic report title
+function setReportTitle(startDate, endDate) {
+  const reportTitle = document.querySelector('.report-title')
+  return reportTitle.innerHTML = `Date Between <b>${startDate}</b> and <b>${endDate || getCurrentDate()}</b>`
+}
 // exports.getDateFormat = { getDateFormat, aJAXPostRequest };
 
 export {
@@ -161,4 +165,5 @@ export {
   test,
   formValidation,
   deleteData,
+  setReportTitle,
 };
