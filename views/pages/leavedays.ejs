@@ -157,20 +157,20 @@
   <table  class="table leaveday-table">
     <thead>
       <tr>
-        <td class="table-img td-width-zero"></td>
+        <td class="table-img"></td>
 
-        <td>Name</td>
-        <td class="project-table-title">Leave Reason</td>
-        <td>Start Date</td>
-        <td>End Date</td>
-        <td>Duration</td>
+        <td class="td-width ">Name</td>
+        <td class="project-table-title td-width">Leave Reason</td>
+        <td class="td-width">Start Date</td>
+        <td class="td-width">End Date</td>
+        <td class="td-width">Duration</td>
       </tr>
     </thead>
     <tbody id="leaveday-table">
       <%if(loggedInUser.userRole==='admin'){ %>
        <%employeeLeaveList.map((user,idx) =>{ %>
       <tr>
-        <td class="table-img td-width-zero">
+        <td class="table-img">
           <% if(user.avatar !== null && user.avatar.match(/^(http|https):/g)){
           %>
           <img src="<%= user.avatar%>" />
@@ -180,19 +180,19 @@
           />
           <% } %>
         </td>
-        <td>
+        <td class="td-width">
           <div class="username"><%=user.name%></div>
           <span id="role"><%= user.user_role==='admin'? 'admin' : ''%> </span>
         </td>
-        <td>
+        <td class="td-width">
           <input class="reason-val" type="text" value="<%=user.reason %>" />
         </td>
-        <td>
+        <td class="td-width">
           <input class="start-val" type="text" value="<%=user.start%> " />
         </td>
         <td><input class="end-val" type="text" value="<%=user.end%>" /></td>
-        <td class="duration"><%= user.duration + ' ' + 'day' %></td>
-        <td>
+        <td class="duration td-width"><%= user.duration + ' ' + 'day' %></td>
+        <td class="td-width">
           <div class="btn-group">
             <button type="button" class="action-btn">Action</button>
             <button type="button" class="update-btn">Update</button>
