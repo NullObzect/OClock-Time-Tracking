@@ -3,10 +3,10 @@
 .dashboard-none {
   display: none;
 }
-.dashboard-head{
+.dashboard-head {
   display: flex;
   align-items: center;
-  justify-content: center
+  justify-content: center;
 }
 
 .oclock-box {
@@ -30,7 +30,7 @@
     0px 6.16275px 7.53556px rgba(5, 51, 143, 0.0661684);
 }
 .time-box {
-  flex-grow:1 ;
+  flex-grow: 1;
 }
 .current-time {
   font-size: 36px;
@@ -80,7 +80,6 @@
 .dashboard-reports {
   border-collapse: collapse;
   margin: 25px 40px;
- 
 }
 .dashboard-reports tbody td {
   border-bottom: 1px solid #b9b9b9;
@@ -106,19 +105,17 @@
   max-width: 300px;
   overflow-wrap: break-word;
 }
-.dashboard-reports td:nth-last-child(1) {
-  width: 0;
-}
+
 .dashboard-reports td .username {
   display: flex;
   text-align: center;
 }
-#hidden-data h5{
+#hidden-data h5 {
   margin: auto;
   width: 100%;
   text-align: center;
 }
-.title-for-cnt-ely{
+.title-for-cnt-ely {
   margin: auto;
   width: 100%;
   text-align: center;
@@ -129,25 +126,24 @@
 .table input {
   outline: none !important;
   border-radius: 10px;
-  
 }
-.table input{
+.table input {
   border: none;
   background-color: transparent;
   padding: 6px;
   outline: none;
+  width: 90%;
 }
 .table input:focus {
   outline: none;
   border: none;
   border-radius: 10px;
-
-
 }
-.table th , .table td {
+.table th,
+.table td {
   width: 160px;
 }
-.title-for-cnt-ely{
+.title-for-cnt-ely {
   font-size: 14px;
   font-weight: bold;
   color: #000;
@@ -157,7 +153,7 @@
 /* .cnt-working-emy-list{
   position: relative;
 } */
-.modal-cont{
+.modal-cont {
   position: absolute;
   top: 0;
   left: 0;
@@ -178,7 +174,12 @@
   width: 70px;
   text-align: center;
 }
-.update-start-time, .update-end-time, .update-btn, .save-btn,.save-btn-for-end-time {
+.update-start-time,
+.update-end-time,
+.update-btn,
+.save-btn,
+.save-btn-for-end-time,
+.opt-cancel-btn {
   background-color: #103047;
   border-radius: 10px;
   color: #fff;
@@ -192,11 +193,15 @@
   width: 70px;
 }
 
-.save-btn, .save-btn-for-end-time {
+.save-btn,
+.save-btn-for-end-time {
   background-color: rgb(17, 221, 17);
 }
-.update-start-time, .update-end-time, .save-btn,.save-btn-for-end-time {
-  
+.update-start-time,
+.update-end-time,
+.save-btn,
+.save-btn-for-end-time,
+.opt-cancel-btn {
   display: none;
 }
 

@@ -154,103 +154,106 @@
 
   <!-- Markup for leave days table  -->
   <div class="scroll-table">
-  <table  class="table leaveday-table">
-    <thead>
-      <tr>
-        <td class="table-img"></td>
+    <table class="table leaveday-table">
+      <thead>
+        <tr>
+          <td class="table-img"></td>
 
-        <td class="td-width ">Name</td>
-        <td class="project-table-title td-width">Leave Reason</td>
-        <td class="td-width">Start Date</td>
-        <td class="td-width">End Date</td>
-        <td class="td-width">Duration</td>
-      </tr>
-    </thead>
-    <tbody id="leaveday-table">
-      <%if(loggedInUser.userRole==='admin'){ %>
-       <%employeeLeaveList.map((user,idx) =>{ %>
-      <tr>
-        <td class="table-img">
-          <% if(user.avatar !== null && user.avatar.match(/^(http|https):/g)){
-          %>
-          <img src="<%= user.avatar%>" />
-          <%} else{%>
-          <img
-            src="/uploads/avatars/<%=user.avatar != null ?  user.avatar : 'demo-avatar.png' %>"
-          />
-          <% } %>
-        </td>
-        <td class="td-width">
-          <div class="username"><%=user.name%></div>
-          <span id="role"><%= user.user_role==='admin'? 'admin' : ''%> </span>
-        </td>
-        <td class="td-width">
-          <input class="reason-val" type="text" value="<%=user.reason %>" />
-        </td>
-        <td class="td-width">
-          <input class="start-val" type="text" value="<%=user.start%> " />
-        </td>
-        <td><input class="end-val" type="text" value="<%=user.end%>" /></td>
-        <td class="duration td-width"><%= user.duration + ' ' + 'day' %></td>
-        <td class="td-width">
-          <div class="btn-group">
-            <button type="button" class="action-btn">Action</button>
-            <button type="button" class="update-btn">Update</button>
-            <button type="button" class="save-btn">Save</button>
-            <input type="hidden" class="leave-id delete-id" value="<%= user.id %>" />
-            <a
-            class="delete-data"
-              ><button class="delete-btn">Delete</button>
-            </a>
-          </div>
-        </td>
-      </tr>
+          <td class="td-width">Name</td>
+          <td class="project-table-title td-width">Leave Reason</td>
+          <td class="td-width">Start Date</td>
+          <td class="td-width">End Date</td>
+          <td class="td-width">Duration</td>
+        </tr>
+      </thead>
+      <tbody id="leaveday-table">
+        <%if(loggedInUser.userRole==='admin'){ %>
+        <%employeeLeaveList.map((user,idx) =>{ %>
+        <tr>
+          <td class="table-img">
+            <% if(user.avatar !== null && user.avatar.match(/^(http|https):/g)){
+            %>
+            <img src="<%= user.avatar%>" />
+            <%} else{%>
+            <img
+              src="/uploads/avatars/<%=user.avatar != null ?  user.avatar : 'demo-avatar.png' %>"
+            />
+            <% } %>
+          </td>
+          <td class="td-width">
+            <div class="username"><%=user.name%></div>
+            <span id="role"><%= user.user_role==='admin'? 'admin' : ''%> </span>
+          </td>
+          <td class="td-width">
+            <input class="reason-val" type="text" value="<%=user.reason %>" />
+          </td>
+          <td class="td-width">
+            <input class="start-val" type="text" value="<%=user.start%> " />
+          </td>
+          <td><input class="end-val" type="text" value="<%=user.end%>" /></td>
+          <td class="duration td-width"><%= user.duration + ' ' + 'day' %></td>
+          <td class="td-width">
+            <div class="btn-group">
+              <button type="button" class="action-btn">Action</button>
+              <button type="button" class="update-btn">Update</button>
+              <button type="button" class="save-btn">Save</button>
+              <button type="button" class="opt-cancel-btn">Cancel</button>
 
-      <% }) %> <%}else{%> <% anEmployeeLeavedaysList.map((user,idx) =>{ %>
-      <tr>
-        <td class="table-img td-width-zero">
-          <% if(user.avatar !== null && user.avatar.match(/^(http|https):/g)){
-          %>
-          <img src="<%= user.avatar%>" />
-          <%} else{%>
-          <img
-            src="/uploads/avatars/<%=user.avatar != null ?  user.avatar : 'demo-avatar.png' %>"
-          />
-          <% } %>
-        </td>
-        <td>
-          <div class="username"><%=user.user_name%></div>
-          <span id="role"><%= user.user_role==='admin'? 'admin' : ''%> </span>
-        </td>
-        <td>
-          <input class="reason-val" type="text" value="<%=user.reason %>" />
-        </td>
-        <td>
-          <input class="start-val" type="text" value="<%=user.start%> " />
-        </td>
-        <td><input class="end-val" type="text" value="<%=user.end%>" /></td>
-        <td class="duration"><%= user.duration + ' ' + 'day' %></td>
-      </tr>
+              <input
+                type="hidden"
+                class="leave-id delete-id"
+                value="<%= user.id %>"
+              />
+              <a class="delete-data"
+                ><button class="delete-btn">Delete</button>
+              </a>
+            </div>
+          </td>
+        </tr>
 
-      <% }) %> <% } %>
-    </tbody>
-  </table>
-  <!-- Markup for user delete modal -->
+        <% }) %> <%}else{%> <% anEmployeeLeavedaysList.map((user,idx) =>{ %>
+        <tr>
+          <td class="table-img td-width-zero">
+            <% if(user.avatar !== null && user.avatar.match(/^(http|https):/g)){
+            %>
+            <img src="<%= user.avatar%>" />
+            <%} else{%>
+            <img
+              src="/uploads/avatars/<%=user.avatar != null ?  user.avatar : 'demo-avatar.png' %>"
+            />
+            <% } %>
+          </td>
+          <td>
+            <div class="username"><%=user.user_name%></div>
+            <span id="role"><%= user.user_role==='admin'? 'admin' : ''%> </span>
+          </td>
+          <td>
+            <input class="reason-val" type="text" value="<%=user.reason %>" />
+          </td>
+          <td>
+            <input class="start-val" type="text" value="<%=user.start%> " />
+          </td>
+          <td><input class="end-val" type="text" value="<%=user.end%>" /></td>
+          <td class="duration"><%= user.duration + ' ' + 'day' %></td>
+        </tr>
 
-<%- include("../partials/delete-modal.ejs"); -%>
-  <!--- Markup for pagination -->
+        <% }) %> <% } %>
+      </tbody>
+    </table>
+    <!-- Markup for user delete modal -->
 
-  <div class="pagination">
-    <ul id="pagination"></ul>
+    <%- include("../partials/delete-modal.ejs"); -%>
+    <!--- Markup for pagination -->
+
+    <div class="pagination">
+      <ul id="pagination"></ul>
+    </div>
   </div>
-</div>
 </div>
 
 <script>
   const baseUrl = "<%= baseUrl %>";
   const loggedInUser = "<%= loggedInUser.userRole %>";
-
-
 </script>
 <script src="<%=baseUrl%>/js/leaveday.js"></script>
 

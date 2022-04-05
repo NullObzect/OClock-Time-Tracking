@@ -1,7 +1,9 @@
 <%- include("../partials/header"); -%>
 
 <style>
-
+  .update-btn {
+    display: none;
+  }
 </style>
 <div id="project">
   <div class="text-head">
@@ -17,49 +19,52 @@
   </div>
   <%- include("../partials/add-project-modal"); -%>
   <div class="scroll-table">
-  <table class="project-table">
-    <thead>
-      <tr>
-        <td>SL</td>
-        <td>Date</td>
-        <td class="project-table-title">Project Name</td>
-        <td>Project Details</td>
-      </tr>
-    </thead>
-    <tbody>
-      <% projects.map((project,idx)=>{ %>
-      <tr>
-        <td><%= idx + 1 %></td>
-        <td><%= project.date %></td>
-        <td class="project-table-title title-value">
-          <%= project.project_name %>
-        </td>
-        <td class="project-details"><%= project.project_details %></td>
-        <%if(loggedInUser.userRole==='admin'){ %>
-        <td class="btn-group">
-          <button type="button" class="action-btn">Action</button>
-          <button type="button" class="update-btn">Update</button>
-          <a class="delete-btn delete-data">
-            <input
-              type="hidden"
-              class="project-id delete-id"
-              value="<%= project.id %>"
-            />Delete</a
-          >
-          <button type="button" class="save-btn">Save</button>
-        </td>
-        <% } %>
-      </tr>
-      <%}) %>
-    </tbody>
-  </table>
-</div>
-<!-- Markup for user delete modal -->
+    <table class="project-table">
+      <thead>
+        <tr>
+          <td>SL</td>
+          <td>Date</td>
+          <td class="project-table-title">Project Name</td>
+          <td>Project Details</td>
+        </tr>
+      </thead>
+      <tbody>
+        <% projects.map((project,idx)=>{ %>
+        <tr>
+          <td><%= idx + 1 %></td>
+          <td><%= project.date %></td>
+          <td class="project-table-title title-value">
+            <%= project.project_name %>
+          </td>
+          <td class="project-details"><%= project.project_details %></td>
+          <%if(loggedInUser.userRole==='admin'){ %>
+          <td class="btn-group">
+            <button type="button" class="action-btn">Action</button>
+            <button type="button" class="update-btn">Update</button>
 
-<%- include("../partials/delete-modal.ejs"); -%>
-<script>
-  const baseUrl = "<%= baseUrl %>";
-  const loggedInUser = "<%= loggedInUser.userRole %>";
-</script>
-<script src="<%= baseUrl %>/js/project.js"></script>
-<%- include("../partials/footer"); -%>
+            <a class="delete-btn delete-data">
+              <input
+                type="hidden"
+                class="project-id delete-id"
+                value="<%= project.id %>"
+              />Delete</a
+            >
+            <button type="button" class="save-btn">Save</button>
+            <button type="button" class="opt-cancel-btn">Cancel</button>
+          </td>
+          <% } %>
+        </tr>
+        <%}) %>
+      </tbody>
+    </table>
+  </div>
+  <!-- Markup for user delete modal -->
+
+  <%- include("../partials/delete-modal.ejs"); -%>
+  <script>
+    const baseUrl = "<%= baseUrl %>";
+    const loggedInUser = "<%= loggedInUser.userRole %>";
+  </script>
+  <script src="<%= baseUrl %>/js/project.js"></script>
+  <%- include("../partials/footer"); -%>
+</div>

@@ -13,12 +13,14 @@ const optionValueChangeBtn = document.querySelectorAll('.opt-val-change-btn');
 const optionValueInput = document.querySelectorAll('.option-value');
 const optionIdInput = document.querySelectorAll('.optionId');
 const optionValueSaveBtn = document.querySelectorAll('.opt-val-save-btn');
+const optCancelBtn = document.querySelectorAll('.opt-cancel-btn');
 
 for (let i = 0; i < optionValueChangeBtn.length; i += 1) {
   optionValueChangeBtn[i].addEventListener('click', (e) => {
     e.preventDefault();
     optionValueSaveBtn[i].style.display = 'block';
     optionValueChangeBtn[i].style.display = 'none';
+    optCancelBtn[i].style.display = 'block';
     // optionValueInput[i].classList.add("bottom-border", "option-value-focus");
     optionValueInput[i].focus();
   });
@@ -42,10 +44,19 @@ for (let i = 0; i < optionValueSaveBtn.length; i += 1) {
 
     optionValueSaveBtn[i].style.display = 'none';
     optionValueChangeBtn[i].style.display = 'block';
+    optCancelBtn[i].style.display = 'none';
     optionValueInput[i].textContent = data.optionValue;
   });
 }
-
+// when click option button
+for (let i = 0; i < optCancelBtn.length; i += 1) {
+  optCancelBtn[i].addEventListener('click', (e) => {
+    e.preventDefault();
+    optionValueSaveBtn[i].style.display = 'none';
+    optionValueChangeBtn[i].style.display = 'block';
+    optCancelBtn[i].style.display = 'none';
+  });
+}
 //  AJAX post request function
 const aJAXPostRequest = (url, values) => new Promise((resolve, reject) => {
   fetch(url, {

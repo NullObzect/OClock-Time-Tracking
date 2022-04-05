@@ -74,6 +74,7 @@ const updateEndTimeVal = document.querySelectorAll('.update-end-time-val');
 const userId = document.querySelectorAll('.userId');
 const getDate = document.querySelectorAll('.get-date');
 const saveBtnForEndTime = document.querySelectorAll('.save-btn-for-end-time');
+const optCancelBtn = document.querySelectorAll('.opt-cancel-btn');
 
 //
 for (let i = 0; i < updateStartTime.length; i++) {
@@ -88,6 +89,7 @@ for (let i = 0; i < updateStartTime.length; i++) {
     updateStartTime[i].style.display = 'none';
     updateEndTime[i].style.display = 'none';
     saveBtn[i].style.display = 'block';
+    optCancelBtn[i].style.display = 'block';
     updateStartTimeVal[i].type = 'time';
     updateStartTimeVal[i].focus();
   });
@@ -105,6 +107,7 @@ for (let i = 0; i < updateStartTime.length; i++) {
     aJAXPostRequest('/update-start-time', data)
     saveBtn[i].style.display = 'none';
     updateBtn[i].style.display = 'block';
+    optCancelBtn[i].style.display = 'none';
   });
 }
 
@@ -114,6 +117,7 @@ for (let i = 0; i < updateEndTime.length; i++) {
     updateEndTime[i].style.display = 'none';
     saveBtnForEndTime[i].style.display = 'block';
     updateStartTime[i].style.display = 'none';
+    optCancelBtn[i].style.display = 'block';
     updateEndTimeVal[i].type = 'time';
     updateEndTimeVal[i].focus();
     const data = {
@@ -137,26 +141,17 @@ for (let i = 0; i < updateEndTime.length; i++) {
     aJAXPostRequest('/update-end-time', data)
     saveBtnForEndTime[i].style.display = 'none';
     updateBtn[i].style.display = 'block';
+    optCancelBtn[i].style.display = 'none';
     return window.location.replace('/dashboard');
   });
 }
-
-//  AJAX post request function
-// const aJAXPostRequest = (url, values) => new Promise((resolve, reject) => {
-//   fetch(url, {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify(values),
-//   })
-//     .then((res) => res.json())
-//     .then((data) => {
-//       console.log({ data });
-//       if (data.success) {
-//         alert('Option Value Updated');
-//       }
-//     })
-//     .catch((err) => console.log(err));
-//   // return window.location.replace('/options/holiday');
-// })
+// when click on cancel button
+for (let i = 0; i < optCancelBtn.length; i++) {
+  optCancelBtn[i].addEventListener('click', () => {
+    updateBtn[i].style.display = 'block';
+    optCancelBtn[i].style.display = 'none';
+    saveBtn[i].style.display = 'none';
+    saveBtnForEndTime[i].style.display = 'none';
+    
+  });
+}

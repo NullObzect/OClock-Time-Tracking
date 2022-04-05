@@ -50,7 +50,6 @@
   letter-spacing: 2px;
   opacity: 0;
   transition: all 0.3s ease;
-
 }
 .options-card:hover {
   background: var(--fade-bluish-gray);
@@ -153,7 +152,8 @@
   outline: none;
 }
 .opt-val-change-btn,
-.opt-val-save-btn {
+.opt-val-save-btn,
+.opt-cancel-btn {
   background-color: #103047;
   border-radius: 10px;
   color: #fff;
@@ -163,20 +163,20 @@
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
-  width: 100%;
+  width: 70px;
 }
-.opt-val-save-btn {
-  background-color: rgb(17, 221, 17);
+.opt-val-save-btn,
+.opt-cancel-btn {
   display: none;
 }
-.green {
+.green,
+.opt-val-save-btn {
   background-color: rgb(17, 221, 17);
 }
 
 /* leaveday table */
 
-.table .leaveday-table .td-width{
+.table .leaveday-table .td-width {
   width: 30%;
   min-width: 120px;
- }
-
+}

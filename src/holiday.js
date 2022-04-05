@@ -94,6 +94,7 @@ async function actions() {
   const updateBtn = document.querySelectorAll('.update-btn');
   const deleteBtn = document.querySelectorAll('.delete-btn');
   const saveBtn = document.querySelectorAll('.save-btn');
+  const optCancelBtn = document.querySelectorAll('.opt-cancel-btn');
   //
   const titleValue = document.querySelectorAll('.title-value');
   const startDateValue = document.querySelectorAll('.start-date-value');
@@ -115,6 +116,7 @@ async function actions() {
       deleteBtn[i].style.display = 'none';
       saveBtn[i].style.display = 'block';
       actionBtn[i].style.display = 'none';
+      optCancelBtn[i].style.display = 'block';
       titleValue[i].focus();
     });
   }
@@ -144,6 +146,16 @@ async function actions() {
       duration[i].innerText = `${dateDiff(data.start, data.end)} day`;
       saveBtn[i].style.display = 'none';
       actionBtn[i].style.display = 'block';
+      optCancelBtn[i].style.display = 'none';
+    });
+  }
+
+  // when cancel button is clicked
+  for (let i = 0; i < optCancelBtn.length; i++) {
+    optCancelBtn[i].addEventListener('click', () => {
+      saveBtn[i].style.display = 'none';
+      actionBtn[i].style.display = 'block';
+      optCancelBtn[i].style.display = 'none';
     });
   }
 }
