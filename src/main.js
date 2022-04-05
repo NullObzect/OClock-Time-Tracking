@@ -73,15 +73,6 @@ window.onclick = function (event) {
   if (moreOption) {
     moreOption.classList.remove('show-more')
   }
-  // const userMoreBtn = document.querySelector('.hidden-menu-show')
-  // if (userMoreBtn) {
-  //   userMoreBtn.classList.remove('hidden-menu-show')
-  // }
-
-  // if (userMoreBtn) {
-  //   for (const userActiveBtn of userMoreBtn) {
-  //   }
-  // }
 
   if (target == modal || target == deleteModal || target == moreOption) {
     modal.style.display = 'none';
