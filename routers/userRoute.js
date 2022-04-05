@@ -6,8 +6,8 @@ const { userValidator, addUserValidationHandler } = require('../middleware/user/
 const { updateUserValidator, updateUserValidationHandler } = require('../middleware/user/updateUserValidator');
 const avatarUpload = require('../middleware/user/avatarUpload');
 
-router.get('/users', decorateHtmlResponse('Add User'), checkLogin, requireRole(['admin']), UserController.getUsers);
-router.post('/add-user', decorateHtmlResponse('Add User'), avatarUpload, userValidator, addUserValidationHandler, UserController.addUser);
+router.get('/users', decorateHtmlResponse('Users'), checkLogin, requireRole(['admin']), UserController.getUsers);
+router.post('/add-user', decorateHtmlResponse('Users'), avatarUpload, userValidator, addUserValidationHandler, UserController.addUser);
 router.get('/users', decorateHtmlResponse('Users'), checkLogin, requireRole(['admin']), UserController.allUsersList)
 router.get('/users-list', checkLogin, requireRole(['admin']), UserController.usersList)
 router.get('/admin-list', checkLogin, requireRole(['admin']), UserController.adminList)
