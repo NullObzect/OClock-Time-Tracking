@@ -7,8 +7,8 @@ const { checkLogin } = require('../middleware/common/AuthMiddleware');
 const avatarUpload = require('../middleware/user/avatarUpload');
 
 // Router for user profile page
-router.get('/', decorateHtmlResponse('User Profile'), checkLogin, ProfileController.userProfile)
-router.get('/picture/:id', decorateHtmlResponse('User Profile'), ProfileController.changeProfile)
-router.post('/update-profile', decorateHtmlResponse('User Profile'), avatarUpload, passwordValidator, passwordValidationHandler, ProfileController.updateProfile)
+router.get('/', decorateHtmlResponse('Profile'), checkLogin, ProfileController.userProfile)
+router.get('/picture/:id', decorateHtmlResponse('Profile'), ProfileController.changeProfile)
+router.post('/update-profile', decorateHtmlResponse('Profile'), avatarUpload, passwordValidator, passwordValidationHandler, ProfileController.updateProfile)
 
 module.exports = router;
