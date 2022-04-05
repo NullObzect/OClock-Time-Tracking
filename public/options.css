@@ -173,7 +173,9 @@
 .opt-val-save-btn {
   background-color: rgb(17, 221, 17);
 }
-
+.opt-cancel-btn {
+  background-color: var(--red) !important;
+}
 /* leaveday table */
 
 .table .leaveday-table .td-width {

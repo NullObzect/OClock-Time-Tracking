@@ -92,21 +92,35 @@ for (let i = 0; i < userMoreBtn.length; i++) {
     userActionBtn[i].classList.toggle('more-active-btn');
     // myFun();
   });
+
+  window.addEventListener('click', (e) => {
+    if (!e.target.matches('#user-more-btn')) {
+      const showMenu = document.querySelector('.hidden-menu-show');
+      console.log(showMenu);
+      if (showMenu) {
+        console.log('yes');
+        //showMenu.classList.remove('hidden-menu-show');
+      }
+    }
+  });
 }
 
 const menu = document.querySelectorAll('.menu');
 function myFun() {
   window.addEventListener('click', (e) => {
+    console.log('click');
     const showMenu = document.querySelector('.hidden-menu-show');
+    const xx = document.body.classList.contains('hidden-menu-show');
 
     menu.forEach((item) => {
-      // if (item.classList.contains("hidden-menu-show") == true) {
-      //   item.classList.remove("hidden-menu-show");
+      console.log(item.classList.contains('hidden-menu-show'))
+      // if (item.classList.contains('hidden-menu-show')) {
+      //   item.classList.remove('hidden-menu-show');
       // }
     });
   });
 }
-myFun();
+//myFun();
 
 function deleteData(deleteUrl) {
   const deleteData = document.querySelectorAll('.delete-data');
