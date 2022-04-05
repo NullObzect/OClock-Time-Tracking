@@ -8,6 +8,8 @@
 <div id="project">
   <div class="text-head">
     <div class="text-title">Projects</div>
+    <%if(loggedInUser.userRole==='admin'){ %>
+
     <div class="add-button">
       <button class="add-btn">
         <span class="add-icon">
@@ -16,6 +18,7 @@
         <span .add-btn-text>Add Project</span>
       </button>
     </div>
+    <%}%>
   </div>
   <%- include("../partials/add-project-modal"); -%>
   <div class="scroll-table">
