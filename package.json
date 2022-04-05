@@ -10,8 +10,9 @@
     "clean": "rimraf node_modules package.json",
     "clean-install": "rimraf node_modules package-lock.json && npm i",
     "build-dev": "webpack --mode development -w",
-    "start": "NODE_ENV=development nodemon  app.js",
-    "production": "NODE_ENV=production node app.js"
+    "start": "NODE_ENV=development node  app.js",
+    "production": "NODE_ENV=production node app.js",
+    "server":"NODE_ENV=development nodemon  app.js"
   },
   "author": "",
   "license": "ISC",
