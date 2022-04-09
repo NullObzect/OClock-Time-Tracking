@@ -2,8 +2,9 @@
 ## Oclock Time tracking
 
 A brief description of what this project does and who it's for
-
-#### Table of Contnts 
+<details>
+ <summary>  Table of Contnts</summary>
+ 
 ##### 1. About the project 
 - Built With
 ##### 2. Getting Started
@@ -13,8 +14,9 @@ A brief description of what this project does and who it's for
 ##### 4. Roadmap
 ##### 5. Contributing
 ##### 6. Contact
-
-
+</details>
+ 
+ 
 ## About The Project
 
 ### Built With
@@ -72,3 +74,6 @@ needed admin email & password
 
 - Mail: rubelamin@mail.com
 - Password: 123456
+
+
+
