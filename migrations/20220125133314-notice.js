@@ -8,16 +8,16 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       notice_type: {
-        allowNull: false,
         type: Sequelize.STRING,
+        defaultValue: null,
       },
       sender_id: {
-        allowNull: false,
         type: Sequelize.STRING,
+        defaultValue: null,
       },
       user_id: {
-        allowNull: false,
         type: Sequelize.STRING,
+        defaultValue: null,
       },
       notice_details: {
         allowNull: false,

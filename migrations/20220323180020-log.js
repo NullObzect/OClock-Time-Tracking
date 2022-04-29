@@ -12,29 +12,33 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       in_time: {
-        allowNull: false,
-        type: Sequelize.STRING(10),
+        type: Sequelize.STRING,
+        defaultValue: null,
       },
       out_time: {
-        allowNull: false,
-        type: Sequelize.STRING(10),
+        type: Sequelize.STRING,
+        defaultValue: null,
       },
       work_hour: {
         allowNull: false,
-        type: Sequelize.STRING(10),
+        type: Sequelize.STRING,
+
       },
 
       start: {
-        allowNull: false,
+
         type: Sequelize.DATE,
+        defaultValue: null,
       },
       end: {
-        allowNull: false,
+
         type: Sequelize.DATE,
+        defaultValue: null,
       },
       work_time: {
-        allowNull: false,
+
         type: Sequelize.STRING(10),
+        defaultValue: null,
       },
       day_type: {
         allowNull: false,
@@ -42,7 +46,6 @@ module.exports = {
       },
 
       create_at: {
-        allowNull: false,
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('NOW()'),
       },

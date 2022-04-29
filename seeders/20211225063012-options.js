@@ -10,7 +10,7 @@ module.exports = {
         option_value: '08:00:00',
       },
       {
-        option_title: 'int-time',
+        option_title: 'in-time',
         option_value: '10:00',
       },
       {

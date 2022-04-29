@@ -12,12 +12,14 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       in_time: {
-        allowNull: false,
-        type: Sequelize.STRING(10),
+
+        type: Sequelize.STRING,
+        defaultValue: null,
       },
       out_time: {
-        allowNull: false,
-        type: Sequelize.STRING(10),
+
+        type: Sequelize.STRING,
+        defaultValue: null,
       },
       project_id: {
         allowNull: false,
@@ -29,15 +31,15 @@ module.exports = {
       },
 
       start: {
-        allowNull: false,
         type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('NOW()'),
       },
       end: {
-        allowNull: false,
+    
         type: Sequelize.DATE,
+        defaultValue: null,
       },
       create_at: {
-        allowNull: false,
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('NOW()'),
       },
