@@ -169,7 +169,7 @@
 .opt-cancel-btn {
   display: none;
 }
-.green,
+
 .opt-val-save-btn {
   background-color: rgb(17, 221, 17);
 }
@@ -181,4 +181,204 @@
 .table .leaveday-table .td-width {
   width: 30%;
   min-width: 120px;
+}
+
+
+/* holiday page */
+
+.holiday-table input[type="text"] {
+  outline: none;
+  border-radius: 10px;
+  border: none;
+  padding: 6px;
+  font-size: 14px;
+  font-weight: 500;
+}
+.holiday-table input[type="text"]:focus {
+  outline: none;
+  border: none;
+}
+.holiday-table,
+tbody td {
+  margin-bottom: -1px;
+}
+.holiday-table input[type="text"] {
+  outline: none !important;
+  border-radius: 10px;
+}
+.holiday-table thead td:nth-child(1) {
+  min-width: 60px;
+}
+.holiday-table a {
+  text-decoration: none;
+}
+
+@media screen and (min-device-width: 380px) and (max-device-width: 768px) {
+  .holiday-table {
+    overflow-x: scroll !important;
+  }
+}
+.action-btn,
+.update-btn,
+.delete-btn,
+.save-btn {
+  background-color: #103047;
+  border-radius: 10px;
+  color: #fff;
+  padding: 8px 12px;
+  border: none;
+  outline: none;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  width: 100%;
+}
+.save-btn {
+  background-color: rgb(17, 221, 17);
+}
+.delete-btn {
+  background-color: rgb(255, 0, 0);
+}
+.action-btn,
+.save-btn {
+  width: 60px;
+}
+.update-btn,
+.delete-btn,
+.save-btn {
+  display: none;
+}
+.btn-group {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+}
+
+.set-styles {
+  border-bottom: 3px solid #ccc;
+  gap: 5px;
+}
+/* style for the date range holiday  same css  */
+.date-range-input {
+  display: flex;
+  justify-content: space-between;
+  margin: 30px 40px;
+}
+.date-range-input-container {
+  background: #f3f3f3;
+  border-radius: 8px;
+  padding: 5px 10px;
+  height: 45px;
+}
+
+.date-input {
+  background: #f3f3f3;
+  width: 150px;
+  padding: 6px;
+  font-size: 16px;
+  font-weight: 400;
+  color: #5e5e5e;
+  border: none;
+  outline: none;
+  /* border: 1px solid #EAEEF4;
+border-radius: 12px; */
+  text-align: left;
+}
+.date-input:focus,
+input[type="data"]:focus {
+  border: none;
+  outline: none !important;
+}
+
+/* leaveDay page */
+
+.leaveday-table input[type="text"] {
+  outline: none;
+  border-radius: 10px;
+  border: none;
+  padding: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  width: 90%;
+}
+
+.leaveday-table th,
+.leaveday-table td {
+  width: 158px !important;
+}
+.leaveday-table a {
+  text-decoration: none;
+}
+.action-btn,
+.update-btn,
+.delete-btn,
+.save-btn {
+  background-color: #103047;
+  border-radius: 10px;
+  color: #fff;
+  padding: 8px 12px;
+  border: none;
+  outline: none;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  width: 100%;
+}
+.save-btn {
+  background-color: rgb(17, 221, 17);
+}
+.delete-btn {
+  background-color: rgb(255, 0, 0);
+}
+.action-btn,
+.save-btn {
+  width: 50%;
+}
+.update-btn,
+.delete-btn,
+.save-btn {
+  display: none;
+}
+.btn-group {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  width: 150px;
+}
+
+.set-styles {
+  border-bottom: 3px solid #ccc;
+  gap: 5px;
+}
+
+/* style for the date range holiday  same css  */
+.date-range-input {
+  display: flex;
+  justify-content: space-between;
+  margin: 30px 40px;
+}
+.date-range-input-container {
+  background: #f3f3f3;
+  border-radius: 8px;
+  padding: 5px 10px;
+  height: 45px;
+}
+
+.date-input {
+  background: #f3f3f3;
+  width: 150px;
+  padding: 6px;
+  font-size: 16px;
+  font-weight: 400;
+  color: #5e5e5e;
+  border: none;
+  outline: none;
+  /* border: 1px solid #EAEEF4;
+border-radius: 12px; */
+  text-align: left;
+}
+.date-input:focus,
+input[type="data"]:focus {
+  border: none;
+  outline: none !important;
 }
