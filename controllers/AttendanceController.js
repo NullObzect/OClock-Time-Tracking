@@ -11,6 +11,8 @@ const AttendanceController = {
       const [{ inTime }] = await AttendanceModel.getInTime()
       const [{ outTime }] = await AttendanceModel.getOutTime()
 
+      console.log(inTime, outTime)
+
       // new
 
       const isId = await AttendanceModel.getCurrentDateUserId(id);

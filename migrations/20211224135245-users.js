@@ -16,29 +16,27 @@ module.exports = {
         type: Sequelize.STRING,
       },
       user_role: {
-        allowNull: false,
         type: Sequelize.STRING,
+        defaultValue: 'user',
       },
       user_mail: {
         allowNull: false,
         type: Sequelize.STRING,
       },
       user_pass: {
-        allowNull: false,
+
         type: Sequelize.STRING,
+        defaultValue: null,
       },
       avatar: {
-        allowNull: false,
         type: Sequelize.STRING,
         defaultValue: 'demo-avatar.png',
       },
       status: {
-        allowNull: false,
         type: Sequelize.INTEGER,
         defaultValue: '2',
       },
       create_at: {
-        allowNull: false,
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('NOW()'),
       },
