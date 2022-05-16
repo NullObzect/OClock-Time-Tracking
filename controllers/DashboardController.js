@@ -9,7 +9,7 @@ const DashboardController = {
   getDashboard: async (req, res) => {
     const { user } = req
 
-    const checkTodayReportEmptyOrNot = await LogModel.checkTodayReportEmptyOrNot(user.id);
+    const checkTodayReportEmptyOrNot = await LogModel.checkTodayReportEmptyOrNot(user.id) 
     const [{ start }] = await AttendanceModel.todayStartTime(user.id)
     const [{ end }] = await AttendanceModel.todayEndTime(user.id)
     const projects = await OptionsModel.getProjects()

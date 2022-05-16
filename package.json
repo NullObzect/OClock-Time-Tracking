@@ -2,7 +2,7 @@
   "name": "mvc",
   "version": "1.0.0",
   "description": "",
-   "engines": {
+  "engines": {
     "node": "16.x"
   },
   "main": "index.js",
@@ -12,7 +12,7 @@
     "build-dev": "webpack --mode development -w",
     "start": "NODE_ENV=development node  app.js",
     "production": "NODE_ENV=production node app.js",
-    "server":"NODE_ENV=development nodemon  app.js"
+    "server": "NODE_ENV=development nodemon  app.js"
   },
   "author": "",
   "license": "ISC",
@@ -40,7 +40,8 @@
     "passport-facebook": "^3.0.0",
     "passport-google-oauth20": "^2.0.0",
     "rimraf": "^3.0.2",
-    "sequelize": "^6.12.0-alpha.1"
+    "sequelize": "^6.12.0-alpha.1",
+    "win-node-env": "^0.6.1"
   },
   "devDependencies": {
     "@babel/core": "^7.15.5",
