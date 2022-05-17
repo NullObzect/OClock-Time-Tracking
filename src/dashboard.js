@@ -27,18 +27,22 @@ const clock = () => {
   };
   return date.toLocaleTimeString('en-us', options);
 };
+
+console.log(clock());
 const currentDate = document.querySelector('.current-date');
-const showCurrentTime = document.querySelector('.current-time');
+// const showCurrentTime = document.querySelector('.current-time');
 const time = document.querySelector('.time');
 const timeMeridiem = document.querySelector('.time-meridiem');
 
 // showCurrentTime.getElementsByTagName("span")[0].textContent = "dd";
 currentDate.innerText = getCurrentDate();
 // showCurrentTime.innerText = clock().slice(0, 5);
-time.innerText = clock().slice(0, 5);
-timeMeridiem.textContent = clock().slice(6, 8);
-console.log(clock().slice(6, 8));
-console.log(timeMeridiem.textContent);
+setInterval(() => {
+  time.innerText = clock().slice(0, 5);
+  timeMeridiem.textContent = clock().slice(6, 8);
+}, 1000);
+// console.log(clock().slice(6, 8));
+// console.log(timeMeridiem.textContent);
 
 // update end time
 document.addEventListener('DOMContentLoaded', () => {
@@ -152,6 +156,5 @@ for (let i = 0; i < optCancelBtn.length; i++) {
     optCancelBtn[i].style.display = 'none';
     saveBtn[i].style.display = 'none';
     saveBtnForEndTime[i].style.display = 'none';
-    
   });
 }
