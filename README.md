@@ -22,8 +22,9 @@ create a virtual environment to store your project dependencies separately.
 ### Installation
 
 
-1. Clone or download this repository and open it in your editor of choice.
-git clone https://github.com/NullObzect/OClock-Time-Tracking.git
+1. Clone or download this repository and open it in your editor of choice. 
+
+- git clone https://github.com/NullObzect/OClock-Time-Tracking.git
 
 
 
