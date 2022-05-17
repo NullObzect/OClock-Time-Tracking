@@ -28,7 +28,7 @@ create a virtual environment to store your project dependencies separately.
 
 
 
-2. Now you can the project with this command
+2. Now you can run the project with this command
 
 - npm install npm@latest -g 
 
