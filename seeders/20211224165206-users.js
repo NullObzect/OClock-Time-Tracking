@@ -19,6 +19,8 @@ module.exports = {
         user_pass: '$2b$10$/oEkGOKwBzook1ymY314.ODwRFtA1dSd6DOsHqZIR3xxCW3tiZEkq',
         avatar: '',
         status: '2',
+        create_at: '2022-05-10 10:30:51',
+        update_at: null,
       },
       {
         user_name: 'Arif Uddin',
@@ -28,6 +30,8 @@ module.exports = {
         user_pass: '$2b$10$/oEkGOKwBzook1ymY314.ODwRFtA1dSd6DOsHqZIR3xxCW3tiZEkq',
         avatar: '',
         status: '2',
+        create_at: '2022-01-10 10:30:51',
+        update_at: null,
       },
 
     ]);

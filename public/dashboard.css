@@ -145,7 +145,7 @@
 }
 .table th,
 .table td {
-  width: 160px;
+  max-width: 100%;
 }
 .title-for-cnt-ely {
   font-size: 14px;

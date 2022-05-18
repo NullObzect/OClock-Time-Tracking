@@ -27,15 +27,13 @@ module.exports = {
       },
       work_details: {
         allowNull: false,
-        type: Sequelize.STRING(255),
+        type: Sequelize.STRING(1000),
       },
-
       start: {
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('NOW()'),
       },
       end: {
-    
         type: Sequelize.DATE,
         defaultValue: null,
       },

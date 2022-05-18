@@ -21,12 +21,9 @@ module.exports = {
       },
       work_hour: {
         allowNull: false,
-        type: Sequelize.STRING,
-
+        type: Sequelize.STRING(10),
       },
-
       start: {
-
         type: Sequelize.DATE,
         defaultValue: null,
       },
