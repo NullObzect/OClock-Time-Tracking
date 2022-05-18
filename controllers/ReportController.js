@@ -11,7 +11,7 @@ const {
 let isUserId;
 
 const ReportController = {
-  // default report page 
+  // default report page
   userReport: async (req, res) => {
     try {
       isUserId = null;
@@ -56,7 +56,6 @@ const ReportController = {
             el.totalTimeExtraOrLess = ''
             el.workTime = '0'
           }
-
         })
 
         /* ======================================================== */
@@ -138,8 +137,15 @@ const ReportController = {
         /* ======================================================== */
 
         const [{ monthStartDate, countWorkday }] = await AttendanceModel.thisMonthDates()
+        console.log({ monthStartDate, countWorkday });
+
         const monthdaysType = await LogModel.countWorkdaysForMonth(userId, monthStartDate)
+        console.log({ monthdaysType });
+
         const thisMonthOffdays = monthdaysType.filter((el) => el.workdays === 0).length
+        console.log({ thisMonthOffdays });
+
+        // FIXME:
         const monthTotalWorkdays = countWorkday - thisMonthOffdays;
 
         const [{
