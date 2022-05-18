@@ -71,3 +71,35 @@ needed admin email & password
 
 - Mail: rubelamin@mail.com
 - Password: 123456
+
+
+
+
+
+### Topices Covered
+- Authentication With JWT
+- Registration, Login, Logout
+- Social Login Passport.js
+- Reset Password
+- User Profile Page
+- Middleware
+- User Authorization
+- User Validation
+- Migrations
+- Seed
+- Session
+- Cookie
+- CURD Operation
+- File Upload
+- Form Validation
+- Searching
+- Sorting 
+- Flash Messages
+- AJAX
+- Pagination
+- Admin Plane
+- Reports Generate 
+- MVC Design
+- Mail verify
+- Nodemailer 
+- Fully Responsive Design
