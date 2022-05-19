@@ -5,6 +5,7 @@ A brief description of what this project does and who it's for
 ## Project Summary
 
 
+![Laptop-1-1440x900](https://user-images.githubusercontent.com/65822873/169217210-4eed0918-5777-4d4d-a22f-c0146db4bed1.png)
 
 
 ### Running this project
