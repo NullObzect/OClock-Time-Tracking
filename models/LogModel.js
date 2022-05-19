@@ -54,7 +54,7 @@ const LogModel = {
     return rows;
   },
   reportsBewttenTwoDate: async (userId, startDate, endDate, workdays) => {
-    const query = `SELECT COUNT(create_at) AS twoDateNumberOfWorkingDays, REPLACE(TIME_FORMAT( work_hour , '%h'),'0', '') * ${workdays} AS twoDateFixedHr,  SEC_TO_TIME(SUM(TIME_TO_SEC(work_time))) AS twoDateTotalWorkHr, SUBTIME(SEC_TO_TIME(SUM(TIME_TO_SEC(work_time))), TIME(work_hour * ${workdays}) ) twoDateTotalExtraOrLess, SEC_TO_TIME(SUM(TIME_TO_SEC(work_time)) / ${workdays}) AS twoDateAvgWorkTime, SUBTIME(SEC_TO_TIME(SUM(TIME_TO_SEC(work_time)) / ${workdays}), work_hour) AS twoDateAvgExtraOrLess, TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(start))),'%h:%i %p') AS twoDateAvgStartTime, TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(end))),'%h:%i %p') AS twoDateAvgEndTime  FROM log  WHERE user_id = ${userId} AND DATE(create_at) BETWEEN  '${startDate}' AND  '${endDate}'`
+    const query = `SELECT COUNT(create_at) AS twoDateNumberOfWorkingDays, REPLACE(TIME_FORMAT( work_hour , '%h'),'0', '') * ${workdays} AS twoDateFixedHr,  SEC_TO_TIME(SUM(TIME_TO_SEC(work_time))) AS twoDateTotalWorkHr, SUBTIME(SEC_TO_TIME(SUM(TIME_TO_SEC(work_time))), SEC_TO_TIME(work_hour * ${workdays} * 60 * 60) ) twoDateTotalExtraOrLess, SEC_TO_TIME(SUM(TIME_TO_SEC(work_time)) / ${workdays}) AS twoDateAvgWorkTime, SUBTIME(SEC_TO_TIME(SUM(TIME_TO_SEC(work_time)) / ${workdays}), work_hour) AS twoDateAvgExtraOrLess, TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(start))),'%h:%i %p') AS twoDateAvgStartTime, TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(end))),'%h:%i %p') AS twoDateAvgEndTime  FROM log  WHERE user_id = ${userId} AND DATE(create_at) BETWEEN  '${startDate}' AND  '${endDate}'`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },

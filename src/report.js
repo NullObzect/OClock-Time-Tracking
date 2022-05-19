@@ -105,7 +105,7 @@ function getCurrentDate() {
   const dd = String(today.getDate()).padStart(2, '0');
   const mm = String(today.getMonth() + 1).padStart(2, '0');
   const yyyy = today.getFullYear();
-  today = `${yyyy}-${mm}-${dd}`;
+  today = `${yyyy}-${mm}-${dd - 1}`;
 
   return today;
 }
@@ -119,7 +119,6 @@ async function dateRange(event) {
   const dateEnd = document.querySelector('#endPicker')
   const startDate = getDateFormat(startDatePicker.getFullDate())
   const endDate = getDateFormat(endDatePicker.getFullDate() || getCurrentDate())
-  console.log(startDate, endDate)
 
   dateStart.dataset.date = startDate
   dateEnd.dataset.date = endDate

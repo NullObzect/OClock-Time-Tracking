@@ -260,6 +260,7 @@ const ReportController = {
       const [{ days }] = await LogModel.numberOfdaysBetweenTwoDates(startDate, endDate)
       const [{ countJoinIngDate }] = await LogModel.countUserJoiningDate(userId)
       const betweenTwoDateTypes = await LogModel.countWorkdaysForBetweenTwoDate(userId, startDate, endDate)
+
       const betweenTwoDateOffdays = betweenTwoDateTypes.filter((el) => el.workdays === 0).length
       const betweenTwoDateWorkdays = days - betweenTwoDateOffdays;
       const [{
