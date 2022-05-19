@@ -42,12 +42,57 @@ const UserController = {
     }
     try {
       if (result.affectedRows > 0) {
+        const id = result.insertId
+        const token = jwt.sign({
+          id,
+          email,
+        }, process.env.JWT_SECRET, { expiresIn: '15m' })
+        const link = `${process.env.BASE_URL}/user-verify/${token}`
+        const subject = 'Oclock active account, link expire in 15 minutes'
+        const textMessage = 'Oclock Account Verify ,'
+        const htmlMessage = `<div id="search-modal">
+    <div style="width: 450px;
+    height: 320px;
+    margin: 50px auto;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25), 0px 27px 42px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;">
+        <img class="login-logo" src="https://i.imgur.com/bRevMXT.png" alt="">        
+      <hr>
+        <div style="min-height: 130px;
+        padding: 12px 20px;
+        font-size: 20px;
+        line-height: 26px;">
+          Hi, ${name} <br>
+          Welcome to Oclock, to active your Oclock profile account.
+          Enter the following active account button:
+        </div>
+         <div class="btn-box">
+          <a style="cursor: pointer;" href="${link}"> <button style="padding: 0px 20px;
+            border-radius: 8px;
+            background-color: #103047;
+            border : none;
+            font-size: 15px;
+            font-weight: 700;
+            line-height: 36px;
+            color: #FFFFFF;
+            margin-left: 8px;
+            text-align: center;
+            cursor: pointer;">Active account</button></a>
+         </div>
+  </div>`
+        await sendMail(email, subject, textMessage, htmlMessage)
         res.status(200).json({
           message: 'User was added successfully!',
         })
       }
     } catch (error) {
       console.log(error)
+      if (error.code == 'ER_DUP_ENTRY') {
+        res.status(500).json({
+          message: 'User was already exist!',
+        })
+      }
       res.status(500).json({
         errors: {
           common: {
@@ -317,7 +362,7 @@ const UserController = {
     try {
       const { userName } = req.query
       const isUserSort = await UserModel.getUserSortByAscendingOrder([userName]);
-  
+
       return res.json(isUserSort)
     } catch (err) {
       console.log('====>Error form userSortByAscendingOrder Controller', err);
@@ -329,7 +374,6 @@ const UserController = {
     try {
       const { userName } = req.query
       const isUserSortByDesc = await UserModel.getUserSortByDescendingOrder([userName]);
-   
 
       return res.json(isUserSortByDesc)
     } catch (err) {
@@ -425,9 +469,9 @@ const UserController = {
   // update user post
   updateUserPush: async (req, res) => {
     const { id, email } = req.body
-    console.log('update',req.body)
-     await UserModel.adminCanUpdateUser(id, email)
-     res.redirect('/users')
+    console.log('update', req.body)
+    await UserModel.adminCanUpdateUser(id, email)
+    res.redirect('/users')
   },
 };
 

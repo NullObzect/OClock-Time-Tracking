@@ -47,7 +47,7 @@
           <td class="user-phone td-width"><%=user.user_phone %></td>
           <td class="user-email td-width"><%=user.user_mail %></td>
           <td class="user-status td-width">
-            <span class="status active">Active</span>
+            <span class="status <%=user.status==1? 'active' : 'inactive'%>"> <%= user.status == 1 ? 'Active' : 'Inactive' %></span>
           </td>
 
           <td class="user-more td-width user-more-btn">

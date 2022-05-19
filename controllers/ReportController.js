@@ -110,6 +110,7 @@ const ReportController = {
         const weekTotalWorkdays = getThisWeekNumberOfday - thisWeekOffdays;
         const [{
           weekNumberOfWorkingDays, weekFixedHr, weekTotalWorkHr, weekTotalExtraOrLess, weekAvgWorkTime, weekAvgExtraOrLess, weekAvgStartTime, weekAvgEndTime,
+        // eslint-disable-next-line no-use-before-define
         }] = await LogModel.thisWeekReports(userId, weekStartDate, countUserJoinDate(countJoinIngDate, weekTotalWorkdays))
 
         const thisWeekExtraOrLessHr = chckTotalWorkTimeExtraOrLess(weekTotalExtraOrLess)

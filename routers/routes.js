@@ -11,9 +11,11 @@ const attendanceRoute = require('./attendanceRoute')
 const holidayRouter = require('./holidayRoute')
 const leavedayRoute = require('./leavedayRoute')
 const optionsRoute = require('./optionsRoute')
+const homeRoute = require('./homeRoute')
 
 // all routers use
 router.use(
+  homeRoute,
   dashboardRoute,
   registerRoute,
   loginRoute,
