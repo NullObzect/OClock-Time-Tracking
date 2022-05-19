@@ -167,6 +167,7 @@ const ReportController = {
           showDaysIsLowOrHigh(countUserJoinDate(countJoinIngDate, monthTotalWorkdays), monthNumberOfWorkingDays),
           isLowOrHighClassForHr(monthAvgExtraOrLess),
         )
+        console.log({ monthReportDetails });
 
         /* ======================================================== */
         /* ==========FIXME:  report for this month  END ========== */
