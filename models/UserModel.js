@@ -16,7 +16,7 @@ const UserModel = {
   // show all users list
   getAllUsersList: async () => {
     try {
-      const getUsersListQuery = 'SELECT u.id,u.user_name,u.user_mail,u.user_phone,u.user_role, u.avatar  FROM users AS u';
+      const getUsersListQuery = 'SELECT u.id,u.user_name,u.user_mail,u.user_phone,u.user_role, u.avatar, u.status  FROM users AS u';
 
       const [rows] = await dbConnect.promise().execute(getUsersListQuery)
       return rows;
