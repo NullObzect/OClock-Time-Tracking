@@ -15,6 +15,7 @@ const config = {
     optionValues: ['@babel/polyfill', './src/optionValues.js'],
     profile: ['@babel/polyfill', './src/profile.js'],
     dashboard: ['@babel/polyfill', './src/dashboard.js'],
+    timePicker: ['@babel/polyfill', './src/timePicker.js'],
   },
   output: {
     path: path.resolve(__dirname, 'public/js/'),
