@@ -10,18 +10,42 @@
 
     <%if(loggedInUser.userRole==='admin'){ %>
 
-    <div class="add-button">
-      <button class="add-btn">
-        <span class="add-icon">
-          <%- include("../partials/icons/add-svg"); -%>
-        </span>
-        <span .add-btn-text>Add Leave </span>
-      </button>
-    </div>
-    <%}%>
+    <div class="" style="display:flex ;">
+      <div class="add-button">
+        <button class="add-btn">
+          <span class="add-icon">
+            <%- include("../partials/icons/add-svg"); -%>
+          </span>
+          <span class='add-btn-text'>Add Leave </span>
+        </button>
+      </div>
+      <div class="add-button">
+        <a class="a-link" href="/options/request-leave">
+        <button class="add-btn">
+            <span class="add-icon">
+              <%- include("../partials/icons/request-svg"); -%>
+            </span>
+            <span class='add-btn-text'>Request Leave </span>
+          </button>
+        </div>
+      </a>
+      </div>
+    <%}else{%>
+      <div class="add-button">
+        <button class="add-btn">
+          <span class="add-icon">
+            <%- include("../partials/icons/send-svg"); -%>
+          </span>
+          <span .add-btn-text>Request Leave </span>
+        </button>
+      </div>
+      <% } %> 
   </div>
+  <%if(loggedInUser.userRole==='admin'){ %>
   <%- include("../partials/add-leaveday-modal"); -%>
-
+<% }else{ %>
+  <%- include("../partials/add-request-leave-modal"); -%>
+  <% } %>  
   <!-- Markup Date range for employee-->
 
   <div class="date-range-input">

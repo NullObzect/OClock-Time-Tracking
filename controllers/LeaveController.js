@@ -30,9 +30,10 @@ const LeaveController = {
       const { user } = req
       const employeeLeaveList = await LeaveModel.getEmployeeLeaveList()
       const selectEmployee = await LeaveModel.selectEmployee();
+      const leaveTypeList = await LeaveModel.leaveTypeList();
       const anEmployeeLeavedaysList = await LeaveModel.anEmployeeLeaveList(user.id)
 
-      res.render('pages/leavedays', { employeeLeaveList, anEmployeeLeavedaysList, selectEmployee })
+      res.render('pages/leavedays', { employeeLeaveList, anEmployeeLeavedaysList, selectEmployee,leaveTypeList })
     } catch (err) {
       console.log('====>Error form LeaveController ', err);
     }
@@ -99,6 +100,23 @@ const LeaveController = {
       })
     } catch (err) {
       console.log('====>Error form LeaveController/getLeavedayListBetweenTwoDate', err);
+    }
+  },
+  requestLeaveList: async (req, res) => {
+    try {
+      res.render('pages/request-leave-list.ejs')
+    } catch (error) {
+      console.log(error)
+    }
+  },
+  addLeaveType: async (req, res) => {
+    const { name, duration } = req.body
+    console.log(name)
+    try {
+      const insertedLeavedayType = await LeaveModel.addLeaveType(name, duration)
+      res.redirect('/options/option-values')
+    } catch (error) {
+      console.log(error)
     }
   },
 

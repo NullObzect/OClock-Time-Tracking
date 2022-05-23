@@ -25,8 +25,6 @@ router.use(
   profileRoute,
   attendanceRoute,
   holidayRouter,
-  leavedayRoute,
-
 )
 router.use('/options', optionsRoute)
 router.use('/options', holidayRouter)

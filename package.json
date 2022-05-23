@@ -12,7 +12,8 @@
     "build-dev": "webpack --mode development -w",
     "start": "NODE_ENV=development node  app.js",
     "production": "NODE_ENV=production node app.js",
-    "server": "NODE_ENV=development nodemon  app.js"
+    "server": "NODE_ENV=development nodemon  app.js",
+    "prod": "NODE_ENV=production nodemon  app.js"
   },
   "author": "",
   "license": "ISC",

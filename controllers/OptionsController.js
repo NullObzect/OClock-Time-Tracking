@@ -1,5 +1,6 @@
 const OptionsModel = require('../models/OptionsModel')
 const userModel = require('../models/UserModel')
+const leaveModel = require('../models/leaveModel')
 
 const OptionsController = {
 
@@ -8,6 +9,7 @@ const OptionsController = {
   },
   getOptionValues: async (req, res) => {
     const optionList = await OptionsModel.options()
+    const leaveTypeList = await leaveModel.leaveTypeList()
     // console.log({ optionList })
     optionList.forEach((el) => {
       if (el.option_title === 'in-time') {
@@ -26,7 +28,7 @@ const OptionsController = {
     })
     // console.log({ optionList })
 
-    res.render('pages/option-values', { optionList })
+    res.render('pages/option-values', { optionList, leaveTypeList })
   },
   getProjects: async (req, res) => {
     try {

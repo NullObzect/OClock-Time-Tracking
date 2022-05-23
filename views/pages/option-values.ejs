@@ -18,10 +18,10 @@
       <tr>
         <td><%= idx + 1 %></td>
         <td><%= op.option_title %></td>
-        <td>
+        <td <%= op.option_title ==	'in-time'  ? " class=time-picker" : op.option_title ==	'out-time'? " class=time-picker":''  %> >
           <input
             type="text"
-            class="option-value"
+            class="option-value  <%= op.option_title ==	'in-time'?'timepicker-ui-input' :op.option_title ==	'in-time'?'timepicker-ui-input':''  %> "
             name="optionValue"
             value="<%= op.option_value %>"
           />
@@ -45,68 +45,59 @@
   </table>
 </div>
 
-<script>
-  /*
-  const optionValueChangeBtn = document.querySelectorAll(".opt-val-change-btn");
-  const optionValueInput = document.querySelectorAll(".option-value");
-  const optionIdInput = document.querySelectorAll(".optionId");
-  const optionValueSaveBtn = document.querySelectorAll(".opt-val-save-btn");
-  console.log(optionValueChangeBtn);
+<div id="leave-option">
+  <div class="text-head">
+    <div class="text-title">Leave Options</div>
+    <div class="add-button">
+      <button class="add-btn">
+        <span class="add-icon">
+          <%- include("../partials/icons/add-svg"); -%>
+        </span>
+        <span .add-btn-text>Add Type </span>
+      </button>
+    </div>
+    <%- include("../partials/add-leave-type"); -%>
+  </div>
+  <table class="project-table">
+    <thead>
+      <tr>
+        <td>SL</td>
+        <td class="project-table-title">Type</td>
+        <td>Duration</td>
+      </tr>
+    </thead>
+    <tbody>
+      <% leaveTypeList.map((lv,idx) =>{ %>
+      <tr>
+        <td><%= idx + 1 %></td>
+        <td><%= lv.name %></td>
+        <td>
+          <input
+            type="text"
+            class="option-value"
+            name="duration"
+            value="<%= lv.duration %>"
+          />
+        </td>
+        <td>
+          <input
+            class="optionId"
+            type="hidden"
+            name="optionId"
+            value="<%= lv.id %>"
+          />
+        </td>
+        <td class="btn-group">
+          <button type="text" class="opt-val-change-btn">Change</button>
+          <button type="submit" class="opt-val-save-btn">save</button>
+          <button type="text" class="opt-cancel-btn">Cancel</button>
+        </td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
 
-  for (let i = 0; i < optionValueChangeBtn.length; i++) {
-    optionValueChangeBtn[i].addEventListener("click", (e) => {
-      e.preventDefault();
-      optionValueSaveBtn[i].style.display = "block";
-      optionValueChangeBtn[i].style.display = "none";
-      //optionValueInput[i].classList.add("bottom-border", "option-value-focus");
-      optionValueInput[i].focus();
-    });
-  }
-  // when user click on save button
-  for (let i = 0; i < optionValueSaveBtn.length; i++) {
-    optionValueSaveBtn[i].addEventListener("click", (e) => {
-      e.preventDefault();
-      let optionValue = optionValueInput[i].value;
-      let optionId = optionIdInput[i].value;
-      if (optionValue == "") {
-        alert("Please enter option value");
-        return;
-      }
-      let data = {
-        optionValue: optionValue,
-        optionId: optionId,
-      };
-      //console.log({ data });
-      aJAXPostRequest("/options/option-values/update-option-value", data);
-      optionValueInput[i] = data.optionValue;
-      optionValueSaveBtn[i].style.display = "none";
-      optionValueChangeBtn[i].style.display = "block";
-    });
-  }
-  //  AJAX post request function
-  function aJAXPostRequest(url, data) {
-    return new Promise((resolve, reject) => {
-      fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log({ data });
-          if (data.success) {
-            alert("Option Value Updated");
-          }
-        })
-        .catch((err) => console.log(err));
-      // return window.location.replace("/options/option-values");
-    });
-  }
-
-    */
-</script>
 <script type="module" src="<%=baseUrl%>/js/optionValues.js"></script>
 
 <%- include("../partials/footer"); -%>
