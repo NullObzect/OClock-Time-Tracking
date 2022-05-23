@@ -1,27 +1,17 @@
 <div id="myModal" class="modal-container">
   <div class="modal">
     <div class="modal-head">
-      <div class="modal-title">Add Leave</div>
+      <div class="modal-title">Request Leave</div>
       <div class="modal-close">
         <%- include("../partials/icons/close-svg"); -%>
       </div>
     </div>
     <div class="modal-content">
       <div class="container">
-        <form action="/options/add-leaveday" method="post">
+        <form action="/add-leaveday" method="post">
           <label for="name">
             <div class="">
-              <select  name="userId">
-                <option disabled selected>Select Employee</option>
-                <% console.log(selectEmployee) %> <% selectEmployee.map(el =>
-                {%>
-                <option value="<%= el.id %>"><%= el.user_name %></option>
-
-                <% }) %>
-              </select>
-              </div>
-              <div class="">
-                <select  name="typeId">
+              <select  name="typeId">
                 <option disabled selected>Select Type</option>
                 <% leaveTypeList.map(el =>
                 {%>
@@ -47,7 +37,7 @@
             </div>
           </label>
           <div class="">
-            <button class="submit-btn">Save</button>
+            <button class="submit-btn">Send</button>
           </div>
         </form>
       </div>
