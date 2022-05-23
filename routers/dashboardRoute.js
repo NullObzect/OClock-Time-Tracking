@@ -7,5 +7,4 @@ router.get('/dashboard', decorateHtmlResponse('Dashboard'), checkLogin, Dashboar
 router.get('/get-start-data', DashboardController.getRunStartData)
 router.post('/update-option-value', DashboardController.getUpdateOptionValues)
 
-
 module.exports = router
