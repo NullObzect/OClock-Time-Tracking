@@ -144,6 +144,9 @@ async function dateRange(event) {
 
   const dateRangeTotalBox = getObjects.dateRangeReportBox;
   const { betweenTwoDatesReportDetails } = dateRangeTotalBox;
+  const { lateCountBetweenTwoDate } = dateRangeTotalBox;
+  console.log(lateCountBetweenTwoDate);
+
   const totalReport = document.getElementById('total-report');
   const filteredReport = document.querySelector('.filtered-report');
   const selectStartDate = document.querySelector('.select-start-date');
@@ -181,6 +184,10 @@ async function dateRange(event) {
             <td>Avg End:</td>
             <td>${betweenTwoDatesReportDetails.avgEndTime}</td>
           </tr>
+          <tr>
+          <td>Late Count:</td>
+          <td>${lateCountBetweenTwoDate === 1 ? `${lateCountBetweenTwoDate} day` : `${lateCountBetweenTwoDate} days`}</td>
+        </tr>
        
   `
   }

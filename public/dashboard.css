@@ -136,7 +136,7 @@
   background-color: transparent;
   padding: 6px;
   outline: none;
-  width: 90%;
+  max-width: 100%;
 }
 .table input:focus {
   outline: none;

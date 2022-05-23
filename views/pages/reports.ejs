@@ -113,6 +113,10 @@
             <td>Avg End:</td>
             <td><%= weekReportDetails.avgEndTime %> </td>
           </tr>
+          <tr>
+            <td>Late Count:</td>
+            <td><%= lateCountThisWeek  === 1 ? lateCountThisWeek + " day"  :  lateCountThisWeek + " days" %></td>
+          </tr>
         </table>
       </div>
     </div>
@@ -143,6 +147,11 @@
             <td>Avg End:</td>
             <td><%=monthReportDetails.avgEndTime %></td>
           </tr>
+
+          <tr>
+            <td>Late Count:</td>
+            <td><%= lateCountThisMonth  === 1 ? lateCountThisMonth + " day" : lateCountThisMonth + " days" %></td>
+          </tr>
         </table>
       </div>
     </div>
@@ -171,6 +180,10 @@
           <tr>
             <td>Avg End:</td>
             <td><%= yearReportDetails.avgEndTime %></td>
+          </tr>
+          <tr>
+            <td>Late Count:</td>
+            <td><%= lateCountThisYear  === 1 ? lateCountThisYear + " day"  :  lateCountThisYear + " days" %></td>
           </tr>
         </table>
       </div>
