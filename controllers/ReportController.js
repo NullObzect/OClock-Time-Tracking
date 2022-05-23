@@ -129,8 +129,13 @@ const ReportController = {
           isLowOrHighClassForHr(weekAvgExtraOrLess),
 
         )
+
+        // late count this week
+        const lateCounts = await LogModel.lateCountThisWeek(userId)
+        const lateCountThisWeek = lateCount(lateCounts)
+
         /* ======================================================== */
-        /* ==========FIXME:  report for this today  END ========== */
+        /* ==========FIXME:  report for this Week  END ========== */
         /* ======================================================== */
 
         /* ======================================================== */
@@ -168,7 +173,11 @@ const ReportController = {
           showDaysIsLowOrHigh(countUserJoinDate(countJoinIngDate, monthTotalWorkdays), monthNumberOfWorkingDays),
           isLowOrHighClassForHr(monthAvgExtraOrLess),
         )
-        console.log({ monthReportDetails });
+
+        const lateCountsMonth = await LogModel.lateCountThisMonth(userId)
+        const lateCountThisMonth = lateCount(lateCountsMonth)
+
+        // console.log({ monthReportDetails });
 
         /* ======================================================== */
         /* ==========FIXME:  report for this month  END ========== */
@@ -204,6 +213,8 @@ const ReportController = {
           isLowOrHighClassForHr(yearAvgExtraOrLess),
 
         )
+        const lateCountsYear = await LogModel.lateCountThisYear(userId)
+        const lateCountThisYear = lateCount(lateCountsYear)
 
         /* ======================================================== */
         /* ==========FIXME:  report for this year  END ========== */
@@ -222,6 +233,9 @@ const ReportController = {
           weekHr,
           monthHr,
           checkUserReportEmptyOrNot,
+          lateCountThisWeek,
+          lateCountThisMonth,
+          lateCountThisYear,
 
         });
       } else if (checkUserReportEmptyOrNot.length === 0) {
@@ -251,6 +265,9 @@ const ReportController = {
       }
 
       const { startDate, endDate } = req.query;
+
+      // for date range input in report page
+
       const getData = await LogModel.reportDetailsBetweenTwoDate(
         userId, startDate, endDate,
       );
@@ -283,6 +300,14 @@ const ReportController = {
         isLowOrHighClassForHr(twoDateAvgExtraOrLess),
 
       )
+
+      // late count for between two date
+
+      const lateCountsBetweenTwoDate = await LogModel.lateCountBetweenTwoDate(userId, startDate, endDate)
+      const lateCountBetweenTwoDate = lateCount(lateCountsBetweenTwoDate)
+
+      //
+
       const dataToJson = JSON.parse(JSON.stringify(getData))
 
       dataToJson.forEach((el) => {
@@ -320,7 +345,7 @@ const ReportController = {
         reports: {
           dateRangeReport, pageNumber, numberOfPage, pageLength, page,
         },
-        dateRangeReportBox: { betweenTwoDatesReportDetails },
+        dateRangeReportBox: { betweenTwoDatesReportDetails,  lateCountBetweenTwoDate },
       })
     } catch (err) {
       console.log('====>Error form ReportController/reportBetweenTwoDate', err);
@@ -332,6 +357,14 @@ const ReportController = {
 /* ======================================================== */
 /* =====FIXME:  report controller all helper  functions ==== */
 /* ======================================================== */
+
+function lateCount(lateCounts) {
+  let lateCount = 0;
+  lateCounts.forEach((el) => {
+    lateCount += el.lateCount
+  })
+  return lateCount
+}
 
 function chckTotalWorkTimeExtraOrLess(totalWorkTime) {
   let isExtra; let
