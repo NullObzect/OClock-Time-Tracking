@@ -18,13 +18,20 @@
 .add-btn {
   display: inline-flex;
   align-items: center;
-  padding: 0 16px;
+  padding: 0 12px;
+  margin: 4px;
   background: none;
   border: 1px solid #c8c8c8;
   border-radius: 15px;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--deep2);
+}
+.a-link{
+  color: var(--deep2);
+  text-decoration: none;
+  padding: 0;
+  margin: 0;
 }
 .add-btn:hover {
   cursor: pointer;
@@ -88,6 +95,9 @@
 }
 .active {
   background: #e1ebff;
+}
+.inactive {
+  background:  #f7b5b5;
 }
 .user-more svg:hover {
   cursor: pointer;

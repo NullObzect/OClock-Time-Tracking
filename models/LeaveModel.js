@@ -39,6 +39,17 @@ const LeaveModel = {
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
+  addLeaveType: async (name, duration) => {
+    const addLeaveTypeQuery = 'INSERT INTO `leave_type`(`name`, `duration`) VALUES (?,?)'
+    const values = [name, duration]
+    const [rows] = await dbConnect.promise().execute(addLeaveTypeQuery, values)
+    return rows;
+  },
+  leaveTypeList: async () => {
+    const leaveTypeList = 'SELECT `id`, `name`, `duration` FROM `leave_type`'
+    const [rows] = await dbConnect.promise().execute(leaveTypeList)
+    return rows;
+  },
 }
 
 module.exports = LeaveModel;

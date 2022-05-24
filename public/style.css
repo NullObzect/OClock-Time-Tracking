@@ -643,6 +643,10 @@ main {
   user-select: none;
   transition: all 0.3s ease;
 }
+.pagination ul li:hover{
+  border: 1.5px solid #848484;
+  transition: all 0.4 ease-in-out;
+}
 .pagination a {
   text-decoration: none;
   color: #837575;
@@ -902,7 +906,7 @@ box-shadow: rgba(0, 0, 0, 0.14) -1px 0px 0px inset;
     font-size: 32px;
   }
   .add-btn {
-    padding: 10px 14px;
+    padding: 8px 12px;
   }
   .add-icon {
     display: none;
