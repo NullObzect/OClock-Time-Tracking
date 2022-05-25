@@ -113,6 +113,7 @@
           <input value="<%= user_name %>" id="name" name="name" type="text" />
         </div>
       </label>
+     <label for="">Email</label>
       <div class="demo-input">
         <%= user_mail %>
       </div>
@@ -122,7 +123,10 @@
           <input type="tel" value="<%= user_phone %>" name="phone" id="phone" />
         </div>
       </label>
-
+      <label for="">Join Date</label>
+      <div class="demo-input">
+        <%= create_at %>
+      </div>
       <label for="newPassword">
         Old Password
         <div class="">
@@ -130,7 +134,6 @@
           <p class="error password-error"></p>
         </div>
       </label>
-
       <label for="oldPassword">
         New Password
         <div class="">

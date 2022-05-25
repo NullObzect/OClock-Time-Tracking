@@ -23,14 +23,14 @@ const ProfileController = {
       const [findIdFormUser] = await UserModel.findUserByEmail(userMailFormDB)
 
       const {
-        id, user_name, user_phone, user_mail, status, avatar,
+        id, user_name, user_phone, user_mail, status, avatar, create_at,
       } = findIdFormUser
       // console.log({ status, avatar })
 
       const platformUser = await ProfileModel.userConnectionDetailsUniqueInfo(id)
       console.log('req flash', req.flash('fail'))
       res.render('pages/profile', {
-        platformUser, user_name, user_phone, user_mail, status, avatar,
+        platformUser, user_name, user_phone, user_mail, status, avatar, create_at,
       })
     } catch (err) {
       console.log('====>Error form userProfile Controller', err);
@@ -90,7 +90,7 @@ const ProfileController = {
           path.join(__dirname, `../public/uploads/avatars/${avatar}`), (err) => {
             console.log(err)
           },
-          console.log(`${avatar} delete`)
+          console.log(`${avatar} delete`),
         )
       }
     }
