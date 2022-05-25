@@ -28,7 +28,6 @@ const clock = () => {
   return date.toLocaleTimeString('en-us', options);
 };
 
-console.log(clock());
 const currentDate = document.querySelector('.current-date');
 // const showCurrentTime = document.querySelector('.current-time');
 const time = document.querySelector('.time');
