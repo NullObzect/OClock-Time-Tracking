@@ -49,8 +49,8 @@ router.post('/user-avatar-change', decorateHtmlResponse('Update User'), avatarUp
 
 // admin can update user
 router.get('/update-user/:id', decorateHtmlResponse('Update User'), checkLogin, requireRole(['admin']), UserController.updateUser)
-router.post('/update-user', decorateHtmlResponse('Update User'),UserController.updateUserPush)
+router.post('/update-user', decorateHtmlResponse('Update User'), UserController.updateUserPush)
 // user or employee edit name
 // router.post('/user/edit/info', UserController.userCanEditName)
-
+router.post('/user/search', UserController.searchUserByName)
 module.exports = router;

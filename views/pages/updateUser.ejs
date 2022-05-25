@@ -17,6 +17,7 @@
       </div>
       
     <input type="hidden" id="id" name="id" value="<%=id%>">
+    <label for="">Name</label>
       <div class="demo-input">
         <%= user_name %>
       </div>
@@ -27,8 +28,12 @@
           <p class="error email-error"></p>
         </div>
       </label>
+      <label for="">Phone</label>
       <div class="demo-input">
         <%= user_phone %>
+      </div>
+      <div class="">
+        <input value="<%= create_at %>" id="email" name="joinDate" type="date" />
       </div>
       <div class="">
         <div class="demo-input" style="color: <%= status==1 ? 'green': 'red'%> ">
@@ -54,7 +59,7 @@
   console.log(form)
   const userCancelBtn = document.getElementById("user-cancel-btn");
   const userSaveBtn = document.getElementById("user-save-btn");
-  form.addEventListener("keyup", () => {
+  form.addEventListener("click", () => {
     userSaveBtn.disabled = false
     userCancelBtn.style.display = "inline";
   });

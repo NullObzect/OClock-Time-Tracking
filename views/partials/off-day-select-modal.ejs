@@ -1,0 +1,75 @@
+<style>
+  .select-container {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    padding: 10px;
+  }
+  .select-btn{
+    text-align: center;
+    width: 90%;
+    padding: 5px;
+    color:var(--deep2);
+    margin: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 5px;
+    background-color:var(--fade-bluish-gray);
+    cursor: pointer;
+  }
+  .select{
+    background-color:var(--deep);
+    color: #ffffff;
+  }
+
+</style>
+<div id="offDayAddModal" class="modal-container">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">Select off day</div>
+      <div id="off-day-modal-close" class="modal-close">
+        <%- include("../partials/icons/close-svg"); -%>
+      </div>
+    </div>
+    <div class="modal-content">
+      <div class="container select-container">
+        <div class="select-btn"><input type="hidden" value="Fri">Friday</div>
+        <div class="select-btn"><input type="hidden" value="Sat">Saturday</div>
+        <div class="select-btn"><input type="hidden" value="Sun">Sunday</div>
+        <div class="select-btn"><input type="hidden" value="Mon">Monday</div>
+        <div class="select-btn"><input type="hidden" value="Tue">Tuesday</div>
+        <div class="select-btn"><input type="hidden" value="Wed">Wednesday</div>
+        <div class="select-btn"><input type="hidden" value="Thu">Thursday</div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  const selectBtn = document.getElementsByClassName('select-btn')
+  const offDayInput = document.querySelector('#offDayAddBtn')
+  const offDayAddBtn= document.querySelector('#offDayAddBtn').value
+  offDayAddBtn
+  let values = []
+  values.push(offDayAddBtn)
+  for(var i =0;i<selectBtn.length;i++){
+    if(offDayAddBtn==selectBtn[i].querySelector('input').value){
+        selectBtn[i].classList.add('select')
+      }
+    selectBtn[i].addEventListener('click',(e)=>{
+      const element = e.target
+      element.classList.toggle("select");
+      const inputValue = element.querySelector('input').value
+      const duplicate = values.indexOf(inputValue)
+      console.log(duplicate,inputValue)
+      if(duplicate != -1){
+        console.log('find')
+        let index = values.indexOf(inputValue)
+        values.splice(index,1)
+      }else{
+
+        values.push(inputValue)
+      }
+      offDayInput.value = values
+    })
+  }
+  console.log(values)  
+</script>

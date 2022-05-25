@@ -112,7 +112,7 @@ const UserModel = {
   },
   findUserByEmail: async (email) => {
     try {
-      const findUserQuery = 'SELECT id,user_name,user_phone,user_mail,user_role,user_pass,avatar,status FROM `users` WHERE user_mail = ?'
+      const findUserQuery = 'SELECT id,user_name,user_phone,user_mail,user_role,user_pass,avatar,status,DATE_FORMAT(create_at,\'%d-%M-%Y\') AS create_at FROM `users` WHERE user_mail = ?'
       const value = [email]
       const [rows] = await dbConnect.promise().execute(findUserQuery, value)
       return rows;
@@ -148,7 +148,7 @@ const UserModel = {
 
   // update user info
   getUpdateUserInfo: async (id) => {
-    const getUser = 'SELECT * FROM `users` WHERE id = ?'
+    const getUser = 'SELECT `id`, `user_name`, `user_phone`, `user_role`, `user_mail`, `user_pass`, `avatar`, `status`, DATE_FORMAT(create_at, \'%Y-%m-%d\') as create_at FROM `users` WHERE id = ?'
     const value = [id]
     const [rows] = await dbConnect.promise().execute(getUser, value)
     return rows;
@@ -170,6 +170,19 @@ const UserModel = {
     const values = [userMail, id]
     const [rows] = await dbConnect.promise().execute(updateSql, values)
     console.log(rows)
+    return rows
+  },
+  userJoinDateChange: async (id, joinDate) => {
+    const updateSql = 'UPDATE `users` SET create_at= ? WHERE id = ?'
+    const values = [joinDate, id]
+    const [rows] = await dbConnect.promise().execute(updateSql, values)
+    console.log(rows)
+    return rows
+  },
+  userSearch: async (name) => {
+    const userSearchQuery = `SELECT id, user_name, user_mail, avatar FROM users WHERE  user_name LIKE '${name}%' or user_mail LIKE '${name}'`
+    console.log('query', userSearchQuery)
+    const [rows] = await dbConnect.promise().execute(userSearchQuery)
     return rows
   },
 

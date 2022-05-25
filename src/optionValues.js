@@ -71,3 +71,21 @@ const aJAXPostRequest = (url, values) => new Promise((resolve, reject) => {
   })
     .catch((err) => console.log(err));
 })
+
+const offDayAddBtn = document.querySelector('#offDayAddBtn')
+const offDayAddModal = document.querySelector('#offDayAddModal')
+const offDayAddModalClose = document.querySelector('#off-day-modal-close')
+if (offDayAddBtn) {
+  offDayAddBtn.addEventListener('click', () => {
+    console.log(offDayAddBtn)
+    offDayAddModal.style.display = 'block'
+  })
+}
+if (offDayAddModalClose) {
+  offDayAddModalClose.addEventListener('click', () => {
+    offDayAddModal.style.display = 'none'
+  })
+}
+
+console.log(offDayAddBtn)
+console.log(offDayAddModal)

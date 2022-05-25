@@ -16,7 +16,10 @@ router.get('/leavedays/between-two-date', LeaveController.getLeavedayListBetween
 // Request leave
 
 router.get('/request-leave', decorateHtmlResponse('Request Leave'), checkLogin, LeaveController.requestLeaveList)
+router.post('/send-request-leave', LeaveController.sendRequestLeave)
 
 router.post('/add-leave-type', LeaveController.addLeaveType)
+router.get('/accept-leave-request/:id', LeaveController.acceptRequestLeave)
+router.get('/reject-leave-request/:id', LeaveController.rejectRequestLeave)
 
 module.exports = router
