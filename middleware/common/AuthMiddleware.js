@@ -14,7 +14,6 @@ const checkLogin = (req, res, next) => {
       if (res.locals.html) {
         res.locals.loggedInUser = userObject
         res.locals.profile = req.user
-        console.log(userObject)
       }
       next()
     } catch (err) {

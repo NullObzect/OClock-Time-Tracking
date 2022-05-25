@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable camelcase */
 /* eslint-disable consistent-return */
 const bcrypt = require('bcrypt');
@@ -7,6 +8,7 @@ const { unlink } = require('fs');
 const UserModel = require('../models/UserModel');
 const sendMail = require('../utilities/sendMail');
 const { pageNumbers } = require('../utilities/pagination')
+const htmlMailText = require('./htmlMailText')
 
 const UserController = {
   // render page
@@ -50,37 +52,7 @@ const UserController = {
         const link = `${process.env.BASE_URL}/user-verify/${token}`
         const subject = 'Oclock active account, link expire in 15 minutes'
         const textMessage = 'Oclock Account Verify ,'
-        const htmlMessage = `<div id="search-modal">
-    <div style="width: 450px;
-    height: 320px;
-    margin: 50px auto;
-    background: #FFFFFF;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25), 0px 27px 42px rgba(0, 0, 0, 0.2);
-    border-radius: 20px;">
-        <img class="login-logo" src="https://i.imgur.com/bRevMXT.png" alt="">        
-      <hr>
-        <div style="min-height: 130px;
-        padding: 12px 20px;
-        font-size: 20px;
-        line-height: 26px;">
-          Hi, ${name} <br>
-          Welcome to Oclock, to active your Oclock profile account.
-          Enter the following active account button:
-        </div>
-         <div class="btn-box">
-          <a style="cursor: pointer;" href="${link}"> <button style="padding: 0px 20px;
-            border-radius: 8px;
-            background-color: #103047;
-            border : none;
-            font-size: 15px;
-            font-weight: 700;
-            line-height: 36px;
-            color: #FFFFFF;
-            margin-left: 8px;
-            text-align: center;
-            cursor: pointer;">Active account</button></a>
-         </div>
-  </div>`
+        const htmlMessage = htmlMailText.addUser(name, link)
         await sendMail(email, subject, textMessage, htmlMessage)
         res.status(200).json({
           message: 'User was added successfully!',
@@ -221,37 +193,7 @@ const UserController = {
         const link = `${process.env.BASE_URL}/recover/${token}`
         const subject = 'Oclock reset password , link expire in 15 minutes'
         const textMessage = 'Oclock reset password ,'
-        const htmlMessage = `<div id="search-modal">
-        <div style="width: 450px;
-        height: 320px;
-        margin: 50px auto;
-        background: #FFFFFF;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25), 0px 27px 42px rgba(0, 0, 0, 0.2);
-        border-radius: 20px;">
-            <img class="login-logo" src="https://i.imgur.com/bRevMXT.png" alt="">        
-          <hr>
-            <div style="min-height: 130px;
-            padding: 12px 20px;
-            font-size: 20px;
-            line-height: 26px;">
-              Hi, ${name} <br>
-              We received a request to reset your Oclock profile password.
-              Enter the following change password button:
-            </div>
-             <div class="btn-box">
-              <a style="cursor: pointer;"  href="${link}"> <button style="padding: 0px 20px;
-                border-radius: 8px;
-                background-color: #103047;
-                border : none;
-                font-size: 15px;
-                font-weight: 700;
-                line-height: 36px;
-                color: #FFFFFF;
-                margin-left: 8px;
-                text-align: center;
-                cursor: pointer;">Change Password</button></a>
-             </div>
-      </div>`
+        const htmlMessage = htmlMailText.recoverUser(name, link)
         await sendMail(email, subject, textMessage, htmlMessage)
         res.status(200).json({
           result: 'We sent your code to successfully',
@@ -395,37 +337,7 @@ const UserController = {
       const link = `${process.env.BASE_URL}/user-verify/${token}`
       const subject = 'Oclock active account, link expire in 15 minutes'
       const textMessage = 'Oclock Account Verify ,'
-      const htmlMessage = `<div id="search-modal">
-    <div style="width: 450px;
-    height: 320px;
-    margin: 50px auto;
-    background: #FFFFFF;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25), 0px 27px 42px rgba(0, 0, 0, 0.2);
-    border-radius: 20px;">
-        <img class="login-logo" src="https://i.imgur.com/bRevMXT.png" alt="">        
-      <hr>
-        <div style="min-height: 130px;
-        padding: 12px 20px;
-        font-size: 20px;
-        line-height: 26px;">
-          Hi, ${name} <br>
-          We received a request to active your Oclock profile account.
-          Enter the following active account button:
-        </div>
-         <div class="btn-box">
-          <a style="cursor: pointer;" href="${link}"> <button style="padding: 0px 20px;
-            border-radius: 8px;
-            background-color: #103047;
-            border : none;
-            font-size: 15px;
-            font-weight: 700;
-            line-height: 36px;
-            color: #FFFFFF;
-            margin-left: 8px;
-            text-align: center;
-            cursor: pointer;">Active account</button></a>
-         </div>
-  </div>`
+      const htmlMessage = htmlMailText.userVerify(name, link)
       await sendMail(email, subject, textMessage, htmlMessage)
       res.status(200).json({
         result: 'We sent your mail to successfully',
@@ -455,12 +367,12 @@ const UserController = {
     try {
       const [findIdFormUser] = await UserModel.getUpdateUserInfo(req.params.id)
       const {
-        id, user_name, user_phone, user_mail, status,
+        id, user_name, user_phone, user_mail, status, create_at,
       } = findIdFormUser
       const { avatar } = findIdFormUser
       const userAvatar = avatar
       res.render('pages/updateUser', {
-        id, user_name, user_phone, user_mail, status, userAvatar,
+        id, user_name, user_phone, user_mail, status, userAvatar, create_at,
       })
     } catch (err) {
       console.log('====>Error form userProfile Controller', err);
@@ -468,10 +380,23 @@ const UserController = {
   },
   // update user post
   updateUserPush: async (req, res) => {
-    const { id, email } = req.body
-    console.log('update', req.body)
-    await UserModel.adminCanUpdateUser(id, email)
+    const { id, email, joinDate } = req.body
+    const [findIdFormUser] = await UserModel.getUpdateUserInfo(id)
+    if (email !== findIdFormUser.user_mail) {
+      await UserModel.adminCanUpdateUser(id, email)
+    }
+    if (joinDate !== findIdFormUser.create_at) {
+      await UserModel.userJoinDateChange(id, joinDate)
+    }
+
     res.redirect('/users')
+  },
+  searchUserByName: async (req, res) => {
+    const { user } = req.body
+    console.log(user)
+    const result = await UserModel.userSearch(user)
+    console.log(result)
+    res.json(result)
   },
 };
 

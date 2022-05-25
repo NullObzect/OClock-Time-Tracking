@@ -220,7 +220,7 @@ function reportHolidayShow(holidayTable, dateRangeReport) {
       <span id="role">${day.user_role === 'admin' ? 'admin' : ''} </span>
     </td>
     <td>
-      <input class="reason-val" type="text" value="${day.reason}" />
+      <input class="reason-val" type="text" value="${day.type}" />
     </td>
     <td>
       <input class="start-val" type="text" value="${day.start} " />

@@ -6,7 +6,6 @@ const userModel = require('../../models/UserModel')
 
 const passwordValidator = [
   check('password').custom(async (value, { req }) => {
-    // const [user] = await userModel.findUserByEmail(req.user.user_mail)
     console.log(req.body.oldPassword.length)
     const isValidPass = await bcrypt.compare(req.body.oldPassword, req.user.user_pass)
     if (value.length > 1) {

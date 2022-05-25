@@ -1,3 +1,121 @@
 <%- include("../partials/header"); -%>
+</style>
+<div id="users">
+<div class="text-head">
+  <div class="text-title">Request for leave</div>
+
+</div>
+
+<!-- Markup Date range for employee-->
+
+<div class="date-range-input">
+  <div class="report-title-container">
+    <h4>Reports</h4>
+    <p class="report-title">In this year.</p>
+  </div>
+  <div class="date-picker">
+    <div class="start-date">
+      <input id="startPicker" type="text" placeholder="-- / -- / ----" />
+    </div>
+    <div class="to">to</div>
+    <div class="end-date">
+      <input id="endPicker" placeholder="-- / -- / ----" />
+    </div>
+    <div id="date-icon" class="date-icon">
+      <svg
+        width="26"
+        height="30"
+        viewBox="0 0 26 30"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M7.66667 1.66675V5.66675V1.66675ZM18.3333 1.66675V5.66675V1.66675ZM1.66667 11.1201H24.3333H1.66667ZM25 10.3334V21.6667C25 25.6667 23 28.3334 18.3333 28.3334H7.66667C3 28.3334 1 25.6667 1 21.6667V10.3334C1 6.33341 3 3.66675 7.66667 3.66675H18.3333C23 3.66675 25 6.33341 25 10.3334Z"
+          stroke-width="2"
+          stroke-miterlimit="10"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M8.05859 21.2666H8.07193M17.9266 17.2666H17.9386H17.9266ZM17.9266 21.2666H17.9386H17.9266ZM12.9933 17.2666H13.0066H12.9933ZM12.9933 21.2666H13.0066H12.9933ZM8.05859 17.2666H8.07193H8.05859Z"
+          stroke-width="2.66667"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- Markup for leave days table  -->
+<div class="scroll-table">
+  <table class="table leaveday-table">
+    <thead>
+      <tr>
+        <td class="table-img"></td>
+        <td class="td-width">Name</td>
+        <td class="project-table-title td-width">Leave Type</td>
+        <td class="td-width">Start Date</td>
+        <td class="td-width">End Date</td>
+        <td class="td-width">Duration</td>
+      </tr>
+    </thead>
+    <tbody id="leaveday-table">
+
+      <%requestLeaveList.map((user,idx) =>{ %>
+      <tr>
+        <td class="table-img">
+          <% if(user.avatar !== null && user.avatar.match(/^(http|https):/g)){
+          %>
+          <img src="<%= user.avatar%>" />
+          <%} else{%>
+          <img
+            src="/uploads/avatars/<%=user.avatar != null ?  user.avatar : 'demo-avatar.png' %>"
+          />
+          <% } %>
+        </td>
+        <td class="td-width">
+          <div class="username"><%=user.user_name%></div>
+        </td>
+        <td class="td-width">
+          <input class="reason-val" type="text" value="<%=user.typeName %>" />
+        </td>
+        <td class="td-width">
+          <input class="start-val" type="text" value="<%=user.start%> " />
+        </td>
+        <td><input class="end-val" type="text" value="<%=user.end%>" /></td>
+        <td class="duration td-width"><%= user.duration + ' ' + 'day' %></td>
+        <td class="td-width">
+          <div class="btn-group">
+            <a href="/options/accept-leave-request/<%=user.id%>" ><button type="button" class="primary-btn accept-btn ">Accept</button></a>
+            <a href="/options/reject-leave-request/<%=user.id%>"><button type="button" class="primary-btn reject-btn">Reject</button></a>
+            <input
+              type="hidden"
+              class="leave-id delete-id"
+              value="<%= user.id %>"
+            />
+          </div>
+        </td>
+      </tr>
+      <%})%>
+    </tbody>
+  </table>
+  <!-- Markup for user delete modal -->
+
+  <%- include("../partials/delete-modal.ejs"); -%>
+  <!--- Markup for pagination -->
+
+  <div class="pagination">
+    <ul id="pagination"></ul>
+  </div>
+</div>
+</div>
+
+<script>
+const baseUrl = "<%= baseUrl %>";
+const loggedInUser = "<%= loggedInUser.userRole %>";
+</script>
+<script src="<%=baseUrl%>/js/requestLeaveday.js"></script>
+
 
 <%- include("../partials/footer"); -%>
