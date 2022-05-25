@@ -1,6 +1,9 @@
+/* eslint-disable no-await-in-loop */
+
 const OptionsModel = require('../models/OptionsModel')
 const userModel = require('../models/UserModel')
-const leaveModel = require('../models/leaveModel')
+const LeaveModel = require('../models/LeaveModel')
+const LogModel = require('../models/LogModel')
 
 const OptionsController = {
 
@@ -9,7 +12,7 @@ const OptionsController = {
   },
   getOptionValues: async (req, res) => {
     const optionList = await OptionsModel.options()
-    const leaveTypeList = await leaveModel.leaveTypeList()
+    const leaveTypeList = await LeaveModel.leaveTypeList()
     // console.log({ optionList })
     optionList.forEach((el) => {
       if (el.option_title === 'in-time') {
@@ -82,38 +85,53 @@ const OptionsController = {
       console.log(req.body);
 
       const { optionId, optionValue } = req.body;
-      console.log(optionId, optionValue);
+      const regEx = /^\d+$/
+      // console.log('regggg', regEx.test(optionValue));
 
+      // console.log('TTTTTTT', optionId, optionValue.match('Hours') == 'Hours');
+      // console.log(optionId, hrToTime(optionValue));
+
+      // for update name
       if (optionValue[0] === 'F' || optionValue[0] === 'S' || optionValue[0] === 'M' || optionValue[0] === 'T' || optionValue[0] === 'W') {
         const isUpdate = await OptionsModel.updateOptionValue(getDayNameToNum(optionValue), optionId)
-        if (isUpdate.errno) {
-          res.send('Error')
-        } else {
-          res.redirect('/options')
-        }
-      } if (optionValue[0] !== 'F') {
+      } if (optionValue[0] !== 'F') { // for update time
         const isUpdate = await OptionsModel.updateOptionValue(time12HrTo24Hr(optionValue), optionId)
-        if (isUpdate.errno) {
-          res.send('Error')
-        } else {
-          res.redirect('/options')
-        }
-      } if (checkInputFixedHr(optionValue) === true) {
+      } if (optionValue.match('Hours') == 'Hours') { // for update fixed time
         const isUpdate = await OptionsModel.updateOptionValue(hrToTime(optionValue), optionId)
-        if (isUpdate.errno) {
-          res.send('Error')
-        } else {
-          res.status(200).json('success')
-        }
+        console.log('yes update fixed time');
+
+        // if (isUpdate.errno) {
+        //   res.send('Error')
+        // } else {
+        //   res.status(200).json('success')
+        // }
+      } if (regEx.test(optionValue)) { // for update fixed time
+        const isUpdate = await OptionsModel.updateOptionValue(optionValue, optionId)
+        console.log('yes update fixed time');
+
+        // if (isUpdate.errno) {
+        //   res.send('Error')
+        // } else {
+        //   res.status(200).json('success')
+        // }
       }
 
-      // console.log('xxx', optionValue);
-      // const isUpdate = await OptionsModel.updateOptionValue(time12HrTo24Hr(optionValue), optionId)
-      // if (isUpdate.errno) {
-      //   res.send('Error')
-      // } else {
-      //   res.redirect('/options')
-      // }
+      // when update option value
+
+      const [{ inTime }] = await LogModel.getOptionsValueForUpdateInTime()
+      const [{ outTime }] = await LogModel.getOptionsValueForUpdateOutTime()
+      const [{ fixedTime }] = await LogModel.getOptionsValueForUpdateFixedTime()
+      const getValues = await LogModel.ifOptionValueIsUpdated()
+      console.log({ getValues });
+
+      if (getValues.length > 0) {
+        for (let i = 0; i < getValues.length; i += 1) {
+          if (inTime != getValues[i].logInTime || outTime != getValues[i].logOutTime || fixedTime != getValues[i].logFixedTime) {
+            await LogModel.updateForLogValues(inTime, outTime, fixedTime, getValues[i].logId)
+            console.log('updated');
+          }
+        }
+      }
     } catch (err) {
       console.log('====>Error form OptionsController updateOptionValues', err);
     }
