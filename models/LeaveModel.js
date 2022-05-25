@@ -1,10 +1,10 @@
 const dbConnect = require('../config/database');
-const { userId } = require('./ProfileModel');
 
 const LeaveModel = {
-  addLeaveday: async (userId, start, end, reason) => {
-    const addLeavedaySql = 'INSERT INTO employee_leaves (user_id, start, end, reason) VALUES(?,?,?,?)'
-    const values = [userId, start, end, reason];
+  addLeaveday: async (userId, typeId, start, end) => {
+    const addLeavedaySql = 'INSERT INTO employee_leaves (user_id,type_id, start, end) VALUES(?,?,?,?)'
+    const values = [userId, typeId, start, end];
+    console.log(addLeavedaySql, values)
     const [rows] = await dbConnect.promise().execute(addLeavedaySql, values);
     return rows;
   },
@@ -14,13 +14,13 @@ const LeaveModel = {
     return rows;
   },
   getEmployeeLeaveList: async () => {
-    const leaveListSql = "SELECT L.id AS id, U.user_name AS name, L.reason AS reason, U.user_role, U.avatar, DATE_FORMAT(L.start, '%Y/%m/%d') AS start, DATE_FORMAT(L.end, '%Y/%m/%d') AS end, DATEDIFF(L.end, L.start) + 1 AS duration FROM `employee_leaves` AS  L JOIN users AS U ON U.id = L.user_id WHERE DATE(start) BETWEEN DATE(CURRENT_DATE - INTERVAL DAYOFYEAR(CURRENT_DATE)  DAY) AND start"
+    const leaveListSql = "SELECT L.id AS id, U.user_name AS name, L.type_id AS typeId, LT.name as type, U.user_role, U.avatar, DATE_FORMAT(L.start, '%Y/%m/%d') AS start, DATE_FORMAT(L.end, '%Y/%m/%d') AS end, DATEDIFF(L.end, L.start) + 1 AS duration FROM `employee_leaves` AS L JOIN leave_type AS LT ON LT.id = L.type_id JOIN users AS U ON U.id = L.user_id WHERE DATE(start) BETWEEN DATE(CURRENT_DATE - INTERVAL DAYOFYEAR(CURRENT_DATE) DAY) AND start"
     const [rows] = await dbConnect.promise().execute(leaveListSql)
     return rows;
   },
 
-  setLeaveEditData: async (start, end, reason, id) => {
-    const query = `UPDATE employee_leaves SET  start = '${start}', end = '${end}', reason = '${reason}' WHERE id =${id}`
+  setLeaveEditData: async (start, end, typeId, id) => {
+    const query = `UPDATE employee_leaves SET  start = '${start}', end = '${end}', type_id = '${typeId}' WHERE id =${id}`
     const [row] = await dbConnect.promise().execute(query)
     return row;
   },
@@ -30,12 +30,15 @@ const LeaveModel = {
     return row.affectedRows;
   },
   leavedaysListBetweenTowDate: async (startDate, endDate) => {
-    const getList = `SELECT U.user_name AS name, U.avatar, EL.id AS id, EL.reason AS reason, DATE_FORMAT(start,'%Y/%m/%d') AS start, DATE_FORMAT(end, '%Y/%m/%d') AS end, DATEDIFF(end,start) + 1 AS duration  FROM employee_leaves AS EL JOIN users AS U ON U.id  = EL.user_id  WHERE DATE(start) BETWEEN  '${startDate}' AND '${endDate}'`;
+    const getList = `SELECT U.user_name AS name, U.avatar, EL.id AS id, EL.type_id AS typeId, LT.name as type ,DATE_FORMAT(start,'%Y/%m/%d') AS start, DATE_FORMAT(end, '%Y/%m/%d') AS end, DATEDIFF(end,start) + 1 AS duration  FROM employee_leaves AS EL
+    JOIN leave_type AS LT ON LT.id = El.type_id
+    JOIN users AS U ON U.id  = EL.user_id  WHERE DATE(start) BETWEEN  '${startDate}' AND '${endDate}'`;
     const [rows] = await dbConnect.promise().execute(getList)
     return rows;
   },
   anEmployeeLeaveList: async (id) => {
-    const query = `SELECT U.user_name,  U.user_role, U.avatar, EL.user_id AS id, EL.reason AS reason, DATE_FORMAT(start,'%Y/%m/%d') AS start, DATE_FORMAT(end, '%Y/%m/%d') AS end, DATEDIFF(end,start) + 1 AS duration  FROM employee_leaves AS EL JOIN users AS U ON U.id = EL.user_id WHERE EL.user_id = ${id}`;
+    const query = `SELECT U.user_name,  U.user_role, U.avatar, EL.user_id AS id, EL.type_id AS typeId, LT.name as type , DATE_FORMAT(start,'%Y/%m/%d') AS start, DATE_FORMAT(end, '%Y/%m/%d') AS end, DATEDIFF(end,start) + 1 AS duration  FROM employee_leaves AS EL
+    JOIN leave_type AS LT ON LT.id = El.type_id JOIN users AS U ON U.id = EL.user_id WHERE EL.user_id = ${id}`;
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
@@ -49,6 +52,34 @@ const LeaveModel = {
     const leaveTypeList = 'SELECT `id`, `name`, `duration` FROM `leave_type`'
     const [rows] = await dbConnect.promise().execute(leaveTypeList)
     return rows;
+  },
+  leaveTypeFind: async (id) => {
+    const leaveTypeFind = 'SELECT `name`, `duration` FROM `leave_type` where id = ?'
+    const value = [id]
+    const [rows] = await dbConnect.promise().execute(leaveTypeFind, value)
+    return rows;
+  },
+  sendRequestLeave: async (userId, type, start, end) => {
+    const requestLeaveQuery = 'INSERT INTO `request_leave`(`user_id`, `type_id`, `start`, `end`) VALUES (?,?,?,?)'
+    const values = [userId, type, start, end]
+    const [rows] = await dbConnect.promise().execute(requestLeaveQuery, values)
+    return rows;
+  },
+  requestLeaveList: async () => {
+    const requestLeaveList = 'SELECT r.id, r.user_id ,u.user_name,u.avatar, r.type_id, l.name as typeName ,DATE_FORMAT(r.start, \'%Y/%m/%d\') AS start, DATE_FORMAT(r.end, \'%Y/%m/%d\') AS end, DATEDIFF(r.end, r.start) + 1 AS duration, r.status , r.created_at FROM request_leave as r,leave_type as l,users as u WHERE u.id = r.user_id and l.id = r.type_id'
+    const [row] = await dbConnect.promise().execute(requestLeaveList)
+    return row
+  },
+  requestLeaveFind: async (id) => {
+    const requestLeaveFind = 'SELECT R.user_id as userId, U.user_name AS userName, U.user_mail AS userMail, R.type_id AS typeId,T.name AS typeName, R.start,R.end, DATE_FORMAT(R.start, \'%Y-%m-%d\') AS start, DATE_FORMAT(R.end, \'%Y-%m-%d\') AS end, DATEDIFF(R.end, R.start) + 1 AS duration FROM request_leave as R JOIN users as U ON R.user_id = U.id JOIN leave_type as T ON R.type_id = T.id WHERE R.id = ?'
+    const value = [id]
+    const [row] = await dbConnect.promise().execute(requestLeaveFind, value)
+    return row
+  },
+  requestLeaveDelete: async (id) => {
+    const requestLeaveDeleteQuery = `DELETE FROM request_leave WHERE id =${id}`
+    const [rows] = await dbConnect.promise().execute(requestLeaveDeleteQuery)
+    return rows
   },
 }
 
