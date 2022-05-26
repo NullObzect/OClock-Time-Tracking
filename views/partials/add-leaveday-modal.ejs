@@ -19,19 +19,20 @@
 
                 <% }) %>
               </select>
+              
               </div>
               <div class="">
                 <select  name="typeId">
                 <option disabled selected>Select Type</option>
                 <% leaveTypeList.map(el =>
                 {%>
-                <option value="<%= el.id %>"><%= el.name %> (<%= el.duration%>)</option>
+                <option value="<%= el.id %>"><%= el.name %></option>
 
                 <% }) %>
               </select>
+              <p class="error select-error"></p>
               </div>
               </label>
-              <p class="error select-error"></p>
           <label for="projectDetails">
             Select Start Date
             <div class="">
