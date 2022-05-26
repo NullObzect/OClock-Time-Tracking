@@ -45,7 +45,7 @@ const LeaveController = {
       const leaveTypeList = await LeaveModel.leaveTypeList();
       const anEmployeeLeavedaysList = await LeaveModel.anEmployeeLeaveList(user.id)
       const userInfo = await AttendanceModel.getEmployeeInfo(userId)
-
+      console.log(anEmployeeLeavedaysList)
       res.render('pages/leavedays', {
         employeeLeaveList, anEmployeeLeavedaysList, selectEmployee, leaveTypeList, userInfo,
       })
@@ -191,6 +191,16 @@ const LeaveController = {
     } catch (error) {
       console.log(error)
     }
+  },
+  editLeaveType: async (req, res) => {
+    const data = req.body
+    const entries = Object.entries(data)
+    for (let i = 0; i < entries.length; i++) {
+      const id = entries[i][0]
+      const value = entries[i][1]
+      await LeaveModel.editLeaveType(value, id)
+    }
+    res.redirect('/options/option-values')
   },
 
 }
