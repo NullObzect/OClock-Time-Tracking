@@ -80,7 +80,7 @@
           />
       <%} else{%>
         <img
-        src="/uploads/avatars/<%=profile.avatar != null ?  profile.avatar : 'demo-avatar.png' %>" />
+        src="/uploads/avatars/<%=profile.avatar != null ?  profile.avatar : profile.gender=='male' ? 'demo-avatar.png':'female-demo-avatar.png' %>" />
         <% } %> 
     
       </div>
