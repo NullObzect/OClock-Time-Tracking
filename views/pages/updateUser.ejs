@@ -2,8 +2,7 @@
 <div id="profile">
   <div class="container">
     <form id="form" action="/update-user" method="post">
-      <div class="profile-avatar-img">
-        
+      <div class="profile-avatar-img">  
         <% if(userAvatar !== null && userAvatar.match(/^(http|https):/g)){ %>
           <img
           id="img"
@@ -12,14 +11,25 @@
           <%} else{%>
             <img
             id="img"
-            src="/uploads/avatars/<%=userAvatar != null ? userAvatar : 'demo-avatar.png' %>" />
+            src="/uploads/avatars/<%=userAvatar != null ? userAvatar :gender=='male' ? 'demo-avatar.png':'female-demo-avatar.png' %>" />
             <% } %>   
       </div>
       
     <input type="hidden" id="id" name="id" value="<%=id%>">
+    <label for="fingerId"
+    >Finger ID
+    <div class="">
+      <input value="<%= finger_id %>" id="fingerId" name="fingerId" type="text" />
+      <p class="error email-error"></p>
+    </div>
+  </label>
     <label for="">Name</label>
       <div class="demo-input">
         <%= user_name %>
+      </div>
+      <label for="">Gender</label>
+      <div class="demo-input">
+        <%= gender %>
       </div>
       <label for="name"
         >Email
@@ -63,5 +73,6 @@
     userSaveBtn.disabled = false
     userCancelBtn.style.display = "inline";
   });
+
 </script>
 <%- include("../partials/footer"); -%>
