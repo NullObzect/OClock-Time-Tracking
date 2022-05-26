@@ -1,5 +1,8 @@
 /* eslint-disable max-len */
 const AttendanceModel = require('../models/AttendanceModel');
+const LogModel = require('../models/LogModel');
+const OptionsModel = require('../models/OptionsModel');
+
 // const { timeToHour } = require('../utilities/formater')
 
 const AttendanceController = {
@@ -7,6 +10,16 @@ const AttendanceController = {
   attendanceStart: async (req, res) => {
     const { projectId, workDetails } = req.body
     try {
+      //
+      function stringToNumber(s) {
+        if (s.length > 0) {
+          return s.replace(/,/, ',')
+        }
+        return ''
+      }
+      const [{ offDayValues }] = await OptionsModel.getOffDaysValue();
+
+      //
       const { id } = req.user
       const [{ inTime }] = await AttendanceModel.getInTime()
       const [{ outTime }] = await AttendanceModel.getOutTime()
@@ -22,7 +35,7 @@ const AttendanceController = {
       const insertedAttendanceStart = await AttendanceModel.setAttendanceStart(id, inTime, outTime, projectId, workDetails)
       //
       if (isUserId === undefined) {
-        await AttendanceModel.insertLog(id)
+        await AttendanceModel.insertLog(stringToNumber(offDayValues), id)
       }
 
       //
@@ -62,6 +75,7 @@ const AttendanceController = {
       const breakTime = getTodayData.length
       console.log('sss', start)
       console.log('today total', todayTotalData)
+
       return res.json({
         start, end, breakTime, getTodayData, todayTotalData, weekTotalData, getWeekData,
       })

@@ -91,19 +91,17 @@ const AttendanceModel = {
       return err;
     }
   },
-  // insertLog: async (userId) => {
-  //   const getRunStartSql = `INSERT INTO log(user_id, in_time, out_time, work_hour, start, end, work_time, day_type) SELECT   user_id AS uId, in_time AS inTime, out_time AS outTime, O.option_value AS workHour,  TIME(MIN(A.start)) AS startTime, CURRENT_TIMESTAMP,  TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) AS totalWorkTime,CASE WHEN WEEKDAY(CURRENT_DATE) IN  (OP.option_value)  THEN 'offday' WHEN  (SELECT COUNT(H.title) FROM holidays AS H WHERE DATE(CURRENT_DATE) BETWEEN H.start AND  H.end) > 0 THEN 'holiday' WHEN (SELECT COUNT(EL.reason) FROM employee_leaves AS EL WHERE DATE(CURRENT_DATE) BETWEEN EL.start AND EL.end AND A.user_id = EL.user_id) > 0 THEN 'leave' ELSE 'regular' END	dayType FROM attendance AS A JOIN options AS O ON o.option_title = 'fixed time' JOIN options AS OP ON OP.option_title = 'off-day' WHERE DATE(A.create_at) = DATE(CURRENT_DATE) AND user_id = ${userId}`
-  //   const value = [userId]
-  //   const [rows] = await dbConnect.promise().execute(getRunStartSql, value);
-  //   return rows;
-  // },
 
-  insertLog: async (userId) => {
-    const getRunStartSql = `INSERT INTO log(user_id, in_time, out_time, work_hour, start, end, work_time, day_type) SELECT   user_id AS uId, in_time AS inTime, out_time AS outTime, O.option_value AS workHour,  TIME(MIN(A.start)) AS startTime, NULL,  TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) AS totalWorkTime,CASE WHEN WEEKDAY(CURRENT_DATE) IN  (OP.option_value)  THEN 'offday' WHEN  (SELECT COUNT(H.title) FROM holidays AS H WHERE DATE(CURRENT_DATE) BETWEEN H.start AND  H.end) > 0 THEN 'holiday' WHEN (SELECT COUNT(EL.reason) FROM employee_leaves AS EL WHERE DATE(CURRENT_DATE) BETWEEN EL.start AND EL.end AND A.user_id = EL.user_id) > 0 THEN 'leave' ELSE 'regular' END	dayType FROM attendance AS A JOIN options AS O ON o.option_title = 'fixed time' JOIN options AS OP ON OP.option_title = 'off-day' WHERE DATE(A.create_at) = DATE(CURRENT_DATE) AND user_id = ${userId}`
+  insertLog: async (offDayValues, userId) => {
+    const getRunStartSql = `INSERT INTO log(user_id, in_time, out_time, work_hour, start, end, work_time, day_type) SELECT   user_id AS uId, in_time AS inTime, out_time AS outTime, O.option_value AS workHour,  TIME(MIN(A.start)) AS startTime, NULL,  TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) AS totalWorkTime,CASE WHEN WEEKDAY(CURRENT_DATE) IN (${offDayValues})   THEN 'offday' WHEN  (SELECT COUNT(H.title) FROM holidays AS H WHERE DATE(CURRENT_DATE) BETWEEN H.start AND  H.end) > 0 THEN 'holiday' WHEN (SELECT COUNT(EL.type_id) FROM employee_leaves AS EL WHERE DATE(CURRENT_DATE) BETWEEN EL.start AND EL.end AND A.user_id = EL.user_id) > 0 THEN 'leave' ELSE 'regular' END	dayType FROM attendance AS A JOIN options AS O ON o.option_title = 'fixed time' JOIN options AS OP ON OP.option_title = 'off-day' WHERE DATE(A.create_at) = DATE(CURRENT_DATE) AND user_id = ${userId}`
+
+    // console.log({ getRunStartSql });
 
     const [rows] = await dbConnect.promise().execute(getRunStartSql);
+
     return rows;
   },
+
   updateLog: async (userId) => {
     const getRunStartSql = `UPDATE log AS L SET L.end = CURRENT_TIMESTAMP WHERE DATE(L.create_at) = DATE(CURRENT_DATE)  AND  user_id = ${userId}`
     const value = [userId]
@@ -202,7 +200,7 @@ const AttendanceModel = {
     return rows;
   },
   todayTotal: async (userId) => {
-    const todayTotalSql = 'SELECT TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(end)))), SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(start))))) as todayTotal, TIME_FORMAT(SUBTIME(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))),SEC_TO_TIME(((O.option_value) * COUNT(DISTINCT DATE(create_at)) * 60) *60)),"%H:%i")   AS totalExtrOrLess FROM  attendance  JOIN options AS o ON o.option_title = "fixed time" WHERE user_id = ? and end IS NOT NULL and Date(create_at)= Date(CURRENT_DATE)'
+    const todayTotalSql = 'SELECT TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(end)))), SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(start))))) as todayTotal, TIME_FORMAT(SUBTIME(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))),SEC_TO_TIME(((O.option_value) * COUNT(DISTINCT DATE(A.create_at)) * 60) *60)),"%H:%i")   AS totalExtrOrLess FROM  attendance AS A JOIN options AS o ON o.option_title = "fixed time" WHERE user_id = ? and end IS NOT NULL and Date(A.create_at)= Date(CURRENT_DATE)'
     const value = [userId]
     const [rows] = await dbConnect.promise().execute(todayTotalSql, value);
     return rows;

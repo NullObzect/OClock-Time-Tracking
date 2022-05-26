@@ -1,4 +1,8 @@
-#options {
+input:focus {
+  outline: none !important;
+}
+input {
+  border: none;
 }
 .options-cards {
   display: flex;
@@ -183,7 +187,6 @@
   width: 30%;
   min-width: 120px;
 }
-
 
 /* holiday page */
 

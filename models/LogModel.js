@@ -14,7 +14,7 @@ const LogModel = {
   },
   // late count time for weekly
   lateCountThisWeek: async (userId) => {
-    const query = `SELECT  CASE WHEN LEFT(TIME_FORMAT(TIMEDIFF(TIME(in_time) + TIME(O.option_value), TIME(start)), '%H:%i'), 1) = '-' THEN 1 ELSE 0 END  lateCount FROM log  JOIN options AS O ON O.option_title = 'tolerance-time'  WHERE  user_id = ${userId} AND create_at >  now() - INTERVAL 7 DAY`
+    const query = `SELECT  CASE WHEN LEFT(TIME_FORMAT(TIMEDIFF(TIME(in_time) + TIME(O.option_value), TIME(start)), '%H:%i'), 1) = '-' THEN 1 ELSE 0 END  lateCount FROM log AS L JOIN options AS O ON O.option_title = 'tolerance-time'  WHERE  user_id = ${userId} AND L.create_at >  now() - INTERVAL 7 DAY`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
@@ -31,7 +31,7 @@ const LogModel = {
   },
   // late count time for weekly monthly
   lateCountThisMonth: async (userId, monthStartDate) => {
-    const query = `SELECT  CASE WHEN LEFT(TIME_FORMAT(TIMEDIFF(TIME(in_time) + TIME(O.option_value), TIME(start)), '%H:%i'), 1) = '-' THEN 1 ELSE 0 END  lateCount FROM log  JOIN options AS O ON O.option_title = 'tolerance-time'  WHERE  user_id = ${userId} AND DATE(create_at) BETWEEN  '${monthStartDate}' AND  DATE(CURRENT_DATE - 1)`
+    const query = `SELECT  CASE WHEN LEFT(TIME_FORMAT(TIMEDIFF(TIME(in_time) + TIME(O.option_value), TIME(start)), '%H:%i'), 1) = '-' THEN 1 ELSE 0 END  lateCount FROM log AS L JOIN options AS O ON O.option_title = 'tolerance-time'  WHERE  user_id = ${userId} AND DATE(L.create_at) BETWEEN  '${monthStartDate}' AND  DATE(CURRENT_DATE - 1)`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
@@ -48,7 +48,7 @@ const LogModel = {
   },
   // late count time for  yearly
   lateCountThisYear: async (userId, yearStartDate) => {
-    const query = `SELECT  CASE WHEN LEFT(TIME_FORMAT(TIMEDIFF(TIME(in_time) + TIME(O.option_value), TIME(start)), '%H:%i'), 1) = '-' THEN 1 ELSE 0 END  lateCount FROM log  JOIN options AS O ON O.option_title = 'tolerance-time'  WHERE  user_id = ${userId} AND DATE(create_at) BETWEEN  '${yearStartDate}' AND  DATE(CURRENT_DATE - 1)`
+    const query = `SELECT  CASE WHEN LEFT(TIME_FORMAT(TIMEDIFF(TIME(in_time) + TIME(O.option_value), TIME(start)), '%H:%i'), 1) = '-' THEN 1 ELSE 0 END  lateCount FROM log AS L JOIN options AS O ON O.option_title = 'tolerance-time'  WHERE  user_id = ${userId} AND DATE(L.create_at) BETWEEN  '${yearStartDate}' AND  DATE(CURRENT_DATE - 1)`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
@@ -77,26 +77,26 @@ const LogModel = {
   },
   // late count time for weekly monthly
   lateCountBetweenTwoDate: async (userId, startDate, endDate) => {
-    const query = `SELECT  CASE WHEN LEFT(TIME_FORMAT(TIMEDIFF(TIME(in_time) + TIME(O.option_value), TIME(start)), '%H:%i'), 1) = '-' THEN 1 ELSE 0 END  lateCount FROM log  JOIN options AS O ON O.option_title = 'tolerance-time'  WHERE  user_id = ${userId} AND DATE(create_at) BETWEEN  '${startDate}' AND  '${endDate}'`
+    const query = `SELECT  CASE WHEN LEFT(TIME_FORMAT(TIMEDIFF(TIME(in_time) + TIME(O.option_value), TIME(start)), '%H:%i'), 1) = '-' THEN 1 ELSE 0 END  lateCount FROM log  AS L JOIN options AS O ON O.option_title = 'tolerance-time'  WHERE  user_id = ${userId} AND DATE(L.create_at) BETWEEN  '${startDate}' AND  '${endDate}'`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
 
   lastSevenDaysReports: async (userId) => {
-    const query = `SELECT  DAYNAME(create_at) AS day, DATE_FORMAT(create_at,'%d-%m-%Y') AS date,  day_type AS dayType, TIME_FORMAT(start,'%h:%i %p') AS start, CASE WHEN  (TIME_TO_SEC(in_time)   >  TIME_TO_SEC(start)) 
+    const query = `SELECT  DAYNAME(L.create_at) AS day, DATE_FORMAT(L.create_at,'%d-%m-%Y') AS date,  day_type AS dayType, TIME_FORMAT(start,'%h:%i %p') AS start, CASE WHEN  (TIME_TO_SEC(in_time)   >  TIME_TO_SEC(start)) 
     THEN TIME_FORMAT(TIMEDIFF(TIME(in_time), TIME(start)), '%H:%i')
     WHEN  TIME(start)  BETWEEN TIME(in_time) AND  TIME(SEC_TO_TIME(TIME_TO_SEC(in_time)) + SEC_TO_TIME(TIME_TO_SEC(O.option_value))) THEN ''
     ELSE TIME_FORMAT(TIMEDIFF(TIME( SEC_TO_TIME(TIME_TO_SEC(in_time)) + SEC_TO_TIME(TIME_TO_SEC(O.option_value))), TIME((start))), '%H:%i') END inTimeExtraOrLess, TIME_FORMAT(end,'%h:%i %p') AS end, TIME_FORMAT(TIMEDIFF(TIME(work_hour), TIME(work_time)), '%H:%i') AS outTimeExtraOrLess, TIME_FORMAT(work_time,'%H:%i') AS workTime, REPLACE(TIME_FORMAT( work_hour , '%h'),'0', '') AS workHr, TIME_FORMAT(TIMEDIFF(work_time, work_hour), '%H
-    :%i') AS totalTimeExtraOrLess FROM log  JOIN options AS O ON O.option_title = 'tolerance-time'  WHERE  user_id = ${userId} AND create_at >  now() - INTERVAL 7 DAY`
+    :%i') AS totalTimeExtraOrLess FROM log AS L JOIN options AS O ON O.option_title = 'tolerance-time'  WHERE  user_id = ${userId} AND L.create_at >  now() - INTERVAL 7 DAY`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
 
   reportDetailsBetweenTwoDate: async (userId, startDate, endDate) => {
-    const query = `SELECT  DAYNAME(create_at) AS day, DATE_FORMAT(create_at,'%d %b %y') AS date,  day_type AS dayType, TIME_FORMAT(start,'%h:%i %p') AS start, CASE WHEN  (TIME_TO_SEC(in_time)   >  TIME_TO_SEC(start)) 
+    const query = `SELECT  DAYNAME(L.create_at) AS day, DATE_FORMAT(L.create_at,'%d %b %y') AS date,  day_type AS dayType, TIME_FORMAT(start,'%h:%i %p') AS start, CASE WHEN  (TIME_TO_SEC(in_time)   >  TIME_TO_SEC(start)) 
     THEN TIME_FORMAT(TIMEDIFF(TIME(in_time), TIME(start)), '%H:%i')
     WHEN  TIME(start)  BETWEEN TIME(in_time) AND  TIME(SEC_TO_TIME(TIME_TO_SEC(in_time)) + SEC_TO_TIME(TIME_TO_SEC(O.option_value))) THEN ''
-    ELSE TIME_FORMAT(TIMEDIFF(TIME( SEC_TO_TIME(TIME_TO_SEC(in_time)) + SEC_TO_TIME(TIME_TO_SEC(O.option_value))), TIME((start))), '%H:%i') END inTimeExtraOrLess, TIME_FORMAT(end,'%h:%i %p') AS end, TIME_FORMAT(TIMEDIFF(TIME(work_hour), TIME(work_time)), '%H:%i') AS outTimeExtraOrLess, TIME_FORMAT(work_time,'%H:%i') AS workTime, REPLACE(TIME_FORMAT( work_hour , '%h'),'0', '') AS workHr, TIME_FORMAT(TIMEDIFF(work_time, work_hour), '%H:%i') AS totalTimeExtraOrLess FROM log JOIN options AS O ON O.option_title = 'tolerance-time' WHERE  user_id = ${userId} AND  DATE(create_at) BETWEEN '${startDate}' AND '${endDate}'`
+    ELSE TIME_FORMAT(TIMEDIFF(TIME( SEC_TO_TIME(TIME_TO_SEC(in_time)) + SEC_TO_TIME(TIME_TO_SEC(O.option_value))), TIME((start))), '%H:%i') END inTimeExtraOrLess, TIME_FORMAT(end,'%h:%i %p') AS end, TIME_FORMAT(TIMEDIFF(TIME(work_hour), TIME(work_time)), '%H:%i') AS outTimeExtraOrLess, TIME_FORMAT(work_time,'%H:%i') AS workTime, REPLACE(TIME_FORMAT( work_hour , '%h'),'0', '') AS workHr, TIME_FORMAT(TIMEDIFF(work_time, work_hour), '%H:%i') AS totalTimeExtraOrLess FROM log AS L JOIN options AS O ON O.option_title = 'tolerance-time' WHERE  user_id = ${userId} AND  DATE(L.create_at) BETWEEN '${startDate}' AND '${endDate}'`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
@@ -124,13 +124,39 @@ const LogModel = {
     return rows;
   },
 
+  // query for update log option value when change option value
+  getOptionsValueFromLog: async () => {
+    const query = 'SELECT id as logId, in_time as logInTime, out_time AS logOutTime, work_hour AS logFixedHr from log WHERE create_at >  now() - INTERVAL 1 DAY'
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows;
+  },
+  getOptionsValueForUpdateInTime: async () => {
+    const query = "SELECT O.option_value AS inTime FROM options AS O WHERE O.option_title = 'in-time'"
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows;
+  },
+  getOptionsValueForUpdateOutTime: async () => {
+    const query = "SELECT O.option_value AS outTime FROM options AS O WHERE O.option_title = 'out-time'"
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows;
+  },
+  getOptionsValueForUpdateFixedTime: async () => {
+    const query = "SELECT O.option_value AS fixedTime FROM options AS O WHERE O.option_title = 'fixed time'"
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows;
+  },
+  updateForLogValues: async (inTime, outTime, fixedTime, id) => {
+    console.log(' log modal', { inTime, fixedTime, id });
+
+    const query = `UPDATE log SET in_time = '${inTime}', out_time = '${outTime}', work_hour = '${fixedTime}' WHERE id = ${id}`
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows.affectedRows;
+  },
+  ifOptionValueIsUpdated: async () => {
+    const query = 'SELECT DISTINCT L.id AS logId, L.in_time as logInTime, L.out_time AS logOutTime, L.work_hour AS logFixedHr FROM options AS O JOIN log AS L ON DATE(O.update_at) = DATE(L.create_at)'
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows;
+  },
+
 }
 module.exports = LogModel
-// late count for week
-// SELECT  CASE WHEN LEFT(TIME_FORMAT(TIMEDIFF(TIME(in_time) + TIME(O.option_value), TIME(start)), '%H:%i'), 1) = '-' THEN 1 ELSE 0 END  inTimeExtraOrLess FROM log  JOIN options AS O ON O.option_title = 'tolerance-time'  WHERE  user_id = 5 AND create_at >  now() - INTERVAL 7 DAY;
-
-// SELECT TIME_FORMAT(start, '%H:%i') as startTime,
-// CASE WHEN  (TIME_TO_SEC(in_time)   >  TIME_TO_SEC(start))
-// THEN TIME_FORMAT(TIMEDIFF(TIME(in_time), TIME(start)), '%H:%i')
-// ELSE TIME_FORMAT(TIMEDIFF(TIME( SEC_TO_TIME(TIME_TO_SEC(in_time)) + SEC_TO_TIME(TIME_TO_SEC(O.option_value))), TIME((start))), '%H:%i') END inTimeExtraOrLess
-// FROM log  JOIN options AS O ON O.option_title = 'tolerance-time'  WHERE  user_id = 5 AND create_at >  now() - INTERVAL 7 DAY;

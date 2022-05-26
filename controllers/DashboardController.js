@@ -9,7 +9,7 @@ const DashboardController = {
   getDashboard: async (req, res) => {
     const { user } = req
 
-    const checkTodayReportEmptyOrNot = await LogModel.checkTodayReportEmptyOrNot(user.id) 
+    const checkTodayReportEmptyOrNot = await LogModel.checkTodayReportEmptyOrNot(user.id)
     const [{ start }] = await AttendanceModel.todayStartTime(user.id)
     const [{ end }] = await AttendanceModel.todayEndTime(user.id)
     const projects = await OptionsModel.getProjects()
@@ -20,8 +20,6 @@ const DashboardController = {
     const { weekTotal } = wTotal
     todayTotal = timeToHour(todayTotal)
     const breakTime = today.length
-
-   
 
     // is end time null
     const isEndTimeNull = await AttendanceModel.getEndTimeIsNull()
@@ -40,6 +38,8 @@ const DashboardController = {
   },
   getRunStartData: async (req, res) => {
     try {
+     
+
       const [{ start }] = await AttendanceModel.getRunStartData(req.user.id)
       res.json(start)
     } catch (err) {
