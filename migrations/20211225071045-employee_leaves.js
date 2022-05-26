@@ -19,9 +19,13 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
       },
-      reason: {
+      type_id: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
+      },
+      create_at: {
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('NOW()'),
       },
 
     });
