@@ -17,6 +17,14 @@ module.exports = {
         option_title: 'out-time',
         option_value: '18:00',
       },
+      {
+        option_title: 'tolerance-time',
+        option_value: '00:30',
+      },
+      {
+        option_title: 'leave-limit',
+        option_value: '52',
+      },
 
     ]);
   },
