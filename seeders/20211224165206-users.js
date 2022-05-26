@@ -12,8 +12,11 @@ module.exports = {
 
     await queryInterface.bulkInsert('users', [
       {
+        finger_id: null,
         user_name: 'Rubel Amin',
+        gender: 'male',
         user_phone: '01648349010',
+
         user_mail: 'rubelamin@mail.com',
         user_role: 'admin',
         user_pass: '$2b$10$/oEkGOKwBzook1ymY314.ODwRFtA1dSd6DOsHqZIR3xxCW3tiZEkq',
@@ -23,7 +26,9 @@ module.exports = {
         update_at: null,
       },
       {
+        finger_id: null,
         user_name: 'Arif Uddin',
+        gender: 'male',
         user_phone: '01648349022',
         user_mail: 'arif@mail.com',
         user_role: 'user',

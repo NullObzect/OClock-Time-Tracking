@@ -7,13 +7,23 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
+      finger_id: {
+        allowNull: true,
+        type: Sequelize.STRING,
+      },
+
       user_name: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
+      gender: {
         allowNull: false,
         type: Sequelize.STRING,
       },
       user_phone: {
         allowNull: false,
         type: Sequelize.STRING,
+        unique: true,
       },
       user_role: {
         type: Sequelize.STRING,
@@ -22,6 +32,7 @@ module.exports = {
       user_mail: {
         allowNull: false,
         type: Sequelize.STRING,
+        unique: true,
       },
       user_pass: {
 
@@ -30,7 +41,7 @@ module.exports = {
       },
       avatar: {
         type: Sequelize.STRING,
-        defaultValue: 'demo-avatar.png',
+        defaultValue: null,
       },
       status: {
         type: Sequelize.INTEGER,
