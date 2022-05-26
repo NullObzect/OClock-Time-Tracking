@@ -1,3 +1,5 @@
+/* eslint-disable no-use-before-define */
+/* eslint-disable camelcase */
 import {
   aJAXPostRequest, dateDiff, dateFormate, deleteData, formValidation, getCurrentDate, setReportTitle
 } from './helper.js';
@@ -251,3 +253,71 @@ deleteData('/leavedays/delete/')
 
 // form validation
 formValidation()
+
+// leave day Search result
+
+let typingTimer;
+const doneTypingInterval = 500;
+const input = document.querySelector('input#user');
+const users_placeholder = document.querySelector('#user-list');
+if (input) {
+  input.addEventListener('keyup', () => {
+    clearTimeout(typingTimer);
+    if (input.value === '') {
+      users_placeholder.style.display = 'none'
+    }
+    // reset
+    if (input.value) {
+      typingTimer = setTimeout(searchUsers, doneTypingInterval);
+    }
+  });
+  // on keydown, clear the countdown
+  input.addEventListener('keydown', () => {
+    clearTimeout(typingTimer);
+  });
+  // send request for search
+  const searchUsers = async () => {
+    const response = await fetch('/user/search', {
+      method: 'POST',
+      body: JSON.stringify({
+        user: input.value,
+      }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    });
+    // get response
+    const result = await response.json();
+    // handle error and response
+    if (result.errors) {
+      const errorplaceholder = document.querySelector('p.error');
+      errorplaceholder.textContent = result.errors.common.msg;
+      errorplaceholder.style.display = 'block';
+    } else if (result.length >= 0) {
+      let generatedHtml = '<ul>';
+      result.forEach((user) => {
+        let avatar;
+        if (user.avatar !== null && user.avatar.match(/^(http|https):/g)) {
+          avatar = `<img
+        src="${user.avatar}"
+        />`
+        } else {
+          avatar = `<img
+      src="/uploads/avatars/${user.avatar === null ? 'demo-avatar.png' : user.avatar}" />`
+        }
+        generatedHtml += `<li ><a href="/options/leavedays/${user.id}">
+            <div class="user">
+              <div class="avatar">
+                ${avatar}
+              </div>
+              <div class="username">${user.user_name.split(' ')[0]}</div>
+            </div>
+            </a>
+          </li>`;
+      });
+      generatedHtml += '</ul>';
+      users_placeholder.innerHTML = generatedHtml;
+      users_placeholder.style.display = 'block'
+    }
+  }
+}
