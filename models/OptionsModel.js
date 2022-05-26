@@ -59,6 +59,11 @@ const OptionsModel = {
     const [rows] = await dbConnect.promise().execute(query)
     return rows.affectedRows
   },
+  getOffDaysValue: async () => {
+    const query = 'SELECT option_value AS offDayValues FROM options WHERE option_title = \'off-day\''
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows
+  },
 
 }
 
