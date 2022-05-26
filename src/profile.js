@@ -19,17 +19,14 @@ submitBtn.addEventListener('click', async (e) => {
   const fileField = document.querySelector('input[type="file"]');
   e.preventDefault()
   const formdata = new FormData(form)
-  // formdata.append('avatar',fileField.files[0])
   const response = await fetch('/update-profile', {
     method: 'POST',
     body: formdata,
   });
   const result = await response.json()
-  console.log(result)
   if (result.errors) {
   // errors
     Object.keys(result.errors).forEach((fieldName) => {
-      console.log(fieldName)
       // add error class to all inputs
       form[fieldName].classList.add('error');
       // set all error placeholders (p tag) textContent

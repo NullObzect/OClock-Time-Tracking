@@ -12,7 +12,7 @@
           <%} else{%>
             <img
             id="img"
-            src="/uploads/avatars/<%=avatar != null ? avatar : 'demo-avatar.png' %>" />
+            src="/uploads/avatars/<%=avatar != null ? avatar : gender=='male' ? 'demo-avatar.png':'female-demo-avatar.png'  %>" />
             <% } %> 
             
             <!-- Markup for update img -->
@@ -108,11 +108,29 @@
       </div>
       <input hidden name="socialImage" type="text" hidden>
       <label for="name"
+        >Finger ID
+        <div class="">
+          <input value="<%= finger_id %>" id="name" name="fingerId" type="text" />
+        </div>
+      </label>
+      <label for="name"
         >Name
         <div class="">
           <input value="<%= user_name %>" id="name" name="name" type="text" />
         </div>
       </label>
+      <label for="gender">
+            Gender
+            <div class="">
+              <select name="gender" id="gender">
+                <option disabled selected>Select Gender</option>
+                <option <%=gender=='male'? 'selected':''%> value="male">Male</option>
+                <option <%=gender=='female'? 'selected':''%> value="female">Female</option>
+                <option <%=gender=='other'? 'selected':''%> value="other">Other</option>
+              </select>
+              <p class="error select-error"></p>
+            </div>
+          </label>
      <label for="">Email</label>
       <div class="demo-input">
         <%= user_mail %>
@@ -155,10 +173,10 @@
 </div>
 <script>
   const form = document.querySelector('form')
-  console.log(form)
   const userCancelBtn = document.getElementById("user-cancel-btn");
   const userSaveBtn = document.getElementById("user-save-btn");
-  form.addEventListener("keyup", () => {
+  form.addEventListener('click', () => {
+    console.log('fff')
     userSaveBtn.disabled = false
     userCancelBtn.style.display = "inline";
   });

@@ -45,6 +45,7 @@ p.error {
   font-size: 14px;
   margin-bottom: 8px;
   display: none;
+  text-transform: capitalize;
 }
 .container input.error {
   border: 1px solid var(--red);

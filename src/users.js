@@ -20,14 +20,24 @@ form.onsubmit = async function (event) {
       inputErrors[j].classList.remove('error');
     }
   }
+  const select = document.querySelector('select')
+  if (select) {
+    if (document.querySelector('select').options.selectedIndex === 0) {
+      const fieldName = 'select'
+      const errorPlaceholder = document.querySelector(`.${fieldName}-error`);
+      errorPlaceholder.textContent = `${fieldName} is required!`;
+      errorPlaceholder.style.display = 'block';
+    }
+  }
+
   // prepare the form data
   const formData = new FormData(form);
-  console.log(formData);
   // send the request to server
   const response = await fetch('/add-user', {
     method: 'POST',
     body: formData,
   });
+  console.log(response)
     // get response
   const result = await response.json();
   // handle error and response
@@ -56,19 +66,6 @@ form.onsubmit = async function (event) {
   }
 };
 
-/*  function openMenu(menu) {
-    const currentMenu = menu.childNodes[3];
-    const showMenu = document.querySelector(".hidden-menu-show");
-
-    if (!currentMenu.classList.contains("hidden-menu-show") && showMenu) {
-      showMenu.classList.remove("hidden-menu-show");
-    }
-
-    currentMenu.classList.toggle("hidden-menu-show");
-  } */
-// const userAction = document.getElementsByClassName("hidden-menu");
-// const showMenu = document.querySelector(".hidden-menu-show");
-
 const userMoreBtn = document.querySelectorAll('.user-more-btn');
 const userActionBtn = document.querySelectorAll('.user-action-btn');
 
@@ -95,32 +92,15 @@ for (let i = 0; i < userMoreBtn.length; i++) {
 
   window.addEventListener('click', (e) => {
     if (!e.target.matches('#user-more-btn')) {
-      const showMenu = document.querySelector('.hidden-menu-show');
-      console.log(showMenu);
-      if (showMenu) {
-        console.log('yes');
-        //showMenu.classList.remove('hidden-menu-show');
-      }
+      // const showMenu = document.querySelector('.hidden-menu-show');
+      // console.log(showMenu);
+      // if (showMenu) {
+      //   console.log('yes');
+      //   // showMenu.classList.remove('hidden-menu-show');
+      // }
     }
   });
 }
-
-const menu = document.querySelectorAll('.menu');
-function myFun() {
-  window.addEventListener('click', (e) => {
-    console.log('click');
-    const showMenu = document.querySelector('.hidden-menu-show');
-    const xx = document.body.classList.contains('hidden-menu-show');
-
-    menu.forEach((item) => {
-      console.log(item.classList.contains('hidden-menu-show'))
-      // if (item.classList.contains('hidden-menu-show')) {
-      //   item.classList.remove('hidden-menu-show');
-      // }
-    });
-  });
-}
-//myFun();
 
 function deleteData(deleteUrl) {
   const deleteData = document.querySelectorAll('.delete-data');
@@ -142,30 +122,3 @@ function deleteData(deleteUrl) {
   }
 }
 deleteData('/delete/user/');
-
-// Paginations Functions
-
-// const firstBtn = document.querySelector('.first')
-// const prevBtn = document.querySelector('.prev')
-// const nextBtn = document.querySelector('.next')
-// const lastBtn = document.querySelector('.last')
-// console.log(firstBtn)
-// firstBtn.addEventListener()
-
-// function first(e) {
-//   const firstPage = Number(e);
-//   return (location.href = `/users?page=${firstPage}`);
-// }
-
-// function prev(e) {
-//   const prevPage = Number(e - 1);
-//   return (location.href = `/users?page=${prevPage}`);
-// }
-// function next(e) {
-//   const nextPage = Number(parseInt(e) + 1);
-//   return (location.href = `/users?page=${nextPage}`);
-// }
-// function last(e) {
-//   const lastPage = e;
-//   return (location.href = `/users?page=${lastPage}`);
-// }
