@@ -30,9 +30,9 @@ const ProfileModel = {
       return err;
     }
   },
-  updateProfile: async (avatar, name, phone, password, id) => {
+  updateProfile: async (avatar, fingerId, name, gender, phone, password, id) => {
     try {
-      const updateProfileSql = `UPDATE users SET ${name ? ` user_name = '${name}'` : ''} ${avatar ? `, avatar = '${avatar}'` : ''} ${password ? `, user_pass = '${password}'` : ''} ${phone ? `, user_phone = '${phone}'` : ''}  WHERE id = ${id}`
+      const updateProfileSql = `UPDATE users SET ${name ? ` user_name = '${name}'` : ''}  ${gender ? `, gender = '${gender}'` : ''} ${fingerId ? `, finger_id = '${fingerId}'` : ''} ${avatar ? `, avatar = '${avatar}'` : ''} ${password ? `, user_pass = '${password}'` : ''} ${phone ? `, user_phone = '${phone}'` : ''}  WHERE id = ${id}`
       const [row] = await dbConnect.promise().execute(updateProfileSql);
       return row;
     } catch (error) {
