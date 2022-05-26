@@ -279,7 +279,9 @@
             <span id="role"><%= user.user_role==='admin'? 'admin' : ''%> </span>
           </td>
           <td class="td-width">
-            <input class="reason-val" type="text" value="<%=user.type %>" />
+            <div><%= user.type %></div>
+
+            <input class="reason-val" type="hidden" value="<%=user.typeId %>" />
           </td>
           <td class="td-width">
             <input class="start-val" type="text" value="<%=user.start%> " />
