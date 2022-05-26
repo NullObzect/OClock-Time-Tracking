@@ -20,7 +20,7 @@
         <td><%= op.option_title %></td>
         <td <%= op.option_title ==	'in-time'  ? " class=time-picker" : op.option_title ==	'out-time'? " class=time-picker":''  %> >
           <input
-          id="<%= op.option_title=='off-day' ?'offDayAddBtn':'' %>" 
+          id="<%= op.option_title=='off-day' ?'offDayAddBtn':op.option_title=='tolerance-time' ?'toleAddBtn':'' %>" 
             type="text"
             class="option-value  <%= op.option_title ==	'in-time'?'timepicker-ui-input' :op.option_title ==	'in-time'?'timepicker-ui-input':''  %> "
             name="optionValue"
@@ -49,23 +49,34 @@
 <div id="leave-option">
   <div class="text-head">
     <div class="text-title">Leave Options</div>
-    <div class="add-button">
-      <button class="add-btn">
-        <span class="add-icon">
-          <%- include("../partials/icons/add-svg"); -%>
-        </span>
-        <span .add-btn-text>Add Type </span>
-      </button>
+    <div class="button-group">
+      <div class="add-button">
+        <button class="add-btn">
+          <span class="add-icon">
+            <%- include("../partials/icons/add-svg"); -%>
+          </span>
+          <span .add-btn-text>Add Type </span>
+        </button>
+      </div>
+      <div id="typeEditBtn" class="add-button">
+        <button class="add-btn">
+          <span class="add-icon">
+            <%- include("../partials/icons/add-svg"); -%>
+          </span>
+          <span .add-btn-text>Edit Type </span>
+        </button>
+      </div>
     </div>
     <%- include("../partials/add-leave-type"); -%>
     <%- include("../partials/off-day-select-modal"); -%>
+    <%- include("../partials/type-edit-modal"); -%>
+    <%- include("../partials/tolarence-set-modal"); -%>
   </div>
   <table class="project-table">
     <thead>
       <tr>
         <td>SL</td>
         <td class="project-table-title">Type</td>
-        <td>Duration</td>
       </tr>
     </thead>
     <tbody>
@@ -75,24 +86,11 @@
         <td><%= lv.name %></td>
         <td>
           <input
-            type="text"
-            class="option-value"
-            name="duration"
-            value="<%= lv.duration %>"
-          />
-        </td>
-        <td>
-          <input
             class="optionId"
             type="hidden"
             name="optionId"
             value="<%= lv.id %>"
           />
-        </td>
-        <td class="btn-group">
-          <button type="text" class="opt-val-change-btn">Change</button>
-          <button type="submit" class="opt-val-save-btn">save</button>
-          <button type="text" class="opt-cancel-btn">Cancel</button>
         </td>
       </tr>
       <% }) %>
