@@ -4,6 +4,9 @@ input:focus {
 input {
   border: none;
 }
+.button-group {
+  display: flex;
+}
 .options-cards {
   display: flex;
   align-items: center;
@@ -385,4 +388,125 @@ border-radius: 12px; */
 input[type="data"]:focus {
   border: none;
   outline: none !important;
+}
+
+/* Leave Day report Box  */
+
+.leave-report-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-items: center;
+  align-items: center;
+  gap: 20px;
+  width: 620px;
+  height: 200px;
+  padding: 12px;
+  border: 1px solid #e6e6e6;
+  border-radius: 15px;
+  margin: auto;
+}
+.leave-profile {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  align-self: center;
+  gap: 10px;
+}
+.leave-profile .username {
+  font-size: 22px;
+  font-weight: 600;
+}
+.leave-profile .email {
+  width: 200px;
+  word-wrap: break-word;
+}
+.leave-profile-avatar {
+  align-self: center;
+}
+.leave-profile-avatar img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 1px solid #c8c8c8;
+}
+.leave-box tr td {
+  line-height: 18px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #3d4e5e;
+}
+.leave-box {
+  width: 250px;
+  height: 165px;
+  padding: 14px;
+  border: 1px solid #e6e6e6;
+  border-radius: 15px;
+  background-color: var(--success-fade);
+  text-transform: capitalize;
+  margin: 6px;
+}
+.leave-box h2 {
+  padding-bottom: 12px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--deep);
+}
+.leave-box td span {
+  font-size: 12px;
+  width: 500;
+}
+.leave-box tr td:nth-child(1) {
+  padding-right: 10px;
+}
+.leave-profile-details {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--black);
+}
+.leave-profile-details,
+.email,
+.phone {
+  margin: 6px 0;
+}
+
+/* Leave Day search Box  */
+.search-user {
+  position: relative;
+  color: #3d4e5e;
+  font-weight: 600;
+}
+.search-user a {
+  text-decoration: none;
+  color: #3d4e5e;
+}
+.search-user input {
+  width: 200px;
+  margin: 0 30px;
+  padding: 8;
+  border: 1px solid #c8c8c8;
+
+  border-radius: 5px;
+  font-size: 14px;
+}
+.user-list ul {
+  list-style-type: none;
+  color: #3d4e5e;
+}
+
+.user-list .user {
+  position: absolute;
+  width: 200px;
+  margin: 8px 30px;
+  padding: 5px;
+  border: 1px solid #c8c8c8;
+  background-color: var(--prim-fade);
+  border-radius: 5px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.user-list .avatar img {
+  width: 25px;
+  height: 25px;
+  border: 1px solid #e6e6e6;
 }

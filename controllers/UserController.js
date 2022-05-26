@@ -32,17 +32,19 @@ const UserController = {
   addUser: async (req, res) => {
     let result;
     let avatar = null;
+    console.log(req.body)
     const {
-      name, email, phone,
+      name, email, phone, gender,
     } = req.body
-    if (req.files && req.files.length > 0) {
-      avatar = req.files[0].filename
-      result = await UserModel.addUser(name, phone, email, avatar)
-    } else {
-      console.log('else')
-      result = await UserModel.addUser(name, phone, email, avatar)
-    }
     try {
+      if (req.files && req.files.length > 0) {
+        avatar = req.files[0].filename
+        result = await UserModel.addUser(name, gender, phone, email, avatar)
+      } else {
+        console.log('else')
+        result = await UserModel.addUser(name, gender, phone, email, avatar)
+        console.log(result)
+      }
       if (result.affectedRows > 0) {
         const id = result.insertId
         const token = jwt.sign({
@@ -367,12 +369,12 @@ const UserController = {
     try {
       const [findIdFormUser] = await UserModel.getUpdateUserInfo(req.params.id)
       const {
-        id, user_name, user_phone, user_mail, status, create_at,
+        id, finger_id, user_name, gender, user_phone, user_mail, status, create_at,
       } = findIdFormUser
       const { avatar } = findIdFormUser
       const userAvatar = avatar
       res.render('pages/updateUser', {
-        id, user_name, user_phone, user_mail, status, userAvatar, create_at,
+        id, finger_id, user_name, gender, user_phone, user_mail, status, userAvatar, create_at,
       })
     } catch (err) {
       console.log('====>Error form userProfile Controller', err);
@@ -380,13 +382,15 @@ const UserController = {
   },
   // update user post
   updateUserPush: async (req, res) => {
-    const { id, email, joinDate } = req.body
+    const {
+      id, fingerId, email, joinDate,
+    } = req.body
     const [findIdFormUser] = await UserModel.getUpdateUserInfo(id)
     if (email !== findIdFormUser.user_mail) {
       await UserModel.adminCanUpdateUser(id, email)
     }
-    if (joinDate !== findIdFormUser.create_at) {
-      await UserModel.userJoinDateChange(id, joinDate)
+    if (joinDate !== findIdFormUser.create_at || fingerId !== findIdFormUser.finger_id) {
+      await UserModel.userJoinDateChange(id, fingerId, joinDate)
     }
 
     res.redirect('/users')
@@ -394,7 +398,8 @@ const UserController = {
   searchUserByName: async (req, res) => {
     const { user } = req.body
     console.log(user)
-    const result = await UserModel.userSearch(user)
+    const input = user.replace(/^\s+|\s+$/gm, '')
+    const result = await UserModel.userSearch(input)
     console.log(result)
     res.json(result)
   },

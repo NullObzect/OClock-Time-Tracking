@@ -36,7 +36,7 @@
             <img src="<%= user.avatar%>" />
             <%} else{%>
             <img
-              src="<%=baseUrl%>/uploads/avatars/<%=user.avatar != null ?  user.avatar : 'demo-avatar.png' %>"
+              src="<%=baseUrl%>/uploads/avatars/<%=user.avatar !== null ?  user.avatar : user.gender=='male' ? 'demo-avatar.png':'female-demo-avatar.png'  %>"
             />
             <% } %>
           </td>

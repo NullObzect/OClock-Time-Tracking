@@ -1,0 +1,73 @@
+<style>
+  .select-container {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    padding: 10px;
+  }
+  .select-box {
+    text-align: center;
+    width: 90%;
+    padding: 5px;
+    color: var(--deep2);
+    margin: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 5px;
+    background-color: var(--fade-bluish-gray);
+    cursor: pointer;
+  }
+  .select {
+    background-color: var(--deep);
+    color: #ffffff;
+  }
+</style>
+<div id="toleranceSetModal" class="modal-container">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">Select off day</div>
+      <div id="tole-modal-close" class="modal-close">
+        <%- include("../partials/icons/close-svg"); -%>
+      </div>
+    </div>
+    <div class="modal-content">
+      <div class="container select-container">
+        <div class="select-box"><input type="hidden" value="00:00" />0m</div>
+        <div class="select-box"><input type="hidden" value="00:15" />15m</div>
+        <div class="select-box"><input type="hidden" value="00:30" />30m</div>
+        <div class="select-box"><input type="hidden" value="00:45" />45m</div>
+        <div class="select-box"><input type="hidden" value="00:60" />1h</div>
+        <div class="select-box"><input type="hidden" value="01:30" />1h 30m</div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  const selectBox = document.getElementsByClassName('select-box')
+  const toleAddBtn= document.querySelector('#toleAddBtn')
+  const currentToleValue= document.querySelector('#toleAddBtn').value
+  let toleValue ;
+  toleValue = currentToleValue
+  for(var i=0;i<selectBox.length;i++){
+    if(currentToleValue==selectBox[i].querySelector('input').value){
+      selectBox[i].classList.add('select')
+      currentElement = selectBox[i]
+    }
+  
+    selectBox[i].addEventListener('click',(e)=>{
+      const element = e.target
+      element.classList.add("select");
+
+      for(var i=0;i<selectBox.length;i++){
+        if(selectBox[i]!=element){
+          if(selectBox[i].classList.contains('select')){
+            selectBox[i].classList.remove('select')
+          }
+        }
+      }
+      const inputToleValue = element.querySelector('input').value
+      toleValue=inputToleValue
+      toleAddBtn.value = toleValue
+    })
+
+  }
+</script>

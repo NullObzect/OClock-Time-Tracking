@@ -3,90 +3,6 @@
     .update-btn {
   display: none;
     }
-  .leave-report-box {
-    display: grid;
-    grid-template-columns: 1fr  1fr;
-    justify-items: center;
-    align-items: center;
-    gap: 20px;
-    width:600px;
-    height: 200px;
-    padding: 12px;
-    border: 1px solid #e6e6e6;
-    border-radius: 15px;
-    margin: auto;
-}
-.leave-profile{
-  display: grid;
-  grid-template-columns: 1fr 3fr;
- align-self: center;
-  gap: 20px;
-}
-.leave-profile .username{
-  font-size: 22px;
-  font-weight: 600;
-}
-.leave-profile-avatar {
- align-self: center;
-  
-}
-.leave-profile-avatar img{
-  width: 100px;
-  height: 100px;
-}
-.leave-box tr td {
-  line-height: 18px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #3d4e5e;
-}
-.leave-box {
-  width: 250px;
-  height: 165px;
-  padding: 14px;
-  border: 1px solid #e6e6e6;
-  border-radius: 15px;
-  background-color: var(--success-fade);
-  text-transform: capitalize;
-  margin: 6px;
-}
-.leave-box h2 {
-  padding-bottom: 12px;
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--deep);
-}
-.leave-box td span {
-  font-size: 12px;
-  width: 500;
-}
-.leave-box tr td:nth-child(1) {
-    padding-right: 10px;
-}
-.leave-profile-details{
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--black);
-}
-.leave-profile-details ,.email,.phone{
-  margin:6px 0;
-}
-.search-user{
-}
-.user-list .user{
-  width: 200px;
-  margin: 8px;
-  padding: 5px 5px;
-  border: 1px solid #c8c8c8;
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-}
-.user-list .avatar img{
-  width: 25px;
-  height: 25px;
-}
 
   </style>
 <div id="users">
@@ -131,29 +47,14 @@
 <% }else{ %>
   <%- include("../partials/add-request-leave-modal"); -%>
   <% } %>  
+  
+  <%if(loggedInUser.userRole==='admin'){ %>
 <div id="search-user" class="search-user">
    <input type="text" id="user" placeholder="Search User">
   <div id="user-list" class="user-list">
-    <ul>
-      <li>
-       <div class="user">
-         <div class="avatar">
-           <img src="/uploads/avatars/demo-avatar.png" />
-         </div>
-         <div class="username">khoaiz</div>
-       </div>
-      </li>
-      <li>
-       <div class="user">
-         <div class="avatar">
-           <img src="/uploads/avatars/demo-avatar.png" />
-         </div>
-         <div class="username">khoaiz</div>
-       </div>
-      </li>
-    </ul>
   </div>
 </div>
+<% } %> 
   <!-- Markup Date range for employee-->
 <div class="leave-report-box">
   <div class="leave-profile">
@@ -164,7 +65,7 @@
           />
       <%} else{%>
         <img
-        src="/uploads/avatars/<%=userInfo.avatar===null ? 'demo-avatar.png' : userInfo.avatar %>" />
+        src="/uploads/avatars/<%=userInfo.avatar!==null ?  userInfo.avatar : userInfo.gender=='male' ? 'demo-avatar.png':'female-demo-avatar.png' %>" />
         <% } %> 
     </div>
     <div class="leave-profile-info">
@@ -270,7 +171,7 @@
             <img src="<%= user.avatar%>" />
             <%} else{%>
             <img
-              src="/uploads/avatars/<%=user.avatar != null ?  user.avatar : 'demo-avatar.png' %>"
+              src="/uploads/avatars/<%=user.avatar != null ?  user.avatar : user.gender=='male' ? 'demo-avatar.png':'female-demo-avatar.png' %>"
             />
             <% } %>
           </td>
@@ -315,7 +216,7 @@
             <img src="<%= user.avatar%>" />
             <%} else{%>
             <img
-              src="/uploads/avatars/<%=user.avatar != null ?  user.avatar : 'demo-avatar.png' %>"
+              src="/uploads/avatars/<%=user.avatar != null ?  user.avatar : user.gender=='male' ? 'demo-avatar.png':'female-demo-avatar.png'  %>"
             />
             <% } %>
           </td>
@@ -353,67 +254,6 @@
 </script>
 <script src="<%=baseUrl%>/js/leaveday.js"></script>
 <script>
-  let typingTimer;
-  const doneTypingInterval = 500;
-  const input = document.querySelector("input#user");
-  const users_placeholder = document.querySelector("#user-list");
 
-  input.addEventListener("keyup", function () {
-    clearTimeout(typingTimer);
-    // reset
-    if (input.value) {
-      typingTimer = setTimeout(searchUsers, doneTypingInterval); //user is "finished typing," send search request
-    }
-  });
-  //on keydown, clear the countdown
-  input.addEventListener("keydown", function () {
-    clearTimeout(typingTimer);
-  });
-  // send request for search
-  async function searchUsers() {
-    let response = await fetch("/user/search", {
-      method: "POST",
-      body: JSON.stringify({
-        user: input.value,
-      }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    });
-    // get response
-    let result = await response.json();
-     console.log(result)
-    // handle error and response
-    if (result.errors) {
-      const errorplaceholder = document.querySelector("p.error");
-      errorplaceholder.textContent = result.errors.common.msg;
-      errorplaceholder.style.display = "block";
-    } else {
-      if (result.length > 0) {
-        let generatedHtml = "<ul>";
-        result.forEach((user) => {
-          let avatar;
-          if(user.avatar !== null && user.avatar.match(/^(http|https):/g)){
-            avatar = `<img
-          src="${ user.avatar}"
-          />`
-          }else {
-           avatar = `<img
-        src="/uploads/avatars/${user.avatar===null ? 'demo-avatar.png' : user.avatar }" />`
-          }
-          generatedHtml += `<li >
-              <div class="user">
-                <div class="avatar">
-                  ${avatar}
-                </div>
-                <div class="username">${user.user_name.split(' ')[0]}</div>
-              </div>
-            </li>`;
-        });
-        generatedHtml += "</ul>";
-        users_placeholder.innerHTML = generatedHtml;
-      }
-    }
-  }
   </script>
 <%- include("../partials/footer"); -%>

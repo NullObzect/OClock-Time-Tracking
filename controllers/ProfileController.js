@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 const jwt = require('jsonwebtoken')
 const path = require('path');
 const { unlink } = require('fs');
@@ -23,14 +24,15 @@ const ProfileController = {
       const [findIdFormUser] = await UserModel.findUserByEmail(userMailFormDB)
 
       const {
-        id, user_name, user_phone, user_mail, status, avatar, create_at,
+        id, finger_id, user_name, gender, user_phone, user_mail, status, avatar, create_at,
       } = findIdFormUser
+      console.log(findIdFormUser)
       // console.log({ status, avatar })
 
       const platformUser = await ProfileModel.userConnectionDetailsUniqueInfo(id)
       console.log('req flash', req.flash('fail'))
       res.render('pages/profile', {
-        platformUser, user_name, user_phone, user_mail, status, avatar, create_at,
+        platformUser, finger_id, user_name, gender, user_phone, user_mail, status, avatar, create_at,
       })
     } catch (err) {
       console.log('====>Error form userProfile Controller', err);
@@ -72,7 +74,7 @@ const ProfileController = {
   updateProfile: async (req, res) => {
     const { id, avatar } = req.user
     const {
-      socialImage, name, phone, password,
+      socialImage, fingerId, name, gender, phone, password,
     } = req.body
     let profileImage;
     let hashPass;
@@ -98,7 +100,7 @@ const ProfileController = {
     if (password) {
       hashPass = await bcrypt.hash(password, 10)
     }
-    const pp = await ProfileModel.updateProfile(profileImage, name, phone, hashPass, id)
+    const pp = await ProfileModel.updateProfile(profileImage, fingerId, name, gender, phone, hashPass, id)
     res.status(200).json(pp)
   },
 

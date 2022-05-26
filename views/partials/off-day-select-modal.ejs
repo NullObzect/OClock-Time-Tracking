@@ -4,23 +4,22 @@
     grid-template-columns: auto auto auto;
     padding: 10px;
   }
-  .select-btn{
+  .select-btn {
     text-align: center;
     width: 90%;
     padding: 5px;
-    color:var(--deep2);
+    color: var(--deep2);
     margin: 10px;
     font-weight: 600;
     font-size: 14px;
     border-radius: 5px;
-    background-color:var(--fade-bluish-gray);
+    background-color: var(--fade-bluish-gray);
     cursor: pointer;
   }
-  .select{
-    background-color:var(--deep);
+  .select {
+    background-color: var(--deep);
     color: #ffffff;
   }
-
 </style>
 <div id="offDayAddModal" class="modal-container">
   <div class="modal">
@@ -32,13 +31,19 @@
     </div>
     <div class="modal-content">
       <div class="container select-container">
-        <div class="select-btn"><input type="hidden" value="Fri">Friday</div>
-        <div class="select-btn"><input type="hidden" value="Sat">Saturday</div>
-        <div class="select-btn"><input type="hidden" value="Sun">Sunday</div>
-        <div class="select-btn"><input type="hidden" value="Mon">Monday</div>
-        <div class="select-btn"><input type="hidden" value="Tue">Tuesday</div>
-        <div class="select-btn"><input type="hidden" value="Wed">Wednesday</div>
-        <div class="select-btn"><input type="hidden" value="Thu">Thursday</div>
+        <div class="select-btn"><input type="hidden" value="Fri" />Friday</div>
+        <div class="select-btn">
+          <input type="hidden" value="Sat" />Saturday
+        </div>
+        <div class="select-btn"><input type="hidden" value="Sun" />Sunday</div>
+        <div class="select-btn"><input type="hidden" value="Mon" />Monday</div>
+        <div class="select-btn"><input type="hidden" value="Tue" />Tuesday</div>
+        <div class="select-btn">
+          <input type="hidden" value="Wed" />Wednesday
+        </div>
+        <div class="select-btn">
+          <input type="hidden" value="Thu" />Thursday
+        </div>
       </div>
     </div>
   </div>
@@ -47,20 +52,23 @@
   const selectBtn = document.getElementsByClassName('select-btn')
   const offDayInput = document.querySelector('#offDayAddBtn')
   const offDayAddBtn= document.querySelector('#offDayAddBtn').value
-  offDayAddBtn
+  const currentValue =offDayAddBtn.split(',')
   let values = []
-  values.push(offDayAddBtn)
+  values.push(...currentValue)
   for(var i =0;i<selectBtn.length;i++){
-    if(offDayAddBtn==selectBtn[i].querySelector('input').value){
-        selectBtn[i].classList.add('select')
-      }
-    selectBtn[i].addEventListener('click',(e)=>{
+    currentValue.map(v=>{
+     if(v==selectBtn[i].querySelector('input').value){
+      selectBtn[i].classList.add('select')
+     } 
+    })
+      selectBtn[i].addEventListener('click',(e)=>{
       const element = e.target
       element.classList.toggle("select");
       const inputValue = element.querySelector('input').value
-      const duplicate = values.indexOf(inputValue)
-      console.log(duplicate,inputValue)
-      if(duplicate != -1){
+      const find = (el)=>el==inputValue
+      const duplicate = values.some(find)
+      console.log(duplicate,find)
+      if(duplicate){
         console.log('find')
         let index = values.indexOf(inputValue)
         values.splice(index,1)
@@ -71,5 +79,5 @@
       offDayInput.value = values
     })
   }
-  console.log(values)  
+
 </script>

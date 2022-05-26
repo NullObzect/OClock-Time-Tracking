@@ -13,7 +13,7 @@
         />
     <%} else{%>
       <img
-      src="/uploads/avatars/<%=userInfo.avatar===null ? 'demo-avatar.png' : userInfo.avatar %>" />
+      src="/uploads/avatars/<%=userInfo.avatar!==null ?userInfo.avatar : userInfo.gender=='male' ? 'demo-avatar.png':'female-demo-avatar.png' %>" />
       <% } %> 
  
   </div>

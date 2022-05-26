@@ -16,15 +16,12 @@ if (navClose) {
 const moreButton = document.getElementById('more-btn')
 const moreOption = document.getElementById('more-option')
 if (moreButton) {
-  // moreButton.addEventListener('click', () => {
-  //   moreOption.classList.toggle('show-more')
-  // })
+  moreOption.addEventListener('mouseleave', () => {
+    moreOption.classList.remove('show-more')
+  })
   moreButton.addEventListener('mouseenter', () => {
     moreOption.classList.add('show-more')
   })
-  // moreButton.addEventListener('mouseout', () => {
-  //   moreOption.classList.remove('show-more')
-  // })
 }
 const currentLocation = location.href.split('/')[3]
 const navMenuUl = document.querySelector('.nav-list')
@@ -50,6 +47,7 @@ for (let i = 0; i < bottomNavList.length; i++) {
 const addBtn = document.querySelector('.add-button')
 const modal = document.querySelector('#myModal')
 const deleteModal = document.querySelector('#deleteModal')
+const subHover = document.querySelector('.sub-options');
 
 // eslint-disable-next-line no-restricted-syntax
 for (const modals of modalClose) {
@@ -73,9 +71,25 @@ window.onclick = function (event) {
   if (moreOption) {
     moreOption.classList.remove('show-more')
   }
+  if (subHover) {
+    subHover.style.display = 'none'
+  }
 
   if (target == modal || target == deleteModal || target == moreOption) {
     modal.style.display = 'none';
     deleteModal.style.display = 'none';
   }
+}
+function imageSet(avatar, gender) {
+  let img;
+  if (avatar !== null && avatar.match(/^(http|https):/g)) {
+    img = `<img id="img" src=${avatar}/>`
+  } else if (avatar != null) {
+    img = `<img id="img" src="/uploads/avatars/${avatar}`
+  } else if (avatar == null && gender == 'male') {
+    img = '<img id="img" src="/uploads/avatars/male-demo-avatar.png'
+  } else {
+    img = '<img id="img" src="/uploads/avatars/female-demo-avatar.png'
+  }
+  return img;
 }

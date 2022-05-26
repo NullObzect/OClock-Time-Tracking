@@ -7,10 +7,10 @@
 .text-head {
   display: flex;
   justify-content: space-between;
-  margin: 30px 40px;
+  margin: 10px 40px;
 }
 .text-title {
-  font-size: 36px;
+  font-size: 24px;
   font-weight: 700;
   color: var(--deep);
 }

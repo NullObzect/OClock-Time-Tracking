@@ -77,7 +77,6 @@ const offDayAddModal = document.querySelector('#offDayAddModal')
 const offDayAddModalClose = document.querySelector('#off-day-modal-close')
 if (offDayAddBtn) {
   offDayAddBtn.addEventListener('click', () => {
-    console.log(offDayAddBtn)
     offDayAddModal.style.display = 'block'
   })
 }
@@ -87,5 +86,29 @@ if (offDayAddModalClose) {
   })
 }
 
-console.log(offDayAddBtn)
-console.log(offDayAddModal)
+const typeEditBtn = document.querySelector('#typeEditBtn')
+const typeEditModal = document.querySelector('#typeEditModal')
+const typeEditModalClose = document.querySelector('#typeEditModalClose')
+if (typeEditBtn) {
+  typeEditBtn.addEventListener('click', () => {
+    typeEditModal.style.display = 'block'
+  })
+}
+if (typeEditModalClose) {
+  typeEditModalClose.addEventListener('click', () => {
+    typeEditModal.style.display = 'none'
+  })
+}
+const toleAddBtn = document.querySelector('#toleAddBtn')
+const toleranceSetModal = document.querySelector('#toleranceSetModal')
+const toleModalClose = document.querySelector('#tole-modal-close')
+if (toleAddBtn) {
+  toleAddBtn.addEventListener('click', () => {
+    toleranceSetModal.style.display = 'block'
+  })
+}
+if (toleModalClose) {
+  toleModalClose.addEventListener('click', () => {
+    toleranceSetModal.style.display = 'none'
+  })
+}

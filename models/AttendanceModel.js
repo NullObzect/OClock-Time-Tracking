@@ -250,7 +250,7 @@ const AttendanceModel = {
 
   // admin see employee reports
   getEmployeeInfo: async (id) => {
-    const getInfo = 'SELECT id,user_name,user_role,user_phone,user_mail, avatar,DATE_FORMAT(create_at,\'%d-%M-%Y\') AS create_at FROM `users` WHERE id = ?'
+    const getInfo = 'SELECT id,user_name,gender,user_role,user_phone,user_mail, avatar,DATE_FORMAT(create_at,\'%d-%M-%Y\') AS create_at FROM `users` WHERE id = ?'
     const value = [id]
     const [row] = await dbConnect.promise().execute(getInfo, value)
     return row[0]

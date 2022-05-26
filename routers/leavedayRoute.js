@@ -8,6 +8,7 @@ const decorateHtmlResponse = require('../middleware/common/decorateHtmlResponse'
 // router.get('/add-leaveday', decorateHtmlResponse('Add Leaveday'), LeaveController.getAddLeavedayPage)
 router.post('/add-leaveday', decorateHtmlResponse('Add Leaveday'), LeaveController.addLeaveday)
 router.get('/leavedays', decorateHtmlResponse('Leavedays'), checkLogin, LeaveController.employeeLeavedaysList)
+router.get('/leavedays/:id', decorateHtmlResponse('Leavedays'), checkLogin, LeaveController.employeeLeavedaysList)
 
 router.post('/leavedays/update', LeaveController.setLeaveData)
 router.get('/leavedays/delete/:id', LeaveController.getDeleteLeaveday)
@@ -21,5 +22,6 @@ router.post('/send-request-leave', LeaveController.sendRequestLeave)
 router.post('/add-leave-type', LeaveController.addLeaveType)
 router.get('/accept-leave-request/:id', LeaveController.acceptRequestLeave)
 router.get('/reject-leave-request/:id', LeaveController.rejectRequestLeave)
+router.post('/edit-leave-type', LeaveController.editLeaveType)
 
 module.exports = router

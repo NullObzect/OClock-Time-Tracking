@@ -117,8 +117,6 @@ function formValidation() {
       }
     }
 
-    console.log(error)
-
     if (error.length === 0) {
       form.submit()
       form.reset()

@@ -1,3 +1,38 @@
+<style>
+  .sub-options {
+    width: 140px;
+    margin-left: auto;
+    display: none;
+    transition: ease 0.2;
+    /* background-color: var(--fade-bluish-gray);
+    border-radius: 10px; */
+
+
+  }
+  .sub-options a{
+    text-decoration: none;
+  }
+  .sub-options .nav-li {
+    margin: auto;
+    width: 100%;
+    background-color: var(--fade-bluish-gray);
+    color: var(--deep-gray);
+    border-radius: 10px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 8px 5px;
+    margin: 5px;
+    transition: ease-in-out 1.2;
+  }
+  .sub-options .nav-li:hover {
+    background-color: var(--deep);
+    cursor: pointer;
+    color: #fff;
+  }
+</style>
+
 <div class="sidebar">
   <div class="logo-content">
     <div class="logo">
@@ -5,7 +40,7 @@
     </div>
   </div>
   <ul class="nav-list">
-    <li class="navli">
+    <li>
       <a href="/dashboard">
         <%- include("./icons/dashboard-svg.ejs"); -%>
         <span class="link-name"> Dashboard </span>
@@ -25,23 +60,45 @@
         <span class="link-name"> Reports </span>
       </a>
     </li>
-    <li>
-      <a href="/options">
+    <li id="options-btn">
+      <a href="#">
         <%- include("./icons/options-svg.ejs"); -%>
         <span class="link-name"> Options </span>
       </a>
     </li>
+    <div class="sub-options">
+      <%if(loggedInUser.userRole==='admin'){ %>
+        <a href="/options/option-values">
+      <div class="nav-li">
+        Option
+      </div>
+    </a>
+      <% } %> 
+      <a href="/options/projects">
+      <div class="nav-li">
+        Projects
+      </div>
+    </a>
+    <a href="/options/holiday">
+      <div class="nav-li">
+        Holiday
+      </div>
+    </a>
+    <a href="/options/leavedays">
+      <div class="nav-li">
+        LeaveDays
+      </div>
+    </a>
+    </div>
   </ul>
   <%- include("./more-option"); -%>
   <div class="sidebar-footer">
     <% if(profile.avatar !== null && profile.avatar.match(/^(http|https):/g)){
     %>
-    <img
-      src="<%= profile.avatar%>"
-    />
+    <img src="<%= profile.avatar%>" />
     <%} else{%>
     <img
-      src="/uploads/avatars/<%=profile.avatar != null ?  profile.avatar : 'demo-avatar.png' %>"
+      src="/uploads/avatars/<%=profile.avatar != null ?  profile.avatar :profile.gender=='male' ? 'demo-avatar.png':'female-demo-avatar.png'  %>"
     />
     <% } %>
 
@@ -62,3 +119,26 @@
     </div>
   </div>
 </div>
+<script>
+  const optionsBtn = document.getElementById("options-btn");
+  const navList = document.querySelector(".nav-list");
+  const navListLi = navList.querySelectorAll('li')
+  const subOptions = document.querySelector(".sub-options");
+  const navLi = document.querySelectorAll(".nav-li");
+  optionsBtn.addEventListener("mouseover", (e) => {
+    subOptions.style.display = "block";
+  });
+  subOptions.addEventListener("mouseleave", () => {
+      subOptions.style.display = "none";
+    });
+    navList.querySelectorAll('li')
+    for(var i=0;i<navListLi.length;i++){
+      const element = navListLi[i]
+      if(element!=optionsBtn){
+        element.addEventListener('mouseover',()=>{
+          subOptions.style.display = "none";
+        })
+      }
+    }
+
+</script>
