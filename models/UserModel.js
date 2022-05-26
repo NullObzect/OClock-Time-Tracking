@@ -1,11 +1,11 @@
 const dbConnect = require('../config/database');
 
 const UserModel = {
-  addUser: async (userName, userPhone, userMail, avatar) => {
+  addUser: async (userName, gender, userPhone, userMail, avatar) => {
     try {
-      const addUserQuery = 'INSERT INTO `users`( `user_name`, `user_phone`, `user_mail`,`avatar`) VALUES (?,?,?,?)';
+      const addUserQuery = 'INSERT INTO `users`( `user_name`,`gender`, `user_phone`, `user_mail`,`avatar`) VALUES (?,?,?,?,?)';
 
-      const values = [userName, userPhone, userMail, avatar];
+      const values = [userName, gender, userPhone, userMail, avatar];
 
       const [rows] = await dbConnect.promise().execute(addUserQuery, values);
       return rows;
@@ -16,7 +16,7 @@ const UserModel = {
   // show all users list
   getAllUsersList: async () => {
     try {
-      const getUsersListQuery = 'SELECT u.id,u.user_name,u.user_mail,u.user_phone,u.user_role, u.avatar, u.status  FROM users AS u';
+      const getUsersListQuery = 'SELECT u.id,u.user_name,u.gender,u.user_mail,u.user_phone,u.user_role, u.avatar, u.status  FROM users AS u';
 
       const [rows] = await dbConnect.promise().execute(getUsersListQuery)
       return rows;
@@ -112,7 +112,7 @@ const UserModel = {
   },
   findUserByEmail: async (email) => {
     try {
-      const findUserQuery = 'SELECT id,user_name,user_phone,user_mail,user_role,user_pass,avatar,status,DATE_FORMAT(create_at,\'%d-%M-%Y\') AS create_at FROM `users` WHERE user_mail = ?'
+      const findUserQuery = 'SELECT id,finger_id,user_name,gender,user_phone,user_mail,user_role,user_pass,avatar,status,DATE_FORMAT(create_at,\'%d-%M-%Y\') AS create_at FROM `users` WHERE user_mail = ?'
       const value = [email]
       const [rows] = await dbConnect.promise().execute(findUserQuery, value)
       return rows;
@@ -148,7 +148,7 @@ const UserModel = {
 
   // update user info
   getUpdateUserInfo: async (id) => {
-    const getUser = 'SELECT `id`, `user_name`, `user_phone`, `user_role`, `user_mail`, `user_pass`, `avatar`, `status`, DATE_FORMAT(create_at, \'%Y-%m-%d\') as create_at FROM `users` WHERE id = ?'
+    const getUser = 'SELECT `id`,finger_id, `user_name`,gender, `user_phone`, `user_role`, `user_mail`, `user_pass`, `avatar`, `status`, DATE_FORMAT(create_at, \'%Y-%m-%d\') as create_at FROM `users` WHERE id = ?'
     const value = [id]
     const [rows] = await dbConnect.promise().execute(getUser, value)
     return rows;
@@ -172,9 +172,9 @@ const UserModel = {
     console.log(rows)
     return rows
   },
-  userJoinDateChange: async (id, joinDate) => {
-    const updateSql = 'UPDATE `users` SET create_at= ? WHERE id = ?'
-    const values = [joinDate, id]
+  userJoinDateChange: async (id, fingerId, joinDate) => {
+    const updateSql = 'UPDATE `users` SET create_at= ? , finger_id =? WHERE id = ?'
+    const values = [joinDate, fingerId, id]
     const [rows] = await dbConnect.promise().execute(updateSql, values)
     console.log(rows)
     return rows
