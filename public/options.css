@@ -135,13 +135,11 @@
 .project-table input[type="text"] {
   outline: none !important;
   border-radius: 10px;
-border: 1px solid var(--fade-bluish-gray);
-background-color: var(--prim-fade);
 }
-/* .project-table input[type="text"]:focus {
+.project-table input[type="text"]:focus {
   outline: none;
   border: none;
-} */
+}
 .option-value {
   border: none;
   background-color: transparent;
