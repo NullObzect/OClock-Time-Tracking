@@ -17,10 +17,8 @@ router.get('/reports', decorateHtmlResponse('Report'), checkLogin, ReportControl
 router.get('/reports/:id', decorateHtmlResponse('Report'), checkLogin, ReportController.userReport)
 //
 router.get('/reports/between/two-date', ReportController.reportBetweenTwoDate)
-//
-// router.get('/reports/between/two-date/:id', ReportController.reportBetweenTwoDate)
 
-// router.get('/reports/employee/:id', decorateHtmlResponse('Employee Report'), ReportController.reportEmployees)
-// router.get('/reports/between/two-date/:id', ReportController.reportBetweenTwoDateForAdmin)
+// Attendance API
+router.post('/attendance-entry', AttendanceController.attendanceEntry)
 
 module.exports = router;

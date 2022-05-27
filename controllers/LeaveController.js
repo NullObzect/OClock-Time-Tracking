@@ -34,8 +34,10 @@ const LeaveController = {
   employeeLeavedaysList: async (req, res) => {
     const { user } = req
     let userId;
+    let viewReport = true;
     if (req.params.id) {
       userId = req.params.id;
+      viewReport = false;
     } else {
       userId = user.id;
     }
@@ -43,11 +45,11 @@ const LeaveController = {
       const employeeLeaveList = await LeaveModel.getEmployeeLeaveList()
       const selectEmployee = await LeaveModel.selectEmployee();
       const leaveTypeList = await LeaveModel.leaveTypeList();
-      const anEmployeeLeavedaysList = await LeaveModel.anEmployeeLeaveList(user.id)
+      const anEmployeeLeavedaysList = await LeaveModel.anEmployeeLeaveList(userId)
       const userInfo = await AttendanceModel.getEmployeeInfo(userId)
       console.log(anEmployeeLeavedaysList)
       res.render('pages/leavedays', {
-        employeeLeaveList, anEmployeeLeavedaysList, selectEmployee, leaveTypeList, userInfo,
+        employeeLeaveList, anEmployeeLeavedaysList, selectEmployee, leaveTypeList, userInfo, viewReport,
       })
     } catch (err) {
       console.log('====>Error form LeaveController ', err);

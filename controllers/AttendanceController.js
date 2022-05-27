@@ -3,6 +3,7 @@ const AttendanceModel = require('../models/AttendanceModel');
 const LogModel = require('../models/LogModel');
 const OptionsModel = require('../models/OptionsModel');
 
+const UserModel = require('../models/UserModel');
 // const { timeToHour } = require('../utilities/formater')
 
 const AttendanceController = {
@@ -122,6 +123,33 @@ const AttendanceController = {
       res.status(200).json('success')
     } catch (err) {
       console.log('====>Error form AttendanceController', err);
+    }
+  },
+  attendanceEntry: async (req, res) => {
+    console.log(req.body);
+    const { fingerId } = req.body
+
+    const user = await UserModel.userFindByFingerId(fingerId)
+    try {
+      if (user.length > 0) {
+        const fingeIdArray = []
+        user.map((u) => {
+          const { finger_id } = u
+          const fingeId = finger_id.split(',')
+          fingeIdArray.push(fingeId)
+        })
+        const index = fingeIdArray.findIndex((arr) => arr.includes(fingerId))
+        const person = user[index]
+        const userID = person.id
+        const [{ inTime }] = await AttendanceModel.getInTime()
+        const [{ outTime }] = await AttendanceModel.getOutTime()
+        await AttendanceModel.setAttendanceStart(userID, inTime, outTime, 0, 'Entry')
+        res.json('welcome')
+      } else {
+        res.json('User Not Found')
+      }
+    } catch (error) {
+      console.log(error)
     }
   },
 
