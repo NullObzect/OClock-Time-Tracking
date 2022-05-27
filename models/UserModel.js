@@ -180,9 +180,15 @@ const UserModel = {
     return rows
   },
   userSearch: async (name) => {
-    const userSearchQuery = `SELECT id, user_name, user_mail, avatar FROM users WHERE  user_name LIKE '${name}%' or user_mail LIKE '${name}'`
+    const userSearchQuery = `SELECT id, user_name,gender, user_mail, avatar FROM users WHERE  user_name LIKE '${name}%' or user_mail LIKE '${name}'`
     console.log('query', userSearchQuery)
     const [rows] = await dbConnect.promise().execute(userSearchQuery)
+    return rows
+  },
+  userFindByFingerId: async (id) => {
+    const findFingerId = `SELECT id,finger_id, user_name,gender user_mail, avatar FROM users WHERE  finger_id LIKE '%${id}%'`
+    console.log(findFingerId)
+    const [rows] = await dbConnect.promise().execute(findFingerId)
     return rows
   },
 
