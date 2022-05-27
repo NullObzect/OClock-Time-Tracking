@@ -129,7 +129,7 @@ const AttendanceController = {
         const userID = person.id
         const [{ inTime }] = await AttendanceModel.getInTime()
         const [{ outTime }] = await AttendanceModel.getOutTime()
-        await AttendanceModel.setAttendanceStart(userID, inTime, outTime, null, null)
+        await AttendanceModel.setAttendanceStart(userID, inTime, outTime, 0, 'Entry')
         res.json('welcome')
       } else {
         res.json('User Not Found')
