@@ -162,14 +162,15 @@
         </tr>
       </thead>
       <tbody id="leaveday-table">
-        <%if(loggedInUser.userRole==='admin'){ %>
+        <%if(loggedInUser.userRole==='admin' & viewReport==true){ %>
         <%employeeLeaveList.map((user,idx) =>{ %>
         <tr>
           <td class="table-img">
             <% if(user.avatar !== null && user.avatar.match(/^(http|https):/g)){
             %>
             <img src="<%= user.avatar%>" />
-            <%} else{%>
+            <%} else {%>
+            
             <img
               src="/uploads/avatars/<%=user.avatar != null ?  user.avatar : user.gender=='male' ? 'demo-avatar.png':'female-demo-avatar.png' %>"
             />
@@ -206,7 +207,8 @@
           </td>
         </tr>
 
-        <% }) %> <%}else{%> <% anEmployeeLeavedaysList.map((user,idx) =>{ %>
+        <% }) %> <%}else {%> <% anEmployeeLeavedaysList.map((user,idx) =>{ %>
+      
         <tr>
           <td class="table-img td-width-zero">
             <% if(user.avatar !== null && user.avatar.match(/^(http|https):/g)){
