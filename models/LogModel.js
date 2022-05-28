@@ -158,5 +158,6 @@ const LogModel = {
     return rows;
   },
 
+
 }
 module.exports = LogModel

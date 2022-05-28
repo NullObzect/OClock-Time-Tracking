@@ -188,7 +188,7 @@ const AttendanceModel = {
 
   // count day & start date
   thisYearDates: async () => {
-    const query = 'SELECT   DATE_FORMAT(NOW() - interval (DAYOFYEAR(NOW()) -1) DAY, "%Y-%m-%d") AS yearStartDate,  DATEDIFF(CURRENT_DATE,  NOW() - INTERVAL (DAYOFYEAR(now())-1) DAY) AS countThisYearWorkday'
+    const query = 'SELECT   DATE_FORMAT(NOW() - interval (DAYOFYEAR(NOW()) -1) DAY, "%Y-%m-%d") AS yearStartDate, DATE_FORMAT(NOW(),\'%Y-12-31\') AS yearEndDate,  DATEDIFF(CURRENT_DATE,  NOW() - INTERVAL (DAYOFYEAR(now())-1) DAY) AS countThisYearWorkday'
     const [rows] = await dbConnect.promise().execute(query);
     return rows;
   },

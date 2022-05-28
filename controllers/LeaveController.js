@@ -8,6 +8,7 @@ const {
   dateFormate, dateDiff,
 } = require('../utilities/formater');
 const { pageNumbers } = require('../utilities/pagination');
+const OptionsModel = require('../models/OptionsModel');
 
 const LeaveController = {
   getAddLeavedayPage: async (req, res) => {
@@ -47,10 +48,26 @@ const LeaveController = {
       const leaveTypeList = await LeaveModel.leaveTypeList();
       const anEmployeeLeavedaysList = await LeaveModel.anEmployeeLeaveList(userId)
       const userInfo = await AttendanceModel.getEmployeeInfo(userId)
-      console.log(anEmployeeLeavedaysList)
-      res.render('pages/leavedays', {
-        employeeLeaveList, anEmployeeLeavedaysList, selectEmployee, leaveTypeList, userInfo, viewReport,
-      })
+
+      const [{ joinThisYearOrNot }] = await LeaveModel.checkUserJoinThisYearOrNot(userId)
+
+      if (joinThisYearOrNot === 0) {
+        const [{ totalLeaveDay }] = await OptionsModel.getTotalLeaveDay(userId)
+        const totalLeaveDayLimit = totalLeaveDay
+        const leaveLimitReport = await LeaveModel.leaveLimitReport(userId)
+        const [{ countLeave }] = await LeaveModel.leaveLimitCount(userId)
+        res.render('pages/leavedays', {
+          employeeLeaveList, anEmployeeLeavedaysList, selectEmployee, leaveTypeList, userInfo, viewReport, totalLeaveDayLimit, leaveLimitReport, countLeave,
+        })
+      } else {
+        const [{ totalLeaveDay }] = await OptionsModel.getTotalLeaveDay(userId)
+        const totalLeaveDayLimit = Number(totalLeaveDay - joinThisYearOrNot)
+        const leaveLimitReport = await LeaveModel.leaveLimitReportJointCurrentYearUser(userId)
+        const [{ countLeave }] = await LeaveModel.leaveLimitCountJointCurrentYearUser(userId)
+        res.render('pages/leavedays', {
+          employeeLeaveList, anEmployeeLeavedaysList, selectEmployee, leaveTypeList, userInfo, viewReport, totalLeaveDayLimit, leaveLimitReport, countLeave,
+        })
+      }
     } catch (err) {
       console.log('====>Error form LeaveController ', err);
     }

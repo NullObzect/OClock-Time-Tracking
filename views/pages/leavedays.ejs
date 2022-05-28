@@ -86,20 +86,20 @@
         <div class="details">
           <table class="work">
             <tr>
-              <td>Casual:</td>
-              <td>22</td>
+              <td>Leave limit:</td>
+              <td><%= totalLeaveDayLimit %><span class="high"><%= Number(totalLeaveDayLimit - countLeave)  %> </span></td>
             </tr>
+          
+            <% leaveLimitReport.map(el =>  {%>
             <tr>
-              <td>sick:</td>
-              <td>2</td>
+              <td><%= el.leaveName %>:</td>
+              <td><%= el.duration %></td>
             </tr>
+            <% }) %> 
+       
             <tr>
-              <td>study:</td>
-              <td>3</td>
-            </tr>
-            <tr>
-              <td>unpaid:</td>
-              <td>3</td>
+              <td><b>Total Taken:</b></td>
+              <td><b><%= countLeave %></b> </td>
             </tr>
           </table>
         </div>

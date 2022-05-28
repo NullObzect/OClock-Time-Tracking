@@ -89,6 +89,35 @@ const LeaveModel = {
     const [rows] = await dbConnect.promise().execute(requestLeaveDeleteQuery)
     return rows
   },
+  checkUserJoinThisYearOrNot: async (userId) => {
+    const query = `SELECT  CASE  WHEN DATE_FORMAT(NOW(), '%Y') = DATE_FORMAT(U.create_at, '%Y')  THEN WEEK(U.create_at) ELSE  0  END joinThisYearOrNot FROM users AS U WHERE U.id = ${userId}`
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows;
+  },
+  leaveLimitReportJointCurrentYearUser: async (userId) => {
+    const query = `SELECT
+    LT.name AS leaveName, SUM(DATEDIFF(end, start) + 1) as duration  FROM employee_leaves AS EL JOIN leave_type AS LT ON LT.id = El.type_id JOIN users AS U ON U.id = EL.user_id WHERE EL.user_id = ${userId} AND  EL.create_at  BETWEEN  DATE(U.create_at) AND DATE_FORMAT(NOW(),'%Y-12-31') GROUP BY LT.name`
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows;
+  },
+  leaveLimitCountJointCurrentYearUser: async (userId) => {
+    const query = `SELECT
+     SUM(DATEDIFF(end, start) + 1) as countLeave  FROM employee_leaves AS EL JOIN leave_type AS LT ON LT.id = El.type_id JOIN users AS U ON U.id = EL.user_id WHERE EL.user_id = ${userId} AND  EL.create_at  BETWEEN  DATE(U.create_at) AND DATE_FORMAT(NOW(),'%Y-12-31')`
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows;
+  },
+  leaveLimitReport: async (userId) => {
+    const query = `SELECT
+    LT.name AS leaveName, SUM(DATEDIFF(end, start) + 1) as duration  FROM employee_leaves AS EL JOIN leave_type AS LT ON LT.id = El.type_id  JOIN users AS U ON U.id = EL.user_id  WHERE EL.user_id = ${userId} AND  EL.create_at  BETWEEN  DATE_FORMAT(NOW() - interval (DAYOFYEAR(NOW()) -1) DAY, "%Y-%m-%d") AND DATE_FORMAT(NOW(),'%Y-12-31') GROUP BY LT.name`
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows;
+  },
+  leaveLimitCount: async (userId) => {
+    const query = `SELECT
+    SUM(DATEDIFF(end, start) + 1) as countLeave FROM employee_leaves AS EL JOIN leave_type AS LT ON LT.id = El.type_id  JOIN users AS U ON U.id = EL.user_id  WHERE EL.user_id = ${userId} AND  EL.create_at  BETWEEN  DATE_FORMAT(NOW() - interval (DAYOFYEAR(NOW()) -1) DAY, "%Y-%m-%d") AND DATE_FORMAT(NOW(),'%Y-12-31') `
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows;
+  },
 }
 
 module.exports = LeaveModel;

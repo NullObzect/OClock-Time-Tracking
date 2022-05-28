@@ -64,6 +64,11 @@ const OptionsModel = {
     const [rows] = await dbConnect.promise().execute(query)
     return rows
   },
+  getTotalLeaveDay: async () => {
+    const query = 'SELECT option_value AS totalLeaveDay FROM options WHERE option_title = \'leave-limit\''
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows
+  },
 
 }
 
