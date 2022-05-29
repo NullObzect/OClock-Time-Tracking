@@ -48,7 +48,6 @@ const LeaveController = {
       const leaveTypeList = await LeaveModel.leaveTypeList();
       const anEmployeeLeavedaysList = await LeaveModel.anEmployeeLeaveList(userId)
       const userInfo = await AttendanceModel.getEmployeeInfo(userId)
-
       const [{ joinThisYearOrNot }] = await LeaveModel.checkUserJoinThisYearOrNot(userId)
 
       if (joinThisYearOrNot === 0) {
