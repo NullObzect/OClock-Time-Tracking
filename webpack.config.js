@@ -14,7 +14,7 @@ const config = {
     users: ['@babel/polyfill', './src/users.js'],
     optionValues: ['@babel/polyfill', './src/optionValues.js'],
     profile: ['@babel/polyfill', './src/profile.js'],
-    dashboard: ['@babel/polyfill', './src/dashboard.js'],
+    home: ['@babel/polyfill', './src/home.js'],
     timePicker: ['@babel/polyfill', './src/timePicker.js'],
   },
   output: {

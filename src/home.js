@@ -1,5 +1,5 @@
 import {
-  aJAXPostRequest
+    aJAXPostRequest
 } from './helper.js';
 import Toastify from './toastify.js';
 
@@ -47,7 +47,7 @@ setInterval(() => {
 document.addEventListener('DOMContentLoaded', () => {
   console.log('update end time');
   const updateEndTimeModal = document.getElementsByClassName('modal-cont');
-  const updateBtn = document.getElementsByClassName('dashboard-update-btn');
+  const updateBtn = document.getElementsByClassName('home-update-btn');
   console.log(updateBtn);
 
   for (let i = 0; i < updateBtn.length; i++) {
@@ -145,7 +145,7 @@ for (let i = 0; i < updateEndTime.length; i++) {
     saveBtnForEndTime[i].style.display = 'none';
     updateBtn[i].style.display = 'block';
     optCancelBtn[i].style.display = 'none';
-    return window.location.replace('/dashboard');
+    return window.location.replace('/home');
   });
 }
 // when click on cancel button

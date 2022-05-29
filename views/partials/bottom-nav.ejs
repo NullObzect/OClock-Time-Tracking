@@ -1,33 +1,31 @@
 <div class="header">
   <div class="nav-container">
     <div class="nav-logo">
-     <a href="/"> <img width="150px" src="/icons/logo.svg" alt="" /></a>
+      <a href="/"> <img width="150px" src="/icons/logo.svg" alt="" /></a>
     </div>
     <div id="bottom-nav-menu" class="bottom-nav-menu">
       <ul class="bottom-nav-list">
         <li class="nav-item">
-          <a href="/dashboard" class="nav-link">
+          <a href="/home" class="nav-link">
             <span class="nav-icon">
-              <%- include("./icons/dashboard-svg.ejs"); -%>
+              <%- include("./icons/home-svg.ejs"); -%>
             </span>
-            Dashboard
+            Home
           </a>
         </li>
         <%if(profile.user_role==='admin'){ %>
         <li class="nav-item">
           <a href="/users" class="nav-link">
             <span class="nav-icon">
-              <%- include("./icons/users-svg.ejs"); -%>
-            </span
+              <%- include("./icons/users-svg.ejs"); -%> </span
             >Users
           </a>
         </li>
-        <% } %> 
+        <% } %>
         <li class="nav-item">
           <a href="/reports" class="nav-link">
             <span class="nav-icon">
-              <%- include("./icons/reports-svg.ejs"); -%>
-            </span
+              <%- include("./icons/reports-svg.ejs"); -%> </span
             >Reports
           </a>
         </li>
@@ -74,15 +72,14 @@
     </div>
     <div class="nav-right">
       <div id="nav-image" class="nav-image">
-        <% if(profile.avatar !== null && profile.avatar.match(/^(http|https):/g)){ %>
-          <img
-          src="<%= profile.avatar%>"
-          />
-      <%} else{%>
+        <% if(profile.avatar !== null &&
+        profile.avatar.match(/^(http|https):/g)){ %>
+        <img src="<%= profile.avatar%>" />
+        <%} else{%>
         <img
-        src="/uploads/avatars/<%=profile.avatar != null ?  profile.avatar : profile.gender=='male' ? 'demo-avatar.png':'female-demo-avatar.png' %>" />
-        <% } %> 
-    
+          src="/uploads/avatars/<%=profile.avatar != null ?  profile.avatar : profile.gender=='male' ? 'demo-avatar.png':'female-demo-avatar.png' %>"
+        />
+        <% } %>
       </div>
       <div id="nav-toggle" class="nav-toggle">
         <svg

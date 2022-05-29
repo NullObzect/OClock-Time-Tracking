@@ -89,9 +89,9 @@ endBtn.addEventListener('click', async (event) => {
 //
 async function todoEnd() {
   const hiddenData = document.getElementById('hidden-data')
-  const dashboardInfo = document.getElementById('dashboard-info')
-  if (dashboardInfo.classList.contains('dashboard-none')) {
-    dashboardInfo.classList.remove('dashboard-none')
+  const homeInfo = document.getElementById('home-info')
+  if (homeInfo.classList.contains('home-none')) {
+    homeInfo.classList.remove('home-none')
   }
   // Stop counting
   clearInterval(intervalId)
