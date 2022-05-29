@@ -186,7 +186,7 @@ const UserModel = {
     return rows
   },
   userFindByFingerId: async (id) => {
-    const findFingerId = `SELECT id,finger_id, user_name,gender user_mail, avatar FROM users WHERE  finger_id LIKE '%${id}%'`
+    const findFingerId = `SELECT id,finger_id as fingerID, user_name,gender user_mail, avatar FROM users WHERE  finger_id LIKE '%${id}%'`
     console.log(findFingerId)
     const [rows] = await dbConnect.promise().execute(findFingerId)
     return rows

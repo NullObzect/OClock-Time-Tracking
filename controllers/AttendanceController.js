@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 const AttendanceModel = require('../models/AttendanceModel');
-const LogModel = require('../models/LogModel');
 const OptionsModel = require('../models/OptionsModel');
+const { stringToNumber } = require('../utilities/formater')
 
 const UserModel = require('../models/UserModel');
 // const { timeToHour } = require('../utilities/formater')
@@ -12,20 +12,13 @@ const AttendanceController = {
     const { projectId, workDetails } = req.body
     try {
       //
-      function stringToNumber(s) {
-        if (s.length > 0) {
-          return s.replace(/,/, ',')
-        }
-        return ''
-      }
+
       const [{ offDayValues }] = await OptionsModel.getOffDaysValue();
 
       //
       const { id } = req.user
       const [{ inTime }] = await AttendanceModel.getInTime()
       const [{ outTime }] = await AttendanceModel.getOutTime()
-
-      console.log(inTime, outTime)
 
       // new
 
@@ -126,24 +119,28 @@ const AttendanceController = {
     }
   },
   attendanceEntry: async (req, res) => {
-    console.log(req.body);
     const { fingerId } = req.body
 
     const user = await UserModel.userFindByFingerId(fingerId)
+    const [{ offDayValues }] = await OptionsModel.getOffDaysValue();
     try {
       if (user.length > 0) {
         const fingeIdArray = []
         user.map((u) => {
-          const { finger_id } = u
-          const fingeId = finger_id.split(',')
+          const { fingerID } = u
+          const fingeId = fingerID.split(',')
           fingeIdArray.push(fingeId)
         })
         const index = fingeIdArray.findIndex((arr) => arr.includes(fingerId))
         const person = user[index]
         const userID = person.id
+        const isId = await AttendanceModel.getCurrentDateUserId(userID);
         const [{ inTime }] = await AttendanceModel.getInTime()
         const [{ outTime }] = await AttendanceModel.getOutTime()
         await AttendanceModel.setAttendanceStart(userID, inTime, outTime, 0, 'Entry')
+        if (isId === undefined) {
+          await AttendanceModel.insertLog(stringToNumber(offDayValues), userID)
+        }
         res.json('welcome')
       } else {
         res.json('User Not Found')

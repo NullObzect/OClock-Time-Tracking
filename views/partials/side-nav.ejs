@@ -1,11 +1,15 @@
 <style>
   .sub-options {
     width: 140px;
-    margin-left: auto;
+    /* margin-left: auto; */
+    margin: auto;
     display: none;
-    transition: ease 0.2;
-    /* background-color: var(--fade-bluish-gray);
-    border-radius: 10px; */
+    -webkit-transition: height 0.3s ease-in;
+    -moz-transition: height 0.3s ease-in;
+    -o-transition: height 0.3s ease-in;
+    -ms-transition: height 0.3s ease-in;
+    transition: height 0.3s ease-in;
+    opacity:0;      
 
 
   }
@@ -127,6 +131,7 @@
   const navLi = document.querySelectorAll(".nav-li");
   optionsBtn.addEventListener("mouseover", (e) => {
     subOptions.style.display = "block";
+    subOptions.style.opacity = 1;
   });
   subOptions.addEventListener("mouseleave", () => {
       subOptions.style.display = "none";
