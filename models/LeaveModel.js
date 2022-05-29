@@ -118,6 +118,18 @@ const LeaveModel = {
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
+  countUnpaidLeave: async (userId) => {
+    const query = `SELECT
+    SUM(DATEDIFF(end, start) + 1) as countUnpaidLeave FROM employee_leaves AS EL JOIN leave_type AS LT ON LT.id = El.type_id  JOIN users AS U ON U.id = EL.user_id  WHERE EL.user_id = ${userId} AND  EL.create_at  BETWEEN  DATE_FORMAT(NOW() - interval (DAYOFYEAR(NOW()) -1) DAY, "%Y-%m-%d") AND DATE_FORMAT(NOW(),'%Y-12-31') AND LT.name = 'Unpaid'`
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows;
+  },
+  leaveLimitCountUnpaidLeaveCurrentYearUser: async (userId) => {
+    const query = `SELECT
+    SUM(DATEDIFF(end, start) + 1) as countUnpaidLeave FROM employee_leaves AS EL JOIN leave_type AS LT ON LT.id = El.type_id  JOIN users AS U ON U.id = EL.user_id  WHERE EL.user_id = ${userId} AND  EL.create_at  BETWEEN DATE(U.create_at) AND DATE_FORMAT(NOW(),'%Y-12-31') AND LT.name = 'Unpaid'`
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows;
+  }
 }
 
 module.exports = LeaveModel;
