@@ -40,7 +40,7 @@ const LoginController = {
           res.cookie(process.env.COOKIE_NAME, token, { maxAge, httpOnly: true, signed: true })
           // set userObject when user loggedin //
           res.locals.loggedInUser = userObject
-          res.redirect('/dashboard')
+          res.redirect('/home')
         } else {
           res.locals.auth = true
           throw createError('Login Failed invalid authentication')

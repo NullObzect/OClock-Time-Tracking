@@ -67,7 +67,7 @@ const redirectLoggedIn = (req, res, next) => {
   if (!cookie) {
     next()
   } else {
-    res.redirect('/dashboard');
+    res.redirect('/home');
   }
 }
 

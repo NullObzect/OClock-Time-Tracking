@@ -92,7 +92,7 @@ const AttendanceController = {
       const { totalWorkTime } = JSON.parse(JSON.stringify(isWorkTime))
       console.log('totalWorkTime', totalWorkTime)
       await AttendanceModel.setLogTotalWorkTimeAdmin(userId, totalWorkTime, date)
-      res.redirect('/dashboard')
+      res.redirect('/home')
     } catch (err) {
       console.log('====>Error form AttendanceController', err);
     }

@@ -1,6 +1,6 @@
 const router = require('express').Router();
 // Import Routes
-const dashboardRoute = require('./dashboardRoute')
+const homeRoute = require('./homeRoute')
 const loginRoute = require('./loginRoute')
 const logoutRoute = require('./logoutRoute')
 const registerRoute = require('./userRoute')
@@ -11,12 +11,13 @@ const attendanceRoute = require('./attendanceRoute')
 const holidayRouter = require('./holidayRoute')
 const leavedayRoute = require('./leavedayRoute')
 const optionsRoute = require('./optionsRoute')
-const homeRoute = require('./homeRoute')
+const landingPage = require('./landingPageRoute')
+const dashboardRoute = require('./dashboardRoute')
 
 // all routers use
 router.use(
   homeRoute,
-  dashboardRoute,
+  landingPage,
   registerRoute,
   loginRoute,
   logoutRoute,
@@ -30,6 +31,7 @@ router.use('/options', optionsRoute)
 router.use('/options', holidayRouter)
 router.use('/options', leavedayRoute)
 router.use('/profile', profileRoute)
+router.use('/dashboard', dashboardRoute)
 
 // exports route
 module.exports = router;

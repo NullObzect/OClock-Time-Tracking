@@ -55,7 +55,7 @@ const UserPlatformController = {
           }, process.env.JWT_SECRET, { expiresIn: maxAge })
           // Set cookie
           res.cookie(process.env.COOKIE_NAME, token, { maxAge, httpOnly: true, signed: true });
-          res.redirect('/dashboard')
+          res.redirect('/home')
         }
       } else {
         res.redirect('/')

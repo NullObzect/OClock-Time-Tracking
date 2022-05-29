@@ -3,17 +3,15 @@
     width: 140px;
     /* margin-left: auto; */
     margin: auto;
-    display: none;
-    -webkit-transition: height 0.3s ease-in;
-    -moz-transition: height 0.3s ease-in;
-    -o-transition: height 0.3s ease-in;
-    -ms-transition: height 0.3s ease-in;
-    transition: height 0.3s ease-in;
-    opacity:0;      
-
-
+    transition: opacity 2s linear;  
+    transform:translate(0);
+    opacity: 1;
   }
-  .sub-options a{
+  .hidden{
+    transform:translate(9999px);
+  opacity: 0;
+  }
+  .sub-options a {
     text-decoration: none;
   }
   .sub-options .nav-li {
@@ -44,10 +42,18 @@
     </div>
   </div>
   <ul class="nav-list">
+    <%if(profile.user_role==='admin'){ %>
+      <li>
+        <a href="/dashboard">
+          <%- include("./icons/dashboard-svg.ejs"); -%>
+          <span class="link-name"> Dashboard </span>
+        </a>
+      </li>
+      <% } %>
     <li>
-      <a href="/dashboard">
-        <%- include("./icons/dashboard-svg.ejs"); -%>
-        <span class="link-name"> Dashboard </span>
+      <a href="/home">
+        <%- include("./icons/home-svg.ejs"); -%>
+        <span class="link-name"> Home </span>
       </a>
     </li>
     <%if(profile.user_role==='admin'){ %>
@@ -70,29 +76,21 @@
         <span class="link-name"> Options </span>
       </a>
     </li>
-    <div class="sub-options">
+    <div class="sub-options hidden">
       <%if(loggedInUser.userRole==='admin'){ %>
-        <a href="/options/option-values">
-      <div class="nav-li">
-        Option
-      </div>
-    </a>
-      <% } %> 
+      <a href="/options/option-values">
+        <div class="nav-li">Option</div>
+      </a>
+      <% } %>
       <a href="/options/projects">
-      <div class="nav-li">
-        Projects
-      </div>
-    </a>
-    <a href="/options/holiday">
-      <div class="nav-li">
-        Holiday
-      </div>
-    </a>
-    <a href="/options/leavedays">
-      <div class="nav-li">
-        LeaveDays
-      </div>
-    </a>
+        <div class="nav-li">Projects</div>
+      </a>
+      <a href="/options/holiday">
+        <div class="nav-li">Holiday</div>
+      </a>
+      <a href="/options/leavedays">
+        <div class="nav-li">LeaveDays</div>
+      </a>
     </div>
   </ul>
   <%- include("./more-option"); -%>
@@ -126,24 +124,22 @@
 <script>
   const optionsBtn = document.getElementById("options-btn");
   const navList = document.querySelector(".nav-list");
-  const navListLi = navList.querySelectorAll('li')
+  const navListLi = navList.querySelectorAll("li");
   const subOptions = document.querySelector(".sub-options");
   const navLi = document.querySelectorAll(".nav-li");
   optionsBtn.addEventListener("mouseover", (e) => {
-    subOptions.style.display = "block";
-    subOptions.style.opacity = 1;
+    subOptions.classList.remove('hidden')
   });
   subOptions.addEventListener("mouseleave", () => {
-      subOptions.style.display = "none";
-    });
-    navList.querySelectorAll('li')
-    for(var i=0;i<navListLi.length;i++){
-      const element = navListLi[i]
-      if(element!=optionsBtn){
-        element.addEventListener('mouseover',()=>{
-          subOptions.style.display = "none";
-        })
-      }
+    subOptions.classList.add('hidden')
+  });
+  navList.querySelectorAll("li");
+  for (var i = 0; i < navListLi.length; i++) {
+    const element = navListLi[i];
+    if (element != optionsBtn) {
+      element.addEventListener("mouseover", () => {
+      subOptions.classList.add('hidden')
+      });
     }
-
+  }
 </script>

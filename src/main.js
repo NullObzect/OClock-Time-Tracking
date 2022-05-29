@@ -72,7 +72,7 @@ window.onclick = function (event) {
     moreOption.classList.remove('show-more')
   }
   if (subHover) {
-    subHover.style.display = 'none'
+    subHover.classList.add('hidden')
   }
 
   if (target == modal || target == deleteModal || target == moreOption) {

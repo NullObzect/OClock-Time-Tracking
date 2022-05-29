@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap");
 @import 'report.css';
 @import 'options.css';
-@import 'dashboard.css';
+@import 'home.css';
 @import 'user.css';
 
 :root {
@@ -778,7 +778,7 @@ box-shadow: rgba(0, 0, 0, 0.14) -1px 0px 0px inset;
     width: 700px;
     margin: 20px;
   }
-  .dashboard-info {
+  .home-info {
     padding: 20px 0px;
   }
 
@@ -916,7 +916,7 @@ box-shadow: rgba(0, 0, 0, 0.14) -1px 0px 0px inset;
   .counter {
     font-size: 24px;
   }
-  .dashboard-info {
+  .home-info {
     padding: 0;
   }
   .notification {
