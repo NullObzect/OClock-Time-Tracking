@@ -6,6 +6,18 @@ const { stringToNumber, time12HrTo24Hr } = require('../utilities/formater')
 const UserModel = require('../models/UserModel');
 // const { timeToHour } = require('../utilities/formater')
 
+const convertTime = (timeStr) => {
+  const [time, modifier] = timeStr.split(' ');
+  let [hours, minutes] = time.split(':');
+  if (hours === '12') {
+    hours = '00';
+  }
+  if (modifier === 'PM') {
+    hours = parseInt(hours, 10) + 12;
+  }
+  return `${hours}:${minutes}`;
+};
+
 const AttendanceController = {
   // Current start time value store in database
   attendanceStart: async (req, res) => {
@@ -84,7 +96,9 @@ const AttendanceController = {
 
       const { userId, date, endTime } = req.body
 
-      const timeStamp = JSON.parse(JSON.stringify(`${date} ${endTime}`))
+      const covertEndTime = convertTime(endTime)
+
+      const timeStamp = JSON.parse(JSON.stringify(`${date} ${covertEndTime}`))
       await AttendanceModel.updateEndTime(userId, timeStamp)
       await AttendanceModel.updateEndTimeForLog(userId, timeStamp)
 
@@ -102,14 +116,15 @@ const AttendanceController = {
     try {
       console.log('updateStartTime', req.body)
       const { userId, startTime, date } = req.body
+
       const { aId } = await AttendanceModel.getMinStartTime(userId)
       const { logUpdateId } = await AttendanceModel.getUpdateLogStartTimeId(userId)
       console.log({ logUpdateId });
-
+      const covertStartTime = convertTime(startTime)
       // const [{ start }] = getMinStartTime
       console.log('getMinStartTime', aId);
 
-      const timeStamp = JSON.parse(JSON.stringify(`${date} ${startTime}`))
+      const timeStamp = JSON.parse(JSON.stringify(`${date} ${covertStartTime}`))
       await AttendanceModel.setStartTime(aId, timeStamp)
       await AttendanceModel.setStartTimeForLog(logUpdateId, timeStamp)
 
