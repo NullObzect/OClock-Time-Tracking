@@ -117,7 +117,16 @@ const UserModel = {
       const [rows] = await dbConnect.promise().execute(findUserQuery, value)
       return rows;
     } catch (err) {
-      console.log(err)
+      return err;
+    }
+  },
+  findUserByPhone: async (phone) => {
+    try {
+      const findUserQuery = 'SELECT id,finger_id,user_name,gender,user_phone,user_mail,user_role,user_pass,avatar,status,DATE_FORMAT(create_at,\'%d-%M-%Y\') AS create_at FROM `users` WHERE user_phone = ?'
+      const value = [phone]
+      const [rows] = await dbConnect.promise().execute(findUserQuery, value)
+      return rows;
+    } catch (err) {
       return err;
     }
   },
