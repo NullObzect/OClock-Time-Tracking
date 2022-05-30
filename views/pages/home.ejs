@@ -81,66 +81,6 @@
 
   <!-- Markup for current working user details -->
 
-  <%if(loggedInUser.userRole==='admin'){ %>
-
-  <div class="home-info cnt-working-emy-list">
-
-    <h4 class="title-for-cnt-ely">Employees Working now ! </h4>
-    <div class="scroll-table">
-    <table class="table">
-      <thead>
-        <tr>
-          <td class="table-img td-width-zero"></td>
-          <td>Name</td>
-          <td class="user-phone">Date</td>
-          <td>Work Details</td>
-          <td class="user-email">Start Time</td>
-          <td class="user-status">End Time</td>
-        </tr>
-      </thead>
-      <tbody>
-        <% isEndTimeNull.map(user=>{%>
-        <tr>
-          <td class="table-img td-width-zero">
-            <% if(user.avatar !== null && user.avatar.match(/^(http|https):/g)){
-          %>
-          <img src="<%= user.avatar%>" />
-          <%} else{%>
-          <img
-            src="/uploads/avatars/<%=user.avatar != null ?  user.avatar : 'demo-avatar.png' %>"
-          />
-          <% } %>
-          </td>
-          <td>
-            <div class="username"><%=user.name%></div>
-            <span id="role"><%= user.userRole==='admin'? 'admin' : ''%> </span>
-          </td>
-          <td class="user-date "><input class="get-date" name="date" type="text" value=" <%= user.curDate %>"></td>
-          <td > <%= user.work_details %></td>
-          <td class="user-phone"><input type="text" class="update-start-time-val" name="startDate" value="<%= user.minStartTime %>"></td>
-          <td class="user-end-time">  <input type="text" name="endTime" class="update-end-time-val" value="<%= user.endTime || 'Empty' %>"></td>
-          <input type="hidden" name="userId" class="userId" value="<%= user.userId %>" />
-          </td>
-
-
-          <td class="btn-group">
-            <button class="update-btn">Update</button>
-            <button class="update-start-time ">Start</button>
-            <button class="update-end-time ">End</button>
-            <button class="save-btn">Save</button>
-            <button class="save-btn-for-end-time">Save</button>
-            <button type="text" class="opt-cancel-btn">Cancel</button>
-
-          </td>
-            
-        </tr>
-
-        <%}) %>
-      </tbody>
-    </table>
-  </div>
-  </div>
-  <%} %>
 
 </div>
  

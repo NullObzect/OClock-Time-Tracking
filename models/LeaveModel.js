@@ -33,12 +33,12 @@ const LeaveModel = {
     const getList = `SELECT U.user_name AS name, U.avatar, EL.id AS id, EL.type_id AS typeId, LT.name as type ,DATE_FORMAT(start,'%Y/%m/%d') AS start, DATE_FORMAT(end, '%Y/%m/%d') AS end, DATEDIFF(end,start) + 1 AS duration  FROM employee_leaves AS EL
     JOIN leave_type AS LT ON LT.id = El.type_id
     JOIN users AS U ON U.id  = EL.user_id  WHERE DATE(start) BETWEEN  '${startDate}' AND '${endDate}'`;
+    console.log(getList)
     const [rows] = await dbConnect.promise().execute(getList)
     return rows;
   },
   anEmployeeLeaveList: async (id) => {
-    const query = `SELECT U.user_name,U.gender,  U.user_role, U.avatar, EL.user_id AS id, EL.type_id AS typeId, LT.name as type , DATE_FORMAT(start,'%Y/%m/%d') AS start, DATE_FORMAT(end, '%Y/%m/%d') AS end, DATEDIFF(end,start) + 1 AS duration  FROM employee_leaves AS EL
-    JOIN leave_type AS LT ON LT.id = El.type_id JOIN users AS U ON U.id = EL.user_id WHERE EL.user_id = ${id}`;
+    const query = `SELECT U.user_name,U.gender,  U.user_role, U.avatar, EL.user_id AS id, EL.type_id AS typeId, LT.name as type , DATE_FORMAT(start,'%Y/%m/%d') AS start, DATE_FORMAT(end, '%Y/%m/%d') AS end, DATEDIFF(end,start) + 1 AS duration  FROM employee_leaves AS EL JOIN leave_type AS LT ON LT.id = El.type_id JOIN users AS U ON U.id = EL.user_id WHERE EL.user_id = ${id}`;
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
@@ -68,7 +68,7 @@ const LeaveModel = {
     return rows;
   },
   requestLeaveList: async () => {
-    const requestLeaveList = 'SELECT r.id, r.user_id ,u.user_name,u.avatar, r.type_id, l.name as typeName ,DATE_FORMAT(r.start, \'%Y/%m/%d\') AS start, DATE_FORMAT(r.end, \'%Y/%m/%d\') AS end, DATEDIFF(r.end, r.start) + 1 AS duration, r.status , r.created_at FROM request_leave as r,leave_type as l,users as u WHERE u.id = r.user_id and l.id = r.type_id'
+    const requestLeaveList = 'SELECT r.id, r.user_id,u.gender ,u.user_name,u.avatar, r.type_id, l.name as typeName ,DATE_FORMAT(r.start, \'%Y/%m/%d\') AS start, DATE_FORMAT(r.end, \'%Y/%m/%d\') AS end, DATEDIFF(r.end, r.start) + 1 AS duration, r.status , r.created_at FROM request_leave as r,leave_type as l,users as u WHERE u.id = r.user_id and l.id = r.type_id'
     const [row] = await dbConnect.promise().execute(requestLeaveList)
     return row
   },
@@ -129,7 +129,13 @@ const LeaveModel = {
     SUM(DATEDIFF(end, start) + 1) as countUnpaidLeave FROM employee_leaves AS EL JOIN leave_type AS LT ON LT.id = El.type_id  JOIN users AS U ON U.id = EL.user_id  WHERE EL.user_id = ${userId} AND  EL.create_at  BETWEEN DATE(U.create_at) AND DATE_FORMAT(NOW(),'%Y-12-31') AND LT.name = 'Unpaid'`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
-  }
+  },
+  sendRequestLeave: async (userId, type, start, end) => {
+    const requestLeaveQuery = 'INSERT INTO `request_leave`(`user_id`, `type_id`, `start`, `end`) VALUES (?,?,?,?)'
+    const values = [userId, type, start, end]
+    const [rows] = await dbConnect.promise().execute(requestLeaveQuery, values)
+    return rows
+  },
 }
 
 module.exports = LeaveModel;

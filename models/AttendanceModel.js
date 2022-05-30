@@ -296,7 +296,7 @@ const AttendanceModel = {
   },
   // if end time is null
   getEndTimeIsNull: async () => {
-    const query = "SELECT TIME_FORMAT(L.start, '%h:%i %p') AS minStartTime, A.user_id AS userId ,A.work_details,  DATE_FORMAT(A.create_at, '%Y-%m-%d') AS curDate,U.user_name AS name, U.avatar AS avatar, TIME_FORMAT(SEC_TO_TIME(SUM(TIME_TO_SEC(A.start))),'%h:%i %p') AS startTime,  A.end AS endTime,U.user_role AS userRole  FROM attendance AS A JOIN users AS U ON U.id IN( A.user_id )   JOIN log AS L ON A.user_id = L.user_id AND DATE(L.create_at) = DATE(A.create_at)  WHERE A.end IS NULL GROUP BY A.user_id"
+    const query = "SELECT TIME_FORMAT(L.start, '%h:%i %p') AS minStartTime, A.user_id AS userId ,A.work_details, DATE_FORMAT(A.create_at, '%Y-%m-%d') AS curDate,U.user_name AS name, U.avatar AS avatar, TIME_FORMAT(SEC_TO_TIME(SUM(TIME_TO_SEC(A.start))),'%h:%i %p') AS startTime,  A.end AS endTime,U.user_role AS userRole,u.gender  FROM attendance AS A JOIN users AS U ON U.id IN( A.user_id )   JOIN log AS L ON A.user_id = L.user_id AND DATE(L.create_at) = DATE(A.create_at)  WHERE A.end IS NULL GROUP BY A.user_id"
     const [rows] = await dbConnect.promise().execute(query)
     return rows
   },
@@ -307,6 +307,7 @@ const AttendanceModel = {
   },
   setStartTime: async (id, startTime) => {
     const query = `UPDATE attendance SET start = '${startTime}' WHERE id = ${id}`
+    console.log(query);
     const [rows] = await dbConnect.promise().execute(query)
     return rows
   },

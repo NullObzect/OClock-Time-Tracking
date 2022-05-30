@@ -42,6 +42,21 @@
   color: var(--white);
   stroke: var(--white);
 }
+.grapBox{
+   width: 100%;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-gap: 30px;
+    height: 200px;
+}
+.grapBox .box{
+  width: 100%;
+  padding: 20px;
+  box-shadow: 0 7px 25px rgba(0,0,0,0.08);
+  border-radius: 20px;
+}
+
 .details{
   width: 100%;
   padding: 20px;
@@ -62,7 +77,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 30px;
+  margin-bottom: 15px;
 }
 .card-header h2{
   font-weight: 600;
@@ -93,8 +108,11 @@
 .working-user table td{
   padding: 10px;
 }
-.working-user table tr td:nth-last-child(-n+3){
-  text-align: end;
+.working-user table tbody td{
+  font-size: 14px;
+}
+.working-user  tbody tr input{
+  width: 80px;
 }
 .request-leave{
   min-height: 500px;
@@ -103,6 +121,17 @@
   box-shadow: 0 7px 25px rgba(0,0,0,0.08);
   border-radius: 20px;
 
+}
+.request-view{
+  text-decoration: none;
+  color: var(--white);
+  padding: 5px 8px;
+  font-size: 14px;
+  background-color: var(--deep2);
+  border-radius: 5px;
+}
+.request-view:hover{
+  opacity: 0.8;
 }
 .img-box{
   width:40px;
@@ -155,7 +184,7 @@
   <div class="dash-card-box">
     <div class="card">
       <div>
-        <div class="numbers">4455</div>
+        <div class="numbers"><%=totalUsers%></div>
         <div class="card-name">Users</div>
       </div>
         <div class="icon-box">
@@ -164,11 +193,11 @@
     </div>
     <div class="card">
       <div>
-        <div class="numbers">55</div>
+        <div class="numbers"><%=totalActive%></div>
         <div class="card-name">Active Users</div>
       </div>
       <div class="icon-box">
-          <%- include("../partials/icons/users-icon.ejs"); -%>
+          <%- include("../partials/icons/active-user-icon.ejs"); -%>
       </div>
     </div>
     <div class="card">
@@ -177,7 +206,7 @@
         <div class="card-name">Leave Users</div>
       </div>
       <div class="icon-box">
-          <%- include("../partials/icons/users-icon.ejs"); -%>
+          <%- include("../partials/icons/leave-user-icon.ejs"); -%>
       </div>
     </div>
     <div class="card">
@@ -188,6 +217,16 @@
       <div class="icon-box">
           <%- include("../partials/icons/users-icon.ejs"); -%>
       </div>
+    </div>
+  </div>
+  <div class="grapBox">
+    <!-- <h2>Analytics</h2> -->
+    <div class="box">
+      <!-- <canvas id="myChart" width="400" height="400"></canvas> -->
+
+    </div>
+    <div class="box">
+
     </div>
   </div>
   <div class="details">
@@ -218,187 +257,42 @@
           </tr>
         </thead>
         <tbody>
-           <tr>
-            <td></td>
-            <td>khoaiz</td>
-            <td>bug fix</td>
-            <td>12:00</td>
-            <td>12:40</td>
-            <td><button>update</button></td>
-          </tr> <tr>
-            <td></td>
-            <td>khoaiz</td>
-            <td>bug fix</td>
-            <td>12:00</td>
-            <td>12:40</td>
-            <td><button>update</button></td>
-          </tr> <tr>
-            <td></td>
-            <td>khoaiz</td>
-            <td>bug fix</td>
-            <td>12:00</td>
-            <td>12:40</td>
-            <td><button>update</button></td>
-          </tr> <tr>
-            <td></td>
-            <td>khoaiz</td>
-            <td>bug fix</td>
-            <td>12:00</td>
-            <td>12:40</td>
-            <td><button>update</button></td>
-          </tr> 
-          <tr>
-            <td></td>
-            <td>khoaiz</td>
-            <td>bug fix</td>
-            <td>12:00</td>
-            <td>12:40</td>
-            <td><button>update</button></td>
-          </tr> 
-          <tr>
-            <td></td>
-            <td>khoaiz</td>
-            <td>bug fix</td>
-            <td>12:00</td>
-            <td>12:40</td>
-            <td><button>update</button></td>
-          </tr> 
-          <tr>
-            <td></td>
-            <td>khoaiz</td>
-            <td>bug fix</td>
-            <td>12:00</td>
-            <td>12:40</td>
-            <td><button>update</button></td>
-          </tr> 
-          <tr>
-            <td></td>
-            <td>khoaiz</td>
-            <td>bug fix</td>
-            <td>12:00</td>
-            <td>12:40</td>
-            <td><button>update</button></td>
-          </tr> 
-          <tr>
-            <td></td>
-            <td>khoaiz</td>
-            <td>bug fix</td>
-            <td>12:00</td>
-            <td>12:40</td>
-            <td><button>update</button></td>
-          </tr> 
-          <tr>
-            <td></td>
-            <td>khoaiz</td>
-            <td>bug fix</td>
-            <td>12:00</td>
-            <td>12:40</td>
-            <td><button>update</button></td>
-          </tr> 
-          <tr>
-            <td></td>
-            <td>khoaiz</td>
-            <td>bug fix</td>
-            <td>12:00</td>
-            <td>12:40</td>
-            <td><button>update</button></td>
-          </tr> 
-          <tr>
-            <td></td>
-            <td>khoaiz</td>
-            <td>bug fix</td>
-            <td>12:00</td>
-            <td>12:40</td>
-            <td><button>update</button></td>
-          </tr> 
-          <tr>
-            <td></td>
-            <td>khoaiz</td>
-            <td>bug fix</td>
-            <td>12:00</td>
-            <td>12:40</td>
-            <td><button>update</button></td>
-          </tr> 
-          <tr>
-            <td></td>
-            <td>khoaiz</td>
-            <td>bug fix</td>
-            <td>12:00</td>
-            <td>12:40</td>
-            <td><button>update</button></td>
-          </tr> 
-          <tr>
-            <td></td>
-            <td>khoaiz</td>
-            <td>bug fix</td>
-            <td>12:00</td>
-            <td>12:40</td>
-            <td><button>update</button></td>
-          </tr> 
-          <tr>
-            <td></td>
-            <td>khoaiz</td>
-            <td>bug fix</td>
-            <td>12:00</td>
-            <td>12:40</td>
-            <td><button>update</button></td>
-          </tr> 
-          <tr>
-            <td></td>
-            <td>khoaiz</td>
-            <td>bug fix</td>
-            <td>12:00</td>
-            <td>12:40</td>
-            <td><button>update</button></td>
-          </tr> 
-          <tr>
-            <td></td>
-            <td>khoaiz</td>
-            <td>bug fix</td>
-            <td>12:00</td>
-            <td>12:40</td>
-            <td><button>update</button></td>
-          </tr> 
-          <tr>
-            <td></td>
-            <td>khoaiz</td>
-            <td>bug fix</td>
-            <td>12:00</td>
-            <td>12:40</td>
-            <td><button>update</button></td>
-          </tr> 
-          <tr>
-            <td></td>
-            <td>khoaiz</td>
-            <td>bug fix</td>
-            <td>12:00</td>
-            <td>12:40</td>
-            <td><button>update</button></td>
-          </tr> 
-          <tr>
-            <td></td>
-            <td>khoaiz</td>
-            <td>bug fix</td>
-            <td>12:00</td>
-            <td>12:40</td>
-            <td><button>update</button></td>
-          </tr> 
-          <tr>
-            <td></td>
-            <td>khoaiz</td>
-            <td>bug fix</td>
-            <td>12:00</td>
-            <td>12:40</td>
-            <td><button>update</button></td>
-          </tr> 
-          <tr>
-            <td></td>
-            <td>khoaiz</td>
-            <td>bug fix</td>
-            <td>12:00</td>
-            <td>12:40</td>
-            <td><button>update</button></td>
-          </tr> 
+          <% isEndTimeNull.map(user=>{ %>
+
+            <tr>
+              <td><div class="img-box">
+                <% if(user.avatar !== null && user.avatar.match(/^(http|https):/g)){
+                  %>
+                  <img src="<%= user.avatar%>" />
+                  <%} else{%>
+                  <img
+                    src="/uploads/avatars/<%=user.avatar != null ?  user.avatar : user.gender=='male' ? 'demo-avatar.png':'female-demo-avatar.png'  %>"
+                  />
+                  <% } %>
+              </div></td>
+              <td>
+            <div class="username"><%=user.name%></div>
+            <span id="role"><%= user.userRole==='admin'? 'admin' : ''%> </span>
+          </td>
+          <input class="get-date" name="date" type="hidden" value=" <%= user.curDate %>">
+          <td > <%= user.work_details %></td>
+          <td class="time-picker"><input type="text" class="update-start-time-val timepicker-ui-input" name="startDate" value="<%= user.minStartTime %>"></td>
+          <td class="user-end-time time-picker">  <input type="text" name="endTime" class="update-end-time-val timepicker-ui-input" value="<%= user.endTime %>"></td>
+          <input type="hidden" name="userId" class="userId" value="<%= user.userId %>" />
+          </td>
+
+
+          <td class="btn-group">
+            <button class="update-btn">Update</button>
+            <button class="update-start-time ">Start</button>
+            <button class="update-end-time ">End</button>
+            <button class="save-btn">Save</button>
+            <button class="save-btn-for-end-time">Save</button>
+            <button type="text" class="opt-cancel-btn">Cancel</button>
+
+          </td>
+            </tr> 
+            <% })  %> 
           
         </tbody>
       </table>
@@ -406,29 +300,45 @@
     <div class="request-leave">
       <div class="card-header">
         <h2>Request Leave</h2>
-        <button>View</button>
+        <a class="request-view" href="/options/request-leave">View</a>
       </div>
       <table>
+      <%requestLeaveList.map(user=>{%>
         <tr>
           <td width="60px">
             <div class="img-box">
-              <img src="/uploads/avatars/demo-avatar.png" alt="">
+              <% if(user.avatar !== null && user.avatar.match(/^(http|https):/g)){
+                  %>
+                  <img src="<%= user.avatar%>" />
+                  <%} else{%>
+                  <img
+                    src="/uploads/avatars/<%=user.avatar != null ?  user.avatar : user.gender=='male' ? 'demo-avatar.png':'female-demo-avatar.png'  %>"
+                  />
+                  <% } %>
             </div>
           </td>
           <td>
             <h4>
-              khoaiz
+              <%=user.user_name%>
               <br>
               <span>
-                Sick
+                <%=user.typeName%>
               </span>
             </h4>
           </td>
         </tr>
+      <% }) %>
 
       </table>
     </div>
   </div>
 </div>
+
 <%- include("../partials/manual-attendance.ejs"); -%>
+
+<script src="<%=baseUrl%>/js/dashboard.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js"></script>
+
+<script src="<%=baseUrl%>/js/chart.js"></script>
+
 <%- include("../partials/footer"); -%>

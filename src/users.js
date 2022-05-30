@@ -9,6 +9,10 @@ const form = document.querySelector('#add-user-form');
 
 form.onsubmit = async function (event) {
   event.preventDefault();
+
+  const submitBtn = document.querySelector('.submit-btn');
+  submitBtn.innerHTML = ''
+  submitBtn.classList.add('loader')
   // clear errors first
   const errorPlaceholders = document.querySelectorAll('p.error');
   for (let i = 0; i < errorPlaceholders.length; i++) {
@@ -37,15 +41,17 @@ form.onsubmit = async function (event) {
     method: 'POST',
     body: formData,
   });
-  console.log(response)
-    // get response
+
+  // get response
   const result = await response.json();
+
   // handle error and response
-  console.log(result);
   if (result.errors) {
+    submitBtn.innerHTML = 'save'
+    submitBtn.classList.remove('loader')
+    console.log('remove')
     // errors
     Object.keys(result.errors).forEach((fieldName) => {
-      console.log(fieldName);
       // add error class to all inputs
       form[fieldName].classList.add('error');
       // set all error placeholders (p tag) textContent
