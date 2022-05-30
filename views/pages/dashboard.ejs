@@ -1,8 +1,434 @@
 <%- include("../partials/header"); -%>
 <style>
+  .dash-card-box{
+    width: 100%;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    grid-gap: 30px;
+  }
+  .dash-card-box .card{
+    background-color: var(--white);
+    box-shadow: 0 7px 25px rgba(0,0,0,0.08);
+    padding: 30px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+  .numbers{
+    position: relative;
+    font-weight: 500;
+    font-size: 32px;
+    color: var(--deep);
+}
+.card-name{
+  position: relative;
+  color: var(--deep2);
+  font-size: 18px;
+  margin-top: 5px;
+
+}
+.icon-box svg{
+  stroke: var(--deep2);
+  width: 40px;
+}
+.card:hover{
+  background-color: var(--deep);
+}
+.card:hover .numbers,
+.card:hover .card-name,
+.card:hover .icon-box svg{
+  color: var(--white);
+  stroke: var(--white);
+}
+.details{
+  width: 100%;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-gap: 30px;
+  margin-top: 10px;
+}
+.working-user{
+  height: 500px ;
+  background-color: var(--white);
+  padding: 20px;
+  box-shadow: 0 7px 25px rgba(0,0,0,0.08);
+  border-radius: 20px;
+  overflow: auto;
+}
+.card-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+}
+.card-header h2{
+  font-weight: 600;
+  color: var(--deep);
+}
+.add-data-btn{
+  padding: 5px 10px;
+  background-color: var(--deep2);
+  text-decoration: none;
+  color: var(--white);
+  border-radius: 6px;
+}
+ .working-user table{
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+.working-user table thead td{
+  font-weight: 600;
+}
+.working-user  tbody tr{
+  color: black;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+.working-user  tbody tr:last-child{
+  border-bottom:none;
+}
+.working-user table td{
+  padding: 10px;
+}
+.working-user table tr td:nth-last-child(-n+3){
+  text-align: end;
+}
+.request-leave{
+  min-height: 500px;
+  background-color: var(--white);
+  padding: 20px;
+  box-shadow: 0 7px 25px rgba(0,0,0,0.08);
+  border-radius: 20px;
+
+}
+.img-box{
+  width:40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.img-box img{
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+}
+.request-leave table tr td h4{
+  font-size: 16px ;
+  font-weight: 500;
+  line-height: 18px;
+}
+.request-leave table tr td h4 span{
+  font-size: 14px;
+  color: var(--deep2);
+}
+@media (max-width:991px){
+  .dash-card-box{
+    grid-template-columns: repeat(2,1fr) ;
+  }
+}
+@media (max-width:768px){
+  .dash-card-box{
+    grid-template-columns: repeat(2,1fr) ;
+  }
+  .details{
+    grid-template-columns: repeat(1,1fr) ;
+  }
+  .working-user{
+    overflow: auto;
+  }
+}
+@media (max-width:480px){
+  .dash-card-box{
+    grid-template-columns: repeat(1,1fr) ;
+  }
+}
 
 </style>
-<div class="main">
-  
+
+<div class="dashboard">
+  <div class="dash-card-box">
+    <div class="card">
+      <div>
+        <div class="numbers">4455</div>
+        <div class="card-name">Users</div>
+      </div>
+        <div class="icon-box">
+            <%- include("../partials/icons/users-icon.ejs"); -%>
+       </div>
+    </div>
+    <div class="card">
+      <div>
+        <div class="numbers">55</div>
+        <div class="card-name">Active Users</div>
+      </div>
+      <div class="icon-box">
+          <%- include("../partials/icons/users-icon.ejs"); -%>
+      </div>
+    </div>
+    <div class="card">
+      <div>
+        <div class="numbers">4455</div>
+        <div class="card-name">Leave Users</div>
+      </div>
+      <div class="icon-box">
+          <%- include("../partials/icons/users-icon.ejs"); -%>
+      </div>
+    </div>
+    <div class="card">
+      <div>
+        <div class="numbers">4455</div>
+        <div class="card-name">Users</div>
+      </div>
+      <div class="icon-box">
+          <%- include("../partials/icons/users-icon.ejs"); -%>
+      </div>
+    </div>
+  </div>
+  <div class="details">
+    <div class="working-user">
+      <div class="card-header">
+        <h2>
+          Working Employees
+        </h2>
+        <div class="add-button" >
+          <button class="add-btn">
+            <span class="add-icon">
+              <%- include("../partials/icons/add-svg"); -%>
+            </span>
+            <span .add-btn-text>Add</span>
+          </button>
+        </div>
+      </div>
+   
+      <table>
+        <thead>
+          <tr>
+            <td></td>
+          <td>Name</td>
+          <td>Details</td>
+          <td>Start</td>
+          <td>End</td>
+          <td>Action</td>
+          </tr>
+        </thead>
+        <tbody>
+           <tr>
+            <td></td>
+            <td>khoaiz</td>
+            <td>bug fix</td>
+            <td>12:00</td>
+            <td>12:40</td>
+            <td><button>update</button></td>
+          </tr> <tr>
+            <td></td>
+            <td>khoaiz</td>
+            <td>bug fix</td>
+            <td>12:00</td>
+            <td>12:40</td>
+            <td><button>update</button></td>
+          </tr> <tr>
+            <td></td>
+            <td>khoaiz</td>
+            <td>bug fix</td>
+            <td>12:00</td>
+            <td>12:40</td>
+            <td><button>update</button></td>
+          </tr> <tr>
+            <td></td>
+            <td>khoaiz</td>
+            <td>bug fix</td>
+            <td>12:00</td>
+            <td>12:40</td>
+            <td><button>update</button></td>
+          </tr> 
+          <tr>
+            <td></td>
+            <td>khoaiz</td>
+            <td>bug fix</td>
+            <td>12:00</td>
+            <td>12:40</td>
+            <td><button>update</button></td>
+          </tr> 
+          <tr>
+            <td></td>
+            <td>khoaiz</td>
+            <td>bug fix</td>
+            <td>12:00</td>
+            <td>12:40</td>
+            <td><button>update</button></td>
+          </tr> 
+          <tr>
+            <td></td>
+            <td>khoaiz</td>
+            <td>bug fix</td>
+            <td>12:00</td>
+            <td>12:40</td>
+            <td><button>update</button></td>
+          </tr> 
+          <tr>
+            <td></td>
+            <td>khoaiz</td>
+            <td>bug fix</td>
+            <td>12:00</td>
+            <td>12:40</td>
+            <td><button>update</button></td>
+          </tr> 
+          <tr>
+            <td></td>
+            <td>khoaiz</td>
+            <td>bug fix</td>
+            <td>12:00</td>
+            <td>12:40</td>
+            <td><button>update</button></td>
+          </tr> 
+          <tr>
+            <td></td>
+            <td>khoaiz</td>
+            <td>bug fix</td>
+            <td>12:00</td>
+            <td>12:40</td>
+            <td><button>update</button></td>
+          </tr> 
+          <tr>
+            <td></td>
+            <td>khoaiz</td>
+            <td>bug fix</td>
+            <td>12:00</td>
+            <td>12:40</td>
+            <td><button>update</button></td>
+          </tr> 
+          <tr>
+            <td></td>
+            <td>khoaiz</td>
+            <td>bug fix</td>
+            <td>12:00</td>
+            <td>12:40</td>
+            <td><button>update</button></td>
+          </tr> 
+          <tr>
+            <td></td>
+            <td>khoaiz</td>
+            <td>bug fix</td>
+            <td>12:00</td>
+            <td>12:40</td>
+            <td><button>update</button></td>
+          </tr> 
+          <tr>
+            <td></td>
+            <td>khoaiz</td>
+            <td>bug fix</td>
+            <td>12:00</td>
+            <td>12:40</td>
+            <td><button>update</button></td>
+          </tr> 
+          <tr>
+            <td></td>
+            <td>khoaiz</td>
+            <td>bug fix</td>
+            <td>12:00</td>
+            <td>12:40</td>
+            <td><button>update</button></td>
+          </tr> 
+          <tr>
+            <td></td>
+            <td>khoaiz</td>
+            <td>bug fix</td>
+            <td>12:00</td>
+            <td>12:40</td>
+            <td><button>update</button></td>
+          </tr> 
+          <tr>
+            <td></td>
+            <td>khoaiz</td>
+            <td>bug fix</td>
+            <td>12:00</td>
+            <td>12:40</td>
+            <td><button>update</button></td>
+          </tr> 
+          <tr>
+            <td></td>
+            <td>khoaiz</td>
+            <td>bug fix</td>
+            <td>12:00</td>
+            <td>12:40</td>
+            <td><button>update</button></td>
+          </tr> 
+          <tr>
+            <td></td>
+            <td>khoaiz</td>
+            <td>bug fix</td>
+            <td>12:00</td>
+            <td>12:40</td>
+            <td><button>update</button></td>
+          </tr> 
+          <tr>
+            <td></td>
+            <td>khoaiz</td>
+            <td>bug fix</td>
+            <td>12:00</td>
+            <td>12:40</td>
+            <td><button>update</button></td>
+          </tr> 
+          <tr>
+            <td></td>
+            <td>khoaiz</td>
+            <td>bug fix</td>
+            <td>12:00</td>
+            <td>12:40</td>
+            <td><button>update</button></td>
+          </tr> 
+          <tr>
+            <td></td>
+            <td>khoaiz</td>
+            <td>bug fix</td>
+            <td>12:00</td>
+            <td>12:40</td>
+            <td><button>update</button></td>
+          </tr> 
+          <tr>
+            <td></td>
+            <td>khoaiz</td>
+            <td>bug fix</td>
+            <td>12:00</td>
+            <td>12:40</td>
+            <td><button>update</button></td>
+          </tr> 
+          
+        </tbody>
+      </table>
+    </div>
+    <div class="request-leave">
+      <div class="card-header">
+        <h2>Request Leave</h2>
+        <button>View</button>
+      </div>
+      <table>
+        <tr>
+          <td width="60px">
+            <div class="img-box">
+              <img src="/uploads/avatars/demo-avatar.png" alt="">
+            </div>
+          </td>
+          <td>
+            <h4>
+              khoaiz
+              <br>
+              <span>
+                Sick
+              </span>
+            </h4>
+          </td>
+        </tr>
+
+      </table>
+    </div>
+  </div>
 </div>
+<%- include("../partials/manual-attendance.ejs"); -%>
 <%- include("../partials/footer"); -%>
