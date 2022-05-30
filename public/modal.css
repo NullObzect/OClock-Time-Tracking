@@ -57,6 +57,14 @@
   stroke: var(--deep2);
   cursor: pointer;
 }
+.modalClose svg {
+  stroke: var(--deep-gray);
+  cursor: pointer;
+}
+.modalClose svg:hover {
+  stroke: var(--deep2);
+  cursor: pointer;
+}
 .container {
   text-align: center;
   align-items: center;

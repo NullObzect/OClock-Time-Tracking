@@ -74,8 +74,8 @@
   color: #3d4e5e;
 }
 .box {
-  width: 251px;
-  height: 170px;
+  width: 260px;
+  min-height: 170px;
   padding: 9px;
   border: 1px solid #e6e6e6;
   border-radius: 15px;
