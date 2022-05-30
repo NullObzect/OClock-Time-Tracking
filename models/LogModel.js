@@ -157,7 +157,17 @@ const LogModel = {
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
-
+  // query for sum total time all employee
+  getTotalTimeToday: async () => {
+    const query = 'SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(work_hour))) AS totalTimeToday FROM log WHERE DATE(create_at) = DATE(CURRENT_DATE)'
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows;
+  },
+  getTotalTimeThisWeek: async () => {
+    const query = 'SELECT  SEC_TO_TIME(SUM(TIME_TO_SEC(work_time))) AS totalTimeThisWeek FROM log WHERE create_at >  now() - INTERVAL 7 DAY'
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows;
+  },
 
 }
 module.exports = LogModel

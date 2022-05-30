@@ -65,11 +65,6 @@ const AttendanceModel = {
               'INSERT INTO attendance(user_id, in_time, out_time,project_id, work_details) VALUES (?,?,?,?,?)',
               [id, inTime, outTime, projectId, workDetails],
             )
-
-          // .then((rows) => {
-          //   console.log(rows)
-          //   conn.execute(`INSERT INTO log(user_id, in_time, out_time, work_hour, start, end, work_time, day_type) SELECT   user_id AS uId, in_time AS inTime, out_time AS outTime, O.option_value AS workHour, CURRENT_TIMESTAMP, NULL, NULL,CASE WHEN DAY(CURRENT_DATE) IN  (OP.option_value)  THEN 'offday' WHEN  (SELECT COUNT(H.title) FROM holidays AS H WHERE DATE(CURRENT_DATE) BETWEEN H.start AND  H.end) > 0 THEN 'holiday' WHEN (SELECT COUNT(EL.reason) FROM employee_leaves AS EL WHERE DATE(CURRENT_DATE) BETWEEN EL.start AND EL.end AND A.user_id = EL.user_id) > 0 THEN 'leave' ELSE 'regular' END	dayType FROM attendance AS A JOIN options AS O ON o.option_title = 'fixed time' JOIN options AS OP ON OP.option_title = 'off-day' WHERE DATE(A.create_at) = DATE(CURRENT_DATE) AND user_id = ${id}`)
-          // })
         })
     } catch (err) {
       console.log('====>Error form AttendanceModel/setAttendance', err);
@@ -91,6 +86,39 @@ const AttendanceModel = {
       return err;
     }
   },
+  setManualAttendanceStart: async (id, start) => {
+    try {
+      const query = `UPDATE attendance SET start = '${start}' WHERE user_id = ${id}`
+
+      const [rows] = await dbConnect.promise().execute(query);
+      return rows.affectedRows;
+    } catch (err) {
+      console.log('====>Error form AttendanceModel/setAttendance', err);
+      return err;
+    }
+  },
+  setManualAttendanceEnd: async (id, end) => {
+    try {
+      const query = `UPDATE attendance SET end = '${end}' WHERE user_id = ${id}`
+
+      const [rows] = await dbConnect.promise().execute(query);
+      return rows.affectedRows;
+    } catch (err) {
+      console.log('====>Error form AttendanceModel/setAttendance', err);
+      return err;
+    }
+  },
+  setManualAttendanceStartAndEnd: async (id, start, end) => {
+    try {
+      const query = `UPDATE attendance SET start = '${start}', end = '${end}' WHERE user_id = ${id}`
+
+      const [rows] = await dbConnect.promise().execute(query);
+      return rows.affectedRows;
+    } catch (err) {
+      console.log('====>Error form AttendanceModel/setAttendance', err);
+      return err;
+    }
+  },
 
   insertLog: async (offDayValues, userId) => {
     const getRunStartSql = `INSERT INTO log(user_id, in_time, out_time, work_hour, start, end, work_time, day_type) SELECT   user_id AS uId, in_time AS inTime, out_time AS outTime, O.option_value AS workHour,  TIME(MIN(A.start)) AS startTime, NULL,  TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) AS totalWorkTime,CASE WHEN WEEKDAY(CURRENT_DATE) IN (${offDayValues})   THEN 'offday' WHEN  (SELECT COUNT(H.title) FROM holidays AS H WHERE DATE(CURRENT_DATE) BETWEEN H.start AND  H.end) > 0 THEN 'holiday' WHEN (SELECT COUNT(EL.type_id) FROM employee_leaves AS EL WHERE DATE(CURRENT_DATE) BETWEEN EL.start AND EL.end AND A.user_id = EL.user_id) > 0 THEN 'leave' ELSE 'regular' END	dayType FROM attendance AS A JOIN options AS O ON o.option_title = 'fixed time' JOIN options AS OP ON OP.option_title = 'off-day' WHERE DATE(A.create_at) = DATE(CURRENT_DATE) AND user_id = ${userId}`
@@ -104,6 +132,12 @@ const AttendanceModel = {
 
   updateLog: async (userId) => {
     const getRunStartSql = `UPDATE log AS L SET L.end = CURRENT_TIMESTAMP WHERE DATE(L.create_at) = DATE(CURRENT_DATE)  AND  user_id = ${userId}`
+    const value = [userId]
+    const [rows] = await dbConnect.promise().execute(getRunStartSql, value);
+    return rows;
+  },
+  updateLogForManualInput: async (userId, end, totalTime) => {
+    const getRunStartSql = `UPDATE log AS L SET L.end = '${end}', L.work_time = '${totalTime}' WHERE DATE(L.create_at) = DATE(CURRENT_DATE)  AND  user_id = ${userId}`
     const value = [userId]
     const [rows] = await dbConnect.promise().execute(getRunStartSql, value);
     return rows;
@@ -154,7 +188,6 @@ const AttendanceModel = {
     return rows;
   },
 
-  // report for today
   /* ======= report model  for this week ========= */
 
   // get current week date and name

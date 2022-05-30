@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 const AttendanceModel = require('../models/AttendanceModel');
 const OptionsModel = require('../models/OptionsModel');
-const { stringToNumber } = require('../utilities/formater')
+const { stringToNumber, time12HrTo24Hr } = require('../utilities/formater')
 
 const UserModel = require('../models/UserModel');
 // const { timeToHour } = require('../utilities/formater')
@@ -199,6 +199,68 @@ const AttendanceController = {
       res.json('User Not Found')
     } catch (error) {
       console.log(error)
+    }
+  },
+  // attendance for manual entry
+
+  manualAttendance: async (req, res) => {
+    try {
+      // default values
+      const [{ offDayValues }] = await OptionsModel.getOffDaysValue();
+      const [{ inTime }] = await AttendanceModel.getInTime()
+      const [{ outTime }] = await AttendanceModel.getOutTime()
+
+      const {
+        userId, date, startTime, endTime,
+      } = req.body
+      const timeStampForStart = JSON.parse(JSON.stringify(`${date} ${time12HrTo24Hr(startTime)}`))
+      const timeStampForEnd = JSON.parse(JSON.stringify(`${date} ${time12HrTo24Hr(endTime)}`))
+
+      // for manual entry
+      if (endTime === undefined || endTime === '') {
+        await AttendanceModel.setAttendanceStart(userId, inTime, outTime, 0, 'Manual Entry')
+
+        await AttendanceModel.setManualAttendanceStart(userId, timeStampForStart)
+
+        const isUserId = await AttendanceModel.getCurrentDateUserId(userId);
+
+        if (isUserId === undefined) {
+          await AttendanceModel.insertLog(stringToNumber(offDayValues), userId)
+        }
+
+        res.json('success')
+      } else if (startTime === undefined || startTime === '') { // for manual exit
+        await AttendanceModel.setAttendanceEnd(userId)
+        await AttendanceModel.setManualAttendanceEnd(userId, timeStampForEnd)
+
+        const isUserId = await AttendanceModel.getCurrentDateUserId(userId);
+
+        const isWorkTime = await AttendanceModel.getCurrentDateWorkTime(userId)
+        const { totalWorkTime } = JSON.parse(JSON.stringify(isWorkTime))
+        if (isUserId) {
+          await AttendanceModel.updateLog(userId)
+          await AttendanceModel.updateLogTotalWorkTime(userId, totalWorkTime)
+        }
+
+        res.json('success')
+      } else if (startTime !== undefined && endTime !== undefined) { // for manual start and end
+        await AttendanceModel.setAttendanceStart(userId, inTime, outTime, 0, 'Manual Entry')
+
+        await AttendanceModel.setManualAttendanceStartAndEnd(userId, timeStampForStart, timeStampForEnd)
+
+        const isUserId = await AttendanceModel.getCurrentDateUserId(userId);
+
+        if (isUserId === undefined) {
+          const isWorkTime = await AttendanceModel.getCurrentDateWorkTime(userId)
+          const { totalWorkTime } = JSON.parse(JSON.stringify(isWorkTime))
+          await AttendanceModel.insertLog(stringToNumber(offDayValues), userId)
+          await AttendanceModel.updateLogForManualInput(userId, timeStampForEnd, totalWorkTime)
+        }
+
+        res.json('success')
+      }
+    } catch (err) {
+      console.log('====>Error form manualAttendance/ controllers', err);
     }
   },
 

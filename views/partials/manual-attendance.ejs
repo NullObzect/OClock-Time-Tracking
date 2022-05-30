@@ -8,19 +8,19 @@
     </div>
     <div class="modal-content">
       <div class="container">
-        <form action="/" method="post">
+        <form action="/manual-attendance" method="post">
           <label for="name">
             <div class="">
-              <select  name="userId">
+              <select name="userId">
                 <option disabled selected>Select Employee</option>
                 <% users.map(u=>{ %>
                 <option value="<%= u.id %>"><%= u.user_name %></option>
 
-                <% }) %> 
+                <% }) %>
               </select>
-              </div>
-              </label>
-              <p class="error select-error"></p>
+            </div>
+          </label>
+          <p class="error select-error"></p>
           <label for="projectDetails">
             Select Start Date
             <div class="">
@@ -31,14 +31,24 @@
           <label for="start">
             Select Start Time
             <div class="time-picker">
-              <input type="text" class="timepicker-ui-input" placeholder="00:00"  name="start" />
+              <input
+                type="text"
+                class="timepicker-ui-input"
+                placeholder="00:00"
+                name="startTime"
+              />
               <p class="error end-error"></p>
             </div>
           </label>
           <label for="end">
             Select End Time
             <div class="time-picker">
-              <input type="text" class="timepicker-ui-input"  placeholder="00:00" name="end" />
+              <input
+                type="text"
+                class="timepicker-ui-input"
+                placeholder="00:00"
+                name="endTime"
+              />
               <p class="error end-error"></p>
             </div>
           </label>
