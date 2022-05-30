@@ -274,8 +274,8 @@ main::-webkit-scrollbar-thumb {
 .sidebar {
   position: fixed;
   height: 100vh;
-  width: 220px;
-  padding: 32px 22px;
+  width: 180px;
+  padding: 32px 16px;
 }
 
 .nav-list {
@@ -284,17 +284,17 @@ main::-webkit-scrollbar-thumb {
 
 .nav-list li {
   position: relative;
-  height: 54px;
+  height: 46px;
   width: 100%;
   margin: 0 5px;
   list-style: none;
-  line-height: 54px;
+  line-height: 46px;
   margin-bottom: 8px;
 }
 .nav-list li a svg {
-  width: 22px;
-  height: 22px;
-  margin: 0 16px;
+  width: 18px;
+  height: 18px;
+  margin: 0 14px;
 }
 .nav-list li a {
   color: var(--deep-gray);
@@ -302,15 +302,14 @@ main::-webkit-scrollbar-thumb {
   display: flex;
   align-items: center;
   text-decoration: none;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   width: 100%;
-  margin: 8px;
 }
 .nav-list li:hover {
   background-color: var(--deep);
   color: var(--white);
-  border-radius: 17px;
+  border-radius: 14px;
 }
 .nav-list li a:hover {
   color: var(--white);
@@ -323,7 +322,7 @@ main::-webkit-scrollbar-thumb {
   justify-content: space-evenly;
   position: absolute;
   bottom: 20px;
-  width: 170px;
+  width: 160px;
   height: 46px;
   border: 1px solid #e8e8e8;
   border-radius: 12px;
@@ -341,6 +340,7 @@ main::-webkit-scrollbar-thumb {
   color: var(--deep-gray);
   padding: 0 5px;
   font-weight: 500;
+  font-size: 14px;
 }
 .sidebar-footer .more {
   cursor: pointer;
@@ -353,7 +353,7 @@ main::-webkit-scrollbar-thumb {
 .more-option {
   display: none;
   position: absolute;
-  width: 170px;
+  width: 150px;
   height: 70px;
   border-radius: 15px;
   background: #ffffff;
@@ -406,13 +406,13 @@ main::-webkit-scrollbar-thumb {
 }
 .nav-list .active {
   background-color: var(--deep);
-  border-radius: 17px;
+  border-radius: 14px;
 }
 .nav-list .active svg {
   color: var(--white);
   stroke: var(--white);
-  width: 26px;
-  height: 26px;
+  width: 22px;
+  height: 22px;
 }
 .nav-list .active a span {
   color: var(--white);
@@ -539,9 +539,9 @@ main::-webkit-scrollbar-thumb {
 /* Bottom Nav Bar End */
 
 main {
-  width: cal(100% - 210px);
+  width: cal(100% - 190px);
   height: 95vh;
-  margin: 20px 20px 20px 210px;
+  margin: 10px 10px 10px 190px;
   border-radius: 15px;
   background: var(--white);
   /* background: black; */
