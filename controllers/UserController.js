@@ -61,12 +61,6 @@ const UserController = {
         })
       }
     } catch (error) {
-      console.log(error)
-      if (error.code == 'ER_DUP_ENTRY') {
-        res.status(500).json({
-          message: 'User was already exist!',
-        })
-      }
       res.status(500).json({
         errors: {
           common: {
