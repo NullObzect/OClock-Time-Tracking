@@ -48,7 +48,6 @@ const LeaveController = {
       const leaveTypeList = await LeaveModel.leaveTypeList();
       const anEmployeeLeavedaysList = await LeaveModel.anEmployeeLeaveList(userId)
       const userInfo = await AttendanceModel.getEmployeeInfo(userId)
-
       const [{ joinThisYearOrNot }] = await LeaveModel.checkUserJoinThisYearOrNot(userId)
 
       if (joinThisYearOrNot === 0) {
@@ -56,16 +55,21 @@ const LeaveController = {
         const totalLeaveDayLimit = totalLeaveDay
         const leaveLimitReport = await LeaveModel.leaveLimitReport(userId)
         const [{ countLeave }] = await LeaveModel.leaveLimitCount(userId)
+        const [{ countUnpaidLeave }] = await LeaveModel.countUnpaidLeave(userId)
+
+        const getTotalLeave = Number(countLeave - countUnpaidLeave || 0)
         res.render('pages/leavedays', {
-          employeeLeaveList, anEmployeeLeavedaysList, selectEmployee, leaveTypeList, userInfo, viewReport, totalLeaveDayLimit, leaveLimitReport, countLeave,
+          employeeLeaveList, anEmployeeLeavedaysList, selectEmployee, leaveTypeList, userInfo, viewReport, totalLeaveDayLimit, leaveLimitReport, countLeave, getTotalLeave,
         })
       } else {
         const [{ totalLeaveDay }] = await OptionsModel.getTotalLeaveDay(userId)
         const totalLeaveDayLimit = Number(totalLeaveDay - joinThisYearOrNot)
         const leaveLimitReport = await LeaveModel.leaveLimitReportJointCurrentYearUser(userId)
         const [{ countLeave }] = await LeaveModel.leaveLimitCountJointCurrentYearUser(userId)
+        const [{ countUnpaidLeave }] = await LeaveModel.leaveLimitCountUnpaidLeaveCurrentYearUser(userId)
+        const getTotalLeave = Number(countLeave - countUnpaidLeave || 0)
         res.render('pages/leavedays', {
-          employeeLeaveList, anEmployeeLeavedaysList, selectEmployee, leaveTypeList, userInfo, viewReport, totalLeaveDayLimit, leaveLimitReport, countLeave,
+          employeeLeaveList, anEmployeeLeavedaysList, selectEmployee, leaveTypeList, userInfo, viewReport, totalLeaveDayLimit, leaveLimitReport, countLeave, getTotalLeave,
         })
       }
     } catch (err) {

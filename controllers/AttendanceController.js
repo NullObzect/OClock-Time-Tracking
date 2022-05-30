@@ -141,10 +141,62 @@ const AttendanceController = {
         if (isId === undefined) {
           await AttendanceModel.insertLog(stringToNumber(offDayValues), userID)
         }
+        // const [result] = await AttendanceModel.getRunStartData(userID)
+        // const { start } = result
+        // res.json(start)
         res.json('welcome')
       } else {
         res.json('User Not Found')
       }
+    } catch (error) {
+      console.log(error)
+    }
+  },
+  attendanceExits: async (req, res) => {
+    const { fingerId } = req.body
+
+    const user = await UserModel.userFindByFingerId(fingerId)
+    const [{ offDayValues }] = await OptionsModel.getOffDaysValue();
+    try {
+      if (user.length > 0) {
+        const fingeIdArray = []
+        user.map((u) => {
+          const { fingerID } = u
+          const fingeId = fingerID.split(',')
+          fingeIdArray.push(fingeId)
+        })
+        const index = fingeIdArray.findIndex((arr) => arr.includes(fingerId))
+        const person = user[index]
+        const userID = person.id
+
+        const [{ start }] = await AttendanceModel.todayStartTime(userID)
+
+        await AttendanceModel.setAttendanceEnd(userID)
+        // count today total work time and store in database
+        const isWorkTime = await AttendanceModel.getCurrentDateWorkTime(userID)
+        const { totalWorkTime } = JSON.parse(JSON.stringify(isWorkTime))
+        if (userID) {
+          await AttendanceModel.updateLog(userID)
+          await AttendanceModel.updateLogTotalWorkTime(userID, totalWorkTime)
+        }
+
+        // const getTodayData = await AttendanceModel.getToday(userID)
+        // const [todayTotalData] = await AttendanceModel.todayTotal(userID)
+        // const [weekTotalData] = await AttendanceModel.weekTotal(userID)
+        // const getWeekData = await AttendanceModel.getWeekHistory(userID)
+        // const [{ end }] = await AttendanceModel.currentEndTime()
+        // const breakTime = getTodayData.length
+        // console.log('sss', start)
+        // console.log('today total', todayTotalData)
+
+        // return res.json({
+        //   start, end, breakTime, getTodayData, todayTotalData, weekTotalData, getWeekData,
+        // })
+        res.json('welcome, exits')
+      } else {
+        res.json('User Not Found')
+      }
+      res.json('User Not Found')
     } catch (error) {
       console.log(error)
     }

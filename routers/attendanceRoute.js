@@ -20,5 +20,6 @@ router.get('/reports/between/two-date', ReportController.reportBetweenTwoDate)
 
 // Attendance API
 router.post('/attendance-entry', AttendanceController.attendanceEntry)
+router.post('/attendance-exits', AttendanceController.attendanceExits)
 
 module.exports = router;

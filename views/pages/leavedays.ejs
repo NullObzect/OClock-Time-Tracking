@@ -87,13 +87,13 @@
           <table class="work">
             <tr>
               <td>Leave limit:</td>
-              <td><%= totalLeaveDayLimit || 0 %><span class="high"><%= Number((totalLeaveDayLimit || 0) - (countLeave || 0))  %> </span></td>
+              <td><%= totalLeaveDayLimit || 0 %><span class="high"><%= Number((totalLeaveDayLimit || 0) - (getTotalLeave || 0))  %> </span></td>
             </tr>
           
             <% leaveLimitReport.map(el =>  {%>
             <tr>
               <td><%= el.leaveName || '' %>:</td>
-              <td><%= el.duration || 0 %></td>
+              <td><%= el.duration || 0 %><small><span style="font-size:8px;" class="<%= el.leaveName == 'unpaid' ? 'low' : '' %> "><%= el.leaveName == 'unpaid' ? 'limit not allowed' : '' %> </span></small></td>
             </tr>
             <% }) %> 
        
