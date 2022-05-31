@@ -19,9 +19,11 @@ const LeaveModel = {
     return rows;
   },
 
-  setLeaveEditData: async (start, end, typeId, id) => {
-    const query = `UPDATE employee_leaves SET  start = '${start}', end = '${end}', type_id = '${typeId}' WHERE id =${id}`
+  setLeaveEditData: async (start, end, id) => {
+    const query = `UPDATE employee_leaves SET  start = '${start}', end = '${end}' WHERE id =${id}`
+    console.log(query)
     const [row] = await dbConnect.promise().execute(query)
+    console.log({ row })
     return row;
   },
   deleteLeaveday: async (id) => {
@@ -44,7 +46,7 @@ const LeaveModel = {
     return rows;
   },
   anEmployeeLeaveList: async (id) => {
-    const query = `SELECT U.user_name,U.gender,  U.user_role, U.avatar, EL.user_id AS id, EL.type_id AS typeId, LT.name as type , DATE_FORMAT(start,'%Y/%m/%d') AS start, DATE_FORMAT(end, '%Y/%m/%d') AS end, DATEDIFF(end,start) + 1 AS duration  FROM employee_leaves AS EL JOIN leave_type AS LT ON LT.id = El.type_id JOIN users AS U ON U.id = EL.user_id WHERE EL.user_id = ${id}`;
+    const query = `SELECT U.user_name,U.gender,  U.user_role, U.avatar, EL.user_id AS id,EL.id AS elId, EL.type_id AS typeId, LT.name as type , DATE_FORMAT(start,'%Y/%m/%d') AS start, DATE_FORMAT(end, '%Y/%m/%d') AS end, DATEDIFF(end,start) + 1 AS duration  FROM employee_leaves AS EL JOIN leave_type AS LT ON LT.id = El.type_id JOIN users AS U ON U.id = EL.user_id WHERE EL.user_id = ${id}`;
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },

@@ -4,8 +4,7 @@ import {
   aJAXPostRequest, dateDiff, dateFormate, deleteData, formValidation, getCurrentDate, setReportTitle
 } from './helper.js';
 
-const id = document.querySelector('#id').value
-console.log(id)
+const userId = document.querySelector('#id').value
 async function pagination(pageNumber, numberOfPage, page) {
   const pagination = document.querySelector('#pagination')
   pagination.innerHTML = `<li class="first page" > </li>
@@ -28,9 +27,9 @@ function loader(numberOfPage, pageNO) {
     console.log('xxx', setReportTitle(startDate, endDate));
 
     let data;
-    if (id) {
+    if (userId) {
       data = await fetch(
-        `${baseUrl}/options/leavedays/${id}/between-two-date?startDate=${startDate}&endDate=${endDate}&page=${pageNo}`,
+        `${baseUrl}/options/leavedays/${userId}/between-two-date?startDate=${startDate}&endDate=${endDate}&page=${pageNo}`,
       );
     } else {
       data = await fetch(
@@ -141,24 +140,21 @@ async function actions() {
     saveBtn[i].addEventListener('click', () => {
     // saveBtn[i].style.display = "none";
 
-      const reason = reasonVal[i].value.trim();
       const start = startVal[i].value.trim();
       const end = endVal[i].value.trim();
       const id = leaveId[i].value;
       console.log(id);
-      if (reason === '' || start === '' || end === '') {
+      if ( start === '' || end === '') {
         alert('Please fill all the fields');
         return;
       }
       const data = {
-        reason,
         start,
         end,
         id,
       };
       console.log(data);
       aJAXPostRequest('/options/leavedays/update', data);
-      reasonVal[i].value = data.reason;
       startVal[i].value = data.start;
       endVal[i].value = data.end;
       duration[i].innerText = `${dateDiff(data.start, data.end)} day`;
@@ -196,9 +192,9 @@ dateIcon.addEventListener('click', async () => {
     return alert('date not select');
   }
   let data;
-  if (id) {
+  if (userId) {
     data = await fetch(
-      `${baseUrl}/options/leavedays/${id}/between-two-date?startDate=${startDate}&endDate=${endDate}`,
+      `${baseUrl}/options/leavedays/${userId}/between-two-date?startDate=${startDate}&endDate=${endDate}`,
     );
   } else {
     data = await fetch(

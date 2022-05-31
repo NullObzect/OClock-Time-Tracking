@@ -82,13 +82,13 @@ const LeaveController = {
   setLeaveData: async (req, res) => {
     try {
       const {
-        id, start, end, reason,
+        id, start, end,
       } = req.body;
+      console.log('edit', req.body);
       const isEdit = await LeaveModel.setLeaveEditData(
 
         dateFormate(start),
         dateFormate(end),
-        reason,
         id,
       )
       if (isEdit.errno) {
@@ -118,17 +118,15 @@ const LeaveController = {
     let leavedays;
     const [userInfo] = await UserModel.findId(id)
     const admin = userInfo.user_role == 'admin'
-    console.log({ admin })
+
     try {
       const { startDate, endDate } = req.query;
-      console.log('startDate', startDate, endDate)
       if (admin) {
         leavedays = await LeaveModel.leavedaysListBetweenTowDate(startDate, endDate)
       } else {
         leavedays = await LeaveModel.leavedaysListBetweenTowDateWithId(id, startDate, endDate)
       }
 
-      console.log(leavedays)
       const getLeavedays = JSON.parse(JSON.stringify(leavedays))
       const page = Number(req.query.page) || 1
       const limit = Number(req.query.limit) || 2
@@ -136,7 +134,6 @@ const LeaveController = {
       const endIndex = page * limit
       const dateRangeReport = getLeavedays.slice(startIndex, endIndex)
 
-      console.log({ dateRangeReport });
       const pageLength = getLeavedays.length / limit
 
       // eslint-disable-next-line max-len
@@ -162,7 +159,7 @@ const LeaveController = {
   },
   addLeaveType: async (req, res) => {
     const { name, duration } = req.body
-    console.log(name)
+
     try {
       const insertedLeavedayType = await LeaveModel.addLeaveType(name, duration)
       res.redirect('/options/option-values')
@@ -196,7 +193,6 @@ const LeaveController = {
       userId, userName, userMail, typeId, typeName, start, end, duration,
     } = requestLeave
     const addUserLeave = await LeaveModel.addLeaveday(userId, typeId, start, end)
-    console.log(addUserLeave)
     try {
       const subject = 'Accept leave request'
       const textMessage = `${userName} leave request accepted`

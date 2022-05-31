@@ -190,6 +190,7 @@
           </td>
           <td><input class="end-val" type="text" value="<%=user.end%>" /></td>
           <td class="duration td-width"><%= user.duration + ' ' + 'day' %></td>
+
           <td class="td-width">
             <div class="btn-group">
               <button type="button" class="action-btn">Action</button>
@@ -210,7 +211,6 @@
         </tr>
 
         <% }) %> <%}else {%> <% anEmployeeLeavedaysList.map((user,idx) =>{ %>
-          <%console.log('i am user')%>
         <tr>
           <td class="table-img td-width-zero">
             <% if(user.avatar !== null && user.avatar.match(/^(http|https):/g)){
@@ -227,13 +227,33 @@
             <span id="role"><%= user.user_role==='admin'? 'admin' : ''%> </span>
           </td>
           <td>
-            <input class="reason-val" type="text" value="<%=user.type %>" />
+            <div><%= user.type %></div>
           </td>
           <td>
             <input class="start-val" type="text" value="<%=user.start%> " />
           </td>
           <td><input class="end-val" type="text" value="<%=user.end%>" /></td>
           <td class="duration"><%= user.duration + ' ' + 'day' %></td>
+
+          <%if(loggedInUser.userRole==='admin'){%>
+            <td class="td-width">
+            <div class="btn-group">
+              <button type="button" class="action-btn">Action</button>
+              <button type="button" class="update-btn">Update</button>
+              <button type="button" class="save-btn">Save</button>
+              <button type="button" class="opt-cancel-btn">Cancel</button>
+
+              <input
+                type="hidden"
+                class="leave-id delete-id"
+                value="<%= user.elId %>"
+              />
+              <a class="delete-data"
+                ><button class="delete-btn">Delete</button>
+              </a>
+            </div>
+          </td>
+          <%}%>
         </tr>
 
         <% }) %> <% } %>
