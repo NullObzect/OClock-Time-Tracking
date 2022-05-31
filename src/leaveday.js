@@ -242,7 +242,7 @@ function reportHolidayShow(holidayTable, dateRangeReport) {
         <input class="start-val" type="text" value="${day.start} " />
       </td>
       <td><input class="end-val" type="text" value="${day.end}" /></td>
-      <td class="duration">${day.duration}   day</td> ${userRole == 'admin' ? `<td>
+      <td class="duration">${day.duration}   day</td> <td>
       <div class="btn-group">
         <button type="button" class="action-btn">Action</button>
         <button type="button" class="update-btn">Update</button>
@@ -253,7 +253,7 @@ function reportHolidayShow(holidayTable, dateRangeReport) {
           ><button class="delete-btn">Delete</button>
         </a>
       </div>
-      </td>` : ''} </tr>`,
+      </td> </tr>`,
     ).join('');
     deleteData('/leavedays/delete/')
   } else {
@@ -276,18 +276,7 @@ function reportHolidayShow(holidayTable, dateRangeReport) {
       <input class="start-val" type="text" value="${day.start} " />
     </td>
     <td><input class="end-val" type="text" value="${day.end}" /></td>
-    <td class="duration">${day.duration}   day</td> ${userRole == 'admin' ? `<td>
-    <div class="btn-group">
-      <button type="button" class="action-btn">Action</button>
-      <button type="button" class="update-btn">Update</button>
-      <button type="button" class="save-btn">Save</button>
-      <input type="hidden" class="leave-id delete-id" value="${day.id}" />
-      <a
-        class="delete-data"
-        ><button class="delete-btn">Delete</button>
-      </a>
-    </div>
-    </td>` : ''} </tr>`,
+    <td class="duration">${day.duration}   day</td> </tr>`,
     ).join('');
     deleteData('/leavedays/delete/')
   }
