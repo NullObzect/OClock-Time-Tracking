@@ -3154,7 +3154,6 @@ eval("/* module decorator */ module = __webpack_require__.nmd(module);\n\n\nfunc
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module can't be inlined because the eval devtool is used.
-/******/ 	var __webpack_exports__ = __webpack_require__("./node_modules/@babel/polyfill/lib/index.js");
 /******/ 	__webpack_require__("./node_modules/@babel/polyfill/lib/index.js");
 /******/ 	var __webpack_exports__ = __webpack_require__("./src/dashboard.js");
 /******/ 	
