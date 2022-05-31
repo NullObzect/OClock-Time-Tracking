@@ -3,6 +3,7 @@ const startData = document.querySelector('#startData')
 const startButton = document.querySelector('#start-button')
 const startBtn = document.querySelector('#start-btn')
 const endBtn = document.querySelector('#end-btn');
+const submitBtn = document.querySelector('.submit-btn');
 
 let intervalId;
 
@@ -25,6 +26,8 @@ let intervalId;
 
 startData.addEventListener('submit', async (e) => {
   e.preventDefault()
+  submitBtn.innerHTML = ''
+  submitBtn.classList.add('loader')
   const error = []
   const errorPlaceholders = document.querySelectorAll('p.error');
   for (let i = 0; i < errorPlaceholders.length; i++) {
@@ -55,12 +58,14 @@ startData.addEventListener('submit', async (e) => {
     }
   }
   if (error.length) {
+    submitBtn.innerHTML = 'Start'
+    submitBtn.classList.remove('loader')
     return false
   }
-  todoStart()
+  todoStart(e.target)
 })
 
-async function todoStart() {
+async function todoStart(e) {
   const projectName = document.querySelector('#projectName')
   const projectDetails = document.querySelector('#projectDetails')
   const modal = document.querySelector('#myModal')
@@ -80,6 +85,9 @@ async function todoStart() {
   if (todayStart.innerText == '00 : 00') {
     todayStart.innerText = currentTime()
   }
+  e.reset();
+  submitBtn.innerHTML = 'Start'
+  submitBtn.classList.remove('loader')
 }
 // End button click event function
 endBtn.addEventListener('click', async (event) => {
