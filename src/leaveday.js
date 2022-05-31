@@ -4,11 +4,13 @@ import {
   aJAXPostRequest, dateDiff, dateFormate, deleteData, formValidation, getCurrentDate, setReportTitle
 } from './helper.js';
 
+const id = document.querySelector('#id').value
+console.log(id)
 async function pagination(pageNumber, numberOfPage, page) {
   const pagination = document.querySelector('#pagination')
   pagination.innerHTML = `<li class="first page" > </li>
  <li class="prev page"></li>
- ${pageNumber.map((p) => `<a class=${page == p ? 'page-active' : ''} ><li class='page-li' data-page={p}>  ${p}  </li></a>`).join('')}
+ ${pageNumber.map((p) => `<a class=${page == p ? 'page-active' : ''} ><li class='page-li' data-page=${p}>  ${p}  </li></a>`).join('')}
  <li class="next page"></li>
  <li class="last page"></li>
  `
@@ -25,9 +27,16 @@ function loader(numberOfPage, pageNO) {
     // setReportTitle(startDate, endDate);
     console.log('xxx', setReportTitle(startDate, endDate));
 
-    const data = await fetch(
-      `${baseUrl}/options/leavedays/between-two-date?startDate=${startDate}&endDate=${endDate}&page=${pageNo}`,
-    );
+    let data;
+    if (id) {
+      data = await fetch(
+        `${baseUrl}/options/leavedays/${id}/between-two-date?startDate=${startDate}&endDate=${endDate}&page=${pageNo}`,
+      );
+    } else {
+      data = await fetch(
+        `${baseUrl}/options/leavedays/between-two-date?startDate=${startDate}&endDate=${endDate}&page=${pageNo}`,
+      );
+    }
 
     const holidays = await data.json();
 
@@ -39,6 +48,7 @@ function loader(numberOfPage, pageNO) {
     const {
       dateRangeReport, pageNumber, numberOfPage,
     } = holidays.reports
+    console.log('ddd', holidays.reports)
     const holidayTable = document.querySelector('#leaveday-table');
 
     reportHolidayShow(holidayTable, dateRangeReport)
@@ -71,6 +81,7 @@ function loader(numberOfPage, pageNO) {
   const pageLi = document.getElementsByClassName('page-li')
   for (let i = 0; i < pageLi.length; i++) {
     const pageNum = pageLi[i].dataset.page
+    console.log({ pageNum })
     if (pageNum !== '...') {
       pageLi[i].addEventListener('click', () => {
         page(pageNum)
@@ -184,11 +195,17 @@ dateIcon.addEventListener('click', async () => {
   if (dateStart.dataset.date === 'null') {
     return alert('date not select');
   }
-
-  const data = await fetch(
-    `${baseUrl}/options/leavedays/between-two-date?startDate=${startDate}&endDate=${endDate}`,
-  );
-
+  let data;
+  if (id) {
+    data = await fetch(
+      `${baseUrl}/options/leavedays/${id}/between-two-date?startDate=${startDate}&endDate=${endDate}`,
+    );
+  } else {
+    data = await fetch(
+      `${baseUrl}/options/leavedays/between-two-date?startDate=${startDate}&endDate=${endDate}`,
+    );
+  }
+  console.log(data)
   const leavedays = await data.json();
   console.log(leavedays);
 
@@ -208,7 +225,6 @@ dateIcon.addEventListener('click', async () => {
 });
 
 function reportHolidayShow(holidayTable, dateRangeReport) {
-  console.log(dateRangeReport)
   holidayTable.innerHTML = dateRangeReport.map(
     (day, idx) => ` <tr>
   
@@ -275,6 +291,7 @@ if (input) {
   input.addEventListener('keydown', () => {
     clearTimeout(typingTimer);
   });
+
   // send request for search
   const searchUsers = async () => {
     const response = await fetch('/user/search', {
