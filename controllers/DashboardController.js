@@ -9,8 +9,9 @@ const DashboardController = {
     const isEndTimeNull = await AttendanceModel.getEndTimeIsNull()
     const totalActive = isEndTimeNull.length
     const requestLeaveList = await LeaveModel.requestLeaveList()
+    const [{ totalLeaveToDay }] = await LeaveModel.todayLeaveUser()
     res.render('pages/dashboard', {
-      totalUsers, totalActive, users, isEndTimeNull, requestLeaveList,
+      totalUsers, totalLeaveToDay, totalActive, users, isEndTimeNull, requestLeaveList,
     })
   },
 }
