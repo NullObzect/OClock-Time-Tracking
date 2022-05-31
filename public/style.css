@@ -36,6 +36,31 @@ body {
   position: fixed;
   z-index: 2;
 }
+.loader::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  border: 4px solid transparent;
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: button-loading-spinner 1s ease infinite;
+}
+
+@keyframes button-loading-spinner {
+  from {
+    transform: rotate(0turn);
+  }
+
+  to {
+    transform: rotate(1turn);
+  }
+}
 .scroll-table {
   overflow-x:auto;
   overflow-y:hidden;
@@ -999,8 +1024,16 @@ box-shadow: rgba(0, 0, 0, 0.14) -1px 0px 0px inset;
   .card-text {
     display: none;
   }
+  /* leave page */
+  .leave-report-box {
+    grid-template-columns: 1fr;
+    width: 320px;
+    height: 400px;
+    justify-items: center;
+  }
 }
 @media only screen and (max-width: 320px) {
+
   .oclock-box {
     width: 280px;
     padding: 20px;
