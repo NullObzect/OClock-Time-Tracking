@@ -144,7 +144,7 @@ async function actions() {
       const end = endVal[i].value.trim();
       const id = leaveId[i].value;
       console.log(id);
-      if ( start === '' || end === '') {
+      if (start === '' || end === '') {
         alert('Please fill all the fields');
         return;
       }
@@ -221,8 +221,44 @@ dateIcon.addEventListener('click', async () => {
 });
 
 function reportHolidayShow(holidayTable, dateRangeReport) {
-  holidayTable.innerHTML = dateRangeReport.map(
-    (day, idx) => ` <tr>
+  const userRole = document.querySelector('#role').value
+  if (userRole == 'admin') {
+    holidayTable.innerHTML = dateRangeReport.map(
+      (day, idx) => `<tr>
+    
+      <td class="table-img">
+       
+       <img src="/uploads/avatars/${day.avatar != null ? day.avatar : 'demo-avatar.png'}" />
+    </td>
+    
+      <td>
+        <div class="username">${day.name}</div>
+        <span id="role">${day.user_role === 'admin' ? 'admin' : ''} </span>
+      </td>
+      <td>
+        <input class="reason-val" type="text" value="${day.type}" />
+      </td>
+      <td>
+        <input class="start-val" type="text" value="${day.start} " />
+      </td>
+      <td><input class="end-val" type="text" value="${day.end}" /></td>
+      <td class="duration">${day.duration}   day</td> ${userRole == 'admin' ? `<td>
+      <div class="btn-group">
+        <button type="button" class="action-btn">Action</button>
+        <button type="button" class="update-btn">Update</button>
+        <button type="button" class="save-btn">Save</button>
+        <input type="hidden" class="leave-id delete-id" value="${day.id}" />
+        <a
+          class="delete-data"
+          ><button class="delete-btn">Delete</button>
+        </a>
+      </div>
+      </td>` : ''} </tr>`,
+    ).join('');
+    deleteData('/leavedays/delete/')
+  } else {
+    holidayTable.innerHTML = dateRangeReport.map(
+      (day, idx) => `<tr>
   
     <td class="table-img">
      
@@ -240,26 +276,23 @@ function reportHolidayShow(holidayTable, dateRangeReport) {
       <input class="start-val" type="text" value="${day.start} " />
     </td>
     <td><input class="end-val" type="text" value="${day.end}" /></td>
-    <td class="duration">${day.duration}   day</td>
-    <td >
-      <div class="btn-group">
-        <button type="button" class="action-btn">Action</button>
-        <button type="button" class="update-btn">Update</button>
-        <button type="button" class="save-btn">Save</button>
-        <input type="hidden" class="leave-id delete-id" value="${day.id}" />
-        <a
-          class="delete-data"
-          ><button class="delete-btn">Delete</button>
-        </a>
-      </div>
-    </td>
-  </tr>
-
-     `,
-
-  ).join('');
-  deleteData('/leavedays/delete/')
+    <td class="duration">${day.duration}   day</td> ${userRole == 'admin' ? `<td>
+    <div class="btn-group">
+      <button type="button" class="action-btn">Action</button>
+      <button type="button" class="update-btn">Update</button>
+      <button type="button" class="save-btn">Save</button>
+      <input type="hidden" class="leave-id delete-id" value="${day.id}" />
+      <a
+        class="delete-data"
+        ><button class="delete-btn">Delete</button>
+      </a>
+    </div>
+    </td>` : ''} </tr>`,
+    ).join('');
+    deleteData('/leavedays/delete/')
+  }
 }
+
 // delete leave day
 deleteData('/leavedays/delete/')
 
