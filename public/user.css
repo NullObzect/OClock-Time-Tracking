@@ -132,7 +132,7 @@
 .hidden-menu-show {
   position: absolute;
   /* max-height: 110px; */
-  min-height: 110px;
+  min-height: 115px;
   overflow: hidden;
   /* height: 110px; */
 
@@ -171,7 +171,7 @@ height: 32px; */
   text-decoration: none;
   font-size: 14px;
   font-weight: 600;
-  margin: 8px 0px 15px 0px;
+  margin: 4px 0px 0px 0px;
   padding: 5px 0;
 }
 .hidden-menu-show li a:hover {
