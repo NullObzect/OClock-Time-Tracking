@@ -37,6 +37,12 @@ const LeaveModel = {
     const [rows] = await dbConnect.promise().execute(getList)
     return rows;
   },
+  leavedaysListBetweenTowDateWithId: async (id, startDate, endDate) => {
+    const getList = `SELECT U.id as userID ,U.user_name AS name, U.avatar, EL.id AS id, EL.type_id AS typeId, LT.name as type ,DATE_FORMAT(start,'%Y/%m/%d') AS start, DATE_FORMAT(end, '%Y/%m/%d') AS end, DATEDIFF(end,start) + 1 AS duration FROM employee_leaves AS EL JOIN leave_type AS LT ON LT.id = El.type_id JOIN users AS U ON U.id = EL.user_id WHERE EL.user_id = ${id} AND DATE(start) BETWEEN  '${startDate}' AND '${endDate}'`;
+    console.log(getList)
+    const [rows] = await dbConnect.promise().execute(getList)
+    return rows;
+  },
   anEmployeeLeaveList: async (id) => {
     const query = `SELECT U.user_name,U.gender,  U.user_role, U.avatar, EL.user_id AS id, EL.type_id AS typeId, LT.name as type , DATE_FORMAT(start,'%Y/%m/%d') AS start, DATE_FORMAT(end, '%Y/%m/%d') AS end, DATEDIFF(end,start) + 1 AS duration  FROM employee_leaves AS EL JOIN leave_type AS LT ON LT.id = El.type_id JOIN users AS U ON U.id = EL.user_id WHERE EL.user_id = ${id}`;
     const [rows] = await dbConnect.promise().execute(query)

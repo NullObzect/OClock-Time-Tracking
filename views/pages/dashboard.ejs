@@ -251,6 +251,7 @@
             <td></td>
           <td>Name</td>
           <td>Details</td>
+          <td>Date</td>
           <td>Start</td>
           <td>End</td>
           <td>Action</td>
@@ -274,8 +275,8 @@
             <div class="username"><%=user.name%></div>
             <span id="role"><%= user.userRole==='admin'? 'admin' : ''%> </span>
           </td>
-          <input class="get-date" name="date" type="hidden" value=" <%= user.curDate %>">
           <td > <%= user.work_details %></td>
+          <td><input class="get-date" name="date" type="text" value=" <%= user.curDate %>"></td>
           <td class="time-picker"><input type="text" class="update-start-time-val timepicker-ui-input" name="startDate" value="<%= user.minStartTime %>"></td>
           <td class="user-end-time time-picker">  <input type="text" name="endTime" class="update-end-time-val timepicker-ui-input" value="<%= user.endTime %>"></td>
           <input type="hidden" name="userId" class="userId" value="<%= user.userId %>" />

@@ -473,6 +473,7 @@ input[type="data"]:focus {
   position: relative;
   color: #3d4e5e;
   font-weight: 600;
+ margin: 10px;
 }
 .search-user a {
   text-decoration: none;
@@ -495,6 +496,7 @@ input[type="data"]:focus {
 .user-list .user {
   position: absolute;
   width: 200px;
+  height: 50px;
   margin: 8px 30px;
   padding: 5px;
   border: 1px solid #c8c8c8;

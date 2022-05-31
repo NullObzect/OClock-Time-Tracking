@@ -146,7 +146,7 @@
       </div>
     </div>
   </div>
-
+<input type="hidden" id="id" value="<%=userId%>" >
   <!-- Markup for leave days table  -->
   <div class="scroll-table">
     <table class="table leaveday-table">
@@ -210,7 +210,7 @@
         </tr>
 
         <% }) %> <%}else {%> <% anEmployeeLeavedaysList.map((user,idx) =>{ %>
-      
+          <%console.log('i am user')%>
         <tr>
           <td class="table-img td-width-zero">
             <% if(user.avatar !== null && user.avatar.match(/^(http|https):/g)){

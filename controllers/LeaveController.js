@@ -9,6 +9,7 @@ const {
 } = require('../utilities/formater');
 const { pageNumbers } = require('../utilities/pagination');
 const OptionsModel = require('../models/OptionsModel');
+const UserModel = require('../models/UserModel');
 
 const LeaveController = {
   getAddLeavedayPage: async (req, res) => {
@@ -34,13 +35,14 @@ const LeaveController = {
 
   employeeLeavedaysList: async (req, res) => {
     const { user } = req
-    let userId;
-    let viewReport = true;
+    let userId = user.id;
+    let viewReport;
+    if (user.user_role == 'admin') {
+      viewReport = true;
+    }
     if (req.params.id) {
       userId = req.params.id;
       viewReport = false;
-    } else {
-      userId = user.id;
     }
     try {
       const employeeLeaveList = await LeaveModel.getEmployeeLeaveList()
@@ -59,7 +61,7 @@ const LeaveController = {
 
         const getTotalLeave = Number(countLeave - countUnpaidLeave || 0)
         res.render('pages/leavedays', {
-          employeeLeaveList, anEmployeeLeavedaysList, selectEmployee, leaveTypeList, userInfo, viewReport, totalLeaveDayLimit, leaveLimitReport, countLeave, getTotalLeave,
+          employeeLeaveList, anEmployeeLeavedaysList, selectEmployee, leaveTypeList, userInfo, viewReport, totalLeaveDayLimit, leaveLimitReport, countLeave, getTotalLeave, userId,
         })
       } else {
         const [{ totalLeaveDay }] = await OptionsModel.getTotalLeaveDay(userId)
@@ -69,7 +71,7 @@ const LeaveController = {
         const [{ countUnpaidLeave }] = await LeaveModel.leaveLimitCountUnpaidLeaveCurrentYearUser(userId)
         const getTotalLeave = Number(countLeave - countUnpaidLeave || 0)
         res.render('pages/leavedays', {
-          employeeLeaveList, anEmployeeLeavedaysList, selectEmployee, leaveTypeList, userInfo, viewReport, totalLeaveDayLimit, leaveLimitReport, countLeave, getTotalLeave,
+          employeeLeaveList, anEmployeeLeavedaysList, selectEmployee, leaveTypeList, userInfo, viewReport, totalLeaveDayLimit, leaveLimitReport, countLeave, getTotalLeave, userId,
         })
       }
     } catch (err) {
@@ -112,11 +114,21 @@ const LeaveController = {
     }
   },
   getLeavedayListBetweenTwoDate: async (req, res) => {
+    const { id } = req.params
+    let leavedays;
+    const [userInfo] = await UserModel.findId(id)
+    const admin = userInfo.user_role == 'admin'
+    console.log({ admin })
     try {
       const { startDate, endDate } = req.query;
       console.log('startDate', startDate, endDate)
+      if (admin) {
+        leavedays = await LeaveModel.leavedaysListBetweenTowDate(startDate, endDate)
+      } else {
+        leavedays = await LeaveModel.leavedaysListBetweenTowDateWithId(id, startDate, endDate)
+      }
 
-      const leavedays = await LeaveModel.leavedaysListBetweenTowDate(startDate, endDate)
+      console.log(leavedays)
       const getLeavedays = JSON.parse(JSON.stringify(leavedays))
       const page = Number(req.query.page) || 1
       const limit = Number(req.query.limit) || 2

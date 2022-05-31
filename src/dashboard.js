@@ -90,7 +90,7 @@ for (let i = 0; i < updateEndTime.length; i++) {
     saveBtnForEndTime[i].style.display = 'none';
     updateBtn[i].style.display = 'block';
     optCancelBtn[i].style.display = 'none';
-    return window.location.replace('/dashboard');
+    return window.location.reload();
   });
 }
 // when click on cancel button
