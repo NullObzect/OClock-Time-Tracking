@@ -42,6 +42,8 @@ const LogModel = {
   },
 
   thisYearReports: async (userId, yearStartDate, workdays) => {
+    console.log({ userId, yearStartDate, workdays });
+
     const query = `SELECT COUNT(create_at) AS yearNumberOfWorkingDays, REPLACE(TIME_FORMAT( work_hour , '%h'),'0', '') * ${workdays} AS yearFixedHr,  SEC_TO_TIME(SUM(TIME_TO_SEC(work_time))) AS yearTotalWorkHr, SUBTIME(SEC_TO_TIME(SUM(TIME_TO_SEC(work_time))), SEC_TO_TIME(work_hour * ${workdays} * 60 * 60) ) yearTotalExtraOrLess, SEC_TO_TIME(SUM(TIME_TO_SEC(work_time)) / ${workdays}) AS yearAvgWorkTime, SUBTIME(SEC_TO_TIME(SUM(TIME_TO_SEC(work_time)) / ${workdays}), work_hour) AS yearAvgExtraOrLess, TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(start))),'%h:%i %p') AS yearAvgStartTime, TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(end))),'%h:%i %p') AS yearAvgEndTime  FROM log  WHERE user_id = ${userId} AND DATE(create_at) BETWEEN  '${yearStartDate}' AND  DATE(CURRENT_DATE - 1)`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
@@ -53,13 +55,11 @@ const LogModel = {
     return rows;
   },
   countUserJoiningDate: async (userId) => {
-    const query = `SELECT DATEDIFF(MAX(L.create_at), U.create_at) as countJoinIngDate FROM log AS L JOIN users AS U ON U.id = L.user_id WHERE    L.user_id = ${userId}`
+    const query = `SELECT DATEDIFF(MAX(L.create_at), U.create_at) + 1 as countJoinIngDate FROM log AS L JOIN users AS U ON U.id = L.user_id WHERE    L.user_id = ${userId}`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
   numberOfdaysBetweenTwoDates: async (startDate, endDate) => {
-    console.log('from model', startDate, endDate);
-
     const query = `SELECT DATEDIFF('${endDate}', '${startDate}') AS days`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;

@@ -226,7 +226,6 @@ const AttendanceModel = {
     return rows;
   },
   setLogTotalWorkTimeAdmin: async (userId, totalWorkTime, endDate) => {
-    console.log('form model', { totalWorkTime })
     const query = `UPDATE log AS L SET L.work_time = '${totalWorkTime}'  WHERE DATE(L.create_at) = '${endDate}'  AND  user_id = ${userId}`
     const [rows] = await dbConnect.promise().execute(query);
     return rows;

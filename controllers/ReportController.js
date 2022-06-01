@@ -23,9 +23,6 @@ const ReportController = {
       } else {
         userId = user.id;
       }
-   
-
-     
 
       const checkUserReportEmptyOrNot = await LogModel.isUserIdInLog(userId)
       const platformUser = await ProfileModel.userConnectionDetailsUniqueInfo(userId)
@@ -109,9 +106,11 @@ const ReportController = {
         }
         const [{ weekStartDate }] = await AttendanceModel.getWeekStartDate(getThisWeekNumberOfday)
         const [{ countJoinIngDate }] = await LogModel.countUserJoiningDate(userId)
+
         const weekdaysType = await LogModel.countWorkdaysForWeek(userId, weekStartDate)
         const thisWeekOffdays = weekdaysType.filter((el) => el.workdays === 0).length
         const weekTotalWorkdays = getThisWeekNumberOfday - thisWeekOffdays;
+
         const [{
           weekNumberOfWorkingDays, weekFixedHr, weekTotalWorkHr, weekTotalExtraOrLess, weekAvgWorkTime, weekAvgExtraOrLess, weekAvgStartTime, weekAvgEndTime,
         // eslint-disable-next-line no-use-before-define
@@ -279,11 +278,16 @@ const ReportController = {
       // log start
 
       const [{ days }] = await LogModel.numberOfdaysBetweenTwoDates(startDate, endDate)
+      console.log({ days });
+
       const [{ countJoinIngDate }] = await LogModel.countUserJoiningDate(userId)
+      console.log({ countJoinIngDate });
       const betweenTwoDateTypes = await LogModel.countWorkdaysForBetweenTwoDate(userId, startDate, endDate)
 
       const betweenTwoDateOffdays = betweenTwoDateTypes.filter((el) => el.workdays === 0).length
-      const betweenTwoDateWorkdays = days - betweenTwoDateOffdays;
+      const betweenTwoDateWorkdays = (days === 0 ? 1 : days) - betweenTwoDateOffdays;
+      console.log({ betweenTwoDateWorkdays });
+
       const [{
         twoDateNumberOfWorkingDays, twoDateFixedHr, twoDateTotalWorkHr, twoDateTotalExtraOrLess, twoDateAvgWorkTime, twoDateAvgExtraOrLess, twoDateAvgStartTime, twoDateAvgEndTime,
       }] = await LogModel.reportsBewttenTwoDate(userId, startDate, endDate, countUserJoinDate(countJoinIngDate, betweenTwoDateWorkdays))
@@ -432,6 +436,9 @@ function countUserJoinDate(joinDay, currentDay) {
   if (joinDay > currentDay) {
     return currentDay
   } if (joinDay < currentDay) {
+    return joinDay
+  }
+  if (joinDay === currentDay) {
     return joinDay
   }
 }
