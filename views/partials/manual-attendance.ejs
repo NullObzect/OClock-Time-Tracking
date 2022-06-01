@@ -11,7 +11,8 @@
         <form action="/manual-attendance" method="post">
           <label for="name">
             <div class="">
-              <select name="userId">
+              <span class="isExist-attdance"></span>
+              <select name="userId" id="userId">
                 <option disabled selected>Select Employee</option>
                 <% users.map(u=>{ %>
                 <option value="<%= u.id %>"><%= u.user_name %></option>
@@ -24,7 +25,7 @@
           <label for="projectDetails">
             Select Start Date
             <div class="">
-              <input type="date" name="date" />
+              <input type="date" name="date" oninput="manualDate(event);" />
               <p class="error start-error"></p>
             </div>
           </label>
@@ -52,6 +53,32 @@
               <p class="error end-error"></p>
             </div>
           </label>
+          <label for="end">
+            Select In Time
+            <div class="time-picker">
+              <input
+                type="text"
+                class="timepicker-ui-input"
+                placeholder="00:00"
+                name="getInTime"
+                value="<%= inTime %>"
+              />
+              <p class="error end-error"></p>
+            </div>
+          </label>
+          <label for="end">
+            Select Out Time
+            <div class="time-picker">
+              <input
+                type="text"
+                class="timepicker-ui-input"
+                placeholder="00:00"
+                name="getOutTime"
+                value="<%= outTime %>"
+              />
+              <p class="error end-error"></p>
+            </div>
+          </label>
           <div class="">
             <button class="submit-btn">Submit</button>
           </div>
@@ -60,3 +87,29 @@
     </div>
   </div>
 </div>
+
+<script>
+  const baseUrl = "<%= baseUrl %>";
+  console.log(baseUrl);
+
+  const userId = document.querySelector("#userId");
+  const isExist = document.querySelector(".isExist-attdance");
+  const manualDate = (event) => {
+    const date = event.target.value;
+
+    fetch(
+      `${baseUrl}/manual-attendance-exist?date=${date}&userId=${userId.value}`
+    )
+      .then((res) => res.json())
+
+      .then((data) => {
+        console.log(data.length);
+        if (data.length > 0) {
+          isExist.textContent = "Attendance Already Exist";
+          isExist.style.color = "red";
+        } else {
+          isExist.textContent = "";
+        }
+      });
+  };
+</script>

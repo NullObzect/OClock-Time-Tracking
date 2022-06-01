@@ -46,11 +46,26 @@ const AttendanceModel = {
     const [rows] = await dbConnect.promise().execute(query);
     return rows;
   },
+  getCurrentDateTime: async () => {
+    const query = 'SELECT NOW() AS currentDateTime'
+    const [rows] = await dbConnect.promise().execute(query);
+    return rows;
+  },
+  getCurrentDateUserIdInAttendance: async (id) => {
+    const query = `SELECT user_id as isUserId FROM attendance WHERE DATE(create_at) = DATE(CURRENT_DATE) AND user_id = ${id}`
+    const [rows] = await dbConnect.promise().execute(query);
+    return rows[0];
+  },
 
   getCurrentDateUserId: async (id) => {
     const query = `SELECT user_id as isUserId FROM log WHERE DATE(create_at) = DATE(CURRENT_DATE) AND user_id = ${id}`
     const [rows] = await dbConnect.promise().execute(query);
     return rows[0];
+  },
+  isExistCurrentDateUserId: async (date, id) => {
+    const query = `SELECT user_id AS isExist FROM log WHERE DATE(create_at) = '${date}' AND user_id  = ${id}`
+    const [rows] = await dbConnect.promise().execute(query);
+    return rows;
   },
   // start
   setAttendanceStart: async (id, inTime, outTime, projectId, workDetails) => {
@@ -64,6 +79,24 @@ const AttendanceModel = {
             .execute(
               'INSERT INTO attendance(user_id, in_time, out_time,project_id, work_details) VALUES (?,?,?,?,?)',
               [id, inTime, outTime, projectId, workDetails],
+            )
+        })
+    } catch (err) {
+      console.log('====>Error form AttendanceModel/setAttendance', err);
+      return err;
+    }
+  },
+  setAttendanceStartForAPI: async (id, inTime, outTime, projectId, workDetails, start) => {
+    try {
+      // eslint-disable-next-line no-tabs
+      return await dbConnect
+        .promise()
+        .getConnection()
+        .then((conn) => {
+          conn
+            .execute(
+              'INSERT INTO attendance(user_id, in_time, out_time,project_id, work_details, start) VALUES (?,?,?,?,?,?)',
+              [id, inTime, outTime, projectId, workDetails, start],
             )
         })
     } catch (err) {
@@ -89,6 +122,17 @@ const AttendanceModel = {
   setManualAttendanceStart: async (id, start) => {
     try {
       const query = `UPDATE attendance SET start = '${start}' WHERE user_id = ${id}`
+
+      const [rows] = await dbConnect.promise().execute(query);
+      return rows.affectedRows;
+    } catch (err) {
+      console.log('====>Error form AttendanceModel/setAttendance', err);
+      return err;
+    }
+  },
+  setManualAttendanceNotStart: async (id, maxId, start) => {
+    try {
+      const query = `UPDATE attendance SET start = '${start}' WHERE user_id = ${id} AND id != ${maxId}`
 
       const [rows] = await dbConnect.promise().execute(query);
       return rows.affectedRows;
@@ -132,6 +176,12 @@ const AttendanceModel = {
 
   updateLog: async (userId) => {
     const getRunStartSql = `UPDATE log AS L SET L.end = CURRENT_TIMESTAMP WHERE DATE(L.create_at) = DATE(CURRENT_DATE)  AND  user_id = ${userId}`
+    const value = [userId]
+    const [rows] = await dbConnect.promise().execute(getRunStartSql, value);
+    return rows;
+  },
+  updateLogEndTimeOrCurTime: async (end, userId) => {
+    const getRunStartSql = `UPDATE log AS L SET L.end = '${end}'  WHERE DATE(L.create_at) = DATE(CURRENT_DATE)  AND  user_id = ${userId}`
     const value = [userId]
     const [rows] = await dbConnect.promise().execute(getRunStartSql, value);
     return rows;
@@ -180,6 +230,12 @@ const AttendanceModel = {
     const value = [userId]
     const [rows] = await dbConnect.promise().execute(getRunStartSql, value);
     return rows;
+  },
+  isAttendanceEndTimeNull: async (userId) => {
+    const getRunStartSql = 'SELECT MAX(id) maxId, CASE WHEN end IS  NULL THEN 1 ELSE 0 END endTimeIsNull  FROM attendance WHERE  DATE(create_at) = DATE(NOW()) AND user_id = ?'
+    const value = [userId]
+    const [rows] = await dbConnect.promise().execute(getRunStartSql, value);
+    return rows[0];
   },
   getWeekHistory: async (userId) => {
     const getWeekHistory = 'SELECT date_format((create_at),"%d %b %y") as date, TIME_FORMAT(SEC_TO_TIME(min(TIME_TO_SEC(start))),"%h:%i% %p") as start ,TIME_FORMAT(SEC_TO_TIME(max(TIME_TO_SEC(end))),"%h:%i% %p") as end ,TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(end)))), SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(start))))) as total FROM attendance WHERE user_id = ? AND  date(create_at) = DATE(CURRENT_DATE) '

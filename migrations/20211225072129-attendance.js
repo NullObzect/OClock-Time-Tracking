@@ -12,7 +12,6 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       in_time: {
-
         type: Sequelize.STRING,
         defaultValue: null,
       },
@@ -22,12 +21,12 @@ module.exports = {
         defaultValue: null,
       },
       project_id: {
-        allowNull: false,
         type: Sequelize.INTEGER,
+        defaultValue: null,
       },
       work_details: {
-        allowNull: false,
         type: Sequelize.STRING(1000),
+        defaultValue: null,
       },
       start: {
         type: Sequelize.DATE,
