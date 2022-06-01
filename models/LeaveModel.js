@@ -145,7 +145,7 @@ const LeaveModel = {
     return rows
   },
   todayLeaveUser: async () => {
-    const totayTotalLeaveUser = 'SELECT COUNT(user_id) AS totalLeaveToDay FROM employee_leaves WHERE DATE(NOW()) = DATE(create_at)'
+    const totayTotalLeaveUser = 'SELECT COUNT(user_id) AS totalLeaveToDay FROM employee_leaves WHERE DATE(NOW()) = DATE(start)'
     const [rows] = await dbConnect.promise().execute(totayTotalLeaveUser)
     return rows
   },

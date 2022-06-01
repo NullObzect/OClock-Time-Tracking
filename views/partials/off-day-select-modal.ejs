@@ -52,7 +52,14 @@
   const selectBtn = document.getElementsByClassName('select-btn')
   const offDayInput = document.querySelector('#offDayAddBtn')
   const offDayAddBtn= document.querySelector('#offDayAddBtn').value
-  const currentValue =offDayAddBtn.split(',')
+  let currentValue;
+  console.log(offDayAddBtn.length)
+  if(offDayAddBtn.length>5){
+     currentValue =offDayAddBtn.split(',')
+  }else{
+   currentValue =[offDayAddBtn]
+  }
+  console.log(offDayAddBtn)
   let values = []
   values.push(...currentValue)
   for(var i =0;i<selectBtn.length;i++){
