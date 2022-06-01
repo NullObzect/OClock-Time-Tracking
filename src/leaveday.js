@@ -5,6 +5,7 @@ import {
 } from './helper.js';
 
 const userId = document.querySelector('#id').value
+
 async function pagination(pageNumber, numberOfPage, page) {
   const pagination = document.querySelector('#pagination')
   pagination.innerHTML = `<li class="first page" > </li>
@@ -17,7 +18,6 @@ async function pagination(pageNumber, numberOfPage, page) {
   loader(numberOfPage, page)
   actions()
 }
-// console.log('xxx', setReportTitle())
 
 function loader(numberOfPage, pageNO) {
   async function page(pageNo) {
@@ -109,7 +109,6 @@ async function actions() {
   const saveBtn = document.querySelectorAll('.save-btn');
   const deleteBtn = document.querySelectorAll('.delete-btn');
   const leaveId = document.querySelectorAll('.leave-id');
-  const reasonVal = document.querySelectorAll('.reason-val');
   const startVal = document.querySelectorAll('.start-val');
   const endVal = document.querySelectorAll('.end-val');
   const duration = document.querySelectorAll('.duration');
@@ -132,7 +131,7 @@ async function actions() {
       deleteBtn[i].style.display = 'none';
       optCancelBtn[i].style.display = 'block';
 
-      reasonVal[i].focus();
+      startVal[i].focus();
     });
   }
   // when click on save button
