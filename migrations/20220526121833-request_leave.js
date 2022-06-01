@@ -1,6 +1,6 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('leave_request', {
+    await queryInterface.createTable('request_leave', {
 
       id: {
         allowNull: false,
@@ -39,6 +39,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('leave_request');
+    await queryInterface.dropTable('request_leave');
   },
 };
