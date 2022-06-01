@@ -8,11 +8,7 @@ const AttendanceModel = {
     console.log('start modal', rows)
     return rows;
   },
-  /*  todayEndTime: async (id) => {
-    const getEndSql = 'SELECT Time_format(MAX(Time(end)),"%h:%i% %p") as end FROM attendance ,projects WHERE user_id = ? and Date(create_at)= Date(CURRENT_DATE)';
-    const [rows] = await dbConnect.promise().execute(getEndSql, [id]);
-    return rows;
-  }, */
+
   todayEndTime: async (id) => {
     const getEndSql = 'SELECT Time_format(MAX(Time(end)),"%h:%i% %p") as end FROM attendance WHERE user_id = ? and Date(create_at)= Date(CURRENT_DATE)';
     const [rows] = await dbConnect.promise().execute(getEndSql, [id]);
@@ -34,7 +30,6 @@ const AttendanceModel = {
     return rows;
   },
 
-  // for log
 
   getInTime: async () => {
     const query = "SELECT option_value AS inTime FROM `options`  WHERE  option_title = 'in-time'"
@@ -46,11 +41,7 @@ const AttendanceModel = {
     const [rows] = await dbConnect.promise().execute(query);
     return rows;
   },
-  getCurrentDateTime: async () => {
-    const query = 'SELECT NOW() AS currentDateTime'
-    const [rows] = await dbConnect.promise().execute(query);
-    return rows;
-  },
+
   getCurrentDateUserIdInAttendance: async (id) => {
     const query = `SELECT user_id as isUserId FROM attendance WHERE DATE(create_at) = DATE(CURRENT_DATE) AND user_id = ${id}`
     const [rows] = await dbConnect.promise().execute(query);
@@ -119,6 +110,20 @@ const AttendanceModel = {
       return err;
     }
   },
+  setLogEndForAPI: async (id) => {
+    try {
+      return await dbConnect
+        .promise()
+        .getConnection()
+        .then((conn) => {
+          conn
+            .execute('UPDATE  log SET  end = CURRENT_TIMESTAMP WHERE user_id = ?', [id])
+        })
+    } catch (err) {
+      console.log('====>Error form AttendanceModel/setAttendance', err);
+      return err;
+    }
+  },
   setManualAttendanceStart: async (id, start) => {
     try {
       const query = `UPDATE attendance SET start = '${start}' WHERE user_id = ${id}`
@@ -130,9 +135,10 @@ const AttendanceModel = {
       return err;
     }
   },
-  setManualAttendanceNotStart: async (id, maxId, start) => {
+
+  setManualAttendanceEnd: async (id, end) => {
     try {
-      const query = `UPDATE attendance SET start = '${start}' WHERE user_id = ${id} AND id != ${maxId}`
+      const query = `UPDATE attendance SET end = '${end}' WHERE user_id = ${id}`
 
       const [rows] = await dbConnect.promise().execute(query);
       return rows.affectedRows;
@@ -141,9 +147,9 @@ const AttendanceModel = {
       return err;
     }
   },
-  setManualAttendanceEnd: async (id, end) => {
+  setAttendanceEndTimeForAPI: async (id, end) => {
     try {
-      const query = `UPDATE attendance SET end = '${end}' WHERE user_id = ${id}`
+      const query = `UPDATE attendance SET end = '${end}' WHERE   end IS NULL AND user_id = ${id}`
 
       const [rows] = await dbConnect.promise().execute(query);
       return rows.affectedRows;
@@ -232,7 +238,7 @@ const AttendanceModel = {
     return rows;
   },
   isAttendanceEndTimeNull: async (userId) => {
-    const getRunStartSql = 'SELECT MAX(id) maxId, CASE WHEN end IS  NULL THEN 1 ELSE 0 END endTimeIsNull  FROM attendance WHERE  DATE(create_at) = DATE(NOW()) AND user_id = ?'
+    const getRunStartSql = 'SELECT  CASE WHEN MAX(end IS  NULL) THEN 1 ELSE 0 END endTimeIsNull  FROM attendance WHERE  DATE(create_at) = DATE(NOW()) AND user_id = ?'
     const value = [userId]
     const [rows] = await dbConnect.promise().execute(getRunStartSql, value);
     return rows[0];
