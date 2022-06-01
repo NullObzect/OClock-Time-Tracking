@@ -19,7 +19,7 @@ router.get('/reports/:id', decorateHtmlResponse('Report'), checkLogin, ReportCon
 router.get('/reports/between/two-date', ReportController.reportBetweenTwoDate)
 
 // Attendance API
-router.post('/attendance-entry', AttendanceController.attendanceEntry)
+router.post('/attendance-entry-or-exits', AttendanceController.attendanceEntryOrExitsAPI)
 router.post('/manual-attendance', AttendanceController.manualAttendance)
 router.get('/manual-attendance-exist', AttendanceController.checkIsExistAttendance)
 

@@ -122,13 +122,12 @@ const AttendanceController = {
       console.log('====>Error form AttendanceController', err);
     }
   },
-  attendanceEntry: async (req, res) => {
+  attendanceEntryOrExitsAPI: async (req, res) => {
     const { fingerId, time } = req.body
-    console.log({ fingerId, time });
-
-    const timeStamp = JSON.parse(JSON.stringify(` ${time}`))
     const user = await UserModel.userFindByFingerId(fingerId)
     const [{ offDayValues }] = await OptionsModel.getOffDaysValue();
+    const timeStamp = JSON.parse(JSON.stringify(`${time}`))
+
     try {
       if (user.length > 0) {
         const fingeIdArray = []
@@ -146,47 +145,46 @@ const AttendanceController = {
         const [{ outTime }] = await AttendanceModel.getOutTime()
 
         // 1st condition for check user is present or not
-        const currentDateTime = await AttendanceModel.getCurrentDateTime()
-        console.log({ currentDateTime, timeStamp });
         if (isId === undefined || isId === null) {
-          // const { endTimeIsNull } = await AttendanceModel.isAttendanceEndTimeNull(userID)
-          // console.log({ endTimeIsNull });
-
-          // if (endTimeIsNull === 0) {
-          await AttendanceModel.setAttendanceStartForAPI(userID, inTime, outTime, 0, 'Entry', timeStamp || currentDateTime)
-          // await AttendanceModel.setManualAttendanceStart(userID, timeStamp || currentDateTime)
+          if (time === undefined) {
+            await AttendanceModel.setAttendanceStart(userID, inTime, outTime, 0, 'Entry')
+            res.json('success')
+          } else {
+            await AttendanceModel.setAttendanceStartForAPI(userID, inTime, outTime, 0, 'Entry', timeStamp)
+            res.json('success')
+          }
 
           const isIdInLog = await AttendanceModel.getCurrentDateUserId(userID);
           if (isIdInLog === undefined) {
             await AttendanceModel.insertLog(stringToNumber(offDayValues), userID)
+            res.json('success')
           }
-          res.json('success')
-
-          // }
         } else if (isId !== undefined || isId !== null) {
           const { endTimeIsNull } = await AttendanceModel.isAttendanceEndTimeNull(userID)
-          console.log({ endTimeIsNull });
 
           if (endTimeIsNull === 1) {
-            await AttendanceModel.setManualAttendanceEnd(userID, timeStamp || currentDateTime)
+            if (time === undefined) {
+              await AttendanceModel.setAttendanceEnd(userID)
+              await AttendanceModel.setLogEndForAPI(userID)
 
+              res.json('success')
+            } else {
+              await AttendanceModel.setAttendanceEndTimeForAPI(userID, timeStamp)
+              await AttendanceModel.updateLogEndTimeOrCurTime(timeStamp, userID)
+
+              res.json('success')
+            }
             const isWorkTime = await AttendanceModel.getCurrentDateWorkTime(userID)
             const { totalWorkTime } = JSON.parse(JSON.stringify(isWorkTime))
-
-            await AttendanceModel.updateLogEndTimeOrCurTime(timeStamp || currentDateTime, userID)
             await AttendanceModel.updateLogTotalWorkTime(userID, totalWorkTime)
-            res.json('success')
           } else if (endTimeIsNull === 0) {
-            await AttendanceModel.setAttendanceStartForAPI(userID, inTime, outTime, 0, 'Entry', timeStamp || currentDateTime)
-
-            // await AttendanceModel.setManualAttendanceNotStart(userID, maxId, timeStamp || currentDateTime)
-
-            // const isWorkTime = await AttendanceModel.getCurrentDateWorkTime(userID)
-            // const { totalWorkTime } = JSON.parse(JSON.stringify(isWorkTime))
-
-            // await AttendanceModel.updateLogEndTimeOrCurTime(timeStamp || currentDateTime, userID)
-            // await AttendanceModel.updateLogTotalWorkTime(userID, totalWorkTime)
-            res.json('success')
+            if (time === undefined) {
+              await AttendanceModel.setAttendanceStart(userID, inTime, outTime, 0, 'Entry')
+              res.json('success')
+            } else {
+              await AttendanceModel.setAttendanceStartForAPI(userID, inTime, outTime, 0, 'Entry', timeStamp)
+              res.json('success')
+            }
           }
         }
       } else {
