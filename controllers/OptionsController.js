@@ -82,7 +82,7 @@ const OptionsController = {
   },
   getUpdateOptionValues: async (req, res) => {
     try {
-      console.log(req.body);
+      console.log('req body', req.body);
 
       const { optionId, optionValue } = req.body;
       const regEx = /^\d+$/
@@ -211,7 +211,7 @@ const offDaysObj = {
   Mon: 0,
   Tue: 1,
   Wed: 2,
-  Thr: 3,
+  Thu: 3,
 }
 function numToDay(obj, num) {
   return Object.keys(obj).find((key) => obj[key] === num)
