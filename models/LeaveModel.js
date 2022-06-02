@@ -76,7 +76,7 @@ const LeaveModel = {
     return rows;
   },
   requestLeaveList: async () => {
-    const requestLeaveList = 'SELECT r.id, r.user_id,u.gender ,u.user_name,u.avatar, r.type_id, l.name as typeName ,DATE_FORMAT(r.start, \'%Y/%m/%d\') AS start, DATE_FORMAT(r.end, \'%Y/%m/%d\') AS end, DATEDIFF(r.end, r.start) + 1 AS duration, r.status , r.created_at FROM request_leave as r,leave_type as l,users as u WHERE u.id = r.user_id and l.id = r.type_id'
+    const requestLeaveList = 'SELECT r.id, r.user_id,u.gender ,u.user_name,u.avatar, r.type_id, l.name as typeName ,DATE_FORMAT(r.start, \'%Y/%m/%d\') AS start, DATE_FORMAT(r.end, \'%Y/%m/%d\') AS end, DATEDIFF(r.end, r.start) + 1 AS duration, r.status , r.create_at FROM request_leave as r,leave_type as l,users as u WHERE u.id = r.user_id and l.id = r.type_id'
     const [row] = await dbConnect.promise().execute(requestLeaveList)
     return row
   },
