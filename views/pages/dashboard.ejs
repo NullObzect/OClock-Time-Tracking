@@ -43,14 +43,14 @@
   stroke: var(--white);
 }
 .grapBox{
-   width: 100%;
+    width: 100%;
     padding: 20px;
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 1fr 1fr 2fr;
     grid-gap: 30px;
-    height: 200px;
+    min-height: 200px;
 }
-.grapBox .box{
+.grapBox .gBox{
   width: 100%;
   padding: 20px;
   box-shadow: 0 7px 25px rgba(0,0,0,0.08);
@@ -147,6 +147,15 @@
   object-fit: cover;
 
 }
+
+.username{
+  cursor: pointer;
+  font-weight: 600;
+  
+}
+.username:hover{
+  color: var(--deep2);
+}
 .request-leave table tr td h4{
   font-size: 16px ;
   font-weight: 500;
@@ -159,6 +168,9 @@
 @media (max-width:991px){
   .dash-card-box{
     grid-template-columns: repeat(2,1fr) ;
+  }
+  .grapbox{
+    grid-template-columns: 1fr ;
   }
 }
 @media (max-width:768px){
@@ -220,13 +232,14 @@
     </div>
   </div>
   <div class="grapBox">
-    <!-- <h2>Analytics</h2> -->
-    <div class="box">
-      <!-- <canvas id="myChart" width="400" height="400"></canvas> -->
-
+    <div class="gBox">
+      <canvas id="myPie" width="200" height="200"></canvas>
     </div>
-    <div class="box">
-
+    <div class="gBox">
+      <canvas id="myDoughnut" width="200" height="200"></canvas>
+    </div>
+    <div class="gBox">
+      <canvas id="myBar"></canvas>
     </div>
   </div>
   <div class="details">
@@ -272,7 +285,7 @@
                   <% } %>
               </div></td>
               <td>
-            <div class="username"><%=user.name%></div>
+            <div class="username userBtn" data-userID="<%=user.userId%>"><%=user.name%></div>
             <span id="role"><%= user.userRole==='admin'? 'admin' : ''%> </span>
           </td>
           <td > <%= user.work_details %></td>
@@ -294,41 +307,66 @@
           </td>
             </tr> 
             <% })  %> 
-          
-        </tbody>
-      </table>
-    </div>
-    <div class="request-leave">
-      <div class="card-header">
-        <h2>Request Leave</h2>
-        <a class="request-view" href="/options/request-leave">View</a>
-      </div>
-      <table>
-      <%requestLeaveList.map(user=>{%>
-        <tr>
-          <td width="60px">
-            <div class="img-box">
-              <% if(user.avatar !== null && user.avatar.match(/^(http|https):/g)){
-                  %>
-                  <img src="<%= user.avatar%>" />
-                  <%} else{%>
-                  <img
-                    src="/uploads/avatars/<%=user.avatar != null ?  user.avatar : user.gender=='male' ? 'demo-avatar.png':'female-demo-avatar.png'  %>"
-                  />
-                  <% } %>
+    <% todayEmployeesRecord.map(user=>{ %>
+
+      <tr>
+        <td><div class="img-box">
+          <% if(user.avatar !== null && user.avatar.match(/^(http|https):/g)){
+            %>
+            <img src="<%= user.avatar%>" />
+            <%} else{%>
+            <img
+              src="/uploads/avatars/<%=user.avatar != null ?  user.avatar : user.gender=='male' ? 'demo-avatar.png':'female-demo-avatar.png'  %>"
+            />
+            <% } %>
+        </div></td>
+        <td>
+      <div class="username userBtn" data-userID="<%=user.userId%>"><%=user.name%></div>
+      <span id="role"><%= user.userRole==='admin'? 'admin' : ''%> </span>
+      </td>
+      <td > <%= user.work_details %></td>
+      <td><input class="get-date" name="date" type="text" value=" <%= user.curDate %>"></td>
+      <td class="time-picker"><input type="text" class="update-start-time-val timepicker-ui-input" name="startDate" value="<%= user.minStartTime %>"></td>
+      <td class="user-end-time time-picker">  <input type="text" name="endTime" class="update-end-time-val timepicker-ui-input" value="<%= user.endTime %>"></td>
+      <input type="hidden" name="userId" class="userId" value="<%= user.userId %>" />
+      </td>
+      </tr> 
+      <% })  %> 
+                
+              </tbody>
+            </table>
+          </div>
+          <div class="request-leave">
+            <div class="card-header">
+              <h2>Request Leave</h2>
+              <a class="request-view" href="/options/request-leave">View</a>
             </div>
-          </td>
-          <td>
-            <h4>
-              <%=user.user_name%>
-              <br>
-              <span>
-                <%=user.typeName%>
-              </span>
-            </h4>
-          </td>
-        </tr>
-      <% }) %>
+            <table>
+            <%requestLeaveList.map(user=>{%>
+              <tr>
+                <td width="60px">
+                  <div class="img-box">
+                    <% if(user.avatar !== null && user.avatar.match(/^(http|https):/g)){
+                        %>
+                        <img src="<%= user.avatar%>" />
+                        <%} else{%>
+                        <img
+                          src="/uploads/avatars/<%=user.avatar != null ?  user.avatar : user.gender=='male' ? 'demo-avatar.png':'female-demo-avatar.png'  %>"
+                        />
+                        <% } %>
+                  </div>
+                </td>
+                <td>
+                  <h4>
+                    <%=user.user_name%>
+                    <br>
+                    <span>
+                      <%=user.typeName%>
+                    </span>
+                  </h4>
+                </td>
+              </tr>
+            <% }) %>
 
       </table>
     </div>
@@ -336,10 +374,103 @@
 </div>
 
 <%- include("../partials/manual-attendance.ejs"); -%>
+<%- include("../partials/user-details-modal.ejs"); -%>
+
+<script>
+  const userNameBtn = document.querySelectorAll('.userBtn')
+  const userDetailsModal = document.querySelector('#userDetails')
+  const userDetailsModalClose = document.querySelector('.user-modal-close')
+  const container = userDetailsModal.querySelector('.user-user-container')
+  console.log(userNameBtn)
+ for(var i =0;i<userNameBtn.length;i++){
+  userNameBtn[i].addEventListener('click',async(e)=>{
+    
+    const element = e.target
+    const userId=element.dataset.userid
+    const api =await fetch(`/dashboard/user-today-details-for-admin/${userId}`)
+    const data = await api.json()
+    const {userInfo,todayReportDetails,weekReportDetails,todayWorkList,lateCountThisWeek} = data
+
+    const bodyData = `  <div class="user-details-head">
+          <div class="user-details">
+            <div class="img">
+             ${userInfo.avatar !== null && userInfo.avatar.match(/^(http|https):/g) ?
+        `<img src=\"${userInfo.avatar}\"/>`:
+      `<img src=\"/uploads/avatars/${userInfo.avatar!==null ?userInfo.avatar : userInfo.gender=='male' ? 'demo-avatar.png':'female-demo-avatar.png'}\" />`}
+            </div>
+            <div class="user-info">
+            <div class="user-name">${userInfo.user_name}</div>
+            <div class="user-mail">${userInfo.user_mail}</div>
+            </div>
+          </div>
+          <div class="report-btn"><a href="/reports/${userId}">Report</a></div>
+        </div>
+        <div class="user-today-info">
+          <table>
+            <tr>
+              <td>Entry :</td>
+              <td>${todayReportDetails.start}</td>
+            </tr>
+            <tr>
+              <td>Today Total Work : </td>
+              <td>${todayReportDetails.todayTotal} hr</td>
+            </tr>
+            <tr>
+              <td>Weekly Workday :</td>
+              <td>${weekReportDetails.totalWorkingDays}/${weekReportDetails.fixedWorkdays} days</td>
+            </tr>
+            <tr>
+              <td>Weekly Work :</td>
+              <td>${weekReportDetails.workingTotalHr}/${weekReportDetails.fixedTotalHr} hr</td>
+            </tr>
+            <tr>
+              <td>Late Count in Week :</td>
+              <td>${lateCountThisWeek} days</td>
+            </tr>
+
+          </table>
+        </div>
+        <div class="user-work-details">
+          <div class="working-user">
+            <div class="card-header">
+              <h2>Today Details</h2>
+            </div>
+
+            <table>
+              <thead>
+                <tr>
+                  <td>Project</td>
+                  <td>Details</td>
+                  <td>Start</td>
+                  <td>End</td>
+                  <td>total</td>
+                </tr>
+              </thead>
+              <tbody>
+                ${todayWorkList.map(tw=>
+                  `<tr>
+                  <td>${tw.project_name}</td>
+                  <td>${tw.work_details}</td>
+                  <td>${tw.start}</td>
+                  <td>${tw.end}</td>
+                  <td>${tw.total}</td>
+                </tr>`
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>`
+        container.innerHTML = bodyData
+        userDetailsModal.style.display = 'block'
+  })
+ }
+  userDetailsModalClose.addEventListener('click',()=>{
+    userDetailsModal.style.display = 'none'
+
+  })
+  </script>
 
 <script src="<%=baseUrl%>/js/dashboard.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js"></script>
-
-<script src="<%=baseUrl%>/js/chart.js"></script>
-
+<script src="<%=baseUrl%>/js/myChart.js"></script>
 <%- include("../partials/footer"); -%>
