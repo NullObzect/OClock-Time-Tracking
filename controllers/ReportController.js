@@ -20,6 +20,8 @@ const ReportController = {
       if (req.params.id) {
         userId = req.params.id;
         isUserId = userId;
+      } else if (req.params.api) {
+        userId = req.params.api;
       } else {
         userId = user.id;
       }
@@ -222,32 +224,61 @@ const ReportController = {
         /* ======================================================== */
         /* ==========FIXME:  report for this year  END ========== */
         /* ======================================================== */
+        if (req.params.api) {
+          res.json({
+            platformUser,
+            userInfo,
+            todayReportDetails,
+            weekReportDetails,
+            monthReportDetails,
+            yearReportDetails,
+            lastSevenDaysReports,
+            avgStartTime,
+            avgEndTime,
+            weekHr,
+            monthHr,
+            checkUserReportEmptyOrNot,
+            lateCountThisWeek,
+            lateCountThisMonth,
+            lateCountThisYear,
 
-        res.render('pages/reports', {
-          platformUser,
-          userInfo,
-          todayReportDetails,
-          weekReportDetails,
-          monthReportDetails,
-          yearReportDetails,
-          lastSevenDaysReports,
-          avgStartTime,
-          avgEndTime,
-          weekHr,
-          monthHr,
-          checkUserReportEmptyOrNot,
-          lateCountThisWeek,
-          lateCountThisMonth,
-          lateCountThisYear,
+          })
+        } else {
+          res.render('pages/reports', {
+            platformUser,
+            userInfo,
+            todayReportDetails,
+            weekReportDetails,
+            monthReportDetails,
+            yearReportDetails,
+            lastSevenDaysReports,
+            avgStartTime,
+            avgEndTime,
+            weekHr,
+            monthHr,
+            checkUserReportEmptyOrNot,
+            lateCountThisWeek,
+            lateCountThisMonth,
+            lateCountThisYear,
 
-        });
+          })
+        }
       } else if (checkUserReportEmptyOrNot.length === 0) {
-        res.render('pages/reports', {
-          platformUser,
-          userInfo,
-          checkUserReportEmptyOrNot,
+        if (req.params.api) {
+          res.json({
+            platformUser,
+            userInfo,
+            checkUserReportEmptyOrNot,
 
-        });
+          });
+        } else {
+          res.render('pages/reports', {
+            platformUser,
+            userInfo,
+            checkUserReportEmptyOrNot,
+
+          });
+        }
       }
     } catch (err) {
       console.log('====>Error form ReportController/ userReport', err);
