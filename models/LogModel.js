@@ -168,6 +168,10 @@ const LogModel = {
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
-
+  todayEmployeesRecord: async () => {
+    const todayEmployeesRecord = 'SELECT U.user_name as name, U.avatar avatar,U.gender,U.user_role as userRole, L.user_id AS userId, Date_Format(L.create_at,\'%Y-%m-%d\') AS curDate, TIME_FORMAT(L.start, \'%h:%i %p\') minStartTime,TIME_FORMAT(L.end, \'%h:%i %p\') endTime, A.work_details   FROM log  AS L JOIN  attendance   AS A  ON A.user_id = L.user_id JOIN  users AS U ON L.user_id = U.id WHERE DATE(L.create_at) = DATE(NOW()) AND L.end = A.end AND L.user_id = A.user_id'
+    const [rows] = await dbConnect.promise().execute(todayEmployeesRecord)
+    return rows;
+  },
 }
 module.exports = LogModel
