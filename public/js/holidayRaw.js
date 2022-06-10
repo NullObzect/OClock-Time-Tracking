@@ -1,3 +1,5 @@
+/* eslint-disable no-return-await */
+/* eslint-disable no-await-in-loop */
 import {
   aJAXPostRequest, dateDiff
 } from './halperRaw.js';
@@ -163,6 +165,4 @@ function dateRange(event) {
  */
   // add action code here
 }
-console.log('asdfasdfjlk', dateRange());
 
-console.log('end of script file');
