@@ -1,7 +1,9 @@
+/* eslint-disable no-await-in-loop */
 /* eslint-disable max-len */
+
 const AttendanceModel = require('../models/AttendanceModel');
 const OptionsModel = require('../models/OptionsModel');
-const { stringToNumber, time12HrTo24Hr } = require('../utilities/formater')
+const { stringToNumber, time12HrTo24Hr, mySetTimeOut } = require('../utilities/formater')
 
 const UserModel = require('../models/UserModel');
 // const { timeToHour } = require('../utilities/formater')
@@ -122,76 +124,90 @@ const AttendanceController = {
       console.log('====>Error form AttendanceController', err);
     }
   },
+
   attendanceEntryOrExitsAPI: async (req, res) => {
-    const { fingerId, time } = req.body
-    const user = await UserModel.userFindByFingerId(fingerId)
-    const [{ offDayValues }] = await OptionsModel.getOffDaysValue();
-    const timeStamp = JSON.parse(JSON.stringify(`${time}`))
+    const data = req.body
+    const [{ inTime }] = await AttendanceModel.getInTime()
+    const [{ outTime }] = await AttendanceModel.getOutTime()
+    const objectLength = Object.keys(data).length;
 
-    try {
-      if (user.length > 0) {
-        const fingeIdArray = []
-        user.map((u) => {
-          const { fingerID } = u
-          const fingeId = fingerID.split(',')
-          fingeIdArray.push(fingeId)
-        })
-        const index = fingeIdArray.findIndex((arr) => arr.includes(fingerId))
-        const person = user[index]
-        const userID = person.id
+    for (let i = 0; i < objectLength; i += 1) {
+      setTimeout(async () => {
+        const { finger_id: fingerId, time } = data[i];
+        console.log({ fingerId, time });
+        const user = await UserModel.userFindByFingerId(fingerId)
+        const [{ offDayValues }] = await OptionsModel.getOffDaysValue();
+        const timeStamp = JSON.parse(JSON.stringify(`${time}`))
 
-        const isId = await AttendanceModel.getCurrentDateUserIdInAttendance(userID);
-        const [{ inTime }] = await AttendanceModel.getInTime()
-        const [{ outTime }] = await AttendanceModel.getOutTime()
+        try {
+          if (user.length > 0) {
+            const fingeIdArray = []
+            user.map((u) => {
+              const { fingerID } = u
+              const fingeId = fingerID.split(',')
+              fingeIdArray.push(fingeId)
+            })
+            const index = fingeIdArray.findIndex((arr) => arr.includes(fingerId.toString()))
+            const person = user[index]
+            const userID = person.id
 
-        // 1st condition for check user is present or not
-        if (isId === undefined || isId === null) {
-          if (time === undefined) {
-            await AttendanceModel.setAttendanceStart(userID, inTime, outTime, 0, 'Entry')
-            res.json('success')
-          } else {
-            await AttendanceModel.setAttendanceStartForAPI(userID, inTime, outTime, 0, 'Entry', timeStamp)
-            res.json('success')
-          }
+            const isId = await AttendanceModel.getCurrentDateUserIdInAttendanceForAPI(userID, timeStamp);
+            const getCurDateAttendanceIdWithOutTime = await AttendanceModel.getCurrentDateUserIdInAttendanceWithOutTimeForAPI(userID);
 
-          const isIdInLog = await AttendanceModel.getCurrentDateUserId(userID);
-          if (isIdInLog === undefined) {
-            await AttendanceModel.insertLog(stringToNumber(offDayValues), userID)
-            res.json('success')
-          }
-        } else if (isId !== undefined || isId !== null) {
-          const { endTimeIsNull } = await AttendanceModel.isAttendanceEndTimeNull(userID)
+            /* =======  FIXME: time is null start ========= */
 
-          if (endTimeIsNull === 1) {
-            if (time === undefined) {
-              await AttendanceModel.setAttendanceEnd(userID)
-              await AttendanceModel.setLogEndForAPI(userID)
+            if (time === undefined || time === null) {
+              if (getCurDateAttendanceIdWithOutTime === undefined) {
+                await AttendanceModel.setAttendanceStart(userID, inTime, outTime, 0, 'Entry')
+                await AttendanceModel.insertLog(stringToNumber(offDayValues), userID)
+                res.json('success')
+              } else if (getCurDateAttendanceIdWithOutTime !== undefined) {
+                const { endTimeIsNullWithOutTime } = await AttendanceModel.isAttendanceEndTimeNullAPIWithOutTime(userID)
 
-              res.json('success')
-            } else {
-              await AttendanceModel.setAttendanceEndTimeForAPI(userID, timeStamp)
-              await AttendanceModel.updateLogEndTimeOrCurTime(timeStamp, userID)
-
-              res.json('success')
+                if (endTimeIsNullWithOutTime === 1) {
+                  await AttendanceModel.setAttendanceEnd(userID)
+                  await AttendanceModel.setLogEndForAPI(userID)
+                  const isWorkTime = await AttendanceModel.getCurrentDateWorkTime(userID)
+                  const { totalWorkTime } = JSON.parse(JSON.stringify(isWorkTime))
+                  await AttendanceModel.updateLog(userID)
+                  await AttendanceModel.updateLogTotalWorkTime(userID, totalWorkTime)
+                } else if (endTimeIsNullWithOutTime === 0) {
+                  await AttendanceModel.setAttendanceStart(userID, inTime, outTime, 0, 'Entry')
+                }
+                res.json('success')
+              }
             }
-            const isWorkTime = await AttendanceModel.getCurrentDateWorkTime(userID)
-            const { totalWorkTime } = JSON.parse(JSON.stringify(isWorkTime))
-            await AttendanceModel.updateLogTotalWorkTime(userID, totalWorkTime)
-          } else if (endTimeIsNull === 0) {
-            if (time === undefined) {
-              await AttendanceModel.setAttendanceStart(userID, inTime, outTime, 0, 'Entry')
-              res.json('success')
-            } else {
+            /* ========= FIXME: time is null end ====== */
+
+            /* =========  TODO: this block work for required time ======= */
+            if (isId === undefined && time !== undefined) {
               await AttendanceModel.setAttendanceStartForAPI(userID, inTime, outTime, 0, 'Entry', timeStamp)
+              const isIdInLog = await AttendanceModel.getCurrentDateUserIdForAPI(userID, timeStamp);
+              if (isIdInLog === undefined) {
+                await AttendanceModel.insertLog(stringToNumber(offDayValues), userID)
+                await AttendanceModel.setLogStartTimeForAPI(userID, timeStamp)
+              }
+              res.json('success')
+            } else if (isId !== undefined && time !== undefined) {
+              const { endTimeIsNull } = await AttendanceModel.isAttendanceEndTimeNullAPI(userID, timeStamp)
+              if (endTimeIsNull === 1) {
+                await AttendanceModel.setAttendanceEndTimeForAPI(userID, timeStamp)
+                await AttendanceModel.updateLogEndTimeForAPI(timeStamp, userID)
+                const isWorkTime = await AttendanceModel.calculateTotalWorkTimeAPI(userID, timeStamp)
+                const { totalWorkTime } = JSON.parse(JSON.stringify(isWorkTime))
+                await AttendanceModel.updateLogTotalWorkTimeAPI(userID, totalWorkTime, timeStamp)
+              } else if (endTimeIsNull === 0) {
+                await AttendanceModel.setAttendanceStartForAPI(userID, inTime, outTime, 0, 'Entry', timeStamp)
+              }
               res.json('success')
             }
+          } else {
+            res.json('User Not Found')
           }
+        } catch (error) {
+          console.log(error)
         }
-      } else {
-        res.json('User Not Found')
-      }
-    } catch (error) {
-      console.log(error)
+      }, 1000 * i)
     }
   },
 
@@ -280,5 +296,6 @@ const AttendanceController = {
   },
 
 }
+
 
 module.exports = AttendanceController
