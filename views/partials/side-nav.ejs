@@ -33,6 +33,7 @@
     cursor: pointer;
     color: #fff;
   }
+
 </style>
 
 <div class="sidebar">
@@ -71,7 +72,7 @@
       </a>
     </li>
     <li id="options-btn">
-      <a href="#">
+      <a href="/options" >
         <%- include("./icons/options-svg.ejs"); -%>
         <span class="link-name"> Options </span>
       </a>
@@ -127,6 +128,9 @@
   const navListLi = navList.querySelectorAll("li");
   const subOptions = document.querySelector(".sub-options");
   const navLi = document.querySelectorAll(".nav-li");
+  optionsBtn.addEventListener('click',(e)=>{
+    e.preventDefault()
+  })
   optionsBtn.addEventListener("mouseover", (e) => {
     subOptions.classList.remove('hidden')
   });
