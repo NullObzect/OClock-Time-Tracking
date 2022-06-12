@@ -3,14 +3,14 @@ const dbConnect = require('../config/database');
 
 const AttendanceModel = {
   todayStartTime: async (id) => {
-    const getStartSql = 'SELECT  Time_format(MIN(Time(start)),"%h:%i% %p") as start FROM attendance  WHERE user_id = ? and Date(create_at) = Date(CURRENT_DATE);'
+    const getStartSql = 'SELECT  Time_format(MIN(Time(start)),"%h:%i% %p") as start FROM attendance  WHERE user_id = ? and Date(start) = Date(CURRENT_DATE);'
     const [rows] = await dbConnect.promise().execute(getStartSql, [id]);
     console.log('start modal', rows)
     return rows;
   },
 
   todayEndTime: async (id) => {
-    const getEndSql = 'SELECT Time_format(MAX(Time(end)),"%h:%i% %p") as end FROM attendance WHERE user_id = ? and Date(create_at)= Date(CURRENT_DATE)';
+    const getEndSql = 'SELECT Time_format(MAX(Time(end)),"%h:%i% %p") as end FROM attendance WHERE user_id = ? and Date(start)= Date(CURRENT_DATE)';
     const [rows] = await dbConnect.promise().execute(getEndSql, [id]);
     return rows;
   },
@@ -48,14 +48,19 @@ const AttendanceModel = {
   },
 
   getCurrentDateUserId: async (id) => {
-    const query = `SELECT user_id as isUserId FROM log WHERE DATE(create_at) = DATE(CURRENT_DATE) AND user_id = ${id}`
+    const query = `SELECT user_id as isUserId FROM log WHERE DATE(start) = DATE(CURRENT_DATE) AND user_id = ${id}`
     const [rows] = await dbConnect.promise().execute(query);
     return rows[0];
   },
   isExistCurrentDateUserId: async (date, id) => {
-    const query = `SELECT user_id AS isExist FROM log WHERE DATE(create_at) = '${date}' AND user_id  = ${id}`
+    const query = `SELECT user_id AS isExist FROM log WHERE DATE(start) = DATE('${date}') AND user_id  = ${id}`
     const [rows] = await dbConnect.promise().execute(query);
     return rows;
+  },
+  isExistCurrentDateUserIdForManualInput: async (date, id) => {
+    const query = `SELECT user_id AS isExist FROM log WHERE DATE(start) = DATE('${date}') AND user_id  = ${id}`
+    const [rows] = await dbConnect.promise().execute(query);
+    return rows[0];
   },
 
   setAttendanceStart: async (id, inTime, outTime, projectId, workDetails) => {
@@ -74,6 +79,18 @@ const AttendanceModel = {
       const query = 'INSERT INTO attendance(user_id, in_time, out_time,project_id, work_details, start) VALUES (?,?,?,?,?,?)'
 
       const values = [id, inTime, outTime, projectId, workDetails, start]
+      const [rows] = await dbConnect.promise().execute(query, values);
+      return rows;
+    } catch (err) {
+      console.log('====>Error form AttendanceModel/setAttendance', err);
+      return err;
+    }
+  },
+  setAttendanceForManualInput: async (id, inTime, outTime, projectId, workDetails, start, end) => {
+    try {
+      const query = 'INSERT INTO attendance(user_id, in_time, out_time,project_id, work_details, start, end) VALUES (?,?,?,?,?,?,?)'
+
+      const values = [id, inTime, outTime, projectId, workDetails, start, end]
       const [rows] = await dbConnect.promise().execute(query, values);
       return rows;
     } catch (err) {
@@ -103,21 +120,9 @@ const AttendanceModel = {
     }
   },
 
-  setManualAttendanceStart: async (id, start) => {
+  setManualAttendanceStartForLog: async (id, start) => {
     try {
-      const query = `UPDATE attendance SET start = '${start}' WHERE user_id = ${id}`
-
-      const [rows] = await dbConnect.promise().execute(query);
-      return rows.affectedRows;
-    } catch (err) {
-      console.log('====>Error form AttendanceModel/setAttendance', err);
-      return err;
-    }
-  },
-
-  setManualAttendanceEnd: async (id, end) => {
-    try {
-      const query = `UPDATE attendance SET end = '${end}' WHERE user_id = ${id}`
+      const query = `UPDATE log AS L  SET L.start = '${start}' WHERE DATE(L.create_at) = CURRENT_DATE AND L.user_id = ${id}`
 
       const [rows] = await dbConnect.promise().execute(query);
       return rows.affectedRows;
@@ -137,17 +142,6 @@ const AttendanceModel = {
       return err;
     }
   },
-  setManualAttendanceStartAndEnd: async (id, start, end) => {
-    try {
-      const query = `UPDATE attendance SET start = '${start}', end = '${end}' WHERE user_id = ${id}`
-
-      const [rows] = await dbConnect.promise().execute(query);
-      return rows.affectedRows;
-    } catch (err) {
-      console.log('====>Error form AttendanceModel/setAttendance', err);
-      return err;
-    }
-  },
   /*
   insertLog: async (offDayValues, userId) => {
     const getRunStartSql = `INSERT INTO log(user_id, in_time, out_time, work_hour, start, end, work_time, day_type) SELECT   user_id AS uId, in_time AS inTime, out_time AS outTime, O.option_value AS workHour,  TIME(MIN(A.start)) AS startTime, NULL,  TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) AS totalWorkTime,CASE WHEN WEEKDAY(CURRENT_DATE) IN (${offDayValues})   THEN 'offday' WHEN  (SELECT COUNT(H.title) FROM holidays AS H WHERE DATE(CURRENT_DATE) BETWEEN H.start AND  H.end) > 0 THEN 'holiday' WHEN (SELECT COUNT(EL.type_id) FROM employee_leaves AS EL WHERE DATE(CURRENT_DATE) BETWEEN EL.start AND EL.end AND A.user_id = EL.user_id) > 0 THEN 'leave' ELSE 'regular' END	dayType FROM attendance AS A JOIN options AS O ON o.option_title = 'fixed time' JOIN options AS OP ON OP.option_title = 'off-day' WHERE DATE(A.create_at) = DATE(CURRENT_DATE) AND user_id = ${userId}`
@@ -159,12 +153,13 @@ const AttendanceModel = {
     return rows;
   }, */
   insertLog: async (offDayValues, userId) => {
-    const getRunStartSql = `INSERT INTO log(user_id, in_time, out_time, work_hour, start, end, work_time, day_type) SELECT   user_id AS uId, in_time AS inTime, out_time AS outTime, O.option_value AS workHour,  TIME(MIN(A.start)) AS startTime, NULL,  TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) AS totalWorkTime,CASE WHEN WEEKDAY(A.start) IN (${offDayValues})   THEN 'offday' WHEN  (SELECT COUNT(H.title) FROM holidays AS H WHERE DATE(A.start) BETWEEN H.start AND  H.end) > 0 THEN 'holiday' WHEN (SELECT COUNT(EL.type_id) FROM employee_leaves AS EL WHERE DATE(A.start) BETWEEN EL.start AND EL.end AND A.user_id = EL.user_id) > 0 THEN 'leave' ELSE 'regular' END	dayType FROM attendance AS A JOIN options AS O ON o.option_title = 'fixed time' JOIN options AS OP ON OP.option_title = 'off-day' WHERE DATE(A.create_at) = DATE(CURRENT_DATE) AND user_id = ${userId}`
-
-    // console.log({ getRunStartSql });
-
+    const getRunStartSql = `INSERT INTO log(user_id, in_time, out_time, work_hour, start, end, work_time, day_type) SELECT   user_id AS uId, in_time AS inTime, out_time AS outTime, O.option_value AS workHour, MIN(A.start) AS startTime, NULL,  TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) AS totalWorkTime,CASE WHEN WEEKDAY(A.start) IN (${offDayValues})   THEN 'offday' WHEN  (SELECT COUNT(H.title) FROM holidays AS H WHERE DATE(A.start) BETWEEN H.start AND  H.end) > 0 THEN 'holiday' WHEN (SELECT COUNT(EL.type_id) FROM employee_leaves AS EL WHERE DATE(A.start) BETWEEN EL.start AND EL.end AND A.user_id = EL.user_id) > 0 THEN 'leave' ELSE 'regular' END	dayType FROM attendance AS A JOIN options AS O ON o.option_title = 'fixed time' JOIN options AS OP ON OP.option_title = 'off-day' WHERE DATE(A.create_at) = DATE(CURRENT_DATE) AND user_id = ${userId}`
     const [rows] = await dbConnect.promise().execute(getRunStartSql);
-
+    return rows;
+  },
+  insertLogForManual: async (offDayValues, date, userId) => {
+    const getRunStartSql = `INSERT INTO log(user_id, in_time, out_time, work_hour, start, end, work_time, day_type) SELECT  user_id AS uId, in_time AS inTime, out_time AS outTime, O.option_value AS workHour, A.start AS startTime, NULL,  TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) AS totalWorkTime,CASE WHEN WEEKDAY(A.start) IN (${offDayValues})   THEN 'offday' WHEN  (SELECT COUNT(H.title) FROM holidays AS H WHERE DATE(A.start) BETWEEN H.start AND  H.end) > 0 THEN 'holiday' WHEN (SELECT COUNT(EL.type_id) FROM employee_leaves AS EL WHERE DATE(A.start) BETWEEN EL.start AND EL.end AND A.user_id = EL.user_id) > 0 THEN 'leave' ELSE 'regular' END	dayType FROM attendance AS A JOIN options AS O ON o.option_title = 'fixed time' JOIN options AS OP ON OP.option_title = 'off-day' WHERE DATE(A.start) = DATE('${date}') AND user_id = ${userId}`
+    const [rows] = await dbConnect.promise().execute(getRunStartSql);
     return rows;
   },
 
@@ -181,32 +176,33 @@ const AttendanceModel = {
     return rows;
   },
   updateLogForManualInput: async (userId, end, totalTime) => {
-    const getRunStartSql = `UPDATE log AS L SET L.end = '${end}', L.work_time = '${totalTime}' WHERE DATE(L.create_at) = DATE(CURRENT_DATE)  AND  user_id = ${userId}`
+    const getRunStartSql = `UPDATE log AS L SET L.end = '${end}', L.work_time = '${totalTime}' WHERE DATE(L.start) = DATE('${end}')   AND  L.user_id = ${userId}`
     const value = [userId]
     const [rows] = await dbConnect.promise().execute(getRunStartSql, value);
     return rows;
   },
-  updateEndTime: async (userId, endTime) => {
-    const getRunStartSql = `UPDATE  attendance SET  end = '${endTime}' WHERE user_id = ${userId}  AND end IS NULL`
+  updateEndTime: async (userId, date, endTime) => {
+    const getRunStartSql = `UPDATE  attendance SET  end = '${endTime}' WHERE DATE(start) = DATE('${date}') AND user_id = ${userId}  AND end IS NULL`
     const [rows] = await dbConnect.promise().execute(getRunStartSql);
     return rows;
   },
   updateEndTimeForLog: async (userId, endTime) => {
-    const getRunStartSql = `UPDATE  log SET  end = '${endTime}' WHERE user_id = ${userId}  AND DATE(create_at) = DATE(start)`
+    const getRunStartSql = `UPDATE  log SET  end = '${endTime}' WHERE user_id = ${userId}  AND DATE('${endTime}') = DATE(start)`
     const [rows] = await dbConnect.promise().execute(getRunStartSql);
     return rows;
   },
   getCurrentDateWorkTime: async (userId) => {
-    const query = `SELECT TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) AS totalWorkTime FROM attendance WHERE  user_id = ${userId} AND DATE(create_at) = DATE(CURRENT_DATE)`
+    const query = `SELECT TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) AS totalWorkTime FROM attendance WHERE  user_id = ${userId} AND DATE() = DATE(CURRENT_DATE)`
     const value = [userId]
     const [rows] = await dbConnect.promise().execute(query, value);
     return rows[0];
   },
   getUpdateEndTimeWorkTime: async (userId, endDate) => {
-    const query = `SELECT TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) AS totalWorkTime FROM attendance WHERE  user_id = ${userId} AND DATE(create_at) = '${endDate}'`
+    const query = `SELECT TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) AS totalWorkTime FROM attendance WHERE  DATE(start) = DATE('${endDate}')  AND user_id = ${userId}`
     const [rows] = await dbConnect.promise().execute(query);
     return rows[0];
   },
+
   updateLogTotalWorkTime: async (userId, totalWorkTime) => {
     console.log('form model', { totalWorkTime })
     const query = `UPDATE log AS L SET L.work_time = '${totalWorkTime}'  WHERE DATE(L.create_at) = DATE(CURRENT_DATE)  AND  user_id = ${userId}`
@@ -214,7 +210,7 @@ const AttendanceModel = {
     return rows;
   },
   setLogTotalWorkTimeAdmin: async (userId, totalWorkTime, endDate) => {
-    const query = `UPDATE log AS L SET L.work_time = '${totalWorkTime}'  WHERE DATE(L.create_at) = '${endDate}'  AND  user_id = ${userId}`
+    const query = `UPDATE log AS L SET L.work_time = '${totalWorkTime}'  WHERE DATE(L.start) = '${endDate}'  AND  user_id = ${userId}`
     const [rows] = await dbConnect.promise().execute(query);
     return rows;
   },
@@ -282,7 +278,7 @@ const AttendanceModel = {
     return rows;
   },
   todayTotal: async (userId) => {
-    const todayTotalSql = 'SELECT TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(end)))), SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(start))))) as todayTotal, TIME_FORMAT(SUBTIME(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))),SEC_TO_TIME(((O.option_value) * COUNT(DISTINCT DATE(A.create_at)) * 60) *60)),"%H:%i")   AS totalExtrOrLess FROM  attendance AS A JOIN options AS o ON o.option_title = "fixed time" WHERE user_id = ? and end IS NOT NULL and Date(A.create_at)= Date(CURRENT_DATE)'
+    const todayTotalSql = 'SELECT TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(end)))), SEC_TO_TIME(SUM(TIME_TO_SEC(TIME(start))))) as todayTotal, TIME_FORMAT(SUBTIME(TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))),SEC_TO_TIME(((O.option_value) * COUNT(DISTINCT DATE(A.create_at)) * 60) *60)),"%H:%i")   AS totalExtrOrLess FROM  attendance AS A JOIN options AS o ON o.option_title = "fixed time" WHERE user_id = ? and end IS NOT NULL and Date(A.start)= Date(CURRENT_DATE)'
     const value = [userId]
     const [rows] = await dbConnect.promise().execute(todayTotalSql, value);
     return rows;
@@ -344,29 +340,30 @@ const AttendanceModel = {
     return rows
   },
   // if end time is null
+
   getEndTimeIsNull: async () => {
-    const query = "SELECT TIME_FORMAT(L.start, '%h:%i %p') AS minStartTime, A.user_id AS userId ,A.work_details, DATE_FORMAT(A.create_at, '%Y-%m-%d') AS curDate,U.user_name AS name, U.avatar AS avatar, TIME_FORMAT(SEC_TO_TIME(SUM(TIME_TO_SEC(A.start))),'%h:%i %p') AS startTime,  A.end AS endTime,U.user_role AS userRole,u.gender  FROM attendance AS A JOIN users AS U ON U.id IN( A.user_id )   JOIN log AS L ON A.user_id = L.user_id AND DATE(L.create_at) = DATE(A.create_at)  WHERE A.end IS NULL GROUP BY A.user_id"
+    const query = "SELECT TIME_FORMAT(L.start, '%h:%i %p') AS minStartTime, A.user_id AS userId ,A.work_details, DATE_FORMAT(A.start, '%Y-%m-%d') AS curDate,U.user_name AS name, U.avatar AS avatar, A.end AS endTime,U.user_role AS userRole,u.gender  FROM attendance AS A JOIN users AS U ON U.id IN( A.user_id )   JOIN log AS L ON A.user_id = L.user_id AND DATE(L.start) = DATE(A.start)  WHERE A.end IS NULL "
     const [rows] = await dbConnect.promise().execute(query)
     return rows
   },
-  getMinStartTime: async (userId) => {
-    const query = `SELECT MAX(id) as aId FROM attendance WHERE  DATE(start) = DATE(create_at) AND user_id = ${userId}`
+  getMinStartTime: async (userId, date) => {
+    const query = `SELECT MAX(id) as aId FROM attendance WHERE  DATE(start) = DATE('${date}') AND user_id = ${userId}`
     const [rows] = await dbConnect.promise().execute(query)
     return rows[0]
   },
-  setStartTime: async (id, startTime) => {
-    const query = `UPDATE attendance SET start = '${startTime}' WHERE id = ${id}`
+  setStartTime: async (id, date, startTime) => {
+    const query = `UPDATE attendance SET start = '${startTime}' WHERE DATE(start) = DATE('${date}') AND id = ${id}`
     console.log(query);
     const [rows] = await dbConnect.promise().execute(query)
     return rows
   },
-  setStartTimeForLog: async (id, startTime) => {
-    const query = `UPDATE log SET start = '${startTime}' WHERE id = ${id}`
+  setStartTimeForLog: async (id, date, startTime) => {
+    const query = `UPDATE log SET start = '${startTime}' WHERE Date(start) = DATE('${date}') AND id = ${id}`
     const [rows] = await dbConnect.promise().execute(query)
     return rows
   },
-  getUpdateLogStartTimeId: async (userId) => {
-    const query = `SELECT MAX(id) AS logUpdateId FROM log WHERE  DATE(create_at) = DATE(start) AND user_id = ${userId}`
+  getUpdateLogStartTimeId: async (userId, date) => {
+    const query = `SELECT MAX(id) AS logUpdateId FROM log WHERE DATE(start) = DATE('${date}') AND user_id = ${userId}`
     const [rows] = await dbConnect.promise().execute(query)
     return rows[0]
   },
