@@ -234,7 +234,19 @@ const AttendanceController = {
       const getLocalCurTime = Date().slice(16, 21);
       const getLocalCurTimeStamp = JSON.parse(JSON.stringify(`${date} ${getLocalCurTime}`))
       // for manual entry
-      if (startTime === undefined || startTime === '') {
+
+      if (startTime !== '' && startTime !== undefined && endTime !== '' && endTime !== undefined) {
+        await AttendanceModel.setAttendanceForManualInput(userId, time12HrTo24Hr(getInTime) || inTime, time12HrTo24Hr(getOutTime) || outTime, 0, 'Manual Entry', timeStampForStart, timeStampForEnd)
+        const isUserId = await AttendanceModel.isExistCurrentDateUserIdForManualInput(date, userId);
+
+        if (isUserId === undefined) {
+          const isWorkTime = await AttendanceModel.getUpdateEndTimeWorkTime(userId, date)
+          const { totalWorkTime } = JSON.parse(JSON.stringify(isWorkTime))
+          await AttendanceModel.insertLogForManual(stringToNumber(offDayValues), date, userId)
+          await AttendanceModel.updateLogForManualInput(userId, timeStampForEnd, totalWorkTime)
+        }
+        res.json('success')
+      } else if (startTime === undefined || startTime === '') {
         await AttendanceModel.setAttendanceStartForAPI(userId, time12HrTo24Hr(getInTime) || inTime, time12HrTo24Hr(getOutTime) || outTime, 0, 'Manual Entry', getLocalCurTimeStamp)
 
         const isUserId = await AttendanceModel.isExistCurrentDateUserIdForManualInput(date, userId);
@@ -248,17 +260,6 @@ const AttendanceController = {
         const isUserId = await AttendanceModel.isExistCurrentDateUserIdForManualInput(date, userId);
         if (isUserId === undefined) {
           await AttendanceModel.insertLogForManual(stringToNumber(offDayValues), date, userId)
-        }
-        res.json('success')
-      } else if (startTime !== '' && endTime !== '') {
-        await AttendanceModel.setAttendanceForManualInput(userId, time12HrTo24Hr(getInTime) || inTime, time12HrTo24Hr(getOutTime) || outTime, 0, 'Manual Entry', timeStampForStart, timeStampForEnd)
-        const isUserId = await AttendanceModel.isExistCurrentDateUserIdForManualInput(date, userId);
-
-        if (isUserId === undefined) {
-          const isWorkTime = await AttendanceModel.getUpdateEndTimeWorkTime(userId, date)
-          const { totalWorkTime } = JSON.parse(JSON.stringify(isWorkTime))
-          await AttendanceModel.insertLogForManual(stringToNumber(offDayValues), date, userId)
-          await AttendanceModel.updateLogForManualInput(userId, timeStampForEnd, totalWorkTime)
         }
         res.json('success')
       }
