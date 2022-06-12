@@ -25,7 +25,12 @@
           <label for="projectDetails">
             Select Start Date
             <div class="">
-              <input type="date" name="date" oninput="manualDate(event);" />
+              <input
+                type="date"
+                name="date"
+                class="manual-date"
+                oninput="manualDate(event);"
+              />
               <p class="error start-error"></p>
             </div>
           </label>
@@ -34,7 +39,7 @@
             <div class="time-picker">
               <input
                 type="text"
-                class="timepicker-ui-input"
+                class="timepicker-ui-input manual-start-time"
                 placeholder="00:00"
                 name="startTime"
               />
@@ -46,7 +51,7 @@
             <div class="time-picker">
               <input
                 type="text"
-                class="timepicker-ui-input"
+                class="timepicker-ui-input manual-end-time"
                 placeholder="00:00"
                 name="endTime"
               />
@@ -54,7 +59,7 @@
             </div>
           </label>
           <label for="end">
-            Select In Time
+            In Time
             <div class="time-picker">
               <input
                 type="text"
@@ -67,7 +72,7 @@
             </div>
           </label>
           <label for="end">
-            Select Out Time
+            Out Time
             <div class="time-picker">
               <input
                 type="text"
@@ -94,6 +99,7 @@
 
   const userId = document.querySelector("#userId");
   const isExist = document.querySelector(".isExist-attdance");
+
   const manualDate = (event) => {
     const date = event.target.value;
 
@@ -103,7 +109,6 @@
       .then((res) => res.json())
 
       .then((data) => {
-        console.log(data.length);
         if (data.length > 0) {
           isExist.textContent = "Attendance Already Exist";
           isExist.style.color = "red";
