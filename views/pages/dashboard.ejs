@@ -276,7 +276,7 @@
             <span id="role"><%= user.userRole==='admin'? 'admin' : ''%> </span>
           </td>
           <td > <%= user.work_details %></td>
-          <td><input class="get-date" name="date" type="text" value=" <%= user.curDate %>"></td>
+          <td ><input class="get-date"  name="date"  type="text" disabled  value="<%= user.curDate %>"></td>
           <td class="time-picker"><input type="text" class="update-start-time-val timepicker-ui-input" name="startDate" value="<%= user.minStartTime %>"></td>
           <td class="user-end-time time-picker">  <input type="text" name="endTime" class="update-end-time-val timepicker-ui-input" value="<%= user.endTime %>"></td>
           <input type="hidden" name="userId" class="userId" value="<%= user.userId %>" />
