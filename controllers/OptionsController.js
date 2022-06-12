@@ -107,13 +107,12 @@ const OptionsController = {
         // }
       } if (regEx.test(optionValue)) { // for update fixed time
         const isUpdate = await OptionsModel.updateOptionValue(optionValue, optionId)
-        console.log('yes update fixed time');
 
-        // if (isUpdate.errno) {
-        //   res.send('Error')
-        // } else {
-        //   res.status(200).json('success')
-        // }
+      /*   if (isUpdate.errno) {
+          res.send('Error')
+        } else {
+          res.status(200).json('success')
+        } */
       }
 
       // when update option value
