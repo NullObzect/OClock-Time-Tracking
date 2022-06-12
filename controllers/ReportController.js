@@ -25,7 +25,7 @@ const ReportController = {
       } else {
         userId = user.id;
       }
-     
+
       const checkUserReportEmptyOrNot = await LogModel.isUserIdInLog(userId)
       const platformUser = await ProfileModel.userConnectionDetailsUniqueInfo(userId)
       const userInfo = await AttendanceModel.getEmployeeInfo(userId)
@@ -179,7 +179,8 @@ const ReportController = {
           isLowOrHighClassForHr(monthAvgExtraOrLess),
         )
 
-        const lateCountsMonth = await LogModel.lateCountThisMonth(userId)
+        const lateCountsMonth = await LogModel.lateCountThisMonth(userId, monthStartDate)
+
         const lateCountThisMonth = lateCount(lateCountsMonth)
 
         // console.log({ monthReportDetails });
@@ -218,7 +219,7 @@ const ReportController = {
           isLowOrHighClassForHr(yearAvgExtraOrLess),
 
         )
-        const lateCountsYear = await LogModel.lateCountThisYear(userId)
+        const lateCountsYear = await LogModel.lateCountThisYear(userId, yearStartDate)
         const lateCountThisYear = lateCount(lateCountsYear)
 
         /* ======================================================== */
@@ -398,11 +399,11 @@ const ReportController = {
 /* ======================================================== */
 
 function lateCount(lateCounts) {
-  let lateCount = 0;
+  let sum = 0;
   lateCounts.forEach((el) => {
-    lateCount += el.lateCount
+    sum += el.lateCount
   })
-  return lateCount
+  return sum
 }
 
 function chckTotalWorkTimeExtraOrLess(totalWorkTime) {

@@ -31,7 +31,7 @@ const LogModel = {
   },
   // late count time for weekly monthly
   lateCountThisMonth: async (userId, monthStartDate) => {
-    const query = `SELECT  CASE WHEN LEFT(TIME_FORMAT(TIMEDIFF(TIME(in_time) + TIME(O.option_value), TIME(start)), '%H:%i'), 1) = '-' THEN 1 ELSE 0 END  lateCount FROM log AS L JOIN options AS O ON O.option_title = 'tolerance-time'  WHERE  user_id = ${userId} AND DATE(L.start) BETWEEN  '${monthStartDate}' AND  DATE(CURRENT_DATE - 1)`
+    const query = `SELECT  CASE WHEN LEFT(TIME_FORMAT(TIMEDIFF(TIME(in_time) + TIME(O.option_value), TIME(start)), '%H:%i'), 1) = '-' THEN 1 ELSE 0 END  lateCount FROM log AS L JOIN options AS O ON O.option_title = 'tolerance-time'  WHERE  user_id = ${userId} AND DATE(L.start) BETWEEN  DATE('${monthStartDate}') AND  DATE(CURRENT_DATE - 1)`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
@@ -50,7 +50,7 @@ const LogModel = {
   },
   // late count time for  yearly
   lateCountThisYear: async (userId, yearStartDate) => {
-    const query = `SELECT  CASE WHEN LEFT(TIME_FORMAT(TIMEDIFF(TIME(in_time) + TIME(O.option_value), TIME(start)), '%H:%i'), 1) = '-' THEN 1 ELSE 0 END  lateCount FROM log AS L JOIN options AS O ON O.option_title = 'tolerance-time'  WHERE  user_id = ${userId} AND DATE(L.start) BETWEEN  '${yearStartDate}' AND  DATE(CURRENT_DATE - 1)`
+    const query = `SELECT  CASE WHEN LEFT(TIME_FORMAT(TIMEDIFF(TIME(in_time) + TIME(O.option_value), TIME(start)), '%H:%i'), 1) = '-' THEN 1 ELSE 0 END  lateCount FROM log AS L JOIN options AS O ON O.option_title = 'tolerance-time'  WHERE  user_id = ${userId} AND DATE(L.start) BETWEEN  DATE('${yearStartDate}') AND  DATE(CURRENT_DATE - 1)`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
