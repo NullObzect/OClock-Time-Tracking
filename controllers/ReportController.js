@@ -23,7 +23,7 @@ const ReportController = {
       } else {
         userId = user.id;
       }
-
+     
       const checkUserReportEmptyOrNot = await LogModel.isUserIdInLog(userId)
       const platformUser = await ProfileModel.userConnectionDetailsUniqueInfo(userId)
       const userInfo = await AttendanceModel.getEmployeeInfo(userId)
