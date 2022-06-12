@@ -20,9 +20,8 @@ module.exports = {
         defaultValue: Sequelize.literal('NOW()'),
       },
       update_at: {
-        allowNull: true,
         type: Sequelize.DATE,
-        defaultValue: null,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()'),
       },
 
     });
