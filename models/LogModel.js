@@ -2,6 +2,14 @@ const dbConnect = require('../config/database');
 
 const LogModel = {
 
+  todayInAndOutTimeExtraOrLess: async (id) => {
+    const query = `SELECT     CASE WHEN  (TIME_TO_SEC(in_time)   >  TIME_TO_SEC(start)) 
+    THEN TIME_FORMAT(TIMEDIFF(TIME(in_time), TIME(start)), '%H:%i')
+    WHEN  TIME(start)  BETWEEN TIME(in_time) AND  TIME(SEC_TO_TIME(TIME_TO_SEC(in_time)) + SEC_TO_TIME(TIME_TO_SEC(O.option_value))) THEN ''
+    ELSE TIME_FORMAT(TIMEDIFF(TIME( SEC_TO_TIME(TIME_TO_SEC(in_time)) + SEC_TO_TIME(TIME_TO_SEC(O.option_value))), TIME((start))), '%H:%i') END inTimeExtraOrLess, TIME_FORMAT(TIMEDIFF(TIME(work_hour), TIME(work_time)), '%H:%i') AS outTimeExtraOrLess FROM log AS L JOIN options AS O ON O.option_title = 'tolerance-time'  WHERE  user_id = ${id} AND DATE(L.start) =  CURRENT_DATE;`
+    const [rows] = await dbConnect.promise().execute(query);
+    return rows;
+  },
   countWorkdaysForWeek: async (userId, weekStartDate) => {
     const query = `SELECT CASE WHEN day_type = 'regular' THEN 1  ELSE 0 END  workdays FROM log  WHERE user_id = ${userId} AND DATE(start) BETWEEN   '${weekStartDate}' AND  DATE(CURRENT_DATE -1)`
     const [rows] = await dbConnect.promise().execute(query)
