@@ -72,6 +72,7 @@ const ReportController = {
         const today = await AttendanceModel.getToday(userId)
         const { todayTotal } = tTotal
         const breakTime = today.length
+
         const todayReportDetails = new TodayReportDetails(
           todayTotal,
           start,
