@@ -412,16 +412,20 @@
               <td>${todayReportDetails.start}</td>
             </tr>
             <tr>
+              <td>Exit :</td>
+              <td>${todayReportDetails.end}</td>
+            </tr>
+            <tr>
               <td>Today Total Work : </td>
-              <td>${todayReportDetails.todayTotal} hr</td>
+              <td>${todayReportDetails.todayTotal} hr <span class="${todayReportDetails.isLowOrHighClassForToday  }">${todayReportDetails.isTotalExtraOrLessHr  }</span></td>
             </tr>
             <tr>
               <td>Weekly Workday :</td>
-              <td>${weekReportDetails.totalWorkingDays}/${weekReportDetails.fixedWorkdays} days</td>
+              <td>${weekReportDetails.totalWorkingDays}/${weekReportDetails.fixedWorkdays} days <span class="${weekReportDetails.classLowOrHighForDay }">${ weekReportDetails.daysIsLowOrHigh }</span></td>
             </tr>
             <tr>
               <td>Weekly Work :</td>
-              <td>${weekReportDetails.workingTotalHr}/${weekReportDetails.fixedTotalHr} hr</td>
+              <td>${weekReportDetails.workingTotalHr}/${weekReportDetails.fixedTotalHr} hr  <span class="${weekReportDetails.classLowOrHighForHr || '' }">${weekReportDetails.isTotalExtraOrLessHr }</span></td>
             </tr>
             <tr>
               <td>Late Count in Week :</td>
