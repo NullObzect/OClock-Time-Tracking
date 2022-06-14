@@ -192,7 +192,7 @@ const AttendanceModel = {
     return rows;
   },
   getCurrentDateWorkTime: async (userId) => {
-    const query = `SELECT TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) AS totalWorkTime FROM attendance WHERE  user_id = ${userId} AND DATE() = DATE(CURRENT_DATE)`
+    const query = `SELECT TIMEDIFF(SEC_TO_TIME(SUM(TIME_TO_SEC(end))), SEC_TO_TIME(SUM(TIME_TO_SEC(start)))) AS totalWorkTime FROM attendance WHERE  user_id = ${userId} AND DATE(start) = DATE(CURRENT_DATE)`
     const value = [userId]
     const [rows] = await dbConnect.promise().execute(query, value);
     return rows[0];
