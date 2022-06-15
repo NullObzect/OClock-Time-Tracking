@@ -72,7 +72,10 @@ const ReportController = {
         const today = await AttendanceModel.getToday(userId)
         const { todayTotal } = tTotal
         const breakTime = today.length
-
+        const gettodayInAndOutTimeExtraOrLess = await LogModel.todayInAndOutTimeExtraOrLess(userId)
+        if (gettodayInAndOutTimeExtraOrLess.length === 0) {
+          gettodayInAndOutTimeExtraOrLess.push({ inTimeExtraOrLess: '', outTimeExtraOrLess: '' })
+        }
         const todayReportDetails = new TodayReportDetails(
           todayTotal,
           start,
@@ -80,6 +83,8 @@ const ReportController = {
           breakTime,
           todayExtraOrLessHr,
           todayExtraOrLessHr,
+          gettodayInAndOutTimeExtraOrLess[0].inTimeExtraOrLess || '',
+          gettodayInAndOutTimeExtraOrLess[0].outTimeExtraOrLess || '',
 
         )
         /* ======================================================== */
@@ -497,13 +502,15 @@ function ReportDetails(
   this.classLowOrHighForHr = classLowOrHighForHr;
 }
 
-function TodayReportDetails(todayTotal, start, end, breakTime, isTotalExtraOrLessHr, isLowOrHighClassForToday) {
+function TodayReportDetails(todayTotal, start, end, breakTime, isTotalExtraOrLessHr, isLowOrHighClassForToday, inTimeExtraOrLess, outTimeExtraOrLess) {
   this.todayTotal = workHourFormateForReport(todayTotal) || '0'
   this.start = start
   this.end = end
   this.breakTime = breakTime
   this.isTotalExtraOrLessHr = showWorkHrIsLowOrHigh((isTotalExtraOrLessHr))
   this.isLowOrHighClassForToday = isLowOrHighClassForHr(isLowOrHighClassForToday)
+  this.inTimeExtraOrLess = inTimeExtraOrLess
+  this.outTimeExtraOrLess = outTimeExtraOrLess
 }
 
 module.exports = ReportController;

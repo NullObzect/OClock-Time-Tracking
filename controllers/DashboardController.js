@@ -32,14 +32,11 @@ const DashboardController = {
   userTodayDetailsForAdmin: async (req, res) => {
     const { id } = req.params
     const todayWorkList = await AttendanceModel.getToday(id)
-    const gettodayInAndOutTimeExtraOrLess = await LogModel.todayInAndOutTimeExtraOrLess(id)
-
     const api = await axios.get(`${process.env.BASE_URL}/dashboard/user-report/${id}`)
     const userReport = api.data
     const {
       userInfo, todayReportDetails, weekReportDetails, lateCountThisWeek,
     } = userReport
-
     res.json({
       userInfo,
       todayReportDetails,

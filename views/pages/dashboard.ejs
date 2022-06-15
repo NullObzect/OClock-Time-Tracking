@@ -409,11 +409,11 @@
           <table>
             <tr>
               <td>Entry :</td>
-              <td>${todayReportDetails.start}</td>
+              <td>${todayReportDetails.start} <span class="${ todayReportDetails.inTimeExtraOrLess.length  === 6 ? 'low' : todayReportDetails.inTimeExtraOrLess === '' ? ' ' : 'high'   }" >${ todayReportDetails.inTimeExtraOrLess.length === 5 ? '+' + todayReportDetails.inTimeExtraOrLess : todayReportDetails.inTimeExtraOrLess   }</span></td>
             </tr>
             <tr>
               <td>Exit :</td>
-              <td>${todayReportDetails.end}</td>
+              <td>${todayReportDetails.end} <span class="${ todayReportDetails.outTimeExtraOrLess.length  === 5 ? 'low' :  todayReportDetails.outTimeExtraOrLess === '' ? ' ' : 'high'  }" >${ todayReportDetails.outTimeExtraOrLess.length  === 5 ?  '-' + todayReportDetails.outTimeExtraOrLess : todayReportDetails.outTimeExtraOrLess === '' ? ' ' :  '+' + todayReportDetails.outTimeExtraOrLess.slice(1)   }</span></td>
             </tr>
             <tr>
               <td>Today Total Work : </td>
