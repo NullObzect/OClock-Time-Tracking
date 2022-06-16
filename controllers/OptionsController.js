@@ -58,11 +58,6 @@ const OptionsController = {
 
       const { optionId, optionValue } = req.body;
       const regEx = /^\d+$/
-      // console.log('regggg', regEx.test(optionValue));
-
-      // console.log('TTTTTTT', optionId, optionValue.match('Hours') == 'Hours');
-      // console.log(optionId, hrToTime(optionValue));
-
       // for update name
       if (optionValue[0] === 'F' || optionValue[0] === 'S' || optionValue[0] === 'M' || optionValue[0] === 'T' || optionValue[0] === 'W') {
         const isUpdate = await OptionsModel.updateOptionValue(getDayNameToNum(optionValue), optionId)
@@ -72,19 +67,23 @@ const OptionsController = {
         const isUpdate = await OptionsModel.updateOptionValue(hrToTime(optionValue), optionId)
         console.log('yes update fixed time');
 
-        // if (isUpdate.errno) {
-        //   res.send('Error')
-        // } else {
-        //   res.status(200).json('success')
-        // }
+        if (isUpdate.errno) {
+          res.send('Error')
+        } else {
+          res.status(200).json({
+            msg: 'success',
+          })
+        }
       } if (regEx.test(optionValue)) { // for update fixed time
         const isUpdate = await OptionsModel.updateOptionValue(optionValue, optionId)
 
-      /*   if (isUpdate.errno) {
+        if (isUpdate.errno) {
           res.send('Error')
         } else {
-          res.status(200).json('success')
-        } */
+          res.status(200).json({
+            msg: 'success',
+          })
+        }
       }
 
       // when update option value
@@ -103,6 +102,9 @@ const OptionsController = {
           }
         }
       }
+      res.status(200).json({
+        msg: 'success',
+      })
     } catch (err) {
       console.log('====>Error form OptionsController updateOptionValues', err);
     }

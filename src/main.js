@@ -80,16 +80,3 @@ window.onclick = function (event) {
     deleteModal.style.display = 'none';
   }
 }
-function imageSet(avatar, gender) {
-  let img;
-  if (avatar !== null && avatar.match(/^(http|https):/g)) {
-    img = `<img id="img" src=${avatar}/>`
-  } else if (avatar != null) {
-    img = `<img id="img" src="/uploads/avatars/${avatar}`
-  } else if (avatar == null && gender == 'male') {
-    img = '<img id="img" src="/uploads/avatars/male-demo-avatar.png'
-  } else {
-    img = '<img id="img" src="/uploads/avatars/female-demo-avatar.png'
-  }
-  return img;
-}
