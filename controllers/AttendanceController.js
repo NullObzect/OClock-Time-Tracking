@@ -222,11 +222,17 @@ const AttendanceController = {
       const isExist = await AttendanceModel.isExistCurrentDateUserIdForManualInput(date, userId);
       if (isExist !== undefined) {
         // return res.json('Already Exist')
-        res.status(200).json('Already Exist')
+        res.status(500).json({
+          msg: 'Already Exist',
+          type: 'warning',
+        })
       }
       if (startTime === '' && endTime !== '') {
         // return res.json('Please Enter Start Time')
-        res.status(200).json('Please Enter Start Time')
+        res.status(500).json({
+          msg: 'Please Enter Start Time',
+          type: 'warning',
+        })
       }
       const timeStampForStart = JSON.parse(JSON.stringify(`${date} ${time12HrTo24Hr(startTime)}`))
       const timeStampForEnd = JSON.parse(JSON.stringify(`${date} ${time12HrTo24Hr(endTime)}`))
@@ -245,7 +251,10 @@ const AttendanceController = {
           await AttendanceModel.insertLogForManual(stringToNumber(offDayValues), date, userId)
           await AttendanceModel.updateLogForManualInput(userId, timeStampForEnd, totalWorkTime)
         }
-        res.json('success')
+        res.json({
+          msg: 'Entry Completed',
+          type: 'success',
+        })
       } else if (startTime === undefined || startTime === '') {
         await AttendanceModel.setAttendanceStartForAPI(userId, time12HrTo24Hr(getInTime) || inTime, time12HrTo24Hr(getOutTime) || outTime, 0, 'Manual Entry', getLocalCurTimeStamp)
 
@@ -254,14 +263,20 @@ const AttendanceController = {
         if (isUserId === undefined) {
           await AttendanceModel.insertLogForManual(stringToNumber(offDayValues), date, userId)
         }
-        res.json('success')
+        res.json({
+          msg: 'Entry Completed',
+          type: 'success',
+        })
       } else if (startTime !== undefined || startTime !== '') {
         await AttendanceModel.setAttendanceStartForAPI(userId, time12HrTo24Hr(getInTime) || inTime, time12HrTo24Hr(getOutTime) || outTime, 0, 'Manual Entry', timeStampForStart)
         const isUserId = await AttendanceModel.isExistCurrentDateUserIdForManualInput(date, userId);
         if (isUserId === undefined) {
           await AttendanceModel.insertLogForManual(stringToNumber(offDayValues), date, userId)
         }
-        res.json('success')
+        res.json({
+          msg: 'Entry Completed',
+          type: 'success',
+        })
       }
     } catch (err) {
       console.log('====>Error form manualAttendance/ controllers', err);

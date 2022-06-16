@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-await-in-loop */
 
 const OptionsModel = require('../models/OptionsModel')
@@ -51,46 +52,12 @@ const OptionsController = {
       console.log('', error);
     }
   },
-
-  getNotice: async (req, res) => {
-    const { user } = req
-    if (user.user_role === 'admin') {
-      const users = await userModel.getAllUsersList()
-      const notices = await OptionsModel.getAllNotice()
-      res.render('pages/notice', { users, notices, user })
-    } else {
-      const notices = await OptionsModel.userNotice(user.id)
-      res.render('pages/notice', { notices, user })
-    }
-  },
-  sendNotice: async (req, res) => {
-    const { userId, noticeDetails } = req.body
-    try {
-      const result = await OptionsModel.sendNotice(userId, noticeDetails)
-      console.log(result)
-      res.redirect('/options/notice')
-    } catch (error) {
-      console.log(error)
-    }
-  },
-  contactAdmin: async (req, res) => {
-    const { userId, noticeDetails } = req.body
-    const { user } = req
-    const senderId = user.id
-    const result = await OptionsModel.contactAdmin(userId, senderId, noticeDetails)
-    res.redirect('/options/notice')
-  },
   getUpdateOptionValues: async (req, res) => {
     try {
       console.log('req body', req.body);
 
       const { optionId, optionValue } = req.body;
       const regEx = /^\d+$/
-      // console.log('regggg', regEx.test(optionValue));
-
-      // console.log('TTTTTTT', optionId, optionValue.match('Hours') == 'Hours');
-      // console.log(optionId, hrToTime(optionValue));
-
       // for update name
       if (optionValue[0] === 'F' || optionValue[0] === 'S' || optionValue[0] === 'M' || optionValue[0] === 'T' || optionValue[0] === 'W') {
         const isUpdate = await OptionsModel.updateOptionValue(getDayNameToNum(optionValue), optionId)
@@ -100,19 +67,23 @@ const OptionsController = {
         const isUpdate = await OptionsModel.updateOptionValue(hrToTime(optionValue), optionId)
         console.log('yes update fixed time');
 
-        // if (isUpdate.errno) {
-        //   res.send('Error')
-        // } else {
-        //   res.status(200).json('success')
-        // }
+        if (isUpdate.errno) {
+          res.send('Error')
+        } else {
+          res.status(200).json({
+            msg: 'success',
+          })
+        }
       } if (regEx.test(optionValue)) { // for update fixed time
         const isUpdate = await OptionsModel.updateOptionValue(optionValue, optionId)
 
-      /*   if (isUpdate.errno) {
+        if (isUpdate.errno) {
           res.send('Error')
         } else {
-          res.status(200).json('success')
-        } */
+          res.status(200).json({
+            msg: 'success',
+          })
+        }
       }
 
       // when update option value
@@ -131,6 +102,9 @@ const OptionsController = {
           }
         }
       }
+      res.status(200).json({
+        msg: 'success',
+      })
     } catch (err) {
       console.log('====>Error form OptionsController updateOptionValues', err);
     }

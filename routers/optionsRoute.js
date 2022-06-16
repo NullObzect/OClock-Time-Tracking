@@ -8,9 +8,7 @@ router.get('/', decorateHtmlResponse('Options'), checkLogin, OptionsController.g
 router.get('/option-values', decorateHtmlResponse('Options'), checkLogin, OptionsController.getOptionValues)
 router.get('/projects', decorateHtmlResponse('Projects'), checkLogin, OptionsController.getProjects)
 router.post('/projects', decorateHtmlResponse('Projects'), checkLogin, OptionsController.createProject)
-router.get('/notice', decorateHtmlResponse('Notice'), checkLogin, OptionsController.getNotice)
-router.post('/notice', decorateHtmlResponse('Notice'), checkLogin, OptionsController.sendNotice)
-router.post('/contact-admin', decorateHtmlResponse('Notice'), checkLogin, OptionsController.contactAdmin)
+
 // update option values
 router.post('/option-values/update-option-value', OptionsController.getUpdateOptionValues)
 router.post('/projects/update-project', OptionsController.getUpdateProject)
