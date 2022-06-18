@@ -116,7 +116,7 @@ const AttendanceController = {
     const data = req.body
     const [{ inTime }] = await AttendanceModel.getInTime()
     const [{ outTime }] = await AttendanceModel.getOutTime()
-    const objectLength = Object.keys(data).length;
+    const objectLength = (data || []).length;
 
     for (let i = 0; i < objectLength; i += 1) {
       setTimeout(async () => {

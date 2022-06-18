@@ -342,7 +342,7 @@ const AttendanceModel = {
   // if end time is null
 
   getEndTimeIsNull: async () => {
-    const query = "SELECT TIME_FORMAT(L.start, '%h:%i %p') AS minStartTime, A.user_id AS userId ,A.work_details, DATE_FORMAT(A.start, '%Y-%m-%d') AS curDate,U.user_name AS name, U.avatar AS avatar, A.end AS endTime,U.user_role AS userRole,u.gender  FROM attendance AS A JOIN users AS U ON U.id IN( A.user_id )   JOIN log AS L ON A.user_id = L.user_id AND DATE(L.start) = DATE(A.start)  WHERE A.end IS NULL "
+    const query = "SELECT TIME_FORMAT(L.start, '%h:%i %p') AS minStartTime, A.user_id AS userId ,A.work_details, DATE_FORMAT(A.start, '%Y-%m-%d') AS curDate,U.user_name AS name, U.avatar AS avatar, A.end AS endTime,U.user_role AS userRole,U.gender  FROM attendance AS A JOIN users AS U ON U.id IN( A.user_id )   JOIN log AS L ON A.user_id = L.user_id AND DATE(L.start) = DATE(A.start)  WHERE A.end IS NULL "
     const [rows] = await dbConnect.promise().execute(query)
     return rows
   },
