@@ -170,7 +170,7 @@ const AttendanceController = {
               await AttendanceModel.setAttendanceStartForAPI(userID, inTime, outTime, 0, 'Entry', timeStamp)
               const isIdInLog = await AttendanceModel.getCurrentDateUserIdForAPI(userID, timeStamp);
               if (isIdInLog === undefined) {
-                await AttendanceModel.insertLog(stringToNumber(offDayValues), userID)
+                await AttendanceModel.insertLogForManual(stringToNumber(offDayValues), timeStamp, userID)
                 await AttendanceModel.setLogStartTimeForAPI(userID, timeStamp)
               }
             } else if (isId !== undefined && time !== undefined) {
@@ -192,7 +192,7 @@ const AttendanceController = {
         } catch (error) {
           console.log(error)
         }
-      }, 1000 * i)
+      }, 500 * i)
     }
   },
 
