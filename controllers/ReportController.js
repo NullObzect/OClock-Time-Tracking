@@ -193,7 +193,6 @@ const ReportController = {
 
         const lateCountThisMonth = lateCount(lateCountsMonth)
 
-        console.log({ monthReportDetails });
 
         /* ======================================================== */
         /* ==========FIXME:  report for this month  END ========== */
@@ -329,7 +328,6 @@ const ReportController = {
 
       const betweenTwoDateOffdays = betweenTwoDateTypes.filter((el) => el.workdays === 0).length
       const betweenTwoDateWorkdays = (days === 0 ? 1 : days) - betweenTwoDateOffdays;
-      console.log({ betweenTwoDateWorkdays });
 
       // this month leave days
       const getLeavedaysBetweenTwoDate = await LogModel.countLeavedaysBetweenTwoDate(userId, startDate, endDate)

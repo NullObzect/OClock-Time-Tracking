@@ -133,7 +133,8 @@ const AttendanceModel = {
   },
   setAttendanceEndTimeForAPI: async (id, end) => {
     try {
-      const query = `UPDATE attendance SET end = '${end}' WHERE   end IS NULL AND user_id = ${id}`
+      const query = `UPDATE attendance SET end = '${end}' WHERE   end IS NULL AND 
+      DATE(start) = DATE('${end}') AND user_id = ${id}`
 
       const [rows] = await dbConnect.promise().execute(query);
       return rows.affectedRows;

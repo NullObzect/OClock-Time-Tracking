@@ -171,7 +171,7 @@ const AttendanceController = {
               const isIdInLog = await AttendanceModel.getCurrentDateUserIdForAPI(userID, timeStamp);
               if (isIdInLog === undefined) {
                 await AttendanceModel.insertLogForManual(stringToNumber(offDayValues), timeStamp, userID)
-                await AttendanceModel.setLogStartTimeForAPI(userID, timeStamp)
+                // await AttendanceModel.setLogStartTimeForAPI(userID, timeStamp)
               }
             } else if (isId !== undefined && time !== undefined) {
               const { endTimeIsNull } = await AttendanceModel.isAttendanceEndTimeNullAPI(userID, timeStamp)
