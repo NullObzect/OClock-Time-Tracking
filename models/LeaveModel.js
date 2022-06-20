@@ -46,7 +46,7 @@ const LeaveModel = {
     return rows;
   },
   anEmployeeLeaveList: async (id) => {
-    const query = `SELECT U.user_name,U.gender,  U.user_role, U.avatar, EL.user_id AS id,EL.id AS elId, EL.type_id AS typeId, LT.name as type , DATE_FORMAT(start,'%Y/%m/%d') AS start, DATE_FORMAT(end, '%Y/%m/%d') AS end, DATEDIFF(end,start) + 1 AS duration  FROM employee_leaves AS EL JOIN leave_type AS LT ON LT.id = El.type_id JOIN users AS U ON U.id = EL.user_id WHERE EL.user_id = ${id}`;
+    const query = `SELECT U.user_name,U.gender,  U.user_role, U.avatar, EL.user_id AS id,EL.id AS elId, EL.type_id AS typeId, LT.name as type , DATE_FORMAT(start,'%Y/%m/%d') AS start, DATE_FORMAT(end, '%Y/%m/%d') AS end, DATEDIFF(end,start) + 1 AS duration  FROM employee_leaves AS EL JOIN leave_type AS LT ON LT.id = EL.type_id JOIN users AS U ON U.id = EL.user_id WHERE EL.user_id = ${id}`;
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
@@ -104,13 +104,13 @@ const LeaveModel = {
   },
   leaveLimitReportJointCurrentYearUser: async (userId) => {
     const query = `SELECT
-    LT.name AS leaveName, SUM(DATEDIFF(end, start) + 1) as duration  FROM employee_leaves AS EL JOIN leave_type AS LT ON LT.id = El.type_id JOIN users AS U ON U.id = EL.user_id WHERE EL.user_id = ${userId} AND  EL.create_at  BETWEEN  DATE(U.create_at) AND DATE_FORMAT(NOW(),'%Y-12-31') GROUP BY LT.name`
+    LT.name AS leaveName, SUM(DATEDIFF(end, start) + 1) as duration  FROM employee_leaves AS EL JOIN leave_type AS LT ON LT.id = EL.type_id JOIN users AS U ON U.id = EL.user_id WHERE EL.user_id = ${userId} AND  EL.create_at  BETWEEN  DATE(U.create_at) AND DATE_FORMAT(NOW(),'%Y-12-31') GROUP BY LT.name`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
   leaveLimitCountJointCurrentYearUser: async (userId) => {
     const query = `SELECT
-     SUM(DATEDIFF(end, start) + 1) as countLeave  FROM employee_leaves AS EL JOIN leave_type AS LT ON LT.id = El.type_id JOIN users AS U ON U.id = EL.user_id WHERE EL.user_id = ${userId} AND  EL.create_at  BETWEEN  DATE(U.create_at) AND DATE_FORMAT(NOW(),'%Y-12-31')`
+     SUM(DATEDIFF(end, start) + 1) as countLeave  FROM employee_leaves AS EL JOIN leave_type AS LT ON LT.id = EL.type_id JOIN users AS U ON U.id = EL.user_id WHERE EL.user_id = ${userId} AND  EL.create_at  BETWEEN  DATE(U.create_at) AND DATE_FORMAT(NOW(),'%Y-12-31')`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
@@ -134,7 +134,7 @@ const LeaveModel = {
   },
   leaveLimitCountUnpaidLeaveCurrentYearUser: async (userId) => {
     const query = `SELECT
-    SUM(DATEDIFF(end, start) + 1) as countUnpaidLeave FROM employee_leaves AS EL JOIN leave_type AS LT ON LT.id = El.type_id  JOIN users AS U ON U.id = EL.user_id  WHERE EL.user_id = ${userId} AND  EL.create_at  BETWEEN DATE(U.create_at) AND DATE_FORMAT(NOW(),'%Y-12-31') AND LT.name = 'Unpaid'`
+    SUM(DATEDIFF(end, start) + 1) as countUnpaidLeave FROM employee_leaves AS EL JOIN leave_type AS LT ON LT.id = EL.type_id  JOIN users AS U ON U.id = EL.user_id  WHERE EL.user_id = ${userId} AND  EL.create_at  BETWEEN DATE(U.create_at) AND DATE_FORMAT(NOW(),'%Y-12-31') AND LT.name = 'Unpaid'`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
