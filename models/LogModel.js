@@ -15,14 +15,19 @@ const LogModel = {
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
+  countThisWeekLeavedays: async (userId, weekStartDate) => {
+    const query = `SELECT DATEDIFF(end, start) + 1 as countLeaveDay FROM employee_leaves WHERE user_id = ${userId} AND DATE(start) BETWEEN '${weekStartDate}' AND DATE(CURRENT_DATE -1)`
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows;
+  },
   thisWeekReports: async (userId, weekStartDate, workdays) => {
     const query = `SELECT COUNT(start) AS weekNumberOfWorkingDays, REPLACE(TIME_FORMAT( work_hour, '%h'),'0', '') * ${workdays} AS weekFixedHr,  SEC_TO_TIME(SUM(TIME_TO_SEC(work_time))) AS weekTotalWorkHr, SUBTIME(SEC_TO_TIME(SUM(TIME_TO_SEC(work_time))), SEC_TO_TIME(work_hour * ${workdays} * 60 * 60) ) weekTotalExtraOrLess, SEC_TO_TIME(SUM(TIME_TO_SEC(work_time)) / ${workdays}) AS weekAvgWorkTime, SUBTIME(SEC_TO_TIME(SUM(TIME_TO_SEC(work_time)) / ${workdays}), work_hour) AS weekAvgExtraOrLess, TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(start))),'%h:%i %p') AS weekAvgStartTime, TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(end))),'%h:%i %p') AS weekAvgEndTime  FROM log  WHERE user_id = ${userId} AND DATE(start) BETWEEN  '${weekStartDate}' AND  DATE(CURRENT_DATE - 1)`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
   // late count time for weekly
-  lateCountThisWeek: async (userId) => {
-    const query = `SELECT  CASE WHEN LEFT(TIME_FORMAT(TIMEDIFF(TIME(in_time) + TIME(O.option_value), TIME(start)), '%H:%i'), 1) = '-' THEN 1 ELSE 0 END  lateCount FROM log AS L JOIN options AS O ON O.option_title = 'tolerance-time'  WHERE  user_id = ${userId} AND L.start >  now() - INTERVAL 7 DAY`
+  lateCountThisWeek: async (userId, weekStartDate) => {
+    const query = `SELECT  CASE WHEN LEFT(TIME_FORMAT(TIMEDIFF(TIME(in_time) + TIME(O.option_value), TIME(start)), '%H:%i'), 1) = '-' THEN 1 ELSE 0 END  lateCount FROM log AS L JOIN options AS O ON O.option_title = 'tolerance-time'  WHERE  user_id = ${userId} AND DATE(start) BETWEEN DATE( '${weekStartDate}') AND  DATE(CURRENT_DATE - 1)`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
@@ -31,7 +36,11 @@ const LogModel = {
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
-
+  countThisMonthLeavedays: async (userId, monthStartDate) => {
+    const query = `SELECT DATEDIFF(end, start) + 1 as countLeaveDay FROM employee_leaves WHERE user_id = ${userId} AND DATE(start) BETWEEN '${monthStartDate}' AND DATE(CURRENT_DATE -1)`
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows;
+  },
   thisMonthReports: async (userId, monthStartDate, workdays) => {
     const query = `SELECT COUNT(start) AS monthNumberOfWorkingDays, REPLACE(TIME_FORMAT( work_hour , '%h'),'0', '') * ${workdays} AS monthFixedHr,  SEC_TO_TIME(SUM(TIME_TO_SEC(work_time))) AS monthTotalWorkHr, SUBTIME(SEC_TO_TIME(SUM(TIME_TO_SEC(work_time))), SEC_TO_TIME(work_hour * ${workdays} * 60 * 60) ) monthTotalExtraOrLess, SEC_TO_TIME(SUM(TIME_TO_SEC(work_time)) / ${workdays}) AS monthAvgWorkTime, SUBTIME(SEC_TO_TIME(SUM(TIME_TO_SEC(work_time)) / ${workdays}), work_hour) AS monthAvgExtraOrLess, TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(start))),'%h:%i %p') AS monthAvgStartTime, TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(end))),'%h:%i %p') AS monthAvgEndTime  FROM log  WHERE user_id = ${userId} AND DATE(start) BETWEEN  '${monthStartDate}' AND  DATE(CURRENT_DATE - 1)`
     const [rows] = await dbConnect.promise().execute(query)
@@ -49,6 +58,11 @@ const LogModel = {
     return rows;
   },
 
+  countThisYearLeavedays: async (userId, yearStartDate) => {
+    const query = `SELECT DATEDIFF(end, start) + 1 as countLeaveDay FROM employee_leaves WHERE user_id = ${userId} AND DATE(start) BETWEEN '${yearStartDate}' AND DATE(CURRENT_DATE -1)`
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows;
+  },
   thisYearReports: async (userId, yearStartDate, workdays) => {
     console.log({ userId, yearStartDate, workdays });
 
@@ -75,6 +89,11 @@ const LogModel = {
 
   countWorkdaysForBetweenTwoDate: async (userId, startDate, endDate) => {
     const query = `SELECT CASE WHEN day_type = 'regular' THEN 1  ELSE 0 END  workdays FROM log  WHERE user_id = ${userId} AND DATE(start)  BETWEEN   '${startDate}' AND '${endDate}'`
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows;
+  },
+  countLeavedaysBetweenTwoDate: async (userId, startDate, endDate) => {
+    const query = `SELECT DATEDIFF(end, start) + 1 as countLeaveDay FROM employee_leaves WHERE user_id = ${userId} AND DATE(start) BETWEEN '${startDate}' AND DATE('${endDate}')`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
