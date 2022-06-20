@@ -26,8 +26,8 @@ const LogModel = {
     return rows;
   },
   // late count time for weekly
-  lateCountThisWeek: async (userId) => {
-    const query = `SELECT  CASE WHEN LEFT(TIME_FORMAT(TIMEDIFF(TIME(in_time) + TIME(O.option_value), TIME(start)), '%H:%i'), 1) = '-' THEN 1 ELSE 0 END  lateCount FROM log AS L JOIN options AS O ON O.option_title = 'tolerance-time'  WHERE  user_id = ${userId} AND L.start >  now() - INTERVAL 7 DAY`
+  lateCountThisWeek: async (userId, weekStartDate) => {
+    const query = `SELECT  CASE WHEN LEFT(TIME_FORMAT(TIMEDIFF(TIME(in_time) + TIME(O.option_value), TIME(start)), '%H:%i'), 1) = '-' THEN 1 ELSE 0 END  lateCount FROM log AS L JOIN options AS O ON O.option_title = 'tolerance-time'  WHERE  user_id = ${userId} AND DATE(start) BETWEEN DATE( '${weekStartDate}') AND  DATE(CURRENT_DATE - 1)`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },

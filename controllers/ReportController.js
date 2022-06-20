@@ -145,7 +145,7 @@ const ReportController = {
         )
 
         // late count this week
-        const lateCounts = await LogModel.lateCountThisWeek(userId)
+        const lateCounts = await LogModel.lateCountThisWeek(userId, weekStartDate)
         const lateCountThisWeek = lateCount(lateCounts)
 
         /* ======================================================== */
@@ -192,7 +192,6 @@ const ReportController = {
         const lateCountsMonth = await LogModel.lateCountThisMonth(userId, monthStartDate)
 
         const lateCountThisMonth = lateCount(lateCountsMonth)
-
 
         /* ======================================================== */
         /* ==========FIXME:  report for this month  END ========== */
