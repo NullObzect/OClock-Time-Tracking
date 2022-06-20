@@ -42,7 +42,6 @@ const ReportController = {
         const reportStringify = await LogModel.lastSevenDaysReports(userId)
         const lastSevenDaysReports = JSON.parse(JSON.stringify(reportStringify))
         lastSevenDaysReports.forEach((el) => {
-          console.log('start', el.outTimeExtraOrLess);
           if (el.dayType !== 'regular') {
             el.inTimeExtraOrLess = ''
             el.outTimeExtraOrLess = ''
@@ -119,6 +118,10 @@ const ReportController = {
         const thisWeekOffdays = weekdaysType.filter((el) => el.workdays === 0).length
         const weekTotalWorkdays = getThisWeekNumberOfday - thisWeekOffdays;
 
+        // this month leave days
+        const getWeekLeavedays = await LogModel.countThisWeekLeavedays(userId, weekStartDate)
+        const totalLeavedaysThisWeek = sumLeavedays(getWeekLeavedays)
+
         const [{
           weekNumberOfWorkingDays, weekFixedHr, weekTotalWorkHr, weekTotalExtraOrLess, weekAvgWorkTime, weekAvgExtraOrLess, weekAvgStartTime, weekAvgEndTime,
         // eslint-disable-next-line no-use-before-define
@@ -127,7 +130,7 @@ const ReportController = {
         const thisWeekExtraOrLessHr = chckTotalWorkTimeExtraOrLess(weekTotalExtraOrLess)
         const weekReportDetails = new ReportDetails(
           weekNumberOfWorkingDays,
-          countUserJoinDate(countJoinIngDate, weekTotalWorkdays),
+          countUserJoinDate(countJoinIngDate, weekTotalWorkdays) - totalLeavedaysThisWeek || 0,
           weekFixedHr,
           weekTotalWorkHr,
           weekAvgWorkTime,
@@ -154,16 +157,17 @@ const ReportController = {
         /* ======================================================== */
 
         const [{ monthStartDate, countWorkday }] = await AttendanceModel.thisMonthDates()
-        console.log({ monthStartDate, countWorkday });
 
         const monthdaysType = await LogModel.countWorkdaysForMonth(userId, monthStartDate)
-        console.log({ monthdaysType });
 
         const thisMonthOffdays = monthdaysType.filter((el) => el.workdays === 0).length
-        console.log({ thisMonthOffdays });
 
         // FIXME:
         const monthTotalWorkdays = countWorkday - thisMonthOffdays;
+
+        // this month leave days
+        const getLeavedays = await LogModel.countThisMonthLeavedays(userId, monthStartDate)
+        const totalLeadedaysThisMonth = sumLeavedays(getLeavedays)
 
         const [{
           monthNumberOfWorkingDays, monthFixedHr, monthTotalWorkHr, monthTotalExtraOrLess, monthAvgWorkTime, monthAvgExtraOrLess, monthAvgStartTime, monthAvgEndTime,
@@ -172,7 +176,7 @@ const ReportController = {
         const thisMonthExtraOrLessHr = chckTotalWorkTimeExtraOrLess(monthTotalExtraOrLess)
         const monthReportDetails = new ReportDetails(
           monthNumberOfWorkingDays,
-          countUserJoinDate(countJoinIngDate, monthTotalWorkdays),
+          countUserJoinDate(countJoinIngDate, monthTotalWorkdays) - totalLeadedaysThisMonth || 0,
           monthFixedHr,
           monthTotalWorkHr,
           monthAvgWorkTime,
@@ -203,7 +207,10 @@ const ReportController = {
         const yeardaysType = await LogModel.countWorkdaysForMonth(userId, yearStartDate)
         const thisYearTotalOffdays = yeardaysType.filter((el) => el.workdays === 0).length
         const yearTotalWorkdays = countThisYearWorkday - thisYearTotalOffdays;
-        // checking this year joining date
+
+        // this month leave days
+        const getThisYearLeavedays = await LogModel.countThisYearLeavedays(userId, yearStartDate)
+        const totalLeavedaysThisYear = sumLeavedays(getThisYearLeavedays)
 
         const [{
           yearNumberOfWorkingDays, yearFixedHr, yearTotalWorkHr, yearTotalExtraOrLess, yearAvgWorkTime, yearAvgExtraOrLess, yearAvgStartTime, yearAvgEndTime,
@@ -212,7 +219,7 @@ const ReportController = {
         const thisYearExtraOrLessHr = chckTotalWorkTimeExtraOrLess(yearTotalExtraOrLess)
         const yearReportDetails = new ReportDetails(
           yearNumberOfWorkingDays,
-          countUserJoinDate(countJoinIngDate, yearTotalWorkdays),
+          countUserJoinDate(countJoinIngDate, yearTotalWorkdays) - totalLeavedaysThisYear || 0,
           yearFixedHr,
           yearTotalWorkHr,
           yearAvgWorkTime,
@@ -316,15 +323,17 @@ const ReportController = {
       // log start
 
       const [{ days }] = await LogModel.numberOfdaysBetweenTwoDates(startDate, endDate)
-      console.log({ days });
 
       const [{ countJoinIngDate }] = await LogModel.countUserJoiningDate(userId)
-      console.log({ countJoinIngDate });
       const betweenTwoDateTypes = await LogModel.countWorkdaysForBetweenTwoDate(userId, startDate, endDate)
 
       const betweenTwoDateOffdays = betweenTwoDateTypes.filter((el) => el.workdays === 0).length
       const betweenTwoDateWorkdays = (days === 0 ? 1 : days) - betweenTwoDateOffdays;
       console.log({ betweenTwoDateWorkdays });
+
+      // this month leave days
+      const getLeavedaysBetweenTwoDate = await LogModel.countLeavedaysBetweenTwoDate(userId, startDate, endDate)
+      const totalLeavedayBetweenTwoDate = sumLeavedays(getLeavedaysBetweenTwoDate)
 
       const [{
         twoDateNumberOfWorkingDays, twoDateFixedHr, twoDateTotalWorkHr, twoDateTotalExtraOrLess, twoDateAvgWorkTime, twoDateAvgExtraOrLess, twoDateAvgStartTime, twoDateAvgEndTime,
@@ -333,7 +342,7 @@ const ReportController = {
       const betweenTwoDateExtraOrLessHr = chckTotalWorkTimeExtraOrLess(twoDateTotalExtraOrLess)
       const betweenTwoDatesReportDetails = new ReportDetails(
         twoDateNumberOfWorkingDays,
-        countUserJoinDate(countJoinIngDate, betweenTwoDateWorkdays),
+        countUserJoinDate(countJoinIngDate, betweenTwoDateWorkdays) - totalLeavedayBetweenTwoDate || 0,
         twoDateFixedHr,
         twoDateTotalWorkHr,
         twoDateAvgWorkTime,
@@ -412,6 +421,13 @@ function lateCount(lateCounts) {
   return sum
 }
 
+function sumLeavedays(leavedays) {
+  let sum = 0;
+  leavedays.forEach((el) => {
+    sum += el.countLeaveDay
+  })
+  return sum
+}
 function chckTotalWorkTimeExtraOrLess(totalWorkTime) {
   let isExtra; let
     isLess;

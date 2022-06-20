@@ -192,7 +192,7 @@ const AttendanceController = {
         } catch (error) {
           console.log(error)
         }
-      }, 500 * i)
+      }, 1000 * i)
     }
   },
 
