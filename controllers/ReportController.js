@@ -139,7 +139,7 @@ const ReportController = {
           weekAvgExtraOrLess,
           thisWeekExtraOrLessHr,
           isLowOrHighClassForday(countUserJoinDate(countJoinIngDate, weekTotalWorkdays), weekNumberOfWorkingDays),
-          showDaysIsLowOrHigh(countUserJoinDate(countJoinIngDate, weekTotalWorkdays), weekNumberOfWorkingDays) || '',
+          showDaysIsLowOrHigh(countUserJoinDate(countJoinIngDate, weekTotalWorkdays - totalLeavedaysThisWeek || 0), weekNumberOfWorkingDays) || '',
           isLowOrHighClassForHr(weekAvgExtraOrLess),
 
         )
@@ -185,7 +185,7 @@ const ReportController = {
           monthAvgExtraOrLess,
           thisMonthExtraOrLessHr,
           isLowOrHighClassForday(countUserJoinDate(countJoinIngDate, monthTotalWorkdays), monthNumberOfWorkingDays),
-          showDaysIsLowOrHigh(countUserJoinDate(countJoinIngDate, monthTotalWorkdays), monthNumberOfWorkingDays),
+          showDaysIsLowOrHigh(countUserJoinDate(countJoinIngDate, monthTotalWorkdays - totalLeadedaysThisMonth || 0), monthNumberOfWorkingDays),
           isLowOrHighClassForHr(monthAvgExtraOrLess),
         )
 
@@ -193,7 +193,7 @@ const ReportController = {
 
         const lateCountThisMonth = lateCount(lateCountsMonth)
 
-        // console.log({ monthReportDetails });
+        console.log({ monthReportDetails });
 
         /* ======================================================== */
         /* ==========FIXME:  report for this month  END ========== */
@@ -228,7 +228,7 @@ const ReportController = {
           yearAvgExtraOrLess,
           thisYearExtraOrLessHr,
           isLowOrHighClassForday(countUserJoinDate(countJoinIngDate, yearTotalWorkdays), yearNumberOfWorkingDays),
-          showDaysIsLowOrHigh(countUserJoinDate(countJoinIngDate, yearTotalWorkdays), yearNumberOfWorkingDays),
+          showDaysIsLowOrHigh(countUserJoinDate(countJoinIngDate, yearTotalWorkdays - totalLeavedaysThisYear || 0), yearNumberOfWorkingDays),
           isLowOrHighClassForHr(yearAvgExtraOrLess),
 
         )
@@ -351,7 +351,7 @@ const ReportController = {
         twoDateAvgExtraOrLess,
         betweenTwoDateExtraOrLessHr,
         isLowOrHighClassForday(countUserJoinDate(countJoinIngDate, betweenTwoDateWorkdays), twoDateNumberOfWorkingDays),
-        showDaysIsLowOrHigh(countUserJoinDate(countJoinIngDate, betweenTwoDateWorkdays), twoDateNumberOfWorkingDays),
+        showDaysIsLowOrHigh(countUserJoinDate(countJoinIngDate, betweenTwoDateWorkdays - totalLeavedayBetweenTwoDate || 0), twoDateNumberOfWorkingDays),
         isLowOrHighClassForHr(twoDateAvgExtraOrLess),
 
       )
