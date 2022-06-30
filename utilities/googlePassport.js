@@ -9,7 +9,6 @@ const clientId = process.env.GOOGLE_PASSPORT_CLIENT_ID
 const clientSecret = process.env.GOOGLE_PASSPORT_CLIENT_SECRET
 const callbackURL = process.env.GOOGLE_PASSPORT_CALLBACK_URL
 
-console.log('click', clientId);
 module.exports = function (passport) {
   passport.use(new GoogleStrategy({
     clientID: clientId === '' ? true : clientId,
