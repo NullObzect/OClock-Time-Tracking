@@ -1,6 +1,6 @@
 const dbConnect = require('../config/database')
 
-const userPlatformModel = {
+const GooglePlatformModel = {
   googlePlatformSet: async (id, platform, uniqueId, name, avatar) => {
     const userConnectionQuery = 'INSERT INTO users_connection_details ( user_id, platform, unique_info,user_name,user_avatar) VALUES (?,?,?,?,?)'
     const value = [id, platform, uniqueId, name, avatar]
@@ -34,4 +34,4 @@ const userPlatformModel = {
 
 }
 
-module.exports = userPlatformModel
+module.exports = GooglePlatformModel

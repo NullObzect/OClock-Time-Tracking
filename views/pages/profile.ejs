@@ -86,9 +86,11 @@
                   'google').user_name.split(" ").map(s=>s[0]).join('')%></span>
           </a>
           <% }else{%>
-            <a title="Connect" href="/auth/google" >
+             <% if(google !==''){ %>
+                <a title="Connect" href="/auth/google" >
             <%- include("../partials/icons/google-svg") -%> 
           </a>
+             <% } %>
              <% } %>
         </span>
         <span
