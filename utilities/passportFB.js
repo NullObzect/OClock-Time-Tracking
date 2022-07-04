@@ -1,10 +1,14 @@
 const FacebookStrategy = require('passport-facebook').Strategy
 
+const clientId = process.env.FACEBOOK_CLIENT_ID
+const clientSecrets = process.env.FACEBOOK_CLIENT_SECRET
+const callbackUrl = `${process.env.BASE_URL}${process.env.FACEBOOK_REDIRECT_LINK}`
+
 module.exports = function (passport) {
   passport.use(new FacebookStrategy({
-    clientID: '282891463362753',
-    clientSecret: '77fb02c0316024aac8c4a66fff569cd0',
-    callbackURL: `${process.env.BASE_URL}/auth/facebook/callback`,
+    clientID: clientId === '' ? true : clientId,
+    clientSecret: clientSecrets === '' ? null : clientSecrets,
+    callbackURL: callbackUrl === '' ? null : callbackUrl,
     enableProof: true,
     profileFields: ['id', 'displayName', 'name', 'gender', 'picture.type(large)', 'email'],
   },

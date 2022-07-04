@@ -71,9 +71,11 @@
               </span>
           </a>
           <% } else{ %>
-            <a title="Connect" href="/auth/facebook">
+            <%if(facebook !==''){%>
+              <a title="Connect" href="/auth/facebook">
               <%- include("../partials/icons/facebook-svg") -%> 
               </a>
+            <%}%>
             <%}%>
         </span>
         <span
@@ -86,9 +88,11 @@
                   'google').user_name.split(" ").map(s=>s[0]).join('')%></span>
           </a>
           <% }else{%>
-            <a title="Connect" href="/auth/google" >
+             <% if(google !==''){ %>
+                <a title="Connect" href="/auth/google" >
             <%- include("../partials/icons/google-svg") -%> 
           </a>
+             <% } %>
              <% } %>
         </span>
         <span
@@ -100,9 +104,11 @@
                   'twitter').user_name.split(" ").map(s=>s[0]).join('')%></span>
           </a>
           <% }else{%>
-            <a title="Connect" >
+              <%if(false){%>
+                <a title="Connect" >
             <%- include("../partials/icons/twitter-svg") -%> 
           </a>
+             <% } %>
              <% } %>
         </span>
       </div>

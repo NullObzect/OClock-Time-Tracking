@@ -16,6 +16,8 @@ function decorateHtmlResponse(pageTitle) {
     res.locals.addUser = false
     res.locals.flashMessage = Flash.getMessage(req)
     res.locals.baseUrl = process.env.BASE_URL
+    res.locals.google = process.env.GOOGLE_PASSPORT_CLIENT_ID
+    res.locals.facebook = process.env.FACEBOOK_CLIENT_ID
     next();
   };
 }
