@@ -4,7 +4,7 @@ const homeRoute = require('./homeRoute')
 const loginRoute = require('./loginRoute')
 const logoutRoute = require('./logoutRoute')
 const registerRoute = require('./userRoute')
-const userPlatformRoute = require('./userPlatformRoute')
+const googlePlatformRoute = require('./googlePlatformRoute')
 const fbUserRoute = require('./fbUserRoute')
 const profileRoute = require('./profileRoute')
 const attendanceRoute = require('./attendanceRoute')
@@ -21,7 +21,7 @@ router.use(
   registerRoute,
   loginRoute,
   logoutRoute,
-  userPlatformRoute,
+  googlePlatformRoute,
   fbUserRoute,
   profileRoute,
   attendanceRoute,
