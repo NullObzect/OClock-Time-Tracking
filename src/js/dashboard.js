@@ -51,7 +51,6 @@ for (let i = 0; i < updateStartTime.length; i++) {
       startTime: updateStartTimeVal[i].value,
       date: getDate[i].value,
     }
-    console.log(data);
     aJAXPostRequest('/update-start-time', data)
     saveBtn[i].style.display = 'none';
     updateBtn[i].style.display = 'block';
@@ -73,7 +72,6 @@ for (let i = 0; i < updateEndTime.length; i++) {
       endTime: updateEndTimeVal[i].value,
       date: getDate[i].value,
     }
-    console.log(data);
   });
   saveBtnForEndTime[i].addEventListener('click', () => {
     if (updateEndTimeVal[i].value === '') {
@@ -85,7 +83,6 @@ for (let i = 0; i < updateEndTime.length; i++) {
       endTime: updateEndTimeVal[i].value,
       date: getDate[i].value,
     }
-    console.log(data);
     aJAXPostRequest('/update-end-time', data)
     saveBtnForEndTime[i].style.display = 'none';
     updateBtn[i].style.display = 'block';
@@ -109,7 +106,6 @@ const userNameBtn = document.querySelectorAll('.userBtn')
 const userDetailsModal = document.querySelector('#userDetails')
 const userDetailsModalClose = document.querySelector('.user-modal-close')
 const container = userDetailsModal.querySelector('.user-user-container')
-console.log(userNameBtn)
 for (let i = 0; i < userNameBtn.length; i++) {
   userNameBtn[i].addEventListener('click', async (e) => {
     const element = e.target
