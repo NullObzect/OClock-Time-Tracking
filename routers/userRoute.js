@@ -37,8 +37,8 @@ router.post('/update-password', UserController.userUpdatePassword)
 
 // Verify User
 
-router.post('/user-verify', UserController.userVerify)
-router.get('/user-verify/:token', UserController.userVerifySet)
+router.post('/user-verify',  UserController.userVerify)
+router.get('/user-verify/:token',decorateHtmlResponse('User verify'), UserController.userVerifySet)
 
 // Forget user
 // router.get('/forgot-password', UserController.getUserForgotPassword)
