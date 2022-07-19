@@ -2,6 +2,7 @@ const selectBox = document.getElementsByClassName('select-box')
 const toleAddBtn = document.querySelector('#toleAddBtn')
 const currentToleValue = document.querySelector('#toleAddBtn').value
 let toleValue;
+let currentElement;
 toleValue = currentToleValue
 for (let i = 0; i < selectBox.length; i++) {
   if (currentToleValue == selectBox[i].querySelector('input').value) {
