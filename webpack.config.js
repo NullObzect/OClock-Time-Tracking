@@ -28,6 +28,7 @@ const config = {
     sideNav: ['@babel/polyfill', './src/js/sideNav.js'],
     tolerenceSetModal: ['@babel/polyfill', './src/js/tolerenceSetModal.js'],
     chart: ['@babel/polyfill', './src/js/chart.js'],
+    addUserModal: ['@babel/polyfill', './src/js/addUserModal.js'],
   },
   output: {
     path: path.resolve(__dirname, 'public/js/'),
