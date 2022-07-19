@@ -2,7 +2,9 @@
 /* eslint-disable no-return-assign */
 import {
   aJAXPostRequest, dateDiff, dateFormate, deleteData, formValidation, getCurrentDate, setReportTitle
-} from './helper.js';
+} from './helper';
+
+const baseUrl = process.env.BASE_URL
 
 function pagination(pageNumber, numberOfPage, page) {
   const pagination = document.querySelector('#pagination')

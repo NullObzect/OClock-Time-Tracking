@@ -1,4 +1,5 @@
 const path = require('path');
+const Dotenv = require('dotenv-webpack')
 
 const config = {
   entry: {
@@ -17,6 +18,15 @@ const config = {
     home: ['@babel/polyfill', './src/js/home.js'],
     timePicker: ['@babel/polyfill', './src/js/timePicker.js'],
     dashboard: ['@babel/polyfill', './src/js/dashboard.js'],
+    newPassword: ['@babel/polyfill', './src/js/newPassword.js'],
+    searchActiveAccount: ['@babel/polyfill', './src/js/searchActiveAccount.js'],
+    searchForgotUser: ['@babel/polyfill', './src/js/searchForgotUser.js'],
+    flashMessage: ['@babel/polyfill', './src/js/flashMessage.js'],
+    footer: ['@babel/polyfill', './src/js/footer.js'],
+    manualAttendance: ['@babel/polyfill', './src/js/manualAttendance.js'],
+    offDaySelectModel: ['@babel/polyfill', './src/js/offDaySelectModel.js'],
+    sideNav: ['@babel/polyfill', './src/js/sideNav.js'],
+    tolerenceSetModal: ['@babel/polyfill', './src/js/tolerenceSetModal.js'],
   },
   output: {
     path: path.resolve(__dirname, 'public/js/'),
@@ -39,6 +49,7 @@ const config = {
       },
     ],
   },
+  plugins: [new Dotenv()],
 };
 
 module.exports = config;
