@@ -3,9 +3,8 @@
 import {
   aJAXPostRequest, dateDiff, dateFormate, deleteData, formValidation, getCurrentDate, setReportTitle
 } from './helper.js';
-
+const baseUrl = process.env.BASE_URL
 const userId = document.querySelector('#id').value
-
 async function pagination(pageNumber, numberOfPage, page) {
   const pagination = document.querySelector('#pagination')
   pagination.innerHTML = `<li class="first page" > </li>

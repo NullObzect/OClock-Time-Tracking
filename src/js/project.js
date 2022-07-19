@@ -1,7 +1,6 @@
 import {
   aJAXPostRequest, deleteData, formValidation
 } from './helper.js';
-
 const actionBtn = document.querySelectorAll('.action-btn');
 const updateBtn = document.querySelectorAll('.update-btn');
 const deleteBtn = document.querySelectorAll('.delete-btn');

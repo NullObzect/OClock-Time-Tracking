@@ -1,5 +1,5 @@
 import Toastify from './toastify.js';
-
+const baseUrl = process.env.BASE_URL
 const dateNullToast = Toastify({
   text: 'Date not select',
   className: 'warning',
