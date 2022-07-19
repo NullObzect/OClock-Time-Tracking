@@ -3,7 +3,7 @@ const Dotenv = require('dotenv-webpack')
 
 const config = {
   entry: {
-    index: './src/js/index.js',
+    
     // test: './src/test.js',
     report: ['@babel/polyfill', './src/js/report.js'],
     timeTracking: ['@babel/polyfill', './src/js/timeTracking.js'],
