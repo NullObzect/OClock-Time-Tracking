@@ -27,6 +27,7 @@ const config = {
     offDaySelectModel: ['@babel/polyfill', './src/js/offDaySelectModel.js'],
     sideNav: ['@babel/polyfill', './src/js/sideNav.js'],
     tolerenceSetModal: ['@babel/polyfill', './src/js/tolerenceSetModal.js'],
+    chart: ['@babel/polyfill', './src/js/chart.js'],
   },
   output: {
     path: path.resolve(__dirname, 'public/js/'),
