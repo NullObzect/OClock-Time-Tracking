@@ -22,7 +22,6 @@
                   <%- include("../partials/icons/edit-svg") -%> 
                 </label>
                 <input
-                  onchange="readURL(this)"
                   name="avatar"
                   hidden
                   id="edit"
@@ -34,7 +33,7 @@
               <div class="update-icon">
                   <% if(platformUser.find(connection => connection.platform ===
                   'google')) { %>
-                    <span  onclick="imgSet('<%=platformUser.find(connection => connection.platform === 'google').user_avatar%>')" >
+                    <span id="googleImageIcon" data-image="<%=platformUser.find(connection => connection.platform === 'google').user_avatar%>"  >
                       <%- include("../partials/icons/google-svg.ejs");  -%>
                       <%}%>
                     </span>
@@ -43,7 +42,7 @@
               <div class="update-icon">
                   <% if(platformUser.find(connection => connection.platform ===
                   'facebook')) {%>
-                    <span  onclick="imgSet('<%=platformUser.find(connection => connection.platform === 'facebook').user_avatar%>')" >
+                    <span  id="facebookImageIcon"  data-image="<%=platformUser.find(connection => connection.platform === 'facebook').user_avatar%>">
                       <%- include("../partials/icons/facebook-svg.ejs");  -%>
                       <%}%>
                     </span>
@@ -84,7 +83,7 @@
                   'google')) {%>
           <a title="Remove" class="social-box" href="/remove/google" >
            <span class="social-icon-active social-active"><%- include("../partials/icons/google-svg") -%> </span>
-            <span class="social-text"><%= platformUser.find(connection => connection.platform ===
+            <span class="social-text "><%= platformUser.find(connection => connection.platform ===
                   'google').user_name.split(" ").map(s=>s[0]).join('')%></span>
           </a>
           <% }else{%>
@@ -177,37 +176,5 @@
     </form>
   </div>
 </div>
-<script>
-  const form = document.querySelector('form')
-  const userCancelBtn = document.getElementById("user-cancel-btn");
-  const userSaveBtn = document.getElementById("user-save-btn");
-  form.addEventListener('click', () => {
-    console.log('fff')
-    userSaveBtn.disabled = false
-    userCancelBtn.style.display = "inline";
-  });
-</script>
-<script>
-  function readURL(input) {
-          console.log(input)
-    if (input.files && input.files[0]) {
-      userSaveBtn.disabled = false
-      var reader = new FileReader();
-      console.log(reader)
-      reader.onload = function (e) { 
-        console.log(e)
-        document.querySelector('#img').setAttribute("src",e.target.result);
-      };
-      reader.readAsDataURL(input.files[0]); 
-    }
-  }  
-
-  function imgSet(link){
-    document.querySelector("input[name='socialImage'").value = link
-    userSaveBtn.disabled = false
-    document.querySelector('#img').setAttribute("src",link);
-  }
-
-</script>
 <script src="<%= baseUrl %>/js/profile.js"></script>
 <%- include("../partials/footer"); -%>
