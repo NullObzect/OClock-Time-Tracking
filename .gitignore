@@ -43,6 +43,9 @@ node_modules/
 jspm_packages/
 public/uploads
 
+# Webpack compile js file 
+public/js
+
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
 
