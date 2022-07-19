@@ -2,7 +2,7 @@ const path = require('path');
 
 const config = {
   entry: {
-    index: './src/index.js',
+    
     // test: './src/test.js',
     report: ['@babel/polyfill', './src/js/report.js'],
     timeTracking: ['@babel/polyfill', './src/js/timeTracking.js'],
