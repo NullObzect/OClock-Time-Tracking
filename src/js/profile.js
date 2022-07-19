@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import Toastify from './toastify.js';
 
 const successToast = Toastify({
@@ -45,3 +46,52 @@ submitBtn.addEventListener('click', async (e) => {
     }, 2000);
   }
 })
+
+// Form Cancel Btn
+const form = document.querySelector('form')
+const userCancelBtn = document.getElementById('user-cancel-btn');
+const userSaveBtn = document.getElementById('user-save-btn');
+form.addEventListener('click', () => {
+  userSaveBtn.disabled = false
+  userCancelBtn.style.display = 'inline';
+});
+
+// Select to profile image change
+
+function readURL(input) {
+  console.log(input)
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    console.log(reader);
+    reader.onload = function (e) {
+      console.log(e);
+      document.querySelector('#img').setAttribute('src', e.target.result);
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+const input = document.getElementById('edit')
+input.addEventListener('change', () => {
+  readURL(input)
+})
+
+// Click to social image set in profile
+function imgSet(link) {
+  document.querySelector("input[name='socialImage'").value = link
+  userSaveBtn.disabled = false
+  document.querySelector('#img').setAttribute('src', link);
+}
+const googleIcon = document.querySelector('#googleImageIcon')
+if (googleIcon) {
+  const { image } = googleIcon.dataset
+  googleIcon.addEventListener('click', () => {
+    imgSet(image)
+  })
+}
+const facebookIcon = document.querySelector('#facebookImageIcon')
+if (facebookIcon) {
+  const { image } = facebookIcon.dataset
+  facebookIcon.addEventListener('click', () => {
+    imgSet(image)
+  })
+}

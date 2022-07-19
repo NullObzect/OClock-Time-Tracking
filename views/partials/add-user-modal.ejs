@@ -20,7 +20,6 @@
               </label>
               <input
                 name="avatar"
-                onchange="readURL(this)"
                 hidden
                 id="edit"
                 type="file"
@@ -71,17 +70,4 @@
     </div>
   </div>
 </div>
-<script>
-  function readURL(input) {
-    if (input.files && input.files[0]) {
-      const reader = new FileReader();
-      console.log(reader);
-      reader.onload = function (e) {
-        console.log(e);
-        document.querySelector("#img").setAttribute("src", e.target.result);
-      };
-      reader.readAsDataURL(input.files[0]);
-    }
-  }
-
-</script>
+<script src="<%=baseUrl%>/js/addUserModal.js"></script>
