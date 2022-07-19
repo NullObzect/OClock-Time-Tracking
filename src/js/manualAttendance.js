@@ -5,7 +5,6 @@ function showToast(message, type) {
     text: message,
     className: `${type}`,
   })
-  console.log(successToast)
   return successToast.showToast()
 }
 
@@ -39,7 +38,6 @@ submit.addEventListener('click', (e) => {
   const error = [];
   const modal = document.querySelector('#myModal')
   const submitBtn = document.getElementById('#submit-btn')
-  console.log(submitBtn)
   const form = document.querySelector('form');
   const errorPlaceholders = document.querySelectorAll('p.error');
   for (let i = 0; i < errorPlaceholders.length; i++) {
@@ -71,12 +69,10 @@ submit.addEventListener('click', (e) => {
   }
   for (const fieldName of error) {
     const errorPlaceholder = document.querySelector(`.${fieldName}-error`);
-    console.log(errorPlaceholder);
     errorPlaceholder.textContent = `${fieldName} is required!`;
     errorPlaceholder.style.display = 'block';
   }
   if (error.length === 0) {
-    console.log(bodyData);
     fetch('/manual-attendance', {
       method: 'POST',
       headers: {
@@ -86,7 +82,6 @@ submit.addEventListener('click', (e) => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log('Success:', data);
         if (data.type == 'warning') {
           showToast(data.msg, 'warning')
         } else {

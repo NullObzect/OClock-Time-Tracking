@@ -7,7 +7,6 @@ const dateNullToast = Toastify({
 // Date change to date icon active remove
 
 function pagination(pageNumber, numberOfPage, page) {
-  console.log({ pageNumber })
   const pagination = document.querySelector('#pagination')
   pagination.innerHTML = `<li class="first page" > </li>
  <li class="prev page"></li>
@@ -145,7 +144,6 @@ async function dateRange(event) {
   const dateRangeTotalBox = getObjects.dateRangeReportBox;
   const { betweenTwoDatesReportDetails } = dateRangeTotalBox;
   const { lateCountBetweenTwoDate } = dateRangeTotalBox;
-  console.log(lateCountBetweenTwoDate);
 
   const totalReport = document.getElementById('total-report');
   const filteredReport = document.querySelector('.filtered-report');

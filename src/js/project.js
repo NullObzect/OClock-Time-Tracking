@@ -47,9 +47,9 @@ for (let i = 0; i < saveBtn.length; i++) {
       pDetails,
       pId,
     };
-    console.log(data);
+   
     aJAXPostRequest('/options/projects/update-project', data);
-    console.log(data)
+
     projectName[i].textContent = data.pName;
     projectDetails[i].textContent = data.pDetails;
     saveBtn[i].style.display = 'none';

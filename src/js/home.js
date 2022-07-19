@@ -1,5 +1,5 @@
 import {
-    aJAXPostRequest
+  aJAXPostRequest
 } from './helper.js';
 import Toastify from './toastify.js';
 
@@ -40,15 +40,12 @@ setInterval(() => {
   time.innerText = clock().slice(0, 5);
   timeMeridiem.textContent = clock().slice(6, 8);
 }, 1000);
-// console.log(clock().slice(6, 8));
-// console.log(timeMeridiem.textContent);
+
 
 // update end time
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('update end time');
   const updateEndTimeModal = document.getElementsByClassName('modal-cont');
   const updateBtn = document.getElementsByClassName('home-update-btn');
-  console.log(updateBtn);
 
   for (let i = 0; i < updateBtn.length; i++) {
     updateBtn[i].addEventListener('click', () => {
@@ -60,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   for (let j = 0; j < closeBtn.length; j++) {
     closeBtn[j].addEventListener('click', () => {
-      console.log('close');
+     
       updateEndTimeModal[j].style.display = 'none';
     });
   }
@@ -106,7 +103,7 @@ for (let i = 0; i < updateStartTime.length; i++) {
       startTime: updateStartTimeVal[i].value,
       date: getDate[i].value,
     }
-    console.log(data);
+
     aJAXPostRequest('/update-start-time', data)
     saveBtn[i].style.display = 'none';
     updateBtn[i].style.display = 'block';
@@ -128,7 +125,7 @@ for (let i = 0; i < updateEndTime.length; i++) {
       endTime: updateEndTimeVal[i].value,
       date: getDate[i].value,
     }
-    console.log(data);
+  
   });
   saveBtnForEndTime[i].addEventListener('click', () => {
     if (updateEndTimeVal[i].value === '') {
@@ -140,7 +137,7 @@ for (let i = 0; i < updateEndTime.length; i++) {
       endTime: updateEndTimeVal[i].value,
       date: getDate[i].value,
     }
-    console.log(data);
+
     aJAXPostRequest('/update-end-time', data)
     saveBtnForEndTime[i].style.display = 'none';
     updateBtn[i].style.display = 'block';

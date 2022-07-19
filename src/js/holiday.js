@@ -30,7 +30,6 @@ function loader(numberOfPage, pageNO) {
     if (holidays.length === 0) {
       return alert('No Holiday Found');
     }
-    console.log('page report', holidays.reports)
 
     const {
       dateRangeReport, pageNumber, numberOfPage,
@@ -174,7 +173,6 @@ dateIcon.addEventListener('click', async () => {
   dateStart.dataset.date = startDate
   dateEnd.dataset.date = endDate
 
-  console.log(startDate, endDate)
 
   if (dateStart.dataset.date === 'null') {
     return alert('date not select');
@@ -186,7 +184,6 @@ dateIcon.addEventListener('click', async () => {
 
   setReportTitle(startDate, endDate)
   const holidays = await data.json();
-  console.log(holidays);
 
   if (holidays.length === 0) {
     return alert('No Holiday Found');
@@ -245,7 +242,6 @@ function reportHolidayShow(holidayTable, dateRangeReport) {
   deleteData('/delete/holiday/');
 }
 
-console.log('end of script file');
 
 async function page(pageNo) {
   const dateStart = document.querySelector('#startPicker')
@@ -255,14 +251,12 @@ async function page(pageNo) {
   dateStart.dataset.date = startDate
   dateEnd.dataset.date = endDate
 
-  console.log(startDate, endDate)
 
   const data = await fetch(
     `${baseUrl}/options/holiday/between-two-date?startDate=${startDate}&endDate=${endDate}&pageNo=${pageNo}`,
   );
 
   const holidays = await data.json();
-  console.log(holidays);
 
   if (holidays.length === 0) {
     return alert('No Holiday Found');

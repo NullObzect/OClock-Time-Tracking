@@ -23,7 +23,6 @@ function loader(numberOfPage, pageNO) {
     const startDate = document.querySelector('#startPicker').dataset.date
     const endDate = document.querySelector('#endPicker').dataset.date
     // setReportTitle(startDate, endDate);
-    console.log('xxx', setReportTitle(startDate, endDate));
 
     let data;
     if (userId) {
@@ -41,12 +40,10 @@ function loader(numberOfPage, pageNO) {
     if (holidays.length === 0) {
       return alert('No Holiday Found');
     }
-    console.log('page report', holidays.reports)
 
     const {
       dateRangeReport, pageNumber, numberOfPage,
     } = holidays.reports
-    console.log('ddd', holidays.reports)
     const holidayTable = document.querySelector('#leaveday-table');
 
     reportHolidayShow(holidayTable, dateRangeReport)
@@ -79,7 +76,6 @@ function loader(numberOfPage, pageNO) {
   const pageLi = document.getElementsByClassName('page-li')
   for (let i = 0; i < pageLi.length; i++) {
     const pageNum = pageLi[i].dataset.page
-    console.log({ pageNum })
     if (pageNum !== '...') {
       pageLi[i].addEventListener('click', () => {
         page(pageNum)
@@ -141,7 +137,6 @@ async function actions() {
       const start = startVal[i].value.trim();
       const end = endVal[i].value.trim();
       const id = leaveId[i].value;
-      console.log(id);
       if (start === '' || end === '') {
         alert('Please fill all the fields');
         return;
@@ -151,7 +146,6 @@ async function actions() {
         end,
         id,
       };
-      console.log(data);
       aJAXPostRequest('/options/leavedays/update', data);
       startVal[i].value = data.start;
       endVal[i].value = data.end;
@@ -184,7 +178,6 @@ dateIcon.addEventListener('click', async () => {
   dateStart.dataset.date = startDate;
   dateEnd.dataset.date = endDate;
 
-  console.log(startDate, endDate);
 
   if (dateStart.dataset.date === 'null') {
     return alert('date not select');
@@ -199,9 +192,7 @@ dateIcon.addEventListener('click', async () => {
       `${baseUrl}/options/leavedays/between-two-date?startDate=${startDate}&endDate=${endDate}`,
     );
   }
-  console.log(data)
   const leavedays = await data.json();
-  console.log(leavedays);
 
   if (leavedays.length === 0) {
     return alert('No Holiday Found');
