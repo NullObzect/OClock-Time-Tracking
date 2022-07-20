@@ -203,7 +203,7 @@ const UserController = {
   recoverUserVerify: async (req, res) => {
     const { token } = req.params
     try {
-      const isVerified = jwt.verify(token, process.env.COOKIE_SECRET)
+      const isVerified = jwt.verify(token, process.env.JWT_SECRET)
       if (isVerified) {
         const { email } = isVerified
         console.log('usermail', email)
@@ -344,7 +344,7 @@ const UserController = {
   userVerifySet: async (req, res) => {
     const { token } = req.params
     try {
-      const isVerified = jwt.verify(token, process.env.COOKIE_SECRET)
+      const isVerified = jwt.verify(token, process.env.JWT_SECRET)
       console.log('verify', isVerified)
       if (isVerified) {
         const { email } = isVerified
