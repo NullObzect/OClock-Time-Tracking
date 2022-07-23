@@ -10,6 +10,7 @@ const timeNullToast = Toastify({
 const successToast = Toastify({
   text: 'Time update successfully',
 })
+const baseUrl = process.env.BASE_URL
 
 // for update start and end time
 
@@ -194,3 +195,48 @@ for (let i = 0; i < userNameBtn.length; i++) {
 userDetailsModalClose.addEventListener('click', () => {
   userDetailsModal.style.display = 'none'
 })
+
+// for dat file upload
+
+const getDatFileForm = document.querySelector('.dat-file')
+const datFileInput = document.querySelector('.dat-file-input')
+const fileStatus = document.querySelector('.file-status')
+
+getDatFileForm.addEventListener('change', (e) => {
+  e.preventDefault()
+  fileStatus.textContent = 'uploading...'
+  const datFile = datFileInput.files[0]
+  const postUrl = `${baseUrl}/attendance-entry-or-exit`
+  const reader = new FileReader()
+  reader.readAsText(datFile)
+  reader.onload = async () => {
+    //  aJAXPostRequest(postUrl, convertDatToJson(reader.result))
+    const api = await fetch(postUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(convertDatToJson(reader.result)),
+    })
+    const data = await api.json()
+    console.log(data)
+
+    fileStatus.textContent = 'uploaded'
+
+    reader.onerror = (error) => {
+      console.log(error);
+    }
+  }
+})
+
+//
+function convertDatToJson(data) {
+  const getData = data.split('\r\n');
+  const splitTab = [...getData].map((item) => item.split('\t'));
+  const attendanceObject = splitTab.map((item) => ({
+    finger_id: item[0],
+    name: item[1],
+    time: item[2],
+  }))
+  return attendanceObject;
+}
