@@ -137,9 +137,18 @@ const AttendanceController = {
             const index = fingeIdArray.findIndex((arr) => arr.includes(fingerId.toString()))
             const person = user[index]
             const userID = person.id
-
             const isId = await AttendanceModel.getCurrentDateUserIdInAttendanceForAPI(userID, timeStamp);
             const getCurDateAttendanceIdWithOutTime = await AttendanceModel.getCurrentDateUserIdInAttendanceWithOutTimeForAPI(userID);
+
+            if (isId !== undefined) {
+              const {
+                startDate, startTime, endDate, endTime, isUserId,
+              } = isId
+              const existingStartTimeStamp = JSON.parse(JSON.stringify(`${startDate} ${startTime}`))
+              const existingEndTimeStamp = JSON.parse(JSON.stringify(`${endDate} ${endTime}`))
+              if (isUserId === userID && existingStartTimeStamp === timeStamp) return res.json('Already Exist')
+              if (isUserId === userID && existingEndTimeStamp === timeStamp) return res.json('Already Exist')
+            }
 
             /* =======  FIXME: time is null start ========= */
 
@@ -161,6 +170,7 @@ const AttendanceController = {
                   await AttendanceModel.setAttendanceStart(userID, inTime, outTime, 0, 'Entry')
                 }
               }
+
               res.json('success')
             }
             /* ========= FIXME: time is null end ====== */
@@ -173,6 +183,7 @@ const AttendanceController = {
                 await AttendanceModel.insertLogForManual(stringToNumber(offDayValues), timeStamp, userID)
                 // await AttendanceModel.setLogStartTimeForAPI(userID, timeStamp)
               }
+              //  res.json('success')
             } else if (isId !== undefined && time !== undefined) {
               const { endTimeIsNull } = await AttendanceModel.isAttendanceEndTimeNullAPI(userID, timeStamp)
               if (endTimeIsNull === 1) {
@@ -185,14 +196,14 @@ const AttendanceController = {
                 await AttendanceModel.setAttendanceStartForAPI(userID, inTime, outTime, 0, 'Entry', timeStamp)
               }
             }
+
             res.json('success')
-          } else {
-            res.json('User Not Found')
           }
+          res.json('User Not Found')
         } catch (error) {
           console.log(error)
         }
-      }, 500 * i)
+      }, 200 * i)
     }
   },
 
