@@ -12,6 +12,10 @@ const userId = document.querySelector('#userId');
 const submit = document.querySelector('#submit-btn');
 const isExist = document.querySelector('.isExist-attdance');
 
+document.querySelector('#manualDate').addEventListener('change', (e) => {
+  manualDate(e)
+})
+
 const manualDate = (event) => {
   const date = event.target.value;
 
