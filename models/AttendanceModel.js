@@ -372,7 +372,7 @@ const AttendanceModel = {
   // below all model for API
 
   getCurrentDateUserIdInAttendanceForAPI: async (id, date) => {
-    const query = `SELECT user_id as isUserId FROM attendance WHERE DATE(start) = DATE('${date}') AND user_id = ${id}`
+    const query = `SELECT user_id as isUserId, DATE_FORMAT(start, '%Y-%m-%d') as startDate, TIME(start) as startTime, DATE_FORMAT(end, '%Y-%m-%d') as endDate, TIME(end) as endTime FROM attendance WHERE DATE(start) = DATE('${date}') AND user_id = ${id}`
     const [rows] = await dbConnect.promise().execute(query);
     return rows[0];
   },
