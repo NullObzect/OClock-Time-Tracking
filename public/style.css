@@ -34,7 +34,16 @@ body {
   overflow: auto;
   background: var(--bg);
   position: fixed;
-  z-index: 2;
+
+}
+#pageLoad{
+  background:var(--white) url('/img/clock2.gif') no-repeat center center  ;
+  background-size: 30%;
+  height: 100vh;
+  width: 100%;
+  position: fixed;
+  z-index: 200;
+
 }
 .loader::after {
   content: "";
@@ -389,6 +398,40 @@ main::-webkit-scrollbar-thumb {
     0px 2.51788px 1.42419px rgba(0, 0, 0, 0.065),
     0px 0.750053px 0.0354451px rgba(0, 0, 0, 0.0452935);
 }
+.sub-options {
+  width: 140px;
+  /* margin-left: auto; */
+  margin: auto;
+  transition: opacity 0.5s linear;  
+  transform:translate(0);
+  opacity: 1;
+}
+.hidden{
+  transform:translate(9999px);
+  opacity: 0;
+}
+.sub-options a {
+  text-decoration: none;
+}
+.sub-options .nav-li {
+  margin: auto;
+  width: 100%;
+  background-color: var(--fade-bluish-gray);
+  color: var(--deep-gray);
+  border-radius: 10px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 5px;
+  margin: 8px;
+  transition: ease-in-out 1.2;
+}
+.sub-options .nav-li:hover {
+  background-color: var(--deep);
+  cursor: pointer;
+  color: #fff;
+}
 .show-more {
   display: block;
 }
@@ -454,7 +497,7 @@ main::-webkit-scrollbar-thumb {
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 100;
+  z-index: 10;
   background-color: var(--bg);
   box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.15);
 }
@@ -571,8 +614,8 @@ main {
   background: var(--white);
   /* background: black; */
   overflow: auto;
-  z-index: 2;
   padding: 0 10px 10px 10px;
+  z-index: 100;
 }
 
 /* Report date range */
