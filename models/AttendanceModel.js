@@ -441,6 +441,26 @@ const AttendanceModel = {
     const [rows] = await dbConnect.promise().execute(query);
     return rows;
   },
+  getDayName: async (date) => {
+    const query = `SELECT DAYNAME('${date}') AS dayName`
+    const [rows] = await dbConnect.promise().execute(query);
+    return rows[0];
+  },
+  getOffDays: async () => {
+    const query = 'SELECT option_value AS offDays FROM options WHERE option_title = \'off-day\'';
+    const [rows] = await dbConnect.promise().execute(query);
+    return rows[0];
+  },
+  getDayNameThisYear: async (date) => {
+    const query = `SELECT DAYNAME('${date}') AS dayNameThisYear`
+    const [rows] = await dbConnect.promise().execute(query);
+    return rows[0];
+  },
+  getOffDaysThisYear: async () => {
+    const query = 'SELECT option_value AS offDaysThisYear FROM options WHERE option_title = \'off-day\'';
+    const [rows] = await dbConnect.promise().execute(query);
+    return rows[0];
+  },
 
 }
 module.exports = AttendanceModel;

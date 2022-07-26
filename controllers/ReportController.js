@@ -1,3 +1,6 @@
+/* eslint-disable no-inner-declarations */
+/* eslint-disable no-await-in-loop */
+/* eslint-disable no-return-assign */
 /* eslint-disable max-len */
 const AttendanceModel = require('../models/AttendanceModel');
 const LogModel = require('../models/LogModel');
@@ -6,6 +9,7 @@ const { pageNumbers } = require('../utilities/pagination')
 const {
   timeToHour, workHourFormateForReport,
 } = require('../utilities/formater');
+const OptionsModel = require('../models/OptionsModel');
 
 // get user id
 let isUserId;
@@ -125,7 +129,7 @@ const ReportController = {
         const [{
           weekNumberOfWorkingDays, weekFixedHr, weekTotalWorkHr, weekTotalExtraOrLess, weekAvgWorkTime, weekAvgExtraOrLess, weekAvgStartTime, weekAvgEndTime,
         // eslint-disable-next-line no-use-before-define
-        }] = await LogModel.thisWeekReports(userId, weekStartDate, countUserJoinDate(countJoinIngDate, weekTotalWorkdays))
+        }] = await LogModel.thisWeekReports(userId, weekStartDate, countUserJoinDate(countJoinIngDate, weekTotalWorkdays - totalLeavedaysThisWeek))
 
         const thisWeekExtraOrLessHr = chckTotalWorkTimeExtraOrLess(weekTotalExtraOrLess)
         const weekReportDetails = new ReportDetails(
@@ -157,26 +161,31 @@ const ReportController = {
         /* ======================================================== */
 
         const [{ monthStartDate, countWorkday }] = await AttendanceModel.thisMonthDates()
-
         const monthdaysType = await LogModel.countWorkdaysForMonth(userId, monthStartDate)
-
         const thisMonthOffdays = monthdaysType.filter((el) => el.workdays === 0).length
 
+        // TODO: new code start
+        const { offDays } = await AttendanceModel.getOffDays()
+        const { dayName } = await AttendanceModel.getDayName(monthStartDate)
+        const countTotalOffDays = totalOffDays(offDays, dayName, countUserJoinDate(countJoinIngDate, countWorkday))
+
+        // TODO: new code end
+
         // FIXME:
-        const monthTotalWorkdays = countWorkday - thisMonthOffdays;
+        const monthTotalWorkdays = (countWorkday - thisMonthOffdays);
 
         // this month leave days
         const getLeavedays = await LogModel.countThisMonthLeavedays(userId, monthStartDate)
         const totalLeadedaysThisMonth = sumLeavedays(getLeavedays)
-
+        const totalOffLeaveHolidays = totalLeadedaysThisMonth + countTotalOffDays
         const [{
           monthNumberOfWorkingDays, monthFixedHr, monthTotalWorkHr, monthTotalExtraOrLess, monthAvgWorkTime, monthAvgExtraOrLess, monthAvgStartTime, monthAvgEndTime,
-        }] = await LogModel.thisMonthReports(userId, monthStartDate, countUserJoinDate(countJoinIngDate, monthTotalWorkdays))
+        }] = await LogModel.thisMonthReports(userId, monthStartDate, countUserJoinDate(countJoinIngDate, monthTotalWorkdays - totalOffLeaveHolidays))
 
         const thisMonthExtraOrLessHr = chckTotalWorkTimeExtraOrLess(monthTotalExtraOrLess)
         const monthReportDetails = new ReportDetails(
           monthNumberOfWorkingDays,
-          countUserJoinDate(countJoinIngDate, monthTotalWorkdays) - totalLeadedaysThisMonth || 0,
+          countUserJoinDate(countJoinIngDate, monthTotalWorkdays - totalOffLeaveHolidays || 0),
           monthFixedHr,
           monthTotalWorkHr,
           monthAvgWorkTime,
@@ -184,8 +193,8 @@ const ReportController = {
           monthAvgEndTime,
           monthAvgExtraOrLess,
           thisMonthExtraOrLessHr,
-          isLowOrHighClassForday(countUserJoinDate(countJoinIngDate, monthTotalWorkdays), monthNumberOfWorkingDays),
-          showDaysIsLowOrHigh(countUserJoinDate(countJoinIngDate, monthTotalWorkdays - totalLeadedaysThisMonth || 0), monthNumberOfWorkingDays),
+          isLowOrHighClassForday(countUserJoinDate(countJoinIngDate, monthTotalWorkdays - totalOffLeaveHolidays), monthNumberOfWorkingDays),
+          showDaysIsLowOrHigh(countUserJoinDate(countJoinIngDate, monthTotalWorkdays - totalOffLeaveHolidays) || 0, monthNumberOfWorkingDays),
           isLowOrHighClassForHr(monthAvgExtraOrLess),
         )
 
@@ -204,20 +213,24 @@ const ReportController = {
         const [{ yearStartDate, countThisYearWorkday }] = await AttendanceModel.thisYearDates()
         const yeardaysType = await LogModel.countWorkdaysForMonth(userId, yearStartDate)
         const thisYearTotalOffdays = yeardaysType.filter((el) => el.workdays === 0).length
+        // TODO: new code start
+        const { offDaysThisYear } = await AttendanceModel.getOffDaysThisYear()
+        const { dayNameThisYear } = await AttendanceModel.getDayNameThisYear(yearStartDate)
+        const countTotalOffDaysThisYear = totalOffDays(offDaysThisYear, dayNameThisYear, countUserJoinDate(countJoinIngDate, countThisYearWorkday))
+        // TODO: new code end
         const yearTotalWorkdays = countThisYearWorkday - thisYearTotalOffdays;
-
         // this month leave days
         const getThisYearLeavedays = await LogModel.countThisYearLeavedays(userId, yearStartDate)
         const totalLeavedaysThisYear = sumLeavedays(getThisYearLeavedays)
-
+        const thisYearTotalOffLeaveHolidays = (totalLeavedaysThisYear + countTotalOffDaysThisYear)
         const [{
           yearNumberOfWorkingDays, yearFixedHr, yearTotalWorkHr, yearTotalExtraOrLess, yearAvgWorkTime, yearAvgExtraOrLess, yearAvgStartTime, yearAvgEndTime,
-        }] = await LogModel.thisYearReports(userId, yearStartDate, countUserJoinDate(countJoinIngDate, yearTotalWorkdays))
+        }] = await LogModel.thisYearReports(userId, yearStartDate, countUserJoinDate(countJoinIngDate, yearTotalWorkdays) - thisYearTotalOffLeaveHolidays)
 
         const thisYearExtraOrLessHr = chckTotalWorkTimeExtraOrLess(yearTotalExtraOrLess)
         const yearReportDetails = new ReportDetails(
           yearNumberOfWorkingDays,
-          countUserJoinDate(countJoinIngDate, yearTotalWorkdays) - totalLeavedaysThisYear || 0,
+          countUserJoinDate(countJoinIngDate, yearTotalWorkdays) - thisYearTotalOffLeaveHolidays || 0,
           yearFixedHr,
           yearTotalWorkHr,
           yearAvgWorkTime,
@@ -225,8 +238,8 @@ const ReportController = {
           yearAvgEndTime,
           yearAvgExtraOrLess,
           thisYearExtraOrLessHr,
-          isLowOrHighClassForday(countUserJoinDate(countJoinIngDate, yearTotalWorkdays), yearNumberOfWorkingDays),
-          showDaysIsLowOrHigh(countUserJoinDate(countJoinIngDate, yearTotalWorkdays - totalLeavedaysThisYear || 0), yearNumberOfWorkingDays),
+          isLowOrHighClassForday(countUserJoinDate(countJoinIngDate, yearTotalWorkdays) - thisYearTotalOffLeaveHolidays, yearNumberOfWorkingDays),
+          showDaysIsLowOrHigh(countUserJoinDate(countJoinIngDate, yearTotalWorkdays) - thisYearTotalOffLeaveHolidays, yearNumberOfWorkingDays),
           isLowOrHighClassForHr(yearAvgExtraOrLess),
 
         )
@@ -314,32 +327,36 @@ const ReportController = {
 
       // for date range input in report page
 
-      const getData = await LogModel.reportDetailsBetweenTwoDate(
-        userId, startDate, endDate,
-      );
+      const getData = await LogModel.reportDetailsBetweenTwoDate(userId, startDate, endDate);
 
       // log start
-
       const [{ days }] = await LogModel.numberOfdaysBetweenTwoDates(startDate, endDate)
-
       const [{ countJoinIngDate }] = await LogModel.countUserJoiningDate(userId)
       const betweenTwoDateTypes = await LogModel.countWorkdaysForBetweenTwoDate(userId, startDate, endDate)
-
       const betweenTwoDateOffdays = betweenTwoDateTypes.filter((el) => el.workdays === 0).length
-      const betweenTwoDateWorkdays = (days === 0 ? 1 : days) - betweenTwoDateOffdays;
 
+      const betweenTwoDateWorkdays = (days === 0 ? 1 : days) - betweenTwoDateOffdays;
+      // TODO: new code start
+      const { offDays } = await AttendanceModel.getOffDays()
+      const { dayName } = await AttendanceModel.getDayName(startDate)
+      const countTotalOffDays = totalOffDays(offDays, dayName, countUserJoinDate(countJoinIngDate, betweenTwoDateWorkdays))
+
+
+      // TODO: new code end
       // this month leave days
       const getLeavedaysBetweenTwoDate = await LogModel.countLeavedaysBetweenTwoDate(userId, startDate, endDate)
       const totalLeavedayBetweenTwoDate = sumLeavedays(getLeavedaysBetweenTwoDate)
+      const totalOffdayLeaveAndHolidays = totalLeavedayBetweenTwoDate + countTotalOffDays
 
+      // FIXME::
       const [{
         twoDateNumberOfWorkingDays, twoDateFixedHr, twoDateTotalWorkHr, twoDateTotalExtraOrLess, twoDateAvgWorkTime, twoDateAvgExtraOrLess, twoDateAvgStartTime, twoDateAvgEndTime,
-      }] = await LogModel.reportsBewttenTwoDate(userId, startDate, endDate, countUserJoinDate(countJoinIngDate, betweenTwoDateWorkdays))
+      }] = await LogModel.reportsBewttenTwoDate(userId, startDate, endDate, countUserJoinDate(countJoinIngDate, betweenTwoDateWorkdays - totalOffdayLeaveAndHolidays))
 
       const betweenTwoDateExtraOrLessHr = chckTotalWorkTimeExtraOrLess(twoDateTotalExtraOrLess)
       const betweenTwoDatesReportDetails = new ReportDetails(
         twoDateNumberOfWorkingDays,
-        countUserJoinDate(countJoinIngDate, betweenTwoDateWorkdays) - totalLeavedayBetweenTwoDate || 0,
+        countUserJoinDate(countJoinIngDate, betweenTwoDateWorkdays - totalOffdayLeaveAndHolidays || 0),
         twoDateFixedHr,
         twoDateTotalWorkHr,
         twoDateAvgWorkTime,
@@ -347,8 +364,8 @@ const ReportController = {
         twoDateAvgEndTime,
         twoDateAvgExtraOrLess,
         betweenTwoDateExtraOrLessHr,
-        isLowOrHighClassForday(countUserJoinDate(countJoinIngDate, betweenTwoDateWorkdays), twoDateNumberOfWorkingDays),
-        showDaysIsLowOrHigh(countUserJoinDate(countJoinIngDate, betweenTwoDateWorkdays - totalLeavedayBetweenTwoDate || 0), twoDateNumberOfWorkingDays),
+        isLowOrHighClassForday(countUserJoinDate(countJoinIngDate, betweenTwoDateWorkdays - totalOffdayLeaveAndHolidays), twoDateNumberOfWorkingDays),
+        showDaysIsLowOrHigh(countUserJoinDate(countJoinIngDate, betweenTwoDateWorkdays - totalOffdayLeaveAndHolidays || 0), twoDateNumberOfWorkingDays),
         isLowOrHighClassForHr(twoDateAvgExtraOrLess),
 
       )
@@ -425,6 +442,15 @@ function sumLeavedays(leavedays) {
   })
   return sum
 }
+function countFriday(dayName) {
+  let count = 0;
+  dayName.forEach((el) => {
+    if (el.dayType === 'friday') {
+      count += 1
+    }
+  })
+  return count
+}
 function chckTotalWorkTimeExtraOrLess(totalWorkTime) {
   let isExtra; let
     isLess;
@@ -493,13 +519,80 @@ function countUserJoinDate(joinDay, currentDay) {
     return joinDay
   }
 }
-// constructor function for report details
+
+// day name to number
+function dayNameToNumber(getName) {
+  let getNumber;
+
+  if (getName === 'Saturday') {
+    return getNumber = 1;
+  } if (getName === 'Sunday') {
+    return getNumber = 2;
+  } if (getName === 'Monday') {
+    return getNumber = 3;
+  } if (getName === 'Tuesday') {
+    return getNumber = 4;
+  } if (getName === 'Wednesday') {
+    return getNumber = 5;
+  } if (getName === 'Thursday') {
+    return getNumber = 6;
+  } if (getName === 'Friday') {
+    return getNumber = 7;
+  }
+}
+
+// generate total offdays
+// for  off day
+const offDaysObj = {
+  Friday: 4,
+  Saturday: 5,
+  Sunday: 6,
+  Monday: 0,
+  Tuesday: 1,
+  Wednesday: 2,
+  Thursday: 3,
+}
+function numToDay(obj, num) {
+  return Object.keys(obj).find((key) => obj[key] === num)
+}
+function totalOffDays(offdays, startDate, totalWorkDays) {
+  const getOffDaysArr = [...offdays]
+  for (let i = 0; i < getOffDaysArr.length; i += 1) {
+    if (getOffDaysArr[i] === ',') {
+      getOffDaysArr.splice(i, 1)
+    }
+  }
+  const offDaysNameArr = getOffDaysArr.map((el) => numToDay(offDaysObj, Number(el || 0)))
+  const getThisMonthAllDaysName = generateMultipleDayName(startDate, totalWorkDays)
+  const totalDays = getThisMonthAllDaysName.filter((el) => offDaysNameArr.includes(el)).length
+
+  return totalDays || 0
+}
+
+// generate multiple week name
+function generateMultipleDayName(dayName, numOfDay) {
+  let arr = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
+  const findIdex = arr.indexOf(dayName)
+  numOfDay += findIdex;
+  while (arr.length < numOfDay) { arr = arr.concat(arr); }
+
+  return arr.slice(findIdex, numOfDay)
+}
 
 function ReportDetails(
-  totalWorkingDays, fixedWorkdays, fixedTotalHr,
-  workingTotalHr, avgWorkHr, avgStartTime,
-  avgEndTime, isAvgExtraOrLessHr, isTotalExtraOrLessHr,
-  classLowOrHighForDay, daysIsLowOrHigh, classLowOrHighForHr,
+  totalWorkingDays,
+  fixedWorkdays,
+  fixedTotalHr,
+  workingTotalHr,
+  avgWorkHr,
+  avgStartTime,
+  avgEndTime,
+  isAvgExtraOrLessHr,
+  isTotalExtraOrLessHr,
+  classLowOrHighForDay,
+  daysIsLowOrHigh,
+  classLowOrHighForHr,
 ) {
   this.totalWorkingDays = totalWorkingDays || 0
   this.fixedWorkdays = fixedWorkdays || 0
