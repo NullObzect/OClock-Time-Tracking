@@ -1,3 +1,8 @@
+/* eslint-disable no-shadow */
+/* eslint-disable eqeqeq */
+/* eslint-disable no-plusplus */
+/* eslint-disable no-undef */
+/* eslint-disable no-restricted-syntax */
 const baseUrl = process.env.BASE_URL
 
 function showToast(message, type) {
@@ -11,10 +16,6 @@ function showToast(message, type) {
 const userId = document.querySelector('#userId');
 const submit = document.querySelector('#submit-btn');
 const isExist = document.querySelector('.isExist-attdance');
-
-document.querySelector('#manualDate').addEventListener('change', (e) => {
-  manualDate(e)
-})
 
 const manualDate = (event) => {
   const date = event.target.value;
@@ -35,14 +36,16 @@ const manualDate = (event) => {
       }
     });
 };
+document.querySelector('#manualDate').addEventListener('change', (e) => {
+  manualDate(e)
+})
 
 submit.addEventListener('click', (e) => {
   e.preventDefault();
   const bodyData = {};
   const error = [];
   const modal = document.querySelector('#myModal')
-  const submitBtn = document.getElementById('#submit-btn')
-  const form = document.querySelector('form');
+  const form = document.querySelector('#manualForm');
   const errorPlaceholders = document.querySelectorAll('p.error');
   for (let i = 0; i < errorPlaceholders.length; i++) {
     errorPlaceholders[i].style.display = 'none';
@@ -76,6 +79,8 @@ submit.addEventListener('click', (e) => {
     errorPlaceholder.textContent = `${fieldName} is required!`;
     errorPlaceholder.style.display = 'block';
   }
+  console.log(form)
+  console.log(error)
   if (error.length === 0) {
     fetch('/manual-attendance', {
       method: 'POST',
