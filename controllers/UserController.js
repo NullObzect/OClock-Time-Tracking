@@ -7,32 +7,25 @@ const path = require('path');
 const { unlink } = require('fs');
 const UserModel = require('../models/UserModel');
 const sendMail = require('../utilities/sendMail');
-const { pageNumbers } = require('../utilities/pagination')
+// const { pageNumbers } = require('../utilities/pagination')
+const paginationCountPage = require('../utilities/paginationCountPage')
+
 const htmlMailText = require('./htmlMailText')
 
 const UserController = {
   // render page
   getUsers: async (req, res) => {
     const user = await UserModel.getAllUsersList()
-    const page = Number(req.query.page) || 1
-    const limit = Number(req.query.limit) || 10
-    const startIndex = (page - 1) * limit
-    const endIndex = page * limit
-    const users = user.slice(startIndex, endIndex)
-    const pageLength = user.length / limit
-    const numberOfPage = Number.isInteger(pageLength) ? Math.floor(pageLength) : Math.floor(pageLength) + 1
-    console.log({ numberOfPage, page })
-    const pageNumber = pageNumbers(numberOfPage, 2, page)
-    console.log(pageNumber)
+    const [users, numberOfPage, page, pageNumber, limit] = paginationCountPage(req, user)
+    const pathUrl = req.path.replace('/', '')
     res.render('pages/users', {
-      users, numberOfPage, page, pageNumber,
+      users, numberOfPage, page, pageNumber, limit, pathUrl,
     });
   },
   // insert user
   addUser: async (req, res) => {
     let result;
     let avatar = null;
-    console.log(req.body)
     const {
       name, email, phone, gender,
     } = req.body
@@ -41,9 +34,7 @@ const UserController = {
         avatar = req.files[0].filename
         result = await UserModel.addUser(name, gender, phone, email, avatar)
       } else {
-        console.log('else')
         result = await UserModel.addUser(name, gender, phone, email, avatar)
-        console.log(result)
       }
       if (result.affectedRows > 0) {
         const id = result.insertId
@@ -89,12 +80,10 @@ const UserController = {
         } else {
           try {
             if (userAvatar !== null) {
-              unlink(
-                path.join(__dirname, `../public/uploads/avatars/${userAvatar}`), (err) => {
-                  console.log(err)
-                  console.log(`${userAvatar} delete`)
-                },
-              )
+              unlink(path.join(__dirname, `../public/uploads/avatars/${userAvatar}`), (err) => {
+                console.log(err)
+                console.log(`${userAvatar} delete`)
+              })
             }
             await UserModel.updateAvatar(avatar, user.id)
             res.redirect('/profile');

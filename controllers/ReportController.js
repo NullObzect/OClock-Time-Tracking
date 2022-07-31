@@ -382,7 +382,7 @@ const ReportController = {
 
       // pagination
       const page = Number(req.query.page) || 1
-      const limit = Number(req.query.limit) || 4
+      const limit = Number(req.query.limit) || process.env.PAGINATION_ROW
       const startIndex = (page - 1) * limit
       const endIndex = page * limit
       const dateRangeReport = dataToJson.slice(startIndex, endIndex)
