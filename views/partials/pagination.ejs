@@ -1,20 +1,66 @@
 <div class="pagination">
+  <div class="selectLimit">
+    <select id="pageLimitSelect">
+      <option value="" selected disabled>limit</option>
+    <option value="<%=baseUrl%>/<%=pathUrl%>?limit=2<%=startDate && `&startDate=${startDate}`%><%=endDate && `&endDate=${endDate}`%>">2</option>
+    <option value="<%=baseUrl%>/<%=pathUrl%>?limit=10<%=startDate && `&startDate=${startDate}`%><%=endDate && `&endDate=${endDate}`%>">10</option>
+    <option value="<%=baseUrl%>/<%=pathUrl%>?limit=20<%=startDate && `&startDate=${startDate}`%><%=endDate && `&endDate=${endDate}`%>">20</option>
+    <option value="<%=baseUrl%>/<%=pathUrl%>?limit=30<%=startDate && `&startDate=${startDate}`%><%=endDate && `&endDate=${endDate}`%>">30</option>
+    <option value="<%=baseUrl%>/<%=pathUrl%>?limit=50<%=startDate && `&startDate=${startDate}`%><%=endDate && `&endDate=${endDate}`%>">50</option>
+    <option value="<%=baseUrl%>/<%=pathUrl%>?limit=100<%=startDate && `&startDate=${startDate}`%><%=endDate && `&endDate=${endDate}`%>">100</option>
+  </select></div>
   <ul>
-      <li class="first" onclick="first(1)"> </li>
-      <% if(page===1){ %>
+
+  
+          <% if(page===1){ %>
+        <li class="first"> </li>
         <li class="prev"> </li>
         <% }else{ %>
+          <li class="first" onclick="first(1)"> </li>
           <li class="prev" onclick="prev('<%=page%>')">  </li>
           <% } %>   
     <% for(let i=0;i<pageNumber.length;i++){ %>
-      <a href="/users?page=<%=pageNumber[i]%>" class=<%= page==pageNumber[i] ? 'page-active' : '' %> ><li>  <%=pageNumber[i]%>  </li></a>
+      <%if(pageNumber[i]!='...'){%>
+      <a href="/<%=pathUrl%>?page=<%=pageNumber[i]%>&limit=<%=limit%><%=startDate && `&startDate=${startDate}`%><%=endDate && `&endDate=${endDate}`%>" class=<%= page==pageNumber[i] ? 'page-active' : '' %> ><li>  <%=pageNumber[i]%>  </li></a>
+      <% }else{%>
+        <li>  <%=pageNumber[i]%>  </li>
+      <%} %>
       <% } %>
 
       <% if(page===numberOfPage){ %>
         <li class="next">  </li>
+        <li class="last">  </li>
         <% }else{ %>
           <li class="next" onclick="next('<%=page%>')"> </li>
-          <% } %>   
           <li class="last" onclick="last('<%=numberOfPage%>')"> </li>
+          <% } %>   
+          
     </ul>
 </div>
+
+<script>
+  const limit = '<%= limit%>'
+  const startDate ='<%=startDate%>'
+  const endDate ='<%=endDate%>'
+
+  console.log({startDate})
+
+  function first(e) {
+  const firstPage = Number(e);
+  return (location.href = `/<%=pathUrl%>?page=${firstPage}&limit=${limit}&startDate=${startDate}&endDate=${endDate}`);
+}
+
+function prev(e) {
+  const prevPage = Number(e - 1);
+  return (location.href = `/<%=pathUrl%>?page=${prevPage}&limit=${limit}&startDate=${startDate}&endDate=${endDate}`);
+}
+function next(e) {
+  const nextPage = Number(parseInt(e) + 1);
+  return (location.href = `/<%=pathUrl%>?page=${nextPage}&limit=${limit}&startDate=${startDate}&endDate=${endDate}`);
+}
+function last(e) {
+  const lastPage = e;
+  return (location.href = `/<%=pathUrl%>?page=${lastPage}&limit=${limit}&startDate=${startDate}&endDate=${endDate}`);
+}
+
+</script>

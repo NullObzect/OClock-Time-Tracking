@@ -28,13 +28,13 @@
     </div>
     <div class="date-picker">
       <div class="start-date">
-        <input id="startPicker" type="text" placeholder="-- / -- / ----" />
+        <input id="startPicker" type="text" value="<%=startDate%>" placeholder="-- / -- / ----" />
       </div>
       <div class="to">to</div>
       <div class="end-date">
-        <input id="endPicker" placeholder="-- / -- / ----" />
+        <input id="endPicker" value="<%=endDate%>" placeholder="-- / -- / ----" />
       </div>
-      <div id="date-icon" class="date-icon">
+      <div id="date-icon" class="date-icon <%=startDate && 'date-icon-active'%>">
         <svg
           width="26"
           height="30"
@@ -126,8 +126,10 @@
   </div>
 </div>
 
-<script>
+<!-- Pagination -->
+<%- include("../partials/pagination"); -%>
 
+<script>
   const loggedInUser = "<%= loggedInUser.userRole %>";
 </script>
 
