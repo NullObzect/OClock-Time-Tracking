@@ -441,6 +441,62 @@ const AttendanceModel = {
     const [rows] = await dbConnect.promise().execute(query);
     return rows;
   },
+  getDayName: async (date) => {
+    const query = `SELECT DAYNAME('${date}') AS dayName`
+    const [rows] = await dbConnect.promise().execute(query);
+    return rows[0];
+  },
+  getOffDays: async () => {
+    const query = 'SELECT option_value AS offDays FROM options WHERE option_title = \'off-day\'';
+    const [rows] = await dbConnect.promise().execute(query);
+    return rows[0];
+  },
+  getDayNameThisYear: async (date) => {
+    const query = `SELECT DAYNAME('${date}') AS dayNameThisYear`
+    const [rows] = await dbConnect.promise().execute(query);
+    return rows[0];
+  },
+  getOffDaysThisYear: async () => {
+    const query = 'SELECT option_value AS offDaysThisYear FROM options WHERE option_title = \'off-day\'';
+    const [rows] = await dbConnect.promise().execute(query);
+    return rows[0];
+  },
+
+  countHolidaysThisMonth: async (monthStartDate, userId) => {
+    const query = `SELECT   CASE  WHEN  DATEDIFF(CURRENT_DATE, U.create_at)  >   DATEDIFF(CURRENT_DATE, '${monthStartDate}') THEN (DATEDIFF(end, start) + 1)   ELSE -1 END countHolidaysThisMonth
+    FROM holidays  CROSS JOIN users AS U 
+   WHERE  DATE(start) BETWEEN '${monthStartDate}' AND DATE(CURRENT_DATE -1) AND U.id =  ${userId}`
+    const [rows] = await dbConnect.promise().execute(query);
+    return rows;
+  },
+  getHolidaysStartDateThisMonth: async (monthStartDate, userId) => {
+    const query = `SELECT   CASE  WHEN  DATEDIFF(CURRENT_DATE, U.create_at)  >   DATEDIFF(CURRENT_DATE, '${monthStartDate}') THEN DATE_FORMAT(start, '%Y-%m-%d')   ELSE -1 END holidaysStartDateThisMonth
+    FROM holidays  CROSS JOIN users AS U 
+   WHERE  DATE(start) BETWEEN '${monthStartDate}' AND DATE(CURRENT_DATE -1) AND U.id =  ${userId}`
+    const [rows] = await dbConnect.promise().execute(query);
+    return rows;
+  },
+
+  countHolidaysBetweenTwoDate: async (startDate, endDate, userId) => {
+    const query = `SELECT   CASE  WHEN  DATEDIFF(CURRENT_DATE, U.create_at)  >   DATEDIFF(CURRENT_DATE, '${startDate}') THEN (DATEDIFF(end, start) + 1)   ELSE -1 END countHolidaysBetweenTwoDate
+    FROM holidays  CROSS JOIN users AS U 
+   WHERE  DATE(start) BETWEEN '${startDate}' AND '${endDate}' AND U.id =  ${userId}`
+    const [rows] = await dbConnect.promise().execute(query);
+    return rows;
+  },
+
+  getHolidaysStartDateBetweenTwoDate: async (startDate, endDate, userId) => {
+    const query = `SELECT   CASE  WHEN  DATEDIFF('${endDate}', U.create_at)  >   DATEDIFF('${endDate}', '${startDate}') THEN DATE_FORMAT(start, '%Y-%m-%d')   ELSE -1 END holidaysStartDateBetweenTwoDate
+    FROM holidays  CROSS JOIN users AS U 
+   WHERE  DATE(start) BETWEEN '${startDate}' AND '${endDate}' AND U.id =  ${userId}`
+    const [rows] = await dbConnect.promise().execute(query);
+    return rows;
+  },
+  countBetweenTwoDatesLeavedays: async (startDate, endDate, userId) => {
+    const query = `SELECT DATEDIFF(end, start) + 1 as countLeaveDay, DATE_FORMAT(start, '%Y-%m-%d') as startDate FROM employee_leaves WHERE user_id = ${userId} AND DATE(start) BETWEEN '${startDate}' AND DATE'${endDate}'`
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows;
+  },
 
 }
 module.exports = AttendanceModel;

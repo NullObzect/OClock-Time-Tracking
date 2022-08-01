@@ -27,7 +27,7 @@ const LogModel = {
   },
   // late count time for weekly
   lateCountThisWeek: async (userId, weekStartDate) => {
-    const query = `SELECT  CASE WHEN LEFT(TIME_FORMAT(TIMEDIFF(TIME(in_time) + TIME(O.option_value), TIME(start)), '%H:%i'), 1) = '-' THEN 1 ELSE 0 END  lateCount FROM log AS L JOIN options AS O ON O.option_title = 'tolerance-time'  WHERE  user_id = ${userId} AND DATE(start) BETWEEN DATE( '${weekStartDate}') AND  DATE(CURRENT_DATE - 1)`
+    const query = `SELECT  CASE WHEN LEFT(TIME_FORMAT(TIMEDIFF(TIME(in_time) + TIME(O.option_value) , TIME(start)), '%H:%i'), 1) = '-' THEN 1 ELSE 0 END  lateCount FROM log AS L JOIN options AS O ON O.option_title = 'tolerance-time'  WHERE  user_id = ${userId} AND DATE(start) BETWEEN DATE( '${weekStartDate}') AND  DATE(CURRENT_DATE - 1)`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
@@ -37,7 +37,7 @@ const LogModel = {
     return rows;
   },
   countThisMonthLeavedays: async (userId, monthStartDate) => {
-    const query = `SELECT DATEDIFF(end, start) + 1 as countLeaveDay FROM employee_leaves WHERE user_id = ${userId} AND DATE(start) BETWEEN '${monthStartDate}' AND DATE(CURRENT_DATE -1)`
+    const query = `SELECT DATEDIFF(end, start) + 1 as countLeaveDay, DATE_FORMAT(start, '%Y-%m-%d') as startDate FROM employee_leaves WHERE user_id = ${userId} AND DATE(start) BETWEEN '${monthStartDate}' AND DATE(CURRENT_DATE -1)`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
@@ -48,7 +48,7 @@ const LogModel = {
   },
   // late count time for weekly monthly
   lateCountThisMonth: async (userId, monthStartDate) => {
-    const query = `SELECT  CASE WHEN LEFT(TIME_FORMAT(TIMEDIFF(TIME(in_time) + TIME(O.option_value), TIME(start)), '%H:%i'), 1) = '-' THEN 1 ELSE 0 END  lateCount FROM log AS L JOIN options AS O ON O.option_title = 'tolerance-time'  WHERE  user_id = ${userId} AND DATE(L.start) BETWEEN  DATE('${monthStartDate}') AND  DATE(CURRENT_DATE - 1)`
+    const query = `SELECT  CASE WHEN LEFT(TIME_FORMAT(TIMEDIFF(TIME(in_time) + TIME(O.option_value) , TIME(start)), '%H:%i'), 1) = '-' THEN 1 ELSE 0 END  lateCount FROM log AS L JOIN options AS O ON O.option_title = 'tolerance-time'  WHERE  user_id = ${userId} AND DATE(L.start) BETWEEN  DATE('${monthStartDate}') AND  DATE(CURRENT_DATE - 1)`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
@@ -72,7 +72,7 @@ const LogModel = {
   },
   // late count time for  yearly
   lateCountThisYear: async (userId, yearStartDate) => {
-    const query = `SELECT  CASE WHEN LEFT(TIME_FORMAT(TIMEDIFF(TIME(in_time) + TIME(O.option_value), TIME(start)), '%H:%i'), 1) = '-' THEN 1 ELSE 0 END  lateCount FROM log AS L JOIN options AS O ON O.option_title = 'tolerance-time'  WHERE  user_id = ${userId} AND DATE(L.start) BETWEEN  DATE('${yearStartDate}') AND  DATE(CURRENT_DATE - 1)`
+    const query = `SELECT  CASE WHEN LEFT(TIME_FORMAT(TIMEDIFF(TIME(in_time) + TIME(O.option_value),  TIME(start)), '%H:%i'), 1) = '-' THEN 1 ELSE 0 END  lateCount FROM log AS L JOIN options AS O ON O.option_title = 'tolerance-time'  WHERE  user_id = ${userId} AND DATE(L.start) BETWEEN  DATE('${yearStartDate}') AND  DATE(CURRENT_DATE - 1)`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
@@ -82,7 +82,7 @@ const LogModel = {
     return rows;
   },
   numberOfdaysBetweenTwoDates: async (startDate, endDate) => {
-    const query = `SELECT DATEDIFF('${endDate}', '${startDate}') AS days`
+    const query = `SELECT DATEDIFF('${endDate}', '${startDate}') + 1 AS days`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
@@ -104,7 +104,7 @@ const LogModel = {
   },
   // late count time for weekly monthly
   lateCountBetweenTwoDate: async (userId, startDate, endDate) => {
-    const query = `SELECT  CASE WHEN LEFT(TIME_FORMAT(TIMEDIFF(TIME(in_time) + TIME(O.option_value), TIME(start)), '%H:%i'), 1) = '-' THEN 1 ELSE 0 END  lateCount FROM log  AS L JOIN options AS O ON O.option_title = 'tolerance-time'  WHERE  user_id = ${userId} AND DATE(L.start) BETWEEN  '${startDate}' AND  '${endDate}'`
+    const query = `SELECT  CASE WHEN LEFT(TIME_FORMAT(TIMEDIFF(TIME(in_time) + TIME(O.option_value) , TIME(start)), '%H:%i'), 1) = '-' THEN 1 ELSE 0 END  lateCount FROM log  AS L JOIN options AS O ON O.option_title = 'tolerance-time'  WHERE  user_id = ${userId} AND DATE(L.start) BETWEEN  '${startDate}' AND  '${endDate}'`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
@@ -112,8 +112,8 @@ const LogModel = {
   lastSevenDaysReports: async (userId) => {
     const query = `SELECT  DAYNAME(L.start) AS day, DATE_FORMAT(L.start,'%d-%m-%Y') AS date,  day_type AS dayType, TIME_FORMAT(start,'%h:%i %p') AS start, CASE WHEN  (TIME_TO_SEC(in_time)   >  TIME_TO_SEC(start)) 
     THEN TIME_FORMAT(TIMEDIFF(TIME(in_time), TIME(start)), '%H:%i')
-    WHEN  TIME(start)  BETWEEN TIME(in_time) AND  TIME(SEC_TO_TIME(TIME_TO_SEC(in_time)) + SEC_TO_TIME(TIME_TO_SEC(O.option_value))) THEN ''
-    ELSE TIME_FORMAT(TIMEDIFF(TIME( SEC_TO_TIME(TIME_TO_SEC(in_time)) + SEC_TO_TIME(TIME_TO_SEC(O.option_value))), TIME((start))), '%H:%i') END inTimeExtraOrLess, TIME_FORMAT(end,'%h:%i %p') AS end, TIME_FORMAT(TIMEDIFF(TIME(work_hour), TIME(work_time)), '%H:%i') AS outTimeExtraOrLess, TIME_FORMAT(work_time,'%H:%i') AS workTime, REPLACE(TIME_FORMAT( work_hour , '%h'),'0', '') AS workHr, TIME_FORMAT(TIMEDIFF(work_time, work_hour), '%H
+    WHEN  TIME(start)  BETWEEN TIME(in_time)  AND  TIME(SEC_TO_TIME(TIME_TO_SEC(in_time)) + SEC_TO_TIME(TIME_TO_SEC(O.option_value))) THEN ''
+    ELSE TIME_FORMAT(TIMEDIFF(TIME( SEC_TO_TIME(TIME_TO_SEC(in_time)) + SEC_TO_TIME(TIME_TO_SEC(O.option_value) )), TIME((start))), '%H:%i') END inTimeExtraOrLess, TIME_FORMAT(end,'%h:%i %p') AS end, TIME_FORMAT(TIMEDIFF(TIME(work_hour), TIME(work_time)), '%H:%i') AS outTimeExtraOrLess, TIME_FORMAT(work_time,'%H:%i') AS workTime, REPLACE(TIME_FORMAT( work_hour , '%h'),'0', '') AS workHr, TIME_FORMAT(TIMEDIFF(work_time, work_hour), '%H
     :%i') AS totalTimeExtraOrLess FROM log AS L JOIN options AS O ON O.option_title = 'tolerance-time'  WHERE  user_id = ${userId} AND L.start >  now() - INTERVAL 7 DAY ORDER BY L.start ASC`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
@@ -123,7 +123,7 @@ const LogModel = {
     const query = `SELECT  DAYNAME(L.start) AS day, DATE_FORMAT(L.start,'%d %b %y') AS date,  day_type AS dayType, TIME_FORMAT(start,'%h:%i %p') AS start, CASE WHEN  (TIME_TO_SEC(in_time)   >  TIME_TO_SEC(start)) 
     THEN TIME_FORMAT(TIMEDIFF(TIME(in_time), TIME(start)), '%H:%i')
     WHEN  TIME(start)  BETWEEN TIME(in_time) AND  TIME(SEC_TO_TIME(TIME_TO_SEC(in_time)) + SEC_TO_TIME(TIME_TO_SEC(O.option_value))) THEN ''
-    ELSE TIME_FORMAT(TIMEDIFF(TIME( SEC_TO_TIME(TIME_TO_SEC(in_time)) + SEC_TO_TIME(TIME_TO_SEC(O.option_value))), TIME((start))), '%H:%i') END inTimeExtraOrLess, TIME_FORMAT(end,'%h:%i %p') AS end, TIME_FORMAT(TIMEDIFF(TIME(work_hour), TIME(work_time)), '%H:%i') AS outTimeExtraOrLess, TIME_FORMAT(work_time,'%H:%i') AS workTime, REPLACE(TIME_FORMAT( work_hour , '%h'),'0', '') AS workHr, TIME_FORMAT(TIMEDIFF(work_time, work_hour), '%H:%i') AS totalTimeExtraOrLess FROM log AS L JOIN options AS O ON O.option_title = 'tolerance-time' WHERE  user_id = ${userId} AND  DATE(L.start) BETWEEN '${startDate}' AND '${endDate}' ORDER BY L.start ASC`
+    ELSE TIME_FORMAT(TIMEDIFF(TIME( SEC_TO_TIME(TIME_TO_SEC(in_time)) + SEC_TO_TIME(TIME_TO_SEC(O.option_value) )), TIME((start))), '%H:%i') END inTimeExtraOrLess, TIME_FORMAT(end,'%h:%i %p') AS end, TIME_FORMAT(TIMEDIFF(TIME(work_hour), TIME(work_time)), '%H:%i') AS outTimeExtraOrLess, TIME_FORMAT(work_time,'%H:%i') AS workTime, REPLACE(TIME_FORMAT( work_hour , '%h'),'0', '') AS workHr, TIME_FORMAT(TIMEDIFF(work_time, work_hour), '%H:%i') AS totalTimeExtraOrLess FROM log AS L JOIN options AS O ON O.option_title = 'tolerance-time' WHERE  user_id = ${userId} AND  DATE(L.start) BETWEEN '${startDate}' AND '${endDate}' ORDER BY L.start ASC`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
