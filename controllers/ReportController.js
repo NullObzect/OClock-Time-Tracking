@@ -425,8 +425,8 @@ const ReportController = {
 
       // count leavedays end
       const uniqueBTDHoliLeaveAndOffdaysDate = [...new Set([...holidaysDatesBTD, ...betweenTwoDateArr, ...BTDLeavedaysDates])]
+
       const fixedWorkdayBTD = totalWorkdaysExceptOffAndHolidays(offDays, generateWeekNames(uniqueBTDHoliLeaveAndOffdaysDate), BTDLeavedaysLen) - betweenTwoDateOffdays
-      console.log('fixedWorkdayBTD', fixedWorkdayBTD);
       // TODO: new code end
       // this month leave days
       // const getLeavedaysBetweenTwoDate = await LogModel.countLeavedaysBetweenTwoDate(userId, startDate, endDate)
@@ -695,7 +695,7 @@ function totalWorkdaysExceptOffAndHolidays(offdays, weekNames, leavedaysLen) {
   return totalDays || 0
 }
 function cmpLeaveAndWeek(week, leave) {
-  if (week || leave === 0) return 0;
+  if (week === 0 && leave === 0) return 0;
   week <= 4 && leave <= 4 ? week++ : week
   if (week > leave) {
     return week
