@@ -18,6 +18,8 @@ function decorateHtmlResponse(pageTitle) {
     res.locals.baseUrl = process.env.BASE_URL
     res.locals.google = process.env.GOOGLE_PASSPORT_CLIENT_ID
     res.locals.facebook = process.env.FACEBOOK_CLIENT_ID
+    res.locals.startDate = ''
+    res.locals.endDate = ''
     next();
   };
 }

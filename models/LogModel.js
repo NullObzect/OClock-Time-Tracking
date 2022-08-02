@@ -37,7 +37,7 @@ const LogModel = {
     return rows;
   },
   countThisMonthLeavedays: async (userId, monthStartDate) => {
-    const query = `SELECT DATEDIFF(end, start) + 1 as countLeaveDay FROM employee_leaves WHERE user_id = ${userId} AND DATE(start) BETWEEN '${monthStartDate}' AND DATE(CURRENT_DATE -1)`
+    const query = `SELECT DATEDIFF(end, start) + 1 as countLeaveDay, DATE_FORMAT(start, '%Y-%m-%d') as startDate FROM employee_leaves WHERE user_id = ${userId} AND DATE(start) BETWEEN '${monthStartDate}' AND DATE(CURRENT_DATE -1)`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },

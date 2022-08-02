@@ -3,6 +3,7 @@
 const HolidayModel = require('../models/HolidayModel');
 const UserModel = require('../models/UserModel')
 const { pageNumbers } = require('../utilities/pagination')
+const paginationCountPage = require('../utilities/paginationCountPage')
 
 // const helperJs = require('../public/js/halper')
 const Flash = require('../utilities/Flash')
@@ -13,10 +14,6 @@ const {
 
 const HolidayController = {
 
-  getAddHolidayPage: async (req, res) => {
-    console.log('message', req.flash('fail'))
-    res.render('pages/addHolidays')
-  },
   addHoliday: async (req, res) => {
     try {
       const { title, start, end } = req.body
@@ -40,9 +37,21 @@ const HolidayController = {
     }
   },
   holidayList: async (req, res) => {
+    let holiday
+    const { startDate, endDate } = req.query;
+    console.log(startDate, endDate)
+    if (startDate) {
+      holiday = await HolidayModel.holidaysListBetweenTowDate(startDate, endDate)
+    } else {
+      holiday = await HolidayModel.holidaysList()
+    }
+
     try {
-      const holidays = await HolidayModel.holidaysList()
-      res.render('pages/holiday', { holidays })
+      const [holidays, numberOfPage, page, pageNumber, limit] = paginationCountPage(req, holiday)
+      const pathUrl = req.path.replace('/', '')
+      res.render('pages/holiday', {
+        holidays, numberOfPage, page, pageNumber, limit, pathUrl, startDate, endDate,
+      })
     } catch (err) {
       console.log('====>Error form HolidayControlle/holidayList', err);
     }
@@ -52,10 +61,11 @@ const HolidayController = {
       const { startDate, endDate } = req.query;
 
       const holidays = await HolidayModel.holidaysListBetweenTowDate(startDate, endDate)
+      console.log({ holidays })
       const getHoliday = JSON.parse(JSON.stringify(holidays))
       // for pagination
       const page = Number(req.query.page) || 1
-      const limit = Number(req.query.limit) || 2
+      const limit = Number(req.query.limit) || process.env.PAGINATION_ROW
       const startIndex = (page - 1) * limit
       const endIndex = page * limit
       const dateRangeReport = getHoliday.slice(startIndex, endIndex)
@@ -64,6 +74,8 @@ const HolidayController = {
 
       const numberOfPage = Number.isInteger(pageLength) ? Math.floor(pageLength) : Math.floor(pageLength) + 1
       const pageNumber = pageNumbers(numberOfPage, 2, page)
+
+      // const [holidays, numberOfPage, page, pageNumber, limit] = paginationCountPage(req, holiday)
 
       res.json({
         reports: {

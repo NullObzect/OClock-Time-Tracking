@@ -134,6 +134,15 @@ const Formater = {
     return `${getTime}`;
   },
 
+  generateMultipleDate: (numOfDay, date, destination, dateFormate) => {
+    const myDate = new Date(date);
+    const gotDate = new Date(myDate.setDate(myDate.getDate() - 1))
+
+    for (let i = 1; i <= numOfDay; i += 1) {
+      destination.push(dateFormate(gotDate.setDate(gotDate.getDate() + 1)))
+    }
+  },
+
 }
 
 module.exports = Formater

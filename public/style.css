@@ -710,6 +710,29 @@ main {
 
 
 /* Pagination  */
+.pagination{
+  display: flex;
+  align-items: center;
+}
+.pagination .selectLimit{
+  margin: 0 40px;
+}
+.selectLimit select{
+  width: 80px;
+    height: 40px;
+    padding: 6px;
+    margin: 12px 0px;
+    font-size: 14px;
+    font-weight: 400;
+    color: #5e5e5e;
+    border: 1px solid #eaeef4;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+}
+.selectLimit select option{
+  cursor: pointer;
+}
 
 .pagination ul {
   width: 100%;

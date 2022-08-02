@@ -110,27 +110,6 @@
 <!-- Pagination -->
 <%- include("../partials/pagination"); -%>
 
-<script>
-  function first(e) {
-  const firstPage = Number(e);
-  return (location.href = `/users?page=${firstPage}`);
-}
-
-function prev(e) {
-  const prevPage = Number(e - 1);
-  return (location.href = `/users?page=${prevPage}`);
-}
-function next(e) {
-  const nextPage = Number(parseInt(e) + 1);
-  return (location.href = `/users?page=${nextPage}`);
-}
-function last(e) {
-  const lastPage = e;
-  return (location.href = `/users?page=${lastPage}`);
-}
-
-</script>
-
 <script src="<%=baseUrl%>/js/users.js"></script>
 
 <%- include("../partials/footer"); -%>
