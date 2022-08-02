@@ -1,4 +1,5 @@
 import Toastify from './toastify.js';
+
 const baseUrl = process.env.BASE_URL
 const dateNullToast = Toastify({
   text: 'Date not select',
@@ -144,6 +145,7 @@ async function dateRange(event) {
   const dateRangeTotalBox = getObjects.dateRangeReportBox;
   const { betweenTwoDatesReportDetails } = dateRangeTotalBox;
   const { lateCountBetweenTwoDate } = dateRangeTotalBox;
+  const { lateCountRatio } = dateRangeTotalBox;
 
   const totalReport = document.getElementById('total-report');
   const filteredReport = document.querySelector('.filtered-report');
@@ -185,6 +187,10 @@ async function dateRange(event) {
           <tr>
           <td>Late Count:</td>
           <td>${lateCountBetweenTwoDate === 1 ? `${lateCountBetweenTwoDate} day` : `${lateCountBetweenTwoDate} days`}</td>
+        </tr>
+          <tr>
+          <td>Late Ratio:</td>
+          <td><span class="${lateCountRatio >= 100 ? 'high' : lateCountRatio === 0 ? '' : 'low'}">${lateCountRatio || 0}%  </span></td>
         </tr>
        
   `

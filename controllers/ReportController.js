@@ -2,6 +2,7 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-return-assign */
 /* eslint-disable max-len */
+const { INTEGER } = require('sequelize');
 const AttendanceModel = require('../models/AttendanceModel');
 const LogModel = require('../models/LogModel');
 const ProfileModel = require('../models/ProfileModel')
@@ -175,6 +176,7 @@ const ReportController = {
         // late count this week
         const lateCounts = await LogModel.lateCountThisWeek(userId, weekStartDate)
         const lateCountThisWeek = lateCount(lateCounts)
+        const lateCountRatioWeek = Math.floor(Number(lateCountThisWeek / countUserJoinDate(countJoinIngDate, fixedWorkdayThisWeek) * 100)) || 0
 
         /* ======================================================== */
         /* ==========FIXME:  report for this Week  END ========== */
@@ -240,6 +242,7 @@ const ReportController = {
         const lateCountsMonth = await LogModel.lateCountThisMonth(userId, monthStartDate)
 
         const lateCountThisMonth = lateCount(lateCountsMonth)
+        const lateCountRatioMonth = Math.floor(Number(lateCountThisMonth / countUserJoinDate(countJoinIngDate, fixedWorkdayThisMonth) * 100)) || 0
 
         /* ======================================================== */
         /* ==========FIXME:  report for this month  END ========== */
@@ -300,6 +303,9 @@ const ReportController = {
         const lateCountsYear = await LogModel.lateCountThisYear(userId, yearStartDate)
         const lateCountThisYear = lateCount(lateCountsYear)
 
+        const lateCountRatioYear = Math.floor(Number(lateCountThisYear / countUserJoinDate(countJoinIngDate, fixedWorkdayThisYear) * 100)) || 0
+        
+
         /* ======================================================== */
         /* ==========FIXME:  report for this year  END ========== */
         /* ======================================================== */
@@ -318,8 +324,11 @@ const ReportController = {
             monthHr,
             checkUserReportEmptyOrNot,
             lateCountThisWeek,
+            lateCountRatioWeek,
             lateCountThisMonth,
+            lateCountRatioMonth,
             lateCountThisYear,
+            lateCountRatioYear,
 
           })
         } else {
@@ -337,8 +346,11 @@ const ReportController = {
             monthHr,
             checkUserReportEmptyOrNot,
             lateCountThisWeek,
+            lateCountRatioWeek,
             lateCountThisMonth,
+            lateCountRatioMonth,
             lateCountThisYear,
+            lateCountRatioYear,
 
           })
         }
@@ -459,6 +471,7 @@ const ReportController = {
 
       const lateCountsBetweenTwoDate = await LogModel.lateCountBetweenTwoDate(userId, startDate, endDate)
       const lateCountBetweenTwoDate = lateCount(lateCountsBetweenTwoDate)
+      const lateCountRatio = Math.floor(Number(lateCountBetweenTwoDate / countUserJoinDate(countJoinIngDate, fixedWorkdayBTD) * 100))
 
       //
 
@@ -499,7 +512,7 @@ const ReportController = {
         reports: {
           dateRangeReport, pageNumber, numberOfPage, pageLength, page,
         },
-        dateRangeReportBox: { betweenTwoDatesReportDetails, lateCountBetweenTwoDate },
+        dateRangeReportBox: { betweenTwoDatesReportDetails, lateCountBetweenTwoDate, lateCountRatio },
       })
     } catch (err) {
       console.log('====>Error form ReportController/reportBetweenTwoDate', err);
@@ -726,6 +739,7 @@ function ReportDetails(
   classLowOrHighForDay,
   daysIsLowOrHigh,
   classLowOrHighForHr,
+
 ) {
   this.totalWorkingDays = totalWorkingDays || 0
   this.fixedWorkdays = fixedWorkdays || 0

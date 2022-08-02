@@ -117,6 +117,10 @@
             <td>Late Count:</td>
             <td><%= lateCountThisWeek  === 1 ? lateCountThisWeek + " day"  :  lateCountThisWeek + " days" %></td>
           </tr>
+          <tr>
+            <td>Late  Ratio:</td>
+            <td><span class="<%= lateCountThisWeek >= 100 ? 'high' : lateCountThisWeek === 0 ? '' : 'low'  %>"><%= lateCountThisWeek + "%" %></span></td>
+          </tr>
         </table>
       </div>
     </div>
@@ -152,6 +156,10 @@
             <td>Late Count:</td>
             <td><%= lateCountThisMonth  === 1 ? lateCountThisMonth + " day" : lateCountThisMonth + " days" %></td>
           </tr>
+          <tr>
+            <td>Late  Ratio:</td>
+            <td><span class="<%= lateCountThisMonth >= 100 ? 'high' :  lateCountThisMonth === 0 ? '' : 'low'  %>"><%= lateCountThisMonth + "%" %></span> </td>
+          </tr>
         </table>
       </div>
     </div>
@@ -184,6 +192,10 @@
           <tr>
             <td>Late Count:</td>
             <td><%= lateCountThisYear  === 1 ? lateCountThisYear + " day"  :  lateCountThisYear + " days" %></td>
+          </tr>
+          <tr>
+            <td>Late  Ratio:</td>
+            <td > <span class="<%= lateCountRatioYear >= 100 ? 'high' : lateCountRatioYear === 0 ? '' : 'low' %>"><%= lateCountRatioYear + "%" %></span></td>
           </tr>
         </table>
       </div>
