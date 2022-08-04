@@ -617,6 +617,10 @@ main {
   padding: 0 10px 10px 10px;
   z-index: 100;
 }
+.text-title a{
+  text-decoration: none;
+  color: var(--deep);
+}
 
 /* Report date range */
 
@@ -1020,6 +1024,10 @@ box-shadow: rgba(0, 0, 0, 0.14) -1px 0px 0px inset;
   /* user page */
   .text-title {
     font-size: 32px;
+  }
+  .text-title a{
+    text-decoration: none;
+    color: var(--deep);
   }
   .add-btn {
     padding: 8px 12px;
