@@ -2,12 +2,12 @@
   <div class="selectLimit">
     <select id="pageLimitSelect">
       <option value="" selected disabled>limit</option>
-    <option value="<%=baseUrl%>/<%=pathUrl%>?limit=2<%=startDate && `&startDate=${startDate}`%><%=endDate && `&endDate=${endDate}`%>">2</option>
-    <option value="<%=baseUrl%>/<%=pathUrl%>?limit=10<%=startDate && `&startDate=${startDate}`%><%=endDate && `&endDate=${endDate}`%>">10</option>
-    <option value="<%=baseUrl%>/<%=pathUrl%>?limit=20<%=startDate && `&startDate=${startDate}`%><%=endDate && `&endDate=${endDate}`%>">20</option>
-    <option value="<%=baseUrl%>/<%=pathUrl%>?limit=30<%=startDate && `&startDate=${startDate}`%><%=endDate && `&endDate=${endDate}`%>">30</option>
-    <option value="<%=baseUrl%>/<%=pathUrl%>?limit=50<%=startDate && `&startDate=${startDate}`%><%=endDate && `&endDate=${endDate}`%>">50</option>
-    <option value="<%=baseUrl%>/<%=pathUrl%>?limit=100<%=startDate && `&startDate=${startDate}`%><%=endDate && `&endDate=${endDate}`%>">100</option>
+    <option value="<%=baseUrl%><%=pathUrl%>?limit=2<%=startDate && `&startDate=${startDate}`%><%=endDate && `&endDate=${endDate}`%>">2</option>
+    <option value="<%=baseUrl%><%=pathUrl%>?limit=10<%=startDate && `&startDate=${startDate}`%><%=endDate && `&endDate=${endDate}`%>">10</option>
+    <option value="<%=baseUrl%><%=pathUrl%>?limit=20<%=startDate && `&startDate=${startDate}`%><%=endDate && `&endDate=${endDate}`%>">20</option>
+    <option value="<%=baseUrl%><%=pathUrl%>?limit=30<%=startDate && `&startDate=${startDate}`%><%=endDate && `&endDate=${endDate}`%>">30</option>
+    <option value="<%=baseUrl%><%=pathUrl%>?limit=50<%=startDate && `&startDate=${startDate}`%><%=endDate && `&endDate=${endDate}`%>">50</option>
+    <option value="<%=baseUrl%><%=pathUrl%>?limit=100<%=startDate && `&startDate=${startDate}`%><%=endDate && `&endDate=${endDate}`%>">100</option>
   </select></div>
   <ul>
 
@@ -21,7 +21,7 @@
           <% } %>   
     <% for(let i=0;i<pageNumber.length;i++){ %>
       <%if(pageNumber[i]!='...'){%>
-      <a href="/<%=pathUrl%>?page=<%=pageNumber[i]%>&limit=<%=limit%><%=startDate && `&startDate=${startDate}`%><%=endDate && `&endDate=${endDate}`%>" class=<%= page==pageNumber[i] ? 'page-active' : '' %> ><li>  <%=pageNumber[i]%>  </li></a>
+      <a href="<%=pathUrl%>?page=<%=pageNumber[i]%>&limit=<%=limit%><%=startDate && `&startDate=${startDate}`%><%=endDate && `&endDate=${endDate}`%>" class=<%= page==pageNumber[i] ? 'page-active' : '' %> ><li>  <%=pageNumber[i]%>  </li></a>
       <% }else{%>
         <li>  <%=pageNumber[i]%>  </li>
       <%} %>
@@ -42,25 +42,27 @@
   const limit = '<%= limit%>'
   const startDate ='<%=startDate%>'
   const endDate ='<%=endDate%>'
-
-  console.log({startDate})
+  
+  function pageChange(action,limit,start,end){
+    return (location.href = start && `<%=pathUrl%>?page=${action}&limit=${limit}&startDate=${start}&endDate=${end}` || `<%=pathUrl%>?page=${action}&limit=${limit}`);
+  }
 
   function first(e) {
   const firstPage = Number(e);
-  return (location.href = `/<%=pathUrl%>?page=${firstPage}&limit=${limit}&startDate=${startDate}&endDate=${endDate}`);
+  pageChange(firstPage,limit,startDate,endDate)
 }
 
 function prev(e) {
   const prevPage = Number(e - 1);
-  return (location.href = `/<%=pathUrl%>?page=${prevPage}&limit=${limit}&startDate=${startDate}&endDate=${endDate}`);
+  pageChange(prevPage,limit,startDate,endDate)
 }
 function next(e) {
   const nextPage = Number(parseInt(e) + 1);
-  return (location.href = `/<%=pathUrl%>?page=${nextPage}&limit=${limit}&startDate=${startDate}&endDate=${endDate}`);
+  pageChange(nextPage,limit,startDate,endDate)
 }
 function last(e) {
   const lastPage = e;
-  return (location.href = `/<%=pathUrl%>?page=${lastPage}&limit=${limit}&startDate=${startDate}&endDate=${endDate}`);
+  pageChange(lastPage,limit,startDate,endDate)
 }
 
 </script>

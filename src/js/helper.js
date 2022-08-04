@@ -78,6 +78,7 @@ function formValidation() {
   const saveBtn = document.querySelector('.submit-btn');
   const form = document.querySelector('form');
   const addModal = document.querySelector('#myModal')
+  const select = document.querySelectorAll('.select')
   saveBtn.addEventListener('click', (e) => {
     e.preventDefault()
     const error = []
@@ -106,17 +107,22 @@ function formValidation() {
         errorPlaceholder.style.display = 'block';
       }
     }
-    const select = document.querySelector('select')
+    console.log(select)
     if (select) {
-      if (document.querySelector('select').options.selectedIndex === 0) {
-        const fieldName = 'select'
-        const errorPlaceholder = document.querySelector(`.${fieldName}-error`);
-        errorPlaceholder.textContent = `${fieldName} is required!`;
-        errorPlaceholder.style.display = 'block';
-        error.push(fieldName)
+      for (let i = 0; i < select.length; i++) {
+        console.log(i)
+        console.log('f', select)
+        if (select[i].options.selectedIndex === 0) {
+          const fieldName = select[i].name
+          console.log(fieldName)
+          const errorPlaceholder = document.querySelector(`.${fieldName}-error`);
+          console.log(errorPlaceholder)
+          errorPlaceholder.textContent = 'select is required!';
+          errorPlaceholder.style.display = 'block';
+          error.push(fieldName)
+        }
       }
     }
-
     if (error.length === 0) {
       form.submit()
       form.reset()

@@ -3,7 +3,7 @@ const { pageNumbers } = require('./pagination')
 
 module.exports = function paginationPageCount(req, data) {
   const page = Number(req.query.page) || 1
-  const limit = Number(req.query.limit) || process.env.PAGINATION_ROW
+  const limit = Number(req.query.limit) || process.env.PAGINATION_ROW || 10
   const startIndex = (page - 1) * limit
   const endIndex = page * limit
   const sliceData = data.slice(startIndex, endIndex)
