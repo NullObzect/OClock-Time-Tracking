@@ -393,6 +393,7 @@ input[type="data"]:focus {
 /* Leave Day report Box  */
 
 .leave-report-box {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr;
   justify-items: center;
@@ -436,7 +437,7 @@ input[type="data"]:focus {
 }
 .leave-box {
   width: 250px;
-  height: 165px;
+  height: 170px;
   padding: 12px;
   border: 1px solid #e6e6e6;
   border-radius: 15px;
@@ -488,13 +489,15 @@ input[type="data"]:focus {
   border-radius: 5px;
   font-size: 14px;
 }
-.user-list ul {
+.user-list ul{
+  position: absolute;
   list-style-type: none;
   color: #3d4e5e;
+  z-index: 11;
 }
 
 .user-list .user {
-  position: absolute;
+  position:relative ;
   width: 200px;
   height: 50px;
   margin: 8px 30px;
