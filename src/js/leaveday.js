@@ -1,86 +1,94 @@
+/* eslint-disable no-undef */
+/* eslint-disable consistent-return */
 /* eslint-disable no-use-before-define */
 /* eslint-disable camelcase */
 import {
-  aJAXPostRequest, dateDiff, dateFormate, deleteData, formValidation, getCurrentDate, setReportTitle
-} from './helper.js';
+  aJAXPostRequest, dateDiff, dateFormate, deleteData, formValidation, getCurrentDate
+} from './helper';
+import Toastify from './toastify';
+
+const dateSelectWarn = Toastify({
+  text: 'Date not select',
+  className: 'info',
+})
+
 const baseUrl = process.env.BASE_URL
-const userId = document.querySelector('#id').value
-async function pagination(pageNumber, numberOfPage, page) {
-  const pagination = document.querySelector('#pagination')
-  pagination.innerHTML = `<li class="first page" > </li>
- <li class="prev page"></li>
- ${pageNumber.map((p) => `<a class=${page == p ? 'page-active' : ''} ><li class='page-li' data-page=${p}>  ${p}  </li></a>`).join('')}
- <li class="next page"></li>
- <li class="last page"></li>
- `
-  // eslint-disable-next-line no-use-before-define
-  loader(numberOfPage, page)
-  actions()
+const userId = document.querySelector('#id').value || false
+
+// Action start
+const actionBtn = document.querySelectorAll('.action-btn');
+const updateBtn = document.querySelectorAll('.update-btn');
+const saveBtn = document.querySelectorAll('.save-btn');
+const deleteBtn = document.querySelectorAll('.delete-btn');
+const leaveId = document.querySelectorAll('.leave-id');
+const startVal = document.querySelectorAll('.start-val');
+const endVal = document.querySelectorAll('.end-val');
+const duration = document.querySelectorAll('.duration');
+const optCancelBtn = document.querySelectorAll('.opt-cancel-btn');
+//
+
+for (let i = 0; i < actionBtn.length; i++) {
+  actionBtn[i].addEventListener('click', () => {
+    actionBtn[i].style.display = 'none';
+    updateBtn[i].style.display = 'block';
+    deleteBtn[i].style.display = 'block';
+  });
 }
 
-function loader(numberOfPage, pageNO) {
-  async function page(pageNo) {
-    const startDate = document.querySelector('#startPicker').dataset.date
-    const endDate = document.querySelector('#endPicker').dataset.date
-    // setReportTitle(startDate, endDate);
+// when click on update button
+for (let i = 0; i < updateBtn.length; i++) {
+  updateBtn[i].addEventListener('click', () => {
+    updateBtn[i].style.display = 'none';
+    saveBtn[i].style.display = 'block';
+    deleteBtn[i].style.display = 'none';
+    optCancelBtn[i].style.display = 'block';
 
-    let data;
-    if (userId) {
-      data = await fetch(
-        `${baseUrl}/options/leavedays/${userId}/between-two-date?startDate=${startDate}&endDate=${endDate}&page=${pageNo}`,
-      );
-    } else {
-      data = await fetch(
-        `${baseUrl}/options/leavedays/between-two-date?startDate=${startDate}&endDate=${endDate}&page=${pageNo}`,
-      );
-    }
+    startVal[i].focus();
+  });
+}
+// when click on save button
+for (let i = 0; i < saveBtn.length; i++) {
+  saveBtn[i].addEventListener('click', () => {
+    // saveBtn[i].style.display = "none";
 
-    const holidays = await data.json();
+    const start = startVal[i].value.trim();
+    const end = endVal[i].value.trim();
+    const id = leaveId[i].value;
+    if (start === '' || end === '') {
+      alert('Please fill all the fields');
+      return;
+    }
+    const data = {
+      start,
+      end,
+      id,
+    };
+    aJAXPostRequest('/options/leavedays/update', data);
+    startVal[i].value = data.start;
+    endVal[i].value = data.end;
+    duration[i].innerText = `${dateDiff(data.start, data.end)} day`;
+    saveBtn[i].style.display = 'none';
+    actionBtn[i].style.display = 'block';
+    optCancelBtn[i].style.display = 'none';
+  });
+}
 
-    if (holidays.length === 0) {
-      return alert('No Holiday Found');
-    }
+// when click on cancel  button
+for (let i = 0; i < optCancelBtn.length; i++) {
+  optCancelBtn[i].addEventListener('click', () => {
+    saveBtn[i].style.display = 'none';
+    actionBtn[i].style.display = 'block';
+    optCancelBtn[i].style.display = 'none';
+  });
+}
 
-    const {
-      dateRangeReport, pageNumber, numberOfPage,
-    } = holidays.reports
-    const holidayTable = document.querySelector('#leaveday-table');
+// Action End
 
-    reportHolidayShow(holidayTable, dateRangeReport)
-    pagination(pageNumber, numberOfPage, pageNo)
-  }
-  const pageClassFirst = document.querySelector('.first')
-  pageClassFirst.addEventListener('click', () => {
-    if (pageNO > 1) {
-      page(Number(1))
-    }
-  })
-  const pageClassPrev = document.querySelector('.prev')
-  pageClassPrev.addEventListener('click', () => {
-    if (pageNO > 1) {
-      page(Number(pageNO - 1))
-    }
-  })
-  const pageClassNext = document.querySelector('.next')
-  pageClassNext.addEventListener('click', () => {
-    if (pageNO < numberOfPage) {
-      page(Number(pageNO + 1))
-    }
-  })
-  const pageClassLast = document.querySelector('.last')
-  pageClassLast.addEventListener('click', () => {
-    if (pageNO < numberOfPage) {
-      page(Number(numberOfPage))
-    }
-  })
-  const pageLi = document.getElementsByClassName('page-li')
-  for (let i = 0; i < pageLi.length; i++) {
-    const pageNum = pageLi[i].dataset.page
-    if (pageNum !== '...') {
-      pageLi[i].addEventListener('click', () => {
-        page(pageNum)
-      })
-    }
+function iconCheck() {
+  const dateIcon = document.querySelector('#date-icon')
+  const data = dateIcon.classList.contains('date-icon-active')
+  if (data) {
+    return dateIcon.classList.remove('date-icon-active')
   }
 }
 
@@ -90,186 +98,25 @@ document.getElementById('startPicker').addEventListener('blur', () => {
 document.getElementById('endPicker').addEventListener('blur', () => {
   iconCheck()
 })
-function iconCheck(e) {
-  const dateIcon = document.querySelector('#date-icon')
-  const data = dateIcon.classList.contains('date-icon-active')
-  if (data) {
-    return dateIcon.classList.remove('date-icon-active')
-  }
-}
 
-async function actions() {
-  const actionBtn = document.querySelectorAll('.action-btn');
-  const updateBtn = document.querySelectorAll('.update-btn');
-  const saveBtn = document.querySelectorAll('.save-btn');
-  const deleteBtn = document.querySelectorAll('.delete-btn');
-  const leaveId = document.querySelectorAll('.leave-id');
-  const startVal = document.querySelectorAll('.start-val');
-  const endVal = document.querySelectorAll('.end-val');
-  const duration = document.querySelectorAll('.duration');
-  const optCancelBtn = document.querySelectorAll('.opt-cancel-btn');
-  //
-
-  for (let i = 0; i < actionBtn.length; i++) {
-    actionBtn[i].addEventListener('click', () => {
-      actionBtn[i].style.display = 'none';
-      updateBtn[i].style.display = 'block';
-      deleteBtn[i].style.display = 'block';
-    });
-  }
-
-  // when click on update button
-  for (let i = 0; i < updateBtn.length; i++) {
-    updateBtn[i].addEventListener('click', () => {
-      updateBtn[i].style.display = 'none';
-      saveBtn[i].style.display = 'block';
-      deleteBtn[i].style.display = 'none';
-      optCancelBtn[i].style.display = 'block';
-
-      startVal[i].focus();
-    });
-  }
-  // when click on save button
-  for (let i = 0; i < saveBtn.length; i++) {
-    saveBtn[i].addEventListener('click', () => {
-    // saveBtn[i].style.display = "none";
-
-      const start = startVal[i].value.trim();
-      const end = endVal[i].value.trim();
-      const id = leaveId[i].value;
-      if (start === '' || end === '') {
-        alert('Please fill all the fields');
-        return;
-      }
-      const data = {
-        start,
-        end,
-        id,
-      };
-      aJAXPostRequest('/options/leavedays/update', data);
-      startVal[i].value = data.start;
-      endVal[i].value = data.end;
-      duration[i].innerText = `${dateDiff(data.start, data.end)} day`;
-      saveBtn[i].style.display = 'none';
-      actionBtn[i].style.display = 'block';
-      optCancelBtn[i].style.display = 'none';
-    });
-  }
-
-  // when click on cancel  button
-  for (let i = 0; i < optCancelBtn.length; i++) {
-    optCancelBtn[i].addEventListener('click', () => {
-      saveBtn[i].style.display = 'none';
-      actionBtn[i].style.display = 'block';
-      optCancelBtn[i].style.display = 'none';
-    });
-  }
-}
-actions();
-// pagination
 const dateIcon = document.querySelector('#date-icon');
+
 dateIcon.addEventListener('click', async () => {
-  const dateStart = document.querySelector('#startPicker');
-  const dateEnd = document.querySelector('#endPicker');
+  const dateStart = document.querySelector('#startPicker').value
   const startDate = dateFormate(startDatePicker.getFullDate());
   const endDate = dateFormate(
     endDatePicker.getFullDate() || getCurrentDate(),
   );
-  dateStart.dataset.date = startDate;
-  dateEnd.dataset.date = endDate;
 
-
-  if (dateStart.dataset.date === 'null') {
-    return alert('date not select');
+  if (dateStart === '') {
+    return dateSelectWarn.showToast()
   }
-  let data;
   if (userId) {
-    data = await fetch(
-      `${baseUrl}/options/leavedays/${userId}/between-two-date?startDate=${startDate}&endDate=${endDate}`,
-    );
+    window.location = `${baseUrl}/options/leavedays/${userId}?startDate=${startDate || dateStart}&endDate=${endDate}`
   } else {
-    data = await fetch(
-      `${baseUrl}/options/leavedays/between-two-date?startDate=${startDate}&endDate=${endDate}`,
-    );
+    window.location = `${baseUrl}/options/leavedays?startDate=${startDate || dateStart}&endDate=${endDate}`;
   }
-  const leavedays = await data.json();
-
-  if (leavedays.length === 0) {
-    return alert('No Holiday Found');
-  }
-  const {
-    dateRangeReport, pageNumber, numberOfPage, page,
-  } = leavedays.reports
-  const holidayTable = document.querySelector('#leaveday-table');
-
-  reportHolidayShow(holidayTable, dateRangeReport)
-  if (numberOfPage > 1) {
-    pagination(pageNumber, numberOfPage, page)
-  }
-  dateIcon.classList.add('date-icon-active')
 });
-
-function reportHolidayShow(holidayTable, dateRangeReport) {
-  const userRole = document.querySelector('#role').value
-  if (userRole == 'admin') {
-    holidayTable.innerHTML = dateRangeReport.map(
-      (day, idx) => `<tr>
-    
-      <td class="table-img">
-       
-       <img src="/uploads/avatars/${day.avatar != null ? day.avatar : 'demo-avatar.png'}" />
-    </td>
-    
-      <td>
-        <div class="username">${day.name}</div>
-        <span id="role">${day.user_role === 'admin' ? 'admin' : ''} </span>
-      </td>
-      <td>
-        <input class="reason-val" type="text" value="${day.type}" />
-      </td>
-      <td>
-        <input class="start-val" type="text" value="${day.start} " />
-      </td>
-      <td><input class="end-val" type="text" value="${day.end}" /></td>
-      <td class="duration">${day.duration}   day</td> <td>
-      <div class="btn-group">
-        <button type="button" class="action-btn">Action</button>
-        <button type="button" class="update-btn">Update</button>
-        <button type="button" class="save-btn">Save</button>
-        <input type="hidden" class="leave-id delete-id" value="${day.id}" />
-        <a
-          class="delete-data"
-          ><button class="delete-btn">Delete</button>
-        </a>
-      </div>
-      </td> </tr>`,
-    ).join('');
-    deleteData('/leavedays/delete/')
-  } else {
-    holidayTable.innerHTML = dateRangeReport.map(
-      (day, idx) => `<tr>
-  
-    <td class="table-img">
-     
-     <img src="/uploads/avatars/${day.avatar != null ? day.avatar : 'demo-avatar.png'}" />
-  </td>
-  
-    <td>
-      <div class="username">${day.name}</div>
-      <span id="role">${day.user_role === 'admin' ? 'admin' : ''} </span>
-    </td>
-    <td>
-      <input class="reason-val" type="text" value="${day.type}" />
-    </td>
-    <td>
-      <input class="start-val" type="text" value="${day.start} " />
-    </td>
-    <td><input class="end-val" type="text" value="${day.end}" /></td>
-    <td class="duration">${day.duration}   day</td> </tr>`,
-    ).join('');
-    deleteData('/leavedays/delete/')
-  }
-}
 
 // delete leave day
 deleteData('/leavedays/delete/')
@@ -277,11 +124,11 @@ deleteData('/leavedays/delete/')
 // form validation
 formValidation()
 
-// leave day Search result
+// leave day user Search result
 
 let typingTimer;
 const doneTypingInterval = 500;
-const input = document.querySelector('input#user');
+const input = document.querySelector('input#userSearch');
 const users_placeholder = document.querySelector('#user-list');
 if (input) {
   input.addEventListener('keyup', () => {

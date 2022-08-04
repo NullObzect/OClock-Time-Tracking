@@ -868,6 +868,12 @@ box-shadow: rgba(0, 0, 0, 0.14) -1px 0px 0px inset;
   text-transform: uppercase;
 }
 
+/* table action */
+
+.update-btn {
+  display: none;
+}
+
 @media only screen and (max-width: 1200px) {
   .oclock-box {
     width: 700px;

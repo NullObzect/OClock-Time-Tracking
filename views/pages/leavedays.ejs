@@ -50,12 +50,13 @@
   
   <%if(loggedInUser.userRole==='admin'){ %>
 <div id="search-user" class="search-user">
-   <input type="text" id="user" placeholder="Search User">
+   <input type="text" id="userSearch" placeholder="Search User">
   <div id="user-list" class="user-list">
   </div>
 </div>
 <% } %> 
   <!-- Markup Date range for employee-->
+
 <div class="leave-report-box">
   <div class="leave-profile">
     <div class="leave-profile-avatar">
@@ -108,6 +109,8 @@
 </div>
 </div>
 
+
+
   <div class="date-range-input">
     <div class="report-title-container">
       <h4>Reports</h4>
@@ -115,13 +118,13 @@
     </div>
     <div class="date-picker">
       <div class="start-date">
-        <input id="startPicker" type="text" placeholder="-- / -- / ----" />
+        <input id="startPicker" value="<%=startDate%>" type="text" placeholder="-- / -- / ----" />
       </div>
       <div class="to">to</div>
       <div class="end-date">
-        <input id="endPicker" placeholder="-- / -- / ----" />
+        <input id="endPicker" value="<%=endDate%>" placeholder="-- / -- / ----" />
       </div>
-      <div id="date-icon" class="date-icon">
+      <div id="date-icon" class="date-icon <%=startDate && 'date-icon-active'%>">
         <svg
           width="26"
           height="30"
@@ -146,9 +149,10 @@
       </div>
     </div>
   </div>
-<input type="hidden" id="id" value="<%=userId%>" >
-<input type="hidden" id="role" value="<%=loggedInUser.userRole%>" >
+  <input type="hidden" id="id" value="<%=searchID%>" >
+  <input type="hidden" id="role" value="<%=loggedInUser.userRole%>" >
   <!-- Markup for leave days table  -->
+  <%if(userReport.length){%>
   <div class="scroll-table">
     <table class="table leaveday-table">
       <thead>
@@ -163,55 +167,7 @@
         </tr>
       </thead>
       <tbody id="leaveday-table">
-        <%if(loggedInUser.userRole==='admin' & viewReport==true){ %>
-        <%employeeLeaveList.map((user,idx) =>{ %>
-        <tr>
-          <td class="table-img">
-            <% if(user.avatar !== null && user.avatar.match(/^(http|https):/g)){
-            %>
-            <img src="<%= user.avatar%>" />
-            <%} else {%>
-            
-            <img
-              src="/uploads/avatars/<%=user.avatar != null ?  user.avatar : user.gender=='male' ? 'demo-avatar.png':'female-demo-avatar.png' %>"
-            />
-            <% } %>
-          </td>
-          <td class="td-width">
-            <div class="username"><%=user.name%></div>
-            <span id="role"><%= user.user_role==='admin'? 'admin' : ''%> </span>
-          </td>
-          <td class="td-width">
-            <div><%= user.type %></div>
-
-            <input class="reason-val" type="hidden" value="<%=user.typeId %>" />
-          </td>
-          <td class="td-width">
-            <input class="start-val" type="text" value="<%=user.start%> " />
-          </td>
-          <td><input class="end-val" type="text" value="<%=user.end%>" /></td>
-          <td class="duration td-width"><%= user.duration + ' ' + 'day' %></td>
-
-          <td class="td-width">
-            <div class="btn-group">
-              <button type="button" class="action-btn">Action</button>
-              <button type="button" class="update-btn">Update</button>
-              <button type="button" class="save-btn">Save</button>
-              <button type="button" class="opt-cancel-btn">Cancel</button>
-
-              <input
-                type="hidden"
-                class="leave-id delete-id"
-                value="<%= user.id %>"
-              />
-              <a class="delete-data"
-                ><button class="delete-btn">Delete</button>
-              </a>
-            </div>
-          </td>
-        </tr>
-
-        <% }) %> <%}else {%> <% anEmployeeLeavedaysList.map((user,idx) =>{ %>
+      <% userReport.map((user,idx) =>{ %>
         <tr>
           <td class="table-img td-width-zero">
             <% if(user.avatar !== null && user.avatar.match(/^(http|https):/g)){
@@ -225,6 +181,7 @@
           </td>
           <td>
             <div class="username"><%=user.user_name%></div>
+            
             <span id="role"><%= user.user_role==='admin'? 'admin' : ''%> </span>
           </td>
           <td>
@@ -256,15 +213,25 @@
           </td>
           <%}%>
         </tr>
-
-        <% }) %> <% } %>
+        <% }) %> 
+        
       </tbody>
     </table>
+    <% } else{ %> 
+<div class="report-not-found">
+  <h4 >No, report founded !!!</h4>
+  <% } %>
+
+
     <!-- Markup for user delete modal -->
 
     <%- include("../partials/delete-modal.ejs"); -%>
     <!--- Markup for pagination -->
 
+    <!-- Pagination -->
+    <%if(userReport.length){%>
+        <%- include("../partials/pagination"); -%>
+    <%}%>
 
     <div class="pagination">
       <ul id="pagination"></ul>
