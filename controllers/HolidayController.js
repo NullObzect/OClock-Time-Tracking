@@ -40,7 +40,7 @@ const HolidayController = {
     }
     try {
       const [holidays, numberOfPage, page, pageNumber, limit] = paginationCountPage(req, holiday)
-      const pathUrl = req.path.replace('/', '')
+      const pathUrl = req.path
       res.render('pages/holiday', {
         holidays, numberOfPage, page, pageNumber, limit, pathUrl, startDate, endDate,
       })
