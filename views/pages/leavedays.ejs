@@ -171,13 +171,13 @@
         <tr>
           <td class="table-img td-width-zero">
             <% if(user.avatar !== null && user.avatar.match(/^(http|https):/g)){
-            %>
-            <img src="<%= user.avatar%>" />
-            <%} else{%>
-            <img
-              src="/uploads/avatars/<%=user.avatar != null ?  user.avatar : user.gender=='male' ? 'demo-avatar.png':'female-demo-avatar.png'  %>"
-            />
-            <% } %>
+              %>
+              <img src="<%= user.avatar%>" />
+              <%} else{%>
+              <img
+                src="<%=baseUrl%>/uploads/avatars/<%=user.avatar !== null ?  user.avatar : user.gender=='male' ? 'demo-avatar.png':'female-demo-avatar.png'  %>"
+              />
+              <% } %>
           </td>
           <td>
             <div class="username"><%=user.user_name%></div>
