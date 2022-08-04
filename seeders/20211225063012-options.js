@@ -25,6 +25,10 @@ module.exports = {
         option_title: 'leave-limit',
         option_value: '52',
       },
+      {
+        option_title: 'weekly-leave-day',
+        option_value: '1',
+      },
 
     ]);
   },

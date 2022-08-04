@@ -444,10 +444,15 @@ const AttendanceModel = {
   getDayName: async (date) => {
     const query = `SELECT DAYNAME('${date}') AS dayName`
     const [rows] = await dbConnect.promise().execute(query);
-    return rows[0];
+    return rows;
   },
   getOffDays: async () => {
     const query = 'SELECT option_value AS offDays FROM options WHERE option_title = \'off-day\'';
+    const [rows] = await dbConnect.promise().execute(query);
+    return rows[0];
+  },
+  weeklyLeaveDay: async () => {
+    const query = 'SELECT option_value AS weeklyLeaveDay FROM options WHERE option_title = \'weekly-leave-day\'';
     const [rows] = await dbConnect.promise().execute(query);
     return rows[0];
   },
