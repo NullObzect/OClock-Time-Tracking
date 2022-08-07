@@ -17,7 +17,7 @@ const UserController = {
   getUsers: async (req, res) => {
     const user = await UserModel.getAllUsersList()
     const [users, numberOfPage, page, pageNumber, limit] = paginationCountPage(req, user)
-    const pathUrl = req.path.replace('/', '')
+    const pathUrl = req.path
     res.render('pages/users', {
       users, numberOfPage, page, pageNumber, limit, pathUrl,
     });

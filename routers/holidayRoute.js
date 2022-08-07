@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const HolidayController = require('../controllers/HolidayControlle')
+const HolidayController = require('../controllers/HolidayController')
 const { checkLogin } = require('../middleware/common/AuthMiddleware')
 const decorateHtmlResponse = require('../middleware/common/decorateHtmlResponse')
 
@@ -12,8 +12,5 @@ router.post('/holiday/edit/holiday', decorateHtmlResponse('Edit Holiday'), Holid
 router.get('/delete/holiday/:id', HolidayController.getDeleteHoliday)
 
 router.get('/employee-see/holidays', decorateHtmlResponse('Holidays'), checkLogin, HolidayController.employeeSeeHolidays)
-
-//
-router.get('/holiday/between-two-date', HolidayController.getHolidayListBetweenTwoDate)
 
 module.exports = router

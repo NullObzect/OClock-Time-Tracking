@@ -1,12 +1,7 @@
 <%- include("../partials/header"); -%>
-<style>
-  .update-btn {
-  display: none;
-}
-</style>
 <div id="project">
   <div class="text-head">
-    <div class="text-title">Holidays</div>
+    <div class="text-title"><a href="<%=baseUrl%>/options/holiday">Holidays</a></div>
     <% if(loggedInUser.userRole === 'admin'){ %>
     <div class="add-button">
       <button class="add-btn">
