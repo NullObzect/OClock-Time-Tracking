@@ -11,7 +11,7 @@
         <form action="/options/add-leaveday" method="post">
           <label for="name">
             <div class="">
-              <select  name="userId">
+              <select class="select" name="userId">
                 <option disabled selected>Select Employee</option>
                 <% console.log(selectEmployee) %> <% selectEmployee.map(el =>
                 {%>
@@ -19,10 +19,11 @@
 
                 <% }) %>
               </select>
+              <p class="error userId-error"></p>
               
               </div>
               <div class="">
-                <select  name="typeId">
+                <select class="select" name="typeId">
                 <option disabled selected>Select Type</option>
                 <% leaveTypeList.map(el =>
                 {%>
@@ -30,7 +31,7 @@
 
                 <% }) %>
               </select>
-              <p class="error select-error"></p>
+              <p class="error typeId-error"></p>
               </div>
               </label>
           <label for="projectDetails">

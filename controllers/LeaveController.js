@@ -1,8 +1,10 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable max-len */
 const LeaveModel = require('../models/LeaveModel');
 const htmlTextMessage = require('./htmlMailText')
 const sendMail = require('../utilities/sendMail');
 const AttendanceModel = require('../models/AttendanceModel');
+const paginationCountPage = require('../utilities/paginationCountPage')
 
 const {
   dateFormate, dateDiff,
@@ -21,8 +23,12 @@ const LeaveController = {
       const {
         userId, typeId, start, end,
       } = req.body
-      const insertedLeaveday = await LeaveModel.addLeaveday(userId, typeId, dateFormate(start),
-        dateFormate(end))
+      const insertedLeaveday = await LeaveModel.addLeaveday(
+        userId,
+        typeId,
+        dateFormate(start),
+        dateFormate(end),
+      )
       if (insertedLeaveday.errno) {
         res.send('Error')
       } else {
@@ -36,21 +42,46 @@ const LeaveController = {
   employeeLeavedaysList: async (req, res) => {
     const { user } = req
     let userId = user.id;
-    let viewReport;
-    if (user.user_role == 'admin') {
-      viewReport = true;
-    }
+    let searchID
+    console.log('ddd', req.params.id)
     if (req.params.id) {
       userId = req.params.id;
-      viewReport = false;
+      searchID = userId
     }
+    const { startDate, endDate } = req.query;
+    let userReport; let numberOfPage; let page; let pageNumber;
+    let limit
+    let employeeLeaveLists;
+    let anEmployeeLeavedaysLists;
+
     try {
-      const employeeLeaveList = await LeaveModel.getEmployeeLeaveList()
+      employeeLeaveLists = await LeaveModel.getEmployeeLeaveList()
       const selectEmployee = await LeaveModel.selectEmployee();
       const leaveTypeList = await LeaveModel.leaveTypeList();
-      const anEmployeeLeavedaysList = await LeaveModel.anEmployeeLeaveList(userId)
+      anEmployeeLeavedaysLists = await LeaveModel.anEmployeeLeaveList(userId)
       const userInfo = await AttendanceModel.getEmployeeInfo(userId)
       const [{ joinThisYearOrNot }] = await LeaveModel.checkUserJoinThisYearOrNot(userId)
+
+      if (startDate) {
+        employeeLeaveLists = await LeaveModel.leavedaysListBetweenTowDate(startDate, endDate)
+        anEmployeeLeavedaysLists = await LeaveModel.leavedaysListBetweenTowDateWithId(userId, startDate, endDate)
+      }
+
+      console.log({
+        userReport, numberOfPage, page, pageNumber, limit,
+      })
+
+      if (user.user_role == 'admin' && req.params.id === undefined) {
+        [userReport, numberOfPage, page, pageNumber, limit] = paginationCountPage(req, employeeLeaveLists)
+      } else if (req.params.id) {
+        [userReport, numberOfPage, page, pageNumber, limit] = paginationCountPage(req, anEmployeeLeavedaysLists)
+      } else {
+        [userReport, numberOfPage, page, pageNumber, limit] = paginationCountPage(req, anEmployeeLeavedaysLists)
+      }
+      console.log({
+        userReport, numberOfPage, page, pageNumber, limit,
+      })
+      const pathUrl = req._parsedOriginalUrl.pathname
 
       if (joinThisYearOrNot === 0) {
         const [{ totalLeaveDay }] = await OptionsModel.getTotalLeaveDay(userId)
@@ -61,7 +92,22 @@ const LeaveController = {
 
         const getTotalLeave = Number(countLeave - countUnpaidLeave || 0)
         res.render('pages/leavedays', {
-          employeeLeaveList, anEmployeeLeavedaysList, selectEmployee, leaveTypeList, userInfo, viewReport, totalLeaveDayLimit, leaveLimitReport, countLeave, getTotalLeave, userId,
+          userReport,
+          numberOfPage,
+          page,
+          pageNumber,
+          limit,
+          pathUrl,
+          selectEmployee,
+          leaveTypeList,
+          userInfo,
+          totalLeaveDayLimit,
+          leaveLimitReport,
+          countLeave,
+          getTotalLeave,
+          searchID,
+          startDate,
+          endDate,
         })
       } else {
         const [{ totalLeaveDay }] = await OptionsModel.getTotalLeaveDay(userId)
@@ -71,7 +117,22 @@ const LeaveController = {
         const [{ countUnpaidLeave }] = await LeaveModel.leaveLimitCountUnpaidLeaveCurrentYearUser(userId)
         const getTotalLeave = Number(countLeave - countUnpaidLeave || 0)
         res.render('pages/leavedays', {
-          employeeLeaveList, anEmployeeLeavedaysList, selectEmployee, leaveTypeList, userInfo, viewReport, totalLeaveDayLimit, leaveLimitReport, countLeave, getTotalLeave, userId,
+          userReport,
+          numberOfPage,
+          page,
+          pageNumber,
+          limit,
+          pathUrl,
+          selectEmployee,
+          leaveTypeList,
+          userInfo,
+          totalLeaveDayLimit,
+          leaveLimitReport,
+          countLeave,
+          getTotalLeave,
+          searchID,
+          startDate,
+          endDate,
         })
       }
     } catch (err) {
@@ -129,7 +190,7 @@ const LeaveController = {
 
       const getLeavedays = JSON.parse(JSON.stringify(leavedays))
       const page = Number(req.query.page) || 1
-      const limit = Number(req.query.limit) || 2
+      const limit = Number(req.query.limit) || process.env.PAGINATION_ROW || 10
       const startIndex = (page - 1) * limit
       const endIndex = page * limit
       const dateRangeReport = getLeavedays.slice(startIndex, endIndex)
