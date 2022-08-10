@@ -714,23 +714,14 @@ function totalWorkdaysExceptOffAndHolidays(offdays, weekNames, betweenTwoNameArr
     }
   }
   const offDaysNameArr = getOffDaysArr.map((el) => numToDay(offDaysObj, Number(el || 0)))
-  // nconsole.log('xxxxxxxxxx', offDaysNameArr);
-
   const offDaysLen = weekNames.filter((el) => offDaysNameArr.includes(el)).length
-  console.log({ offDaysLen });
-
   const finalOffdaysLen = offDaysLen + (weeklyLeaveDay === 1 ? countLeaveDay(offDaysLen, offDaysNameArr, betweenTwoNameArr) : 0)
-  console.log({ finalOffdaysLen });
-
   const totalDays = weekNames.length - finalOffdaysLen
-  console.log({ totalDays });
   return totalDays || 0
 }
 function countLeaveDay(offDayLen, offDayNameArr, betweenTwoNameArr){
   const bothTrue = betweenTwoNameArr.every((el) => offDayNameArr.includes(el))
   const oneIsTrue = offDayNameArr.filter((el) => betweenTwoNameArr.includes(el)).length
-  console.log(bothTrue, oneIsTrue)
-
   if (bothTrue){
     return offDayLen - 1;
   } if (oneIsTrue){

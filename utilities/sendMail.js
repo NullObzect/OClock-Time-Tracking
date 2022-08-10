@@ -10,7 +10,7 @@ const transporter = nodemailer.createTransport({
   secure: true, // true for 465, false for other ports
   auth: {
     user: 'tusherahmedctg7@gmail.com', // generated ethereal user
-    pass: 'kvvfjlxfzohsjfqj', // generated ethereal password
+    pass: 'mfkrwbnmndmvcdub', // generated ethereal password
   },
 });
 async function sendMail(toMail, subject, textMessage, htmlMessage) {
