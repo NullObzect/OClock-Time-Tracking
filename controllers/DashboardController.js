@@ -17,6 +17,7 @@ const DashboardController = {
     const requestLeaveList = await LeaveModel.requestLeaveList()
     const [{ totalLeaveToDay }] = await LeaveModel.todayLeaveUser()
     const todayEmployeesRecord = await LogModel.todayEmployeesRecord()
+
     res.render('pages/dashboard', {
       totalUsers,
       totalActive,
@@ -46,5 +47,15 @@ const DashboardController = {
 
     })
   },
+  chartDataAdmin: async (req, res) => {
+    // chart data for admin dashboard
+    const todayChartData = await LogModel.todayChartData()
+
+    const { todayTotalHr, todayWorkedHr, needHr } = todayChartData[0];
+    console.log('needHr', needHr);
+
+    res.json([todayTotalHr, todayWorkedHr, needHr]);
+  },
+
 }
 module.exports = DashboardController
