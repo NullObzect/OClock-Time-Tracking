@@ -50,6 +50,11 @@ const LeaveModel = {
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
+  anEmployeeRequestLeaveList: async (id) => {
+    const query = `SELECT U.user_name ,U.gender,  U.user_role,U.gender, U.avatar, EL.user_id AS id,EL.id AS elId, EL.type_id AS typeId, LT.name as type , DATE_FORMAT(start,'%Y/%m/%d') AS start, DATE_FORMAT(end, '%Y/%m/%d') AS end, DATEDIFF(end,start) + 1 AS duration  FROM request_leave AS EL JOIN leave_type AS LT ON LT.id = EL.type_id JOIN users AS U ON U.id = EL.user_id WHERE EL.user_id = ${id}`;
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows;
+  },
   addLeaveType: async (name, duration) => {
     const addLeaveTypeQuery = 'INSERT INTO `leave_type`(`name`, `duration`) VALUES (?,?)'
     const values = [name, duration]
