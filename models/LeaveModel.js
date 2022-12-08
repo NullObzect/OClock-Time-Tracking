@@ -33,14 +33,14 @@ const LeaveModel = {
   },
   leavedaysListBetweenTowDate: async (startDate, endDate) => {
     const getList = `SELECT U.user_name , U.avatar,EL.id AS elId,U.gender, EL.type_id AS typeId, LT.name as type ,DATE_FORMAT(start,'%Y/%m/%d') AS start, DATE_FORMAT(end, '%Y/%m/%d') AS end, DATEDIFF(end,start) + 1 AS duration  FROM employee_leaves AS EL
-    JOIN leave_type AS LT ON LT.id = El.type_id
+    JOIN leave_type AS LT ON LT.id = EL.type_id
     JOIN users AS U ON U.id  = EL.user_id  WHERE DATE(start) BETWEEN  '${startDate}' AND '${endDate}'`;
     console.log(getList)
     const [rows] = await dbConnect.promise().execute(getList)
     return rows;
   },
   leavedaysListBetweenTowDateWithId: async (id, startDate, endDate) => {
-    const getList = `SELECT U.id as userID ,U.user_name, U.avatar,U.gender, EL.id AS elId, EL.type_id AS typeId, LT.name as type ,DATE_FORMAT(start,'%Y/%m/%d') AS start, DATE_FORMAT(end, '%Y/%m/%d') AS end, DATEDIFF(end,start) + 1 AS duration FROM employee_leaves AS EL JOIN leave_type AS LT ON LT.id = El.type_id JOIN users AS U ON U.id = EL.user_id WHERE EL.user_id = ${id} AND DATE(start) BETWEEN  '${startDate}' AND '${endDate}'`;
+    const getList = `SELECT U.id as userID ,U.user_name, U.avatar,U.gender, EL.id AS elId, EL.type_id AS typeId, LT.name as type ,DATE_FORMAT(start,'%Y/%m/%d') AS start, DATE_FORMAT(end, '%Y/%m/%d') AS end, DATEDIFF(end,start) + 1 AS duration FROM employee_leaves AS EL JOIN leave_type AS LT ON LT.id = EL.type_id JOIN users AS U ON U.id = EL.user_id WHERE EL.user_id = ${id} AND DATE(start) BETWEEN  '${startDate}' AND '${endDate}'`;
     console.log(getList)
     const [rows] = await dbConnect.promise().execute(getList)
     return rows;
@@ -74,7 +74,7 @@ const LeaveModel = {
   },
   getLeaveTypeNameAndDuration: async (userId) => {
     const query = `SELECT LT.name AS leaveName, DATEDIFF(end, start) + 1 as duration
-    FROM employee_leaves AS EL JOIN leave_type AS LT ON LT.id = El.type_id 
+    FROM employee_leaves AS EL JOIN leave_type AS LT ON LT.id = EL.type_id 
    JOIN users AS U ON U.id = EL.user_id 
    WHERE EL.user_id = ${userId} AND U.create_at > now() - INTERVAL 365 DAY`
     const [rows] = await dbConnect.promise().execute(query)
@@ -121,19 +121,19 @@ const LeaveModel = {
   },
   leaveLimitReport: async (userId) => {
     const query = `SELECT
-    LT.name AS leaveName, SUM(DATEDIFF(end, start) + 1) as duration  FROM employee_leaves AS EL JOIN leave_type AS LT ON LT.id = El.type_id  JOIN users AS U ON U.id = EL.user_id  WHERE EL.user_id = ${userId} AND  EL.create_at  BETWEEN  DATE_FORMAT(NOW() - interval (DAYOFYEAR(NOW()) -1) DAY, "%Y-%m-%d") AND DATE_FORMAT(NOW(),'%Y-12-31') GROUP BY LT.name`
+    LT.name AS leaveName, SUM(DATEDIFF(end, start) + 1) as duration  FROM employee_leaves AS EL JOIN leave_type AS LT ON LT.id = EL.type_id  JOIN users AS U ON U.id = EL.user_id  WHERE EL.user_id = ${userId} AND  EL.create_at  BETWEEN  DATE_FORMAT(NOW() - interval (DAYOFYEAR(NOW()) -1) DAY, "%Y-%m-%d") AND DATE_FORMAT(NOW(),'%Y-12-31') GROUP BY LT.name`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
   leaveLimitCount: async (userId) => {
     const query = `SELECT
-    SUM(DATEDIFF(end, start) + 1) as countLeave FROM employee_leaves AS EL JOIN leave_type AS LT ON LT.id = El.type_id  JOIN users AS U ON U.id = EL.user_id  WHERE EL.user_id = ${userId} AND  EL.create_at  BETWEEN  DATE_FORMAT(NOW() - interval (DAYOFYEAR(NOW()) -1) DAY, "%Y-%m-%d") AND DATE_FORMAT(NOW(),'%Y-12-31') `
+    SUM(DATEDIFF(end, start) + 1) as countLeave FROM employee_leaves AS EL JOIN leave_type AS LT ON LT.id = EL.type_id  JOIN users AS U ON U.id = EL.user_id  WHERE EL.user_id = ${userId} AND  EL.create_at  BETWEEN  DATE_FORMAT(NOW() - interval (DAYOFYEAR(NOW()) -1) DAY, "%Y-%m-%d") AND DATE_FORMAT(NOW(),'%Y-12-31') `
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
   countUnpaidLeave: async (userId) => {
     const query = `SELECT
-    SUM(DATEDIFF(end, start) + 1) as countUnpaidLeave FROM employee_leaves AS EL JOIN leave_type AS LT ON LT.id = El.type_id  JOIN users AS U ON U.id = EL.user_id  WHERE EL.user_id = ${userId} AND  EL.create_at  BETWEEN  DATE_FORMAT(NOW() - interval (DAYOFYEAR(NOW()) -1) DAY, "%Y-%m-%d") AND DATE_FORMAT(NOW(),'%Y-12-31') AND LT.name = 'Unpaid'`
+    SUM(DATEDIFF(end, start) + 1) as countUnpaidLeave FROM employee_leaves AS EL JOIN leave_type AS LT ON LT.id = EL.type_id  JOIN users AS U ON U.id = EL.user_id  WHERE EL.user_id = ${userId} AND  EL.create_at  BETWEEN  DATE_FORMAT(NOW() - interval (DAYOFYEAR(NOW()) -1) DAY, "%Y-%m-%d") AND DATE_FORMAT(NOW(),'%Y-12-31') AND LT.name = 'Unpaid'`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
