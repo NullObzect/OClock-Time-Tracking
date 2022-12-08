@@ -209,10 +209,10 @@ const UserController = {
     const { email, password } = req.body
     try {
       const hashPass = await bcrypt.hash(password, 10);
-      UserModel.UpdatePassword(email, hashPass)
       const [user] = await UserModel.findUserByEmail(email)
+      await UserModel.UpdatePassword(email, hashPass)
       await UserModel.userVerify(user.id)
-      res.redirect('/')
+      res.redirect('/login')
     } catch (err) {
       console.log(err)
     }

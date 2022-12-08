@@ -17,11 +17,11 @@ module.exports = {
         type: Sequelize.STRING,
       },
       gender: {
-        allowNull: false,
+        // allowNull: false,
         type: Sequelize.STRING,
       },
       user_phone: {
-        allowNull: false,
+        // allowNull: false,
         type: Sequelize.STRING,
         unique: true,
       },
