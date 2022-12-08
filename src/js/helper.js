@@ -142,11 +142,18 @@ function deleteData(deleteUrl) {
     deleteData[i].addEventListener('click', () => {
       // alert("delete");
       deleteModal.style.display = 'block';
-      console.log(deleteId[i].value);
-
       deleteBtn[0].addEventListener('click', () => {
-        console.log(deleteId[i].value);
-        window.location.href = `${deleteUrl}${deleteId[i].value}`;
+        fetch(`${deleteUrl}${deleteId[i].value}`, {
+          method: 'POST',
+        }).then((res) => res.json()).then((result) => {
+          if (result.response === 'success') {
+            deleteModal.style.display = 'none';
+            window.location.reload();
+          } else {
+            deleteModal.style.display = 'none';
+            alert('error')
+          }
+        })
       });
       cancelBtn[0].addEventListener('click', () => {
         deleteModal.style.display = 'none';

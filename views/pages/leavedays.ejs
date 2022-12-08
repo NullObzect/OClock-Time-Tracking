@@ -204,7 +204,7 @@
               <input
                 type="hidden"
                 class="leave-id delete-id"
-                value="<%= user.elId %>"
+                value="<%= user.id %>"
               />
               <a class="delete-data"
                 ><button class="delete-btn">Delete</button>
@@ -220,6 +220,7 @@
     <% } else{ %> 
 <div class="report-not-found">
   <h4 >No, report founded !!!</h4>
+
   <% } %>
 
 
@@ -237,6 +238,38 @@
       <ul id="pagination"></ul>
     </div>
   </div>
+  <%if(anEmployeeRequestLeaveList.length){%>
+    <div style="margin:0 40px ">
+    <h4>Request</h4>
+    <table class="table leaveday-table">
+      <thead>
+        <tr>
+          <td class="project-table-title td-width">Leave type</td>
+          <td class="td-width">Start Date</td>
+          <td class="td-width">End Date</td>
+          <td class="td-width">Duration</td>
+        </tr>
+      </thead>
+      <tbody id="leaveday-table">
+      <% anEmployeeRequestLeaveList.map((user,idx) =>{ %>
+        <tr>
+          <td>
+            <div><%= user.type %></div>
+          </td>
+          <td>
+            <input class="start-val" type="text" value="<%=user.start%> " />
+          </td>
+          <td><input class="end-val" type="text" value="<%=user.end%>" /></td>
+          <td class="duration"><%= user.duration + ' ' + 'day' %></td>
+
+        </tr>
+        <% }) %> 
+        
+      </tbody>
+    </table>
+    </div>
+  <%} %>
+ 
 </div>
 
 <script>

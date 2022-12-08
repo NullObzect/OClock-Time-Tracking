@@ -18,8 +18,20 @@ const htmlTextMessage = {
               Leave type : ${type} <br>
               Date : ${start} to ${end} <br>
               Duration : ${duration} days
-
             </div>
+            <div class="btn-box">
+            <a style="cursor: pointer;" href="${process.env.BASE_URL}/options/request-leave"> <button style="padding: 0px 20px;
+              border-radius: 8px;
+              background-color: #103047;
+              border : none;
+              font-size: 15px;
+              font-weight: 700;
+              line-height: 36px;
+              color: #FFFFFF;
+              margin-left: 8px;
+              text-align: center;
+              cursor: pointer;">Request List</button></a>
+           </div>
       </div>`),
   acceptRequestLeave: (name, type, start, end, duration) => (`<div id="search-modal">
       <div style="width: 450px;
