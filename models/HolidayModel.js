@@ -35,6 +35,12 @@ const HolidayModel = {
     const [row] = await dbConnect.promise().execute(deleteSql, value)
     return row.affectedRows;
   },
+  countDayAndStartDateForHoliday: async (userId) => {
+    const query = `SELECT DATEDIFF(end, start) + 1 countDay, DATE_FORMAT(start, '%Y-%m-%d') startDate FROM holidays JOIN users U ON U.id = ${userId} WHERE DATE(start) BETWEEN U.create_at and DATE(CURRENT_DATE - 1)`
+    const [rows] = await dbConnect.promise().execute(query)
+
+    return rows;
+  },
 
 }
 
