@@ -38,8 +38,6 @@ const HomeController = {
   },
   getRunStartData: async (req, res) => {
     try {
-     
-
       const [{ start }] = await AttendanceModel.getRunStartData(req.user.id)
       res.json(start)
     } catch (err) {
