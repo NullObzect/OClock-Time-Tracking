@@ -501,7 +501,8 @@ const AttendanceModel = {
     const query = `SELECT DATEDIFF(end, start) + 1 as countLeaveDay, DATE_FORMAT(start, '%Y-%m-%d') as startDate FROM employee_leaves WHERE user_id = ${userId} AND DATE(start) BETWEEN '${startDate}' AND DATE'${endDate}'`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
-  },
+  }
+
 
 }
 module.exports = AttendanceModel;
