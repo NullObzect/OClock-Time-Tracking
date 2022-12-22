@@ -23,4 +23,11 @@ router.post('/attendance-entry-or-exit', AttendanceController.attendanceEntryOrE
 router.post('/manual-attendance', AttendanceController.manualAttendance)
 router.get('/manual-attendance-exist', AttendanceController.checkIsExistAttendance)
 
+//  absents API
+router.get('/absent', decorateHtmlResponse('Report'), checkLogin, ReportController.absentDate)
+router.get('/absent/:id', decorateHtmlResponse('Report'), checkLogin, ReportController.absentDate)
+
+// add missing attendance
+router.post('/add-missing-attendance', AttendanceController.addMissingAttendance)
+
 module.exports = router;
