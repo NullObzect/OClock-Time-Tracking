@@ -10,9 +10,12 @@ const LogModel = require('../models/LogModel');
 const ProfileModel = require('../models/ProfileModel')
 const { pageNumbers } = require('../utilities/pagination')
 const {
-  timeToHour, workHourFormateForReport, generateMultipleDate, dateFormate,
+  timeToHour, workHourFormateForReport, generateMultipleDate, dateFormate, offDaysObject, numOfDay, getNumToDay, generateWeekName,
 } = require('../utilities/formater');
 const OptionsModel = require('../models/OptionsModel');
+const UserModel = require('../models/UserModel');
+const HolidayModel = require('../models/HolidayModel');
+const LeaveModel = require('../models/LeaveModel');
 
 // get user id
 let isUserId;
@@ -36,6 +39,8 @@ const ReportController = {
       const checkUserReportEmptyOrNot = await LogModel.isUserIdInLog(userId)
       const platformUser = await ProfileModel.userConnectionDetailsUniqueInfo(userId)
       const userInfo = await AttendanceModel.getEmployeeInfo(userId)
+
+      const userRole = await AttendanceModel.getEmployeeInfo(user.id)
 
       if (checkUserReportEmptyOrNot.length !== 0) {
         const [{ avgStartTime }] = await AttendanceModel.avgStartTime(userId)
@@ -176,7 +181,6 @@ const ReportController = {
           isLowOrHighClassForHr(weekAvgExtraOrLess),
 
         )
-
         // late count this week
         const lateCounts = await LogModel.lateCountThisWeek(userId, weekStartDate)
         const lateCountThisWeek = lateCount(lateCounts)
@@ -198,6 +202,7 @@ const ReportController = {
         const offdaysAndHolidaysDateArr = []
         const thisMonthTotalWorkdays = countUserJoinDate(countJoinIngDate, countWorkday)
         generateMultipleDate(thisMonthTotalWorkdays, monthStartDate, offdaysAndHolidaysDateArr, dateFormate)
+
         // count holidays  start
         const countHolidaysThisMonth = await AttendanceModel.countHolidaysThisMonth(monthStartDate, userId)
         const countHolidaysThisMonthArr = countHolidaysThisMonth.map((el) => el.countHolidaysThisMonth)
@@ -208,11 +213,8 @@ const ReportController = {
         // count leavedays start
         const countThisMonthLeavedays = await LogModel.countThisMonthLeavedays(userId, monthStartDate)
         const countThisMonthLeavedaysArr = countThisMonthLeavedays.map((el) => el.countLeaveDay)
-
         const countThisMonthLeavedaysDatesArr = countThisMonthLeavedays.map((el) => el.startDate)
         const thisMonthLeavedaysDates = generateDatesFromBetweenNum(countThisMonthLeavedaysArr, countThisMonthLeavedaysDatesArr, dateFormate)
-
-        const thisMonthLeavedaysLen = thisMonthLeavedaysDates.length
 
         // count leavedays end
         const uniqueHoliLeaveAndOffdaysDate = [...new Set([...holidaysDates, ...offdaysAndHolidaysDateArr, ...thisMonthLeavedaysDates])]
@@ -309,9 +311,64 @@ const ReportController = {
 
         const lateCountRatioYear = Math.floor(Number(lateCountThisYear / countUserJoinDate(countJoinIngDate, fixedWorkdayThisYear) * 100)) || 0
 
+        // TODO: new feature  for missing date
+
+        /*
+          1. get join date
+          2. get join date to current date & return  number of day
+          3. off days, holidays, leave days date array
+          4. present date array
+          6. unique date array  (present date array + off days, holidays, leave days date array)
+          7. missing date array (join date to current date - unique date array)
+          8. missing date array length
+        */
+        const numOfDayJoiningDateToCurrentDate = await UserModel.numOfDayJoiningDateToCurrentDate(userId)
+        const allDateArr = []
+        generateMultipleDate(numOfDayJoiningDateToCurrentDate.numOfDay, numOfDayJoiningDateToCurrentDate.joiningDate, allDateArr, dateFormate)
+        // holidays date
+        const countDayAndStartDate = await HolidayModel.countDayAndStartDateForHoliday(userId)
+        const countDay = countDayAndStartDate.map((el) => el.countDay)
+        const startDate = countDayAndStartDate.map((el) => el.startDate)
+        const holidayDateArr = []
+        for (let i = 0; i < countDay.length; i += 1) {
+          generateMultipleDate(countDay[i], startDate[i], holidayDateArr, dateFormate)
+        }
+        // leave date
+        const countDayAndStartDateForLeave = await LeaveModel.countDayAndStartDateForLeaveDay(userId)
+        const countDayForLeave = countDayAndStartDateForLeave.map((el) => el.countDay)
+        const startDateForLeave = countDayAndStartDateForLeave.map((el) => el.startDate)
+        const leaveDateArr = []
+        for (let i = 0; i < countDayForLeave.length; i += 1) {
+          generateMultipleDate(countDayForLeave[i], startDateForLeave[i], leaveDateArr, dateFormate)
+        }
+        // off date
+        const offDateArr = []
+        for (let i = 0; i < allDateArr.length; i += 1) {
+          if (generateWeekName(allDateArr[i]) == getNumToDay(offDays[0], numOfDay, offDaysObject)) {
+            offDateArr.push(allDateArr[i])
+          }
+          if (offDays.length > 1){
+            if (generateWeekName(allDateArr[i]) == getNumToDay(offDays[2], numOfDay, offDaysObject)) {
+              offDateArr.push(allDateArr[i])
+            }
+          }
+        }
+        // work date date
+        const getWorkingDate = await LogModel.workingDate(userId)
+        const workingDateArr = getWorkingDate.map((el) => el.workingDate)
+        const uniqueDateArr = [...new Set([...holidayDateArr, ...leaveDateArr, ...offDateArr, ...workingDateArr])]
+        const missingDateArr = allDateArr.filter((el) => !uniqueDateArr.includes(el))
+        // console.log({ missingDateArr });
+
+        // TODO: new feature  for missing date  generate  automated
+
+        const lastTendayData = await LogModel.lastTendaysData(userId)
+        console.log({ lastTendayData });
+
         /* ======================================================== */
         /* ==========FIXME:  report for this year  END ========== */
         /* ======================================================== */
+
         if (req.params.api) {
           res.json({
             platformUser,
@@ -354,6 +411,8 @@ const ReportController = {
             lateCountRatioMonth,
             lateCountThisYear,
             lateCountRatioYear,
+            missingDateArr,
+            userRole,
 
           })
         }
@@ -518,6 +577,79 @@ const ReportController = {
       })
     } catch (err) {
       console.log('====>Error form ReportController/reportBetweenTwoDate', err);
+      return err;
+    }
+  },
+
+  absentDate: async (req, res) => {
+    const { offDays } = await AttendanceModel.getOffDays()
+
+    try {
+      isUserId = null;
+      const { user } = req
+      let userId;
+      if (req.params.id) {
+        userId = req.params.id;
+        isUserId = userId;
+      } else {
+        userId = user.id;
+      }
+      // TODO: new feature  for missing date
+
+      /*
+          1. get join date
+          2. get join date to current date & return  number of day
+          3. off days, holidays, leave days date array
+          4. present date array
+          6. unique date array  (present date array + off days, holidays, leave days date array)
+          7. missing date array (join date to current date - unique date array)
+          8. missing date array length
+        */
+      const numOfDayJoiningDateToCurrentDate = await UserModel.numOfDayJoiningDateToCurrentDate(userId)
+      const allDateArr = []
+      generateMultipleDate(numOfDayJoiningDateToCurrentDate.numOfDay, numOfDayJoiningDateToCurrentDate.joiningDate, allDateArr, dateFormate)
+      // holidays date
+      const countDayAndStartDate = await HolidayModel.countDayAndStartDateForHoliday(userId)
+      const countDay = countDayAndStartDate.map((el) => el.countDay)
+      const startDate = countDayAndStartDate.map((el) => el.startDate)
+      const holidayDateArr = []
+      for (let i = 0; i < countDay.length; i += 1) {
+        generateMultipleDate(countDay[i], startDate[i], holidayDateArr, dateFormate)
+      }
+      // leave date
+      const countDayAndStartDateForLeave = await LeaveModel.countDayAndStartDateForLeaveDay(userId)
+      const countDayForLeave = countDayAndStartDateForLeave.map((el) => el.countDay)
+      const startDateForLeave = countDayAndStartDateForLeave.map((el) => el.startDate)
+      const leaveDateArr = []
+      for (let i = 0; i < countDayForLeave.length; i += 1) {
+        generateMultipleDate(countDayForLeave[i], startDateForLeave[i], leaveDateArr, dateFormate)
+      }
+      // off date
+      const offDateArr = []
+      for (let i = 0; i < allDateArr.length; i += 1) {
+        if (generateWeekName(allDateArr[i]) == getNumToDay(offDays[0], numOfDay, offDaysObject)) {
+          offDateArr.push(allDateArr[i])
+        }
+        if (offDays.length > 1){
+          if (generateWeekName(allDateArr[i]) == getNumToDay(offDays[2], numOfDay, offDaysObject)) {
+            offDateArr.push(allDateArr[i])
+          }
+        }
+      }
+      // work date date
+      const getWorkingDate = await LogModel.workingDate(userId)
+      const workingDateArr = getWorkingDate.map((el) => el.workingDate)
+      const uniqueDateArr = [...new Set([...holidayDateArr, ...leaveDateArr, ...offDateArr, ...workingDateArr])]
+      const missingDateArr = allDateArr.filter((el) => !uniqueDateArr.includes(el))
+      // console.log({ missingDateArr });
+
+      // TODO: new feature  for missing date  generate  automated
+
+      const lastTendayData = await LogModel.lastTendaysData(userId)
+      console.log({ lastTendayData });
+      res.json({ absentDate: missingDateArr, lastTendayData })
+    } catch (err) {
+      console.log('====>Error form ReportController/absentDate', err);
       return err;
     }
   },
