@@ -316,12 +316,9 @@
         </div>
         
     </form>
-
-
-    
       </div>
    
-      <table>
+      <table id="working-employees">
         <thead>
           <tr>
             <td></td>
@@ -337,7 +334,8 @@
           <% isEndTimeNull.map(user=>{ %>
 
             <tr>
-              <td><div class="img-box">
+              <td>
+                <div class="img-box">
                 <% if(user.avatar !== null && user.avatar.match(/^(http|https):/g)){
                   %>
                   <img src="<%= user.avatar%>" />
@@ -346,20 +344,23 @@
                     src="/uploads/avatars/<%=user.avatar != null ?  user.avatar : user.gender=='male' ? 'demo-avatar.png':'female-demo-avatar.png'  %>"
                   />
                   <% } %>
-              </div></td>
-              <td>
+               </div>
+              </td>
+            <td>
             <div class="username userBtn" data-userID="<%=user.userId%>"><%=user.name%></div>
             <span id="role"><%= user.userRole==='admin'? 'admin' : ''%> </span>
           </td>
           <td > <%= user.work_details %></td>
           <td ><input class="get-date"  name="date"  type="text" disabled  value="<%= user.curDate %>"></td>
           <td class="time-picker"><input type="text" class="update-start-time-val timepicker-ui-input" name="startDate" value="<%= user.minStartTime %>"></td>
+
           <td class="user-end-time time-picker">  <input type="text" name="endTime" class="update-end-time-val timepicker-ui-input" value="<%= user.endTime %>"></td>
-          <input type="hidden" name="userId" class="userId" value="<%= user.userId %>" />
-          </td>
+          
+          
+          
+          <td  class="btn-group"> 
 
-
-          <td class="btn-group">
+            <input type="hidden" name="userId" class="userId" value="<%= user.userId %>" />
             <button class="update-btn">Update</button>
             <button class="update-start-time ">Start</button>
             <button class="update-end-time ">End</button>
@@ -395,6 +396,10 @@
       </td>
       </tr> 
       <% })  %> 
+
+
+      
+   
                 
               </tbody>
             </table>
