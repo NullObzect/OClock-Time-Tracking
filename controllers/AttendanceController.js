@@ -6,6 +6,8 @@ const OptionsModel = require('../models/OptionsModel');
 const { stringToNumber, time12HrTo24Hr } = require('../utilities/formater')
 
 const UserModel = require('../models/UserModel');
+const LeaveModel = require('../models/LeaveModel');
+const LogModel = require('../models/LogModel');
 // const { timeToHour } = require('../utilities/formater')
 
 const convertTime = (timeStr) => {
@@ -291,6 +293,29 @@ const AttendanceController = {
       }
     } catch (err) {
       console.log('====>Error form manualAttendance/ controllers', err);
+    }
+  },
+
+  addMissingAttendance: async (req, res) => {
+    try {
+      // console.log('====>req.body', req.body);
+      const { absentDate, lastTendayData } = req.body
+      let { userID } = req.body
+
+      if (userID === undefined || userID === null) {
+        userID = req.user.id
+      }
+
+      const [{ inTime }] = await AttendanceModel.getInTime()
+      const [{ outTime }] = await AttendanceModel.getOutTime()
+      const [{ fixedTime }] = await LogModel.getOptionsValueForUpdateFixedTime()
+
+      for (let i = 0; i < (absentDate.length > lastTendayData.length ? lastTendayData.length : absentDate.length); i += 1) {
+        await LogModel.addMissingDate(userID, inTime, outTime, fixedTime, `${absentDate[i]}  ${lastTendayData[i].startTime}`, `${absentDate[i]}  ${lastTendayData[i].endTime}`, lastTendayData[i].totalWorkTime, 'regular', `${absentDate[i]}  ${lastTendayData[i].startTime}`)
+      }
+      res.json('success')
+    } catch (err) {
+      console.log('====>Error form', err);
     }
   },
 
