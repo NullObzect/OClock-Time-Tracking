@@ -201,5 +201,11 @@ const UserModel = {
     return rows
   },
 
+  numOfDayJoiningDateToCurrentDate: async (id) => {
+    const numOfDayJoiningDateToCurrentDateQuery = `SELECT DATE_FORMAT(U.create_at, "%Y-%m-%d") as joiningDate, DATEDIFF(CURRENT_DATE(),U.create_at) as numOfDay FROM users as U WHERE U.id = ${id}`
+    const [rows] = await dbConnect.promise().execute(numOfDayJoiningDateToCurrentDateQuery)
+    return rows[0]
+  },
+
 }
 module.exports = UserModel;
