@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 const dbConnect = require('../config/database');
 
 const LogModel = {
@@ -206,6 +207,33 @@ const LogModel = {
     const query = 'SELECT  work_hour * COUNT(user_id)  AS todayTotalHr, SEC_TO_TIME(SUM(TIME_TO_SEC(work_time))) todayWorkedHr, SEC_TO_TIME((TIME_TO_SEC(L.work_hour) * COUNT(user_id) - SUM(TIME_TO_SEC(work_time)))) as needHr   FROM log AS L WHERE  DATE(L.create_at) = DATE(CURRENT_DATE);'
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
+  },
+  workingDate: async (userId) => {
+    const query = `SELECT DATE_FORMAT(L.start, '%Y-%m-%d') workingDate FROM log L WHERE L.user_id = ${userId}`
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows;
+  },
+  lastTendaysData: async (userId) => {
+    const query = `SELECT  TIME_FORMAT(start, '%H:%i:%s') startTime, TIME_FORMAT(end, '%H:%i:%s') endTime, work_time totalWorkTime  FROM log WHERE user_id = ${userId} ORDER BY create_at DESC LIMIT 30;`
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows;
+  },
+
+  addMissingDate: async (userId, inTime, outTime, workHr, start, end, workTime, dayType, createdAt) => {
+    try {
+      console.log('====>addMissingDate', {
+        userId, inTime, outTime, workHr, start, end, workTime, dayType,
+      });
+
+      const query = 'INSERT INTO log (user_id, in_time, out_time, work_hour, start, end, work_time, day_type, create_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+
+      const values = [userId, inTime, outTime, workHr, start, end, workTime, dayType, createdAt]
+
+      const [rows] = await dbConnect.promise().execute(query, values)
+      return rows;
+    } catch (err) {
+      console.log('====>Error form', err);
+    }
   },
 
 }
