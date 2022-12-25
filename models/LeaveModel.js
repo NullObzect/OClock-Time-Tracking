@@ -158,7 +158,7 @@ const LeaveModel = {
     const query = `SELECT DATEDIFF(end, start) + 1 countDay, DATE_FORMAT(start, '%Y-%m-%d') startDate FROM employee_leaves E JOIN users U ON U.id = E.user_id   WHERE DATE(start) BETWEEN U.create_at and DATE(CURRENT_DATE - 1) AND E.user_id = ${userId};`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
-  }
+  },
 }
 
 module.exports = LeaveModel;
