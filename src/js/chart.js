@@ -1,5 +1,4 @@
 const { data } = require('autoprefixer');
-const { default: axios } = require('axios');
 
 const bar = document.getElementById('myBar').getContext('2d');
 const pie = document.getElementById('myPie').getContext('2d');
@@ -12,17 +11,6 @@ const getChartData = fetch(`${process.env.BASE_URL}/dashboard/admin-chart`)
   .then((getData) => {
     arr.push(getData);
   })
-
-console.log('xxx', getChartData);
-
-setTimeout(() => {
-  console.log('arr', arr[0][0]);
-}, 1000)
-
-function showChartData(getData) {
-  console.log('data', getData.needHr);
-  return [10, 30, 20];
-}
 
 const myChart = new Chart(bar, {
   type: 'bar',
@@ -48,7 +36,7 @@ const myChart = new Chart(bar, {
 const pieConfig = {
   type: 'polarArea',
   data: {
-    labels: ['Total', 'Running', 'Need'],
+    labels: ['Total Hr', 'Running Hr', 'Need Hr'],
     datasets: [
       {
         label: '# of Votes',
@@ -72,7 +60,6 @@ const pieConfig = {
 
 };
 
-// pieConfig.data.datasets[0].data = [arr[0][0]];
 setTimeout(() => {
   pieConfig.data.datasets[0].data = [arr[0][0], arr[0][1], arr[0][2]];
 }, 500)

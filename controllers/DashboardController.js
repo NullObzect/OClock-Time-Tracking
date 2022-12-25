@@ -52,7 +52,7 @@ const DashboardController = {
     const todayChartData = await LogModel.todayChartData()
 
     const { todayTotalHr, todayWorkedHr, needHr } = todayChartData[0];
-    console.log('needHr', needHr);
+    console.log({ todayTotalHr, todayWorkedHr, needHr });
 
     res.json([todayTotalHr, todayWorkedHr, needHr]);
   },
