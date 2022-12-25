@@ -204,7 +204,7 @@ const LogModel = {
 
   // query for get all chart data
   todayChartData: async () => {
-    const query = 'SELECT  work_hour * COUNT(user_id)  AS todayTotalHr, SEC_TO_TIME(SUM(TIME_TO_SEC(work_time))) todayWorkedHr, SEC_TO_TIME((TIME_TO_SEC(L.work_hour) * COUNT(user_id) - SUM(TIME_TO_SEC(work_time)))) as needHr   FROM log AS L WHERE  DATE(L.create_at) = DATE(CURRENT_DATE);'
+    const query = 'SELECT  work_hour * COUNT(user_id)  AS todayTotalHr, TIME_FORMAT(SEC_TO_TIME(SUM(TIME_TO_SEC(work_time))), \'%H\') todayWorkedHr, TIME_FORMAT(SEC_TO_TIME((TIME_TO_SEC(L.work_hour) * COUNT(user_id) - SUM(TIME_TO_SEC(work_time)))), \'%H\') as needHr   FROM log AS L WHERE  DATE(L.create_at) = DATE(CURRENT_DATE)'
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
