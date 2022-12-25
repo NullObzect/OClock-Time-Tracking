@@ -4,6 +4,7 @@
 <div class="reports-container">
 <!-- Markup for employee profile -->
 <div class="profile">
+  <a href="/update-user/<%= userInfo.id %>">
 
   <div class="avatar">
 
@@ -17,8 +18,11 @@
       <% } %> 
  
   </div>
+  </a>
   <div class="profile-info">
+
     <div class="username"><%= userInfo.user_name  %></div>
+    
     <div class="role"><%= userInfo.user_role == "user" ? "Employee" : "Admin"  %> </div>
     <div class="profile-details">
       <div class="email"><%= userInfo.user_mail %> </div>
