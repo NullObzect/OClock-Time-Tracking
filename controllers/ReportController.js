@@ -125,7 +125,6 @@ const ReportController = {
         }
         const { offDays } = await AttendanceModel.getOffDays()
         const { weeklyLeaveDay } = await AttendanceModel.weeklyLeaveDay()
-
         const [{ weekStartDate }] = await AttendanceModel.getWeekStartDate(getThisWeekNumberOfday)
         const [{ countJoinIngDate }] = await LogModel.countUserJoiningDate(userId)
         const weekdaysType = await LogModel.countWorkdaysForWeek(userId, weekStartDate)
@@ -156,7 +155,7 @@ const ReportController = {
 
         const thisWeekFinalDateArr = uniqueHoliLeaveAndOffdaysDateThisWeek.filter((el) => !holidaysDatesThisWeek.includes(el))
 
-        const fixedWorkdayThisWeek = totalWorkdaysExceptOffAndHolidays(offDays, generateWeekNames(thisWeekFinalDateArr), arrFirstAndLastEel(thisWeekDatesArr), Number(weeklyLeaveDay)) - thisWeekOffdays
+        const fixedWorkdayThisWeek = totalWorkdaysExceptOffAndHolidays(offDays, generateWeekNames(thisWeekFinalDateArr), arrFirstAndLastEel(thisWeekDatesArr), Number(weeklyLeaveDay) + 1) - thisWeekOffdays
 
         // TODO: new code end
 
@@ -181,6 +180,7 @@ const ReportController = {
           isLowOrHighClassForHr(weekAvgExtraOrLess),
 
         )
+
         // late count this week
         const lateCounts = await LogModel.lateCountThisWeek(userId, weekStartDate)
         const lateCountThisWeek = lateCount(lateCounts)
@@ -220,7 +220,7 @@ const ReportController = {
         const uniqueHoliLeaveAndOffdaysDate = [...new Set([...holidaysDates, ...offdaysAndHolidaysDateArr, ...thisMonthLeavedaysDates])]
         const thisMonthFinalDateArr = uniqueHoliLeaveAndOffdaysDate.filter((el) => !holidaysDates.includes(el))
 
-        const fixedWorkdayThisMonth = totalWorkdaysExceptOffAndHolidays(offDays, generateWeekNames(thisMonthFinalDateArr), arrFirstAndLastEel(offdaysAndHolidaysDateArr), Number(weeklyLeaveDay)) - workInThisMonthTotalOffdays
+        const fixedWorkdayThisMonth = totalWorkdaysExceptOffAndHolidays(offDays, generateWeekNames(thisMonthFinalDateArr), arrFirstAndLastEel(offdaysAndHolidaysDateArr), Number(weeklyLeaveDay) + 1) - workInThisMonthTotalOffdays
 
         // TODO: new code end
 
@@ -243,9 +243,7 @@ const ReportController = {
           showDaysIsLowOrHigh(countUserJoinDate(countJoinIngDate, fixedWorkdayThisMonth) || 0, monthNumberOfWorkingDays),
           isLowOrHighClassForHr(monthAvgExtraOrLess),
         )
-
         const lateCountsMonth = await LogModel.lateCountThisMonth(userId, monthStartDate)
-
         const lateCountThisMonth = lateCount(lateCountsMonth)
         const lateCountRatioMonth = Math.floor(Number(lateCountThisMonth / countUserJoinDate(countJoinIngDate, fixedWorkdayThisMonth) * 100)) || 0
 
@@ -258,11 +256,13 @@ const ReportController = {
         /* ======================================================== */
 
         const [{ yearStartDate, countThisYearWorkday }] = await AttendanceModel.thisYearDates()
+
         const yeardaysType = await LogModel.countWorkdaysForMonth(userId, yearStartDate)
         const thisYearTotalOffdays = yeardaysType.filter((el) => el.workdays === 0).length
         // TODO: new code start
         const thisYearDatesArr = []
         const thisYearTotalWorkdays = countUserJoinDate(countJoinIngDate, countThisYearWorkday)
+
         generateMultipleDate(thisYearTotalWorkdays, yearStartDate, thisYearDatesArr, dateFormate)
         const countHolidaysThisYear = await AttendanceModel.countHolidaysThisMonth(yearStartDate, userId)
         const countHolidaysThisYearArr = countHolidaysThisYear.map((el) => el.countHolidaysThisMonth)
@@ -282,7 +282,7 @@ const ReportController = {
         const uniqueHoliLeaveAndOffdaysDateThisYear = [...new Set([...holidaysDatesThisYear, ...thisYearDatesArr, ...thisYearLeavedaysDates])]
         const thisYearFinalDateArr = uniqueHoliLeaveAndOffdaysDateThisYear.filter((el) => !holidaysDatesThisYear.includes(el))
 
-        const fixedWorkdayThisYear = totalWorkdaysExceptOffAndHolidays(offDays, generateWeekNames(thisYearFinalDateArr), arrFirstAndLastEel(thisYearDatesArr), Number(weeklyLeaveDay)) - thisYearTotalOffdays
+        const fixedWorkdayThisYear = totalWorkdaysExceptOffAndHolidays(offDays, generateWeekNames(thisYearFinalDateArr), arrFirstAndLastEel(thisYearDatesArr), Number(weeklyLeaveDay) + 1) - thisYearTotalOffdays - 1
 
         //
 
@@ -363,7 +363,6 @@ const ReportController = {
         // TODO: new feature  for missing date  generate  automated
 
         const lastTendayData = await LogModel.lastTendaysData(userId)
-        console.log({ lastTendayData });
 
         /* ======================================================== */
         /* ==========FIXME:  report for this year  END ========== */
@@ -503,7 +502,7 @@ const ReportController = {
 
       const finalBTDDatesArr = uniqueBTDHoliLeaveAndOffdaysDate.filter((el) => !holidaysDatesBTD.includes(el))
 
-      const fixedWorkdayBTD = totalWorkdaysExceptOffAndHolidays(offDays, generateWeekNames(finalBTDDatesArr), generateWeekNames(arrFirstAndLastEel(betweenTwoDateArr)), Number(weeklyLeaveDay)) - betweenTwoDateOffdays
+      const fixedWorkdayBTD = totalWorkdaysExceptOffAndHolidays(offDays, generateWeekNames(finalBTDDatesArr), generateWeekNames(arrFirstAndLastEel(betweenTwoDateArr)), Number(weeklyLeaveDay) + 1) - betweenTwoDateOffdays
       // TODO: new code end
 
       // FIXME::
@@ -646,7 +645,6 @@ const ReportController = {
       // TODO: new feature  for missing date  generate  automated
 
       const lastTendayData = await LogModel.lastTendaysData(userId)
-      console.log({ lastTendayData });
       res.json({ absentDate: missingDateArr, lastTendayData })
     } catch (err) {
       console.log('====>Error form ReportController/absentDate', err);
@@ -849,6 +847,7 @@ function totalWorkdaysExceptOffAndHolidays(offdays, weekNames, betweenTwoNameArr
   const offDaysLen = weekNames.filter((el) => offDaysNameArr.includes(el)).length
   const finalOffdaysLen = offDaysLen + (weeklyLeaveDay === 1 ? countLeaveDay(offDaysLen, offDaysNameArr, betweenTwoNameArr) : 0)
   const totalDays = weekNames.length - finalOffdaysLen
+
   return totalDays || 0
 }
 function countLeaveDay(offDayLen, offDayNameArr, betweenTwoNameArr){
@@ -859,6 +858,8 @@ function countLeaveDay(offDayLen, offDayNameArr, betweenTwoNameArr){
   } if (oneIsTrue){
     return offDayLen
   }
+  console.log({ offDayLen });
+
   return offDayLen + 1;
 }
 
