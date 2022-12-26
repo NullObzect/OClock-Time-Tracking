@@ -65,6 +65,8 @@ const LogModel = {
     return rows;
   },
   thisYearReports: async (userId, yearStartDate, workdays) => {
+    console.log({ yearStartDate, workdays });
+
     const query = `SELECT COUNT(start) AS yearNumberOfWorkingDays, REPLACE(TIME_FORMAT( work_hour , '%h'),'0', '') * ${workdays} AS yearFixedHr,  SEC_TO_TIME(SUM(TIME_TO_SEC(work_time))) AS yearTotalWorkHr, SUBTIME(SEC_TO_TIME(SUM(TIME_TO_SEC(work_time))), SEC_TO_TIME(work_hour * ${workdays} * 60 * 60) ) yearTotalExtraOrLess, SEC_TO_TIME(SUM(TIME_TO_SEC(work_time)) / ${workdays}) AS yearAvgWorkTime, SUBTIME(SEC_TO_TIME(SUM(TIME_TO_SEC(work_time)) / ${workdays}), work_hour) AS yearAvgExtraOrLess, TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(start))),'%h:%i %p') AS yearAvgStartTime, TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(end))),'%h:%i %p') AS yearAvgEndTime  FROM log  WHERE user_id = ${userId} AND DATE(start) BETWEEN  '${yearStartDate}' AND  DATE(CURRENT_DATE - 1)`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
@@ -234,6 +236,19 @@ const LogModel = {
     } catch (err) {
       console.log('====>Error form', err);
     }
+  },
+
+  deleteAllReportFromAttendance: async (userId) => {
+    const query = `DELETE FROM attendance WHERE user_id = ${userId}`
+
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows.affectedRows
+  },
+  deleteAllReportFromLog: async (userId) => {
+    const query = `DELETE FROM log WHERE user_id = ${userId}`
+
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows.affectedRows
   },
 
 }
