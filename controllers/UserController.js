@@ -10,7 +10,8 @@ const sendMail = require('../utilities/sendMail');
 // const { pageNumbers } = require('../utilities/pagination')
 const paginationCountPage = require('../utilities/paginationCountPage')
 
-const htmlMailText = require('./htmlMailText')
+const htmlMailText = require('./htmlMailText');
+const LogModel = require('../models/LogModel');
 
 const UserController = {
   // render page
@@ -385,6 +386,20 @@ const UserController = {
     const result = await UserModel.userSearch(input)
     console.log(result)
     res.json(result)
+  },
+
+  deleteUserReports: async (req, res) => {
+    try {
+      const userId = req.params.id
+      console.log({ userId });
+
+      await LogModel.deleteAllReportFromAttendance(userId)
+      await LogModel.deleteAllReportFromLog(userId)
+      res.redirect('/users')
+    } catch (err) {
+      console.log('====>Error form Delete controller', err);
+      return err;
+    }
   },
 };
 
