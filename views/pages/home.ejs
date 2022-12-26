@@ -42,9 +42,12 @@
     </div>
   </div>
 
-  <div id="home-info" class="home-info <%=checkTodayReportEmptyOrNot.length !== 0 ? '' : 'home-none' %>">
+  <div
+    id="home-info"
+    class="home-info <%=checkTodayReportEmptyOrNot.length !== 0 ? '' : 'home-none' %>"
+  >
     <div class="scroll-table">
-      <table class="home-reports"  >
+      <table class="home-reports">
         <thead>
           <tr>
             <td class="project-name">Project Name</td>
@@ -54,11 +57,10 @@
             <td>Total</td>
           </tr>
         </thead>
-  
+
         <tbody id="todayReport" class="home-reports-tbody">
-  
-          <!---- Today details condition check --> 
-  
+          <!---- Today details condition check -->
+
           <% today.map(today=>{ %>
           <tr>
             <td class="project-name"><%= today.project_name%></td>
@@ -74,17 +76,15 @@
   </div>
 
   <%if(checkTodayReportEmptyOrNot.length === 0){ %>
-    <div id="hidden-data">
+  <div id="hidden-data">
     <h5>Today's report is empty now !</h5>
-    </div>
+  </div>
   <% } %>
 
   <!-- Markup for current working user details -->
-
-
 </div>
- 
-  <script src="<%=baseUrl%>/js/startData.js"></script>
-  <script src="<%=baseUrl%>/js/home.js"></script>
 
- <%- include("../partials/footer.ejs"); -%>
+<script src="<%=baseUrl%>/js/startData.js"></script>
+<script src="<%=baseUrl%>/js/home.js"></script>
+
+<%- include("../partials/footer.ejs"); -%>

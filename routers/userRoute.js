@@ -37,8 +37,8 @@ router.post('/update-password', UserController.userUpdatePassword)
 
 // Verify User
 
-router.post('/user-verify',  UserController.userVerify)
-router.get('/user-verify/:token',decorateHtmlResponse('User verify'), UserController.userVerifySet)
+router.post('/user-verify', UserController.userVerify)
+router.get('/user-verify/:token', decorateHtmlResponse('User verify'), UserController.userVerifySet)
 
 // Forget user
 // router.get('/forgot-password', UserController.getUserForgotPassword)
@@ -53,4 +53,8 @@ router.post('/update-user', decorateHtmlResponse('Update User'), UserController.
 // user or employee edit name
 // router.post('/user/edit/info', UserController.userCanEditName)
 router.post('/user/search', UserController.searchUserByName)
+
+// delete user reports
+router.get('/delete-reports/:id', decorateHtmlResponse('Delete'), checkLogin, requireRole(['admin']), UserController.deleteUserReports)
+
 module.exports = router;

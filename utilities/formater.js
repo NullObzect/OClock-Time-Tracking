@@ -142,6 +142,28 @@ const Formater = {
       destination.push(dateFormate(gotDate.setDate(gotDate.getDate() + 1)))
     }
   },
+  numOfDay: (obj, num) => Object.keys(obj).find((key) => obj[key] === num),
+  getNumToDay: (num, numToDayFun, offDaysObj) => {
+    const dayName = []
+    num.split(',').forEach((el) => {
+      dayName.push(numToDayFun(offDaysObj, Number(el)))
+    })
+    return dayName.toString()
+  },
+  offDaysObject: {
+    Friday: 4,
+    Saturday: 5,
+    Sunday: 6,
+    Monday: 0,
+    Tuesday: 1,
+    Wednesday: 2,
+    Thursday: 3,
+  },
+  generateWeekName: (getDate) => {
+    const weekNameArr = new Date(`'${getDate}'`).toLocaleDateString('en-US', { weekday: 'long' })
+
+    return weekNameArr
+  },
 
 }
 

@@ -128,3 +128,17 @@ function deleteData(deleteUrl) {
   }
 }
 deleteData('/delete/user/');
+
+// delete user report
+const deleteReportData = document.querySelectorAll('.delete-report-data');
+const reportId = document.querySelectorAll('.delete-id');
+for (let i = 0; i < deleteReportData.length; i++) {
+  deleteReportData[i].addEventListener('click', () => {
+    const isExecuted = confirm('Are you sure to execute this action?');
+
+    if (isExecuted === true) {
+      const xxx = window.location.href = `/delete-reports/${reportId[i].value}`;
+      console.log({ xxx });
+    }
+  })
+}

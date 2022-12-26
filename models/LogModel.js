@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 const dbConnect = require('../config/database');
 
 const LogModel = {
@@ -64,7 +65,7 @@ const LogModel = {
     return rows;
   },
   thisYearReports: async (userId, yearStartDate, workdays) => {
-    console.log({ userId, yearStartDate, workdays });
+    console.log({ yearStartDate, workdays });
 
     const query = `SELECT COUNT(start) AS yearNumberOfWorkingDays, REPLACE(TIME_FORMAT( work_hour , '%h'),'0', '') * ${workdays} AS yearFixedHr,  SEC_TO_TIME(SUM(TIME_TO_SEC(work_time))) AS yearTotalWorkHr, SUBTIME(SEC_TO_TIME(SUM(TIME_TO_SEC(work_time))), SEC_TO_TIME(work_hour * ${workdays} * 60 * 60) ) yearTotalExtraOrLess, SEC_TO_TIME(SUM(TIME_TO_SEC(work_time)) / ${workdays}) AS yearAvgWorkTime, SUBTIME(SEC_TO_TIME(SUM(TIME_TO_SEC(work_time)) / ${workdays}), work_hour) AS yearAvgExtraOrLess, TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(start))),'%h:%i %p') AS yearAvgStartTime, TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(end))),'%h:%i %p') AS yearAvgEndTime  FROM log  WHERE user_id = ${userId} AND DATE(start) BETWEEN  '${yearStartDate}' AND  DATE(CURRENT_DATE - 1)`
     const [rows] = await dbConnect.promise().execute(query)
@@ -77,7 +78,9 @@ const LogModel = {
     return rows;
   },
   countUserJoiningDate: async (userId) => {
-    const query = `SELECT DATEDIFF(MAX(L.start), U.create_at) + 1 as countJoinIngDate FROM log AS L JOIN users AS U ON U.id = L.user_id WHERE    L.user_id = ${userId}`
+    // const query = `SELECT DATEDIFF(MAX(L.start), U.create_at) + 1 as countJoinIngDate FROM log AS L JOIN users AS U ON U.id = L.user_id WHERE    L.user_id = ${userId}`
+
+    const query = `SELECT  DATEDIFF(CURRENT_DATE - 1, U.create_at) + 1 as countJoinIngDate FROM users AS U  WHERE U.id =  ${userId}`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
   },
@@ -200,5 +203,53 @@ const LogModel = {
     const [rows] = await dbConnect.promise().execute(todayEmployeesRecord)
     return rows;
   },
+
+  // query for get all chart data
+  todayChartData: async () => {
+    const query = 'SELECT  work_hour * COUNT(user_id)  AS todayTotalHr, TIME_FORMAT(SEC_TO_TIME(SUM(TIME_TO_SEC(work_time))), \'%H\') todayWorkedHr, TIME_FORMAT(SEC_TO_TIME((TIME_TO_SEC(L.work_hour) * COUNT(user_id) - SUM(TIME_TO_SEC(work_time)))), \'%H\') as needHr   FROM log AS L WHERE  DATE(L.create_at) = DATE(CURRENT_DATE)'
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows;
+  },
+  workingDate: async (userId) => {
+    const query = `SELECT DATE_FORMAT(L.start, '%Y-%m-%d') workingDate FROM log L WHERE L.user_id = ${userId}`
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows;
+  },
+  lastTendaysData: async (userId) => {
+    const query = `SELECT  TIME_FORMAT(start, '%H:%i:%s') startTime, TIME_FORMAT(end, '%H:%i:%s') endTime, work_time totalWorkTime  FROM log WHERE user_id = ${userId} ORDER BY create_at DESC LIMIT 30;`
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows;
+  },
+
+  addMissingDate: async (userId, inTime, outTime, workHr, start, end, workTime, dayType, createdAt) => {
+    try {
+      console.log('====>addMissingDate', {
+        userId, inTime, outTime, workHr, start, end, workTime, dayType,
+      });
+
+      const query = 'INSERT INTO log (user_id, in_time, out_time, work_hour, start, end, work_time, day_type, create_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+
+      const values = [userId, inTime, outTime, workHr, start, end, workTime, dayType, createdAt]
+
+      const [rows] = await dbConnect.promise().execute(query, values)
+      return rows;
+    } catch (err) {
+      console.log('====>Error form', err);
+    }
+  },
+
+  deleteAllReportFromAttendance: async (userId) => {
+    const query = `DELETE FROM attendance WHERE user_id = ${userId}`
+
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows.affectedRows
+  },
+  deleteAllReportFromLog: async (userId) => {
+    const query = `DELETE FROM log WHERE user_id = ${userId}`
+
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows.affectedRows
+  },
+
 }
 module.exports = LogModel

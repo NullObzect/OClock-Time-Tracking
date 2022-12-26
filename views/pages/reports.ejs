@@ -4,6 +4,7 @@
 <div class="reports-container">
 <!-- Markup for employee profile -->
 <div class="profile">
+  <a href="/update-user/<%= userInfo.id %>">
 
   <div class="avatar">
 
@@ -17,8 +18,11 @@
       <% } %> 
  
   </div>
+  </a>
   <div class="profile-info">
+
     <div class="username"><%= userInfo.user_name  %></div>
+    
     <div class="role"><%= userInfo.user_role == "user" ? "Employee" : "Admin"  %> </div>
     <div class="profile-details">
       <div class="email"><%= userInfo.user_mail %> </div>
@@ -60,6 +64,13 @@
       </div>
     </div>
   </div>
+
+  <a href="#missing-data">
+
+  <div class="missing-btn-cont">
+    <button type="button" class="missing-btn"><%- include("../partials/icons/notification.ejs"); -%> <span>Absent</span> <span class="missing-data-len"><%= checkUserReportEmptyOrNot.length === 0 ? 0  : missingDateArr.length  %></span> </button>     
+    </div>
+</a>
 </div>
 
  <% if(checkUserReportEmptyOrNot.length !== 0){ %>
@@ -316,18 +327,13 @@
         <td><%=  el.start %> <span class="<%= el.inTimeExtraOrLess.length  === 6 ? 'low' : el.inTimeExtraOrLess === '' ? ' ' : 'high'   %>" ><%= el.inTimeExtraOrLess.length === 5 ? '+' + el.inTimeExtraOrLess : el.inTimeExtraOrLess   %></span> </td>
         <td><%=  el.end %><span class="<%= el.outTimeExtraOrLess.length  === 5 ? 'low' :  el.outTimeExtraOrLess === '' ? ' ' : 'high'  %>" ><%= el.outTimeExtraOrLess.length  === 5 ?  '-' + el.outTimeExtraOrLess : el.outTimeExtraOrLess === '' ? ' ' :  '+' + el.outTimeExtraOrLess.slice(1)   %></span> </td>
         <td><%= el.workTime + ' / ' + el.workHr + ' hr' %><span class="<%= el.totalTimeExtraOrLess.length  == '0' ? '' :   el.totalTimeExtraOrLess[0] !== '-' ? 'high' : 'low'  %>" ><%= el.totalTimeExtraOrLess.length  === 5 ? '+' + el.totalTimeExtraOrLess : el.totalTimeExtraOrLess   %></span></td>
-      
-        
       </tr>
       <% }) %>
       <% } %>
-      
     </tbody>
-
   </table>
 </div>
 </div>
-
 </div>
 <div class="pagination" >
   <ul id="pagination">
@@ -338,6 +344,54 @@
 <div class="report-not-found">
   <h4 >No, report founded !!!</h4>
   <% } %>
+</div>
 
+<!-- Missing date -->
+<% if(checkUserReportEmptyOrNot.length !== 0) { %>
+
+  <% if(missingDateArr.length !== 0) { %>
+
+<div id="missing-data" class="missing-date-cont">
+
+  <div class="missing-date">
+    
+    <div class="missing-date-title">
+      <div>
+        <h4>Missing date</h4>
+        </div>
+      <div>
+       <% if( userRole.user_role === 'admin') { %>
+        <button  type="submit" id="automated-btn" class="missing-btn">Automated</button>
+        <%} %>
+        </div>
+    </div>
+    <div class="missing-table-cont">
+    <div class="missing-scroll-table  cus-scrollbar scroll-bar-style">
+      <table class="missing-date-table">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Absent Date</th>
+          </tr>
+        </thead>
+        <tbody id="missing-date">  
+          <% for(let i = 0; i < missingDateArr.length; i++) {%>
+          <tr> 
+            <td><%= i + 1 %></td>
+            <td><%=  missingDateArr[i]  %> </td>
+          </tr>
+          <% } %>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+    </div>
+  </div>
+
+</div>
+  <% } %>
+
+
+<%- include("../partials/user-details-modal.ejs"); -%>
 <script src="<%=baseUrl%>/js/report.js"></script>
 <%- include("../partials/footer"); -%>

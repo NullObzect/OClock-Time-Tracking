@@ -229,11 +229,56 @@ function reportShow(reportTableBody, dateRangeReport) {
         <td>${el.end}<span class="${el.outTimeExtraOrLess.length === 5 ? 'low' : el.outTimeExtraOrLess === '' ? ' ' : 'high'}">${el.outTimeExtraOrLess.length === 5 ? `-${el.outTimeExtraOrLess}` : `${el.outTimeExtraOrLess}` === '' ? ' ' : `+${el.outTimeExtraOrLess.slice(1)}`}</span> </td>
         
         <td>${`${el.workTime} / ${el.workHr} hr`}<span class="${el.totalTimeExtraOrLess.length == '0' ? '' : el.totalTimeExtraOrLess[0] !== '-' ? 'high' : 'low'}" >${el.totalTimeExtraOrLess.length - 1 === 4 ? `+${el.totalTimeExtraOrLess}` : el.totalTimeExtraOrLess}</span></td>
-      
-        
       </tr> 
-   
-
    `).join('')
   }
 }
+// for absent report
+async function getAbsentDate() {
+  const url = window.location.pathname;
+  const id = Number(url.substring(url.lastIndexOf('/') + 1));
+  const postURL = `/absent/${isNaN(id) ? '' : id}`;
+  const data = await fetch(`${postURL}`);
+  if (data.status === 200) {
+    console.log('ok');
+    const getObjects = await data.json();
+
+    return { getObjects, userID: id };
+  }
+}
+
+getAbsentDate();
+
+const absentBtn = document.querySelector('.missing-btn');
+absentBtn.addEventListener('click', () => {
+  absentBtn.style.display = 'none';
+  document.querySelector('.missing-date-cont').style.display = 'block'
+})
+
+// automated
+const automatedBtn = document.querySelector('#automated-btn');
+automatedBtn.addEventListener('click', async (e) => {
+  e.preventDefault();
+  automatedBtn.textContent = 'Loading...';
+  automatedBtn.style.color = 'black';
+  automatedBtn.classList.add('loader')
+  const { getObjects, userID } = await getAbsentDate();
+  const { lastTendayData, absentDate } = getObjects;
+
+  const isPost = await fetch('/add-missing-attendance', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: JSON.stringify({ absentDate, lastTendayData, userID }),
+
+  })
+  if (isPost.status === 200) {
+    const isSuccess = await isPost.json();
+    if (isSuccess === 'success') {
+      automatedBtn.textContent = 'Automated';
+      automatedBtn.style.color = 'white';
+      automatedBtn.classList.remove('loader')
+    }
+  }
+})
