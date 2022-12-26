@@ -127,6 +127,8 @@ const ReportController = {
         const { weeklyLeaveDay } = await AttendanceModel.weeklyLeaveDay()
         const [{ weekStartDate }] = await AttendanceModel.getWeekStartDate(getThisWeekNumberOfday)
         const [{ countJoinIngDate }] = await LogModel.countUserJoiningDate(userId)
+        console.log({ countJoinIngDate });
+
         const weekdaysType = await LogModel.countWorkdaysForWeek(userId, weekStartDate)
         const thisWeekOffdays = weekdaysType.filter((el) => el.workdays === 0).length
         // TODO:  new code
@@ -220,13 +222,17 @@ const ReportController = {
         const uniqueHoliLeaveAndOffdaysDate = [...new Set([...holidaysDates, ...offdaysAndHolidaysDateArr, ...thisMonthLeavedaysDates])]
         const thisMonthFinalDateArr = uniqueHoliLeaveAndOffdaysDate.filter((el) => !holidaysDates.includes(el))
 
-        const fixedWorkdayThisMonth = totalWorkdaysExceptOffAndHolidays(offDays, generateWeekNames(thisMonthFinalDateArr), arrFirstAndLastEel(offdaysAndHolidaysDateArr), Number(weeklyLeaveDay) + 1) - workInThisMonthTotalOffdays
+        const fixedWorkdayThisMonth = totalWorkdaysExceptOffAndHolidays(offDays, generateWeekNames(thisMonthFinalDateArr), arrFirstAndLastEel(offdaysAndHolidaysDateArr), Number(weeklyLeaveDay) + 1) - workInThisMonthTotalOffdays - 1
+
+        console.log({ fixedWorkdayThisMonth });
 
         // TODO: new code end
 
         const [{
           monthNumberOfWorkingDays, monthFixedHr, monthTotalWorkHr, monthTotalExtraOrLess, monthAvgWorkTime, monthAvgExtraOrLess, monthAvgStartTime, monthAvgEndTime,
         }] = await LogModel.thisMonthReports(userId, monthStartDate, countUserJoinDate(countJoinIngDate, fixedWorkdayThisMonth))
+
+        console.log('this month day', countUserJoinDate(countJoinIngDate, fixedWorkdayThisMonth));
 
         const thisMonthExtraOrLessHr = chckTotalWorkTimeExtraOrLess(monthTotalExtraOrLess)
         const monthReportDetails = new ReportDetails(
@@ -283,6 +289,8 @@ const ReportController = {
         const thisYearFinalDateArr = uniqueHoliLeaveAndOffdaysDateThisYear.filter((el) => !holidaysDatesThisYear.includes(el))
 
         const fixedWorkdayThisYear = totalWorkdaysExceptOffAndHolidays(offDays, generateWeekNames(thisYearFinalDateArr), arrFirstAndLastEel(thisYearDatesArr), Number(weeklyLeaveDay) + 1) - thisYearTotalOffdays - 1
+
+        console.log({ fixedWorkdayThisYear });
 
         //
 
