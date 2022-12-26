@@ -47,7 +47,9 @@
           <td class="user-phone td-width"><%=user.user_phone %></td>
           <td class="user-email td-width"><%=user.user_mail %></td>
           <td class="user-status td-width">
-            <span class="status <%=user.status==1? 'active' : 'inactive'%>"> <%= user.status == 1 ? 'Active' : 'Inactive' %></span>
+            <span class="status <%=user.status==1? 'active' : 'inactive'%>">
+              <%= user.status == 1 ? 'Active' : 'Inactive' %></span
+            >
           </td>
 
           <td class="user-more td-width user-more-btn">
@@ -91,6 +93,17 @@
                       value="<%= user.id %>"
                     />
                     <span>Delete</span>
+                  </a>
+                </li>
+
+                <li>
+                  <a class="delete-report-data">
+                    <input
+                      class="delete-report-id"
+                      type="hidden"
+                      value="<%= user.id %>"
+                    />
+                    <span>Delete Reports</span>
                   </a>
                 </li>
               </ul>
