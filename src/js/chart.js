@@ -18,7 +18,7 @@ const myChart = new Chart(bar, {
     labels: ['Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu'],
     datasets: [
       {
-        label: '# of Votes',
+        label: 'This week worked employee',
         data: [42, 46, 43, 36, 0, 0],
         backgroundColor: [
           'rgba(16, 48, 71, 1)',
@@ -59,9 +59,8 @@ const pieConfig = {
   },
 
 };
-
 setTimeout(() => {
-  pieConfig.data.datasets[0].data = [arr[0][0], arr[0][1], arr[0][2]];
+  pieConfig.data.datasets[0].data = [arr[0][0], arr[0][1], arr[0][2]]
 }, 500)
 
 setTimeout(() => {
