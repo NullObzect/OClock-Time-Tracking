@@ -88,7 +88,7 @@
           <table class="work">
             <tr>
               <td>Leave limit:</td>
-              <td><%= totalLeaveDayLimit || 0 %><span class="high"><%= Number((totalLeaveDayLimit || 0) - (getTotalLeave || 0))  %> </span></td>
+              <td><%= totalLeaveDayLimit || 0 %><span class="<%= (totalLeaveDayLimit  >=  getTotalLeave) ?  'high'  : 'low'  %>"><%= Number(totalLeaveDayLimit >  getTotalLeave ?  totalLeaveDayLimit - getTotalLeave : getTotalLeave - totalLeaveDayLimit )  %> </span></td>
             </tr>
           
             <% leaveLimitReport.map(el =>  {%>
