@@ -27,7 +27,7 @@
   font-weight: 600;
   color: var(--deep2);
 }
-.a-link{
+.a-link {
   color: var(--deep2);
   text-decoration: none;
   padding: 0;
@@ -75,11 +75,10 @@
 .table td {
   padding: 12px 10px;
 }
-.td-width{
+.td-width {
   width: 30%;
   min-width: 120px;
- }
-
+}
 
 .table td .username {
   display: flex;
@@ -97,7 +96,7 @@
   background: #e1ebff;
 }
 .inactive {
-  background:  #f7b5b5;
+  background: #f7b5b5;
 }
 .user-more svg:hover {
   cursor: pointer;
@@ -110,7 +109,6 @@
   box-sizing: border-box;
   border-radius: 19px;
 }
-
 
 .hidden-menu {
   overflow: hidden;
@@ -132,11 +130,11 @@
 .hidden-menu-show {
   position: absolute;
   /* max-height: 110px; */
-  min-height: 115px;
+  min-height: 145px;
   overflow: hidden;
   /* height: 110px; */
 
-  width: 130px;
+  width: 135px;
   padding: 6px;
   border-radius: 15px;
   background: #ffffff;
