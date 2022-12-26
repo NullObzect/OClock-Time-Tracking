@@ -222,7 +222,7 @@ const ReportController = {
         const uniqueHoliLeaveAndOffdaysDate = [...new Set([...holidaysDates, ...offdaysAndHolidaysDateArr, ...thisMonthLeavedaysDates])]
         const thisMonthFinalDateArr = uniqueHoliLeaveAndOffdaysDate.filter((el) => !holidaysDates.includes(el))
 
-        const fixedWorkdayThisMonth = totalWorkdaysExceptOffAndHolidays(offDays, generateWeekNames(thisMonthFinalDateArr), arrFirstAndLastEel(offdaysAndHolidaysDateArr), Number(weeklyLeaveDay) + 1) - workInThisMonthTotalOffdays - 1
+        const fixedWorkdayThisMonth = totalWorkdaysExceptOffAndHolidays(offDays, generateWeekNames(thisMonthFinalDateArr), arrFirstAndLastEel(offdaysAndHolidaysDateArr), Number(weeklyLeaveDay) + 1) - workInThisMonthTotalOffdays
 
         console.log({ fixedWorkdayThisMonth });
 
