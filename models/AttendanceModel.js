@@ -5,7 +5,6 @@ const AttendanceModel = {
   todayStartTime: async (id) => {
     const getStartSql = 'SELECT  Time_format(MIN(Time(start)),"%h:%i% %p") as start FROM attendance  WHERE user_id = ? and Date(start) = Date(CURRENT_DATE);'
     const [rows] = await dbConnect.promise().execute(getStartSql, [id]);
-    console.log('start modal', rows)
     return rows;
   },
 
@@ -468,14 +467,14 @@ const AttendanceModel = {
   },
 
   countHolidaysThisMonth: async (monthStartDate, userId) => {
-    const query = `SELECT   CASE  WHEN  DATEDIFF(CURRENT_DATE, U.create_at)  >   DATEDIFF(CURRENT_DATE, '${monthStartDate}') THEN (DATEDIFF(end, start) + 1)   ELSE -1 END countHolidaysThisMonth
+    const query = `SELECT   CASE  WHEN  DATEDIFF(CURRENT_DATE, U.create_at)  >=   DATEDIFF(CURRENT_DATE, '${monthStartDate}') THEN (DATEDIFF(end, start) + 1)   ELSE -1 END countHolidaysThisMonth
     FROM holidays  CROSS JOIN users AS U 
    WHERE  DATE(start) BETWEEN '${monthStartDate}' AND DATE(CURRENT_DATE -1) AND U.id =  ${userId}`
     const [rows] = await dbConnect.promise().execute(query);
     return rows;
   },
   getHolidaysStartDateThisMonth: async (monthStartDate, userId) => {
-    const query = `SELECT   CASE  WHEN  DATEDIFF(CURRENT_DATE, U.create_at)  >   DATEDIFF(CURRENT_DATE, '${monthStartDate}') THEN DATE_FORMAT(start, '%Y-%m-%d')   ELSE -1 END holidaysStartDateThisMonth
+    const query = `SELECT   CASE  WHEN  DATEDIFF(CURRENT_DATE, U.create_at)  >=   DATEDIFF(CURRENT_DATE, '${monthStartDate}') THEN DATE_FORMAT(start, '%Y-%m-%d')   ELSE -1 END holidaysStartDateThisMonth
     FROM holidays  CROSS JOIN users AS U 
    WHERE  DATE(start) BETWEEN '${monthStartDate}' AND DATE(CURRENT_DATE -1) AND U.id =  ${userId}`
     const [rows] = await dbConnect.promise().execute(query);
@@ -483,15 +482,15 @@ const AttendanceModel = {
   },
 
   countHolidaysBetweenTwoDate: async (startDate, endDate, userId) => {
-    const query = `SELECT   CASE  WHEN  DATEDIFF(CURRENT_DATE, U.create_at)  >   DATEDIFF(CURRENT_DATE, '${startDate}') THEN (DATEDIFF(end, start) + 1)   ELSE -1 END countHolidaysBetweenTwoDate
+    const query = `SELECT   CASE  WHEN  DATEDIFF(CURRENT_DATE, U.create_at)  >=   DATEDIFF(CURRENT_DATE, '${startDate}') THEN (DATEDIFF(end, start) + 1)   ELSE -1 END countHolidaysBetweenTwoDate
     FROM holidays  CROSS JOIN users AS U 
-   WHERE  DATE(start) BETWEEN '${startDate}' AND '${endDate}' AND U.id =  ${userId}`
+    WHERE  DATE(start) BETWEEN '${startDate}' AND '${endDate}' AND U.id =  ${userId}`
     const [rows] = await dbConnect.promise().execute(query);
     return rows;
   },
 
   getHolidaysStartDateBetweenTwoDate: async (startDate, endDate, userId) => {
-    const query = `SELECT   CASE  WHEN  DATEDIFF('${endDate}', U.create_at)  >   DATEDIFF('${endDate}', '${startDate}') THEN DATE_FORMAT(start, '%Y-%m-%d')   ELSE -1 END holidaysStartDateBetweenTwoDate
+    const query = `SELECT   CASE  WHEN  DATEDIFF('${endDate}', U.create_at)  >=   DATEDIFF('${endDate}', '${startDate}') THEN DATE_FORMAT(start, '%Y-%m-%d')   ELSE -1 END holidaysStartDateBetweenTwoDate
     FROM holidays  CROSS JOIN users AS U 
    WHERE  DATE(start) BETWEEN '${startDate}' AND '${endDate}' AND U.id =  ${userId}`
     const [rows] = await dbConnect.promise().execute(query);
@@ -501,8 +500,28 @@ const AttendanceModel = {
     const query = `SELECT DATEDIFF(end, start) + 1 as countLeaveDay, DATE_FORMAT(start, '%Y-%m-%d') as startDate FROM employee_leaves WHERE user_id = ${userId} AND DATE(start) BETWEEN '${startDate}' AND DATE'${endDate}'`
     const [rows] = await dbConnect.promise().execute(query)
     return rows;
-  }
+  },
 
+  // get month start date
+
+  getThisMonthDate: async (monthStartDate, userId) => {
+    const query = `SELECT DISTINCT  CASE WHEN  DATEDIFF(CURRENT_DATE , U.create_at) >= DATEDIFF(CURRENT_DATE , '${monthStartDate}')
+    THEN  '${monthStartDate}' ELSE DATE_FORMAT(U.create_at,'%Y-%m-%d') END joiningDate   FROM holidays  CROSS JOIN users AS U 
+    WHERE   U.id = ${userId}`
+
+    const [row] = await dbConnect.promise().execute(query)
+
+    return row
+  },
+  getThisYearDate: async (monthStartDate, userId) => {
+    const query = `SELECT   CASE WHEN  DATEDIFF(CURRENT_DATE , U.create_at) >= DATEDIFF(CURRENT_DATE , '${monthStartDate}')
+    THEN  '${monthStartDate}' ELSE DATE_FORMAT(U.create_at,'%Y-%m-%d') END joiningDateYear   FROM holidays  CROSS JOIN users AS U 
+    WHERE   U.id = ${userId}`
+
+    const [row] = await dbConnect.promise().execute(query)
+
+    return row
+  },
 
 }
 module.exports = AttendanceModel;
