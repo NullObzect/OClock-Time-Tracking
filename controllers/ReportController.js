@@ -10,6 +10,7 @@ const ProfileModel = require('../models/ProfileModel')
 const { pageNumbers } = require('../utilities/pagination')
 const {
   timeToHour, workHourFormateForReport, generateMultipleDate, dateFormate, offDaysObject, numOfDay, getNumToDay, generateWeekName,
+  convertSecToHr,
 } = require('../utilities/formater');
 const OptionsModel = require('../models/OptionsModel');
 const UserModel = require('../models/UserModel');
@@ -311,7 +312,7 @@ const ReportController = {
           yearNumberOfWorkingDays,
           countUserJoinDate(countJoinIngDate, fixedWorkdayThisYear),
           yearFixedHr,
-          yearTotalWorkHr,
+          convertSecToHr(yearTotalWorkHr),
           yearAvgWorkTime,
           yearAvgStartTime,
           yearAvgEndTime,
@@ -518,7 +519,7 @@ const ReportController = {
         twoDateNumberOfWorkingDays,
         countUserJoinDate(countJoinIngDate, fixedWorkdayBTD),
         twoDateFixedHr,
-        twoDateTotalWorkHr,
+        convertSecToHr(twoDateTotalWorkHr),
         twoDateAvgWorkTime,
         twoDateAvgStartTime,
         twoDateAvgEndTime,
