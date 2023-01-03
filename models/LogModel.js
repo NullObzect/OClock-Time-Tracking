@@ -255,6 +255,11 @@ const LogModel = {
     const [rows] = await dbConnect.promise().execute(query)
     return rows
   },
+  todayWorkingEmployees: async () => {
+    const query = 'SELECT count(user_id) todayWorkingEmployee FROM log WHERE Date(start) = Date(CURRENT_DATE)'
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows[0]
+  },
 
 }
 module.exports = LogModel

@@ -64,10 +64,9 @@ const config = {
 };
 
 // for crosshair
+
 setTimeout(() => {
   data.labels = dateArr;
-}, 500);
-setTimeout(() => {
   data.datasets[0].data = workTimeArr;
 }, 500);
 setTimeout(() => {

@@ -56,6 +56,16 @@ const DashboardController = {
 
     res.json([todayTotalHr, todayWorkedHr, needHr]);
   },
+  trackingEmployeesToday: async (req, res) => {
+    const users = await UserModel.getAllUsersList()
+    const totalEmployees = users.length
+    const [{ totalLeaveToDay }] = await LeaveModel.todayLeaveUser()
+    const { todayWorkingEmployee } = await LogModel.todayWorkingEmployees()
+
+    console.log(totalEmployees, totalLeaveToDay, todayWorkingEmployee);
+    const trackingTodayEmployeeArr = [totalEmployees, todayWorkingEmployee, totalLeaveToDay]
+    res.json(trackingTodayEmployeeArr)
+  },
 
 }
 module.exports = DashboardController
