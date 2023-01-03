@@ -1,0 +1,18 @@
+<%- include("../partials/header"); -%>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js"></script>
+
+<style>
+  .my-chart {
+    margin: 20px;
+    padding: 20px;
+    box-shadow: 0 7px 25px rgb(0 0 0 / 8%);
+    border-radius: 20px;
+  }
+</style>
+
+<div class="my-chart">
+  <canvas id="myChart"></canvas>
+</div>
+<script src="<%=baseUrl%>/js/ProductivityChart.js"></script>
+
+<%- include("../partials/footer.ejs"); -%>
