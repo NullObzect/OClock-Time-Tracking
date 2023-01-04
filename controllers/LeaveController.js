@@ -59,7 +59,8 @@ const LeaveController = {
       const selectEmployee = await LeaveModel.selectEmployee();
       const leaveTypeList = await LeaveModel.leaveTypeList();
       anEmployeeLeavedaysLists = await LeaveModel.anEmployeeLeaveList(userId)
-      let anEmployeeRequestLeaveList = await LeaveModel.anEmployeeRequestLeaveList(userId)
+      const anEmployeeRequestLeaveList = await LeaveModel.anEmployeeRequestLeaveList(userId)
+
       const userInfo = await AttendanceModel.getEmployeeInfo(userId)
       const [{ joinThisYearOrNot }] = await LeaveModel.checkUserJoinThisYearOrNot(userId)
 
@@ -79,7 +80,6 @@ const LeaveController = {
       } else {
         [userReport, numberOfPage, page, pageNumber, limit] = paginationCountPage(req, anEmployeeLeavedaysLists)
       }
-      console.log(userReport)
       const pathUrl = req._parsedOriginalUrl.pathname
 
       if (joinThisYearOrNot === 0) {
@@ -90,7 +90,7 @@ const LeaveController = {
         const [{ countUnpaidLeave }] = await LeaveModel.countUnpaidLeave(userId)
 
         const getTotalLeave = Number(countLeave - countUnpaidLeave || 0)
-        console.log('admin', { userReport })
+        //  console.log('admin', { userReport })
         res.render('pages/leavedays', {
           userReport,
           numberOfPage,
@@ -108,6 +108,8 @@ const LeaveController = {
           searchID,
           startDate,
           endDate,
+          anEmployeeRequestLeaveList,
+
         })
       } else {
         const [{ totalLeaveDay }] = await OptionsModel.getTotalLeaveDay(userId)
