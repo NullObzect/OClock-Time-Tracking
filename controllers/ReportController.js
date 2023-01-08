@@ -39,8 +39,7 @@ const ReportController = {
       const checkUserReportEmptyOrNot = await LogModel.isUserIdInLog(userId)
       const platformUser = await ProfileModel.userConnectionDetailsUniqueInfo(userId)
       const userInfo = await AttendanceModel.getEmployeeInfo(userId)
-
-      const userRole = await AttendanceModel.getEmployeeInfo(user.id)
+      const userRole = await AttendanceModel.getEmployeeInfo(userId)
 
       if (checkUserReportEmptyOrNot.length !== 0) {
         const [{ avgStartTime }] = await AttendanceModel.avgStartTime(userId)
