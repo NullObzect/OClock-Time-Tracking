@@ -3,7 +3,7 @@ const Dotenv = require('dotenv-webpack')
 
 const config = {
   entry: {
-    
+
     // test: './src/test.js',
     report: ['@babel/polyfill', './src/js/report.js'],
     timeTracking: ['@babel/polyfill', './src/js/timeTracking.js'],
@@ -28,6 +28,7 @@ const config = {
     sideNav: ['@babel/polyfill', './src/js/sideNav.js'],
     tolerenceSetModal: ['@babel/polyfill', './src/js/tolerenceSetModal.js'],
     chart: ['@babel/polyfill', './src/js/chart.js'],
+    productivityChart: ['@babel/polyfill', './src/js/productivityChart.js'],
     addUserModal: ['@babel/polyfill', './src/js/addUserModal.js'],
   },
   output: {

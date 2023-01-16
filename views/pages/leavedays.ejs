@@ -204,7 +204,7 @@
               <input
                 type="hidden"
                 class="leave-id delete-id"
-                value="<%= user.id %>"
+                value="<%= user.elId %>"
               />
               <a class="delete-data"
                 ><button class="delete-btn">Delete</button>
@@ -230,6 +230,7 @@
     <!--- Markup for pagination -->
 
     <!-- Pagination -->
+
     <%if(userReport.length){%>
         <%- include("../partials/pagination"); -%>
     <%}%>
@@ -238,7 +239,7 @@
       <ul id="pagination"></ul>
     </div>
   </div>
-  <%if(anEmployeeRequestLeaveList.length){%>
+  <%if(anEmployeeRequestLeaveList.length !== 0){%>
     <div style="margin:0 40px ">
     <h4>Request</h4>
     <table class="table leaveday-table">
@@ -268,7 +269,9 @@
       </tbody>
     </table>
     </div>
-  <%} %>
+  <% }  %>
+
+    
  
 </div>
 
