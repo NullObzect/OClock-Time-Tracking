@@ -119,7 +119,7 @@ dateIcon.addEventListener('click', async () => {
 });
 
 // delete leave day
-deleteData(`${baseUrl}/options/leavedays/delete/`)
+deleteData('/options/leavedays/delete/')
 
 // form validation
 formValidation()

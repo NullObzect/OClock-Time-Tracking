@@ -240,5 +240,3 @@ function convertDatToJson(data) {
   }))
   return attendanceObject;
 }
-
-

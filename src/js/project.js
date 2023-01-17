@@ -1,6 +1,7 @@
 import {
   aJAXPostRequest, deleteData, formValidation
 } from './helper.js';
+
 const actionBtn = document.querySelectorAll('.action-btn');
 const updateBtn = document.querySelectorAll('.update-btn');
 const deleteBtn = document.querySelectorAll('.delete-btn');
@@ -47,7 +48,8 @@ for (let i = 0; i < saveBtn.length; i++) {
       pDetails,
       pId,
     };
-   
+    console.log({ data })
+
     aJAXPostRequest('/options/projects/update-project', data);
 
     projectName[i].textContent = data.pName;
