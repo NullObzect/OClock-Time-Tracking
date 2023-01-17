@@ -1,0 +1,69 @@
+<%- include("../partials/header"); -%>
+
+<style>
+  .update-btn {
+    display: none;
+  }
+</style>
+<div id="project">
+  <div class="text-head">
+    <div class="text-title">Payroll</div>
+    <%if(loggedInUser.userRole==='admin'){ %>
+
+    <div class="add-button">
+      <button class="add-btn">
+        <span class="add-icon">
+          <%- include("../partials/icons/add-svg"); -%>
+        </span>
+        <span .add-btn-text>Add Payroll</span>
+      </button>
+    </div>
+    <%}%>
+  </div>
+  <%- include("../partials/add-payroll-modal"); -%>
+  <div class="scroll-table">
+    <table class="project-table">
+      <thead>
+        <tr>
+          <td>SL</td>
+
+          <td class="project-table-title">Name</td>
+          <td>Salary</td>
+        </tr>
+      </thead>
+      <tbody>
+        <% salaries.map((salary,idx)=>{ %>
+        <tr>
+          <td><%= idx + 1 %></td>
+          <td class="project-table-title title-value"><%= salary.name %></td>
+          <td class="project-details"><%= salary.amount %></td>
+          <%if(loggedInUser.userRole==='admin'){ %>
+          <td class="btn-group">
+            <button type="button" class="action-btn">Action</button>
+            <button type="button" class="update-btn">Update</button>
+
+            <a class="delete-btn delete-data">
+              <input
+                type="hidden"
+                class="project-id delete-id"
+                value="<%= salary.payrollId %>"
+              />Delete</a
+            >
+            <button type="button" class="save-btn">Save</button>
+            <button type="button" class="opt-cancel-btn">Cancel</button>
+          </td>
+          <% } %>
+        </tr>
+        <%}) %>
+      </tbody>
+    </table>
+  </div>
+  <!-- Markup for user delete modal -->
+
+  <%- include("../partials/delete-modal.ejs"); -%>
+  <script>
+    const loggedInUser = "<%= loggedInUser.userRole %>";
+  </script>
+  <script src="<%= baseUrl %>/js/payroll.js"></script>
+  <%- include("../partials/footer"); -%>
+</div>
