@@ -30,6 +30,8 @@ const config = {
     chart: ['@babel/polyfill', './src/js/chart.js'],
     productivityChart: ['@babel/polyfill', './src/js/productivityChart.js'],
     addUserModal: ['@babel/polyfill', './src/js/addUserModal.js'],
+    payroll: ['@babel/polyfill', './src/js/payroll.js'],
+
   },
   output: {
     path: path.resolve(__dirname, 'public/js/'),
