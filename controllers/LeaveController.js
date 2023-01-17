@@ -171,7 +171,7 @@ const LeaveController = {
       if (isDelete.errno) {
         return res.json({ response: 'error' })
       }
-      return res.json({ response: 'success' })
+      return res.redirect('/options/leavedays')
     } catch (err) {
       console.log('====>Error form  LeaveController/getDeleteLeaveday', err);
     }

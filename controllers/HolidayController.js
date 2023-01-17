@@ -45,7 +45,7 @@ const HolidayController = {
         holidays, numberOfPage, page, pageNumber, limit, pathUrl, startDate, endDate,
       })
     } catch (err) {
-      console.log('====>Error form HolidayControlle/holidayList', err);
+      console.log('====>Error form Holiday Controller/holidayList', err);
     }
   },
 
