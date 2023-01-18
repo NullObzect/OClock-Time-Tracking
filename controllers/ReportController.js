@@ -378,7 +378,7 @@ const ReportController = {
         // TODO: new feature  for missing date  generate  automated
 
         const lastTendayData = await LogModel.lastTendaysData(userId)
-
+        const loggedInuser = res.locals.loggedInUser
         /* ======================================================== */
         /* ==========FIXME:  report for this year  END ========== */
         /* ======================================================== */
@@ -403,6 +403,7 @@ const ReportController = {
             lateCountRatioMonth,
             lateCountThisYear,
             lateCountRatioYear,
+            loggedInuser,
 
           })
         } else {
