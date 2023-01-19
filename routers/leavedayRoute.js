@@ -25,4 +25,6 @@ router.get('/accept-leave-request/:id', LeaveController.acceptRequestLeave)
 router.get('/reject-leave-request/:id', LeaveController.rejectRequestLeave)
 router.post('/edit-leave-type', LeaveController.editLeaveType)
 
+router.get('/accept-each-request', LeaveController.acceptEachRequest)
+
 module.exports = router
