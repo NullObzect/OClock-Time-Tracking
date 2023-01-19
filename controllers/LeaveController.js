@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 /* eslint-disable prefer-const */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable max-len */
@@ -298,19 +299,12 @@ const LeaveController = {
   },
   acceptEachRequest: async (req, res) => {
     const requestLeaveList = await LeaveModel.requestLeaveList()
-
-    // const
-
     for (let i = 0; i < requestLeaveList.length; i += 1) {
-      //  console.log(requestLeaveList[i].id)
       const [requestLeave] = await LeaveModel.requestLeaveFind(requestLeaveList[i].id)
-
-      //  console.log({ requestLeave });
       const {
         userId, userName, userMail, typeId, typeName, start, end, duration,
       } = requestLeave
 
-      console.log({ userId });
       const addUserLeave = await LeaveModel.addLeaveday(userId, typeId, start, end)
       try {
         const subject = 'Accept leave request'
@@ -319,7 +313,6 @@ const LeaveController = {
         if (addUserLeave.affectedRows) {
           await LeaveModel.requestLeaveDelete(requestLeaveList[i].id)
           sendMail(userMail, subject, textMessage, htmlMessage)
-          //  res.redirect('/options/request-leave')
         }
       } catch (error) {
         console.log(error)
