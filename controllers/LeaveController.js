@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 /* eslint-disable prefer-const */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable max-len */
@@ -171,7 +172,7 @@ const LeaveController = {
       if (isDelete.errno) {
         return res.json({ response: 'error' })
       }
-      return res.json({ response: 'success' })
+      return res.redirect('/options/leavedays')
     } catch (err) {
       console.log('====>Error form  LeaveController/getDeleteLeaveday', err);
     }
@@ -295,6 +296,30 @@ const LeaveController = {
       await LeaveModel.editLeaveType(value, id)
     }
     res.redirect('/options/option-values')
+  },
+  acceptEachRequest: async (req, res) => {
+    const requestLeaveList = await LeaveModel.requestLeaveList()
+    for (let i = 0; i < requestLeaveList.length; i += 1) {
+      const [requestLeave] = await LeaveModel.requestLeaveFind(requestLeaveList[i].id)
+      const {
+        userId, userName, userMail, typeId, typeName, start, end, duration,
+      } = requestLeave
+
+      const addUserLeave = await LeaveModel.addLeaveday(userId, typeId, start, end)
+      try {
+        const subject = 'Accept leave request'
+        const textMessage = `${userName} leave request accepted`
+        const htmlMessage = htmlTextMessage.acceptRequestLeave(userName, typeName, start, end, duration)
+        if (addUserLeave.affectedRows) {
+          await LeaveModel.requestLeaveDelete(requestLeaveList[i].id)
+          sendMail(userMail, subject, textMessage, htmlMessage)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    res.redirect('/options/request-leave')
   },
 
 }

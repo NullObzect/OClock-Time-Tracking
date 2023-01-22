@@ -12,6 +12,7 @@
         <span class="link-name"> Dashboard </span>
       </a>
     </li>
+
     <% } %>
     <li>
       <a href="/home">
@@ -23,7 +24,13 @@
     <li>
       <a href="/users">
         <%- include("./icons/users-svg.ejs"); -%>
-        <span class="link-name"> Users </span>
+        <span class="link-name"> Employees </span>
+      </a>
+    </li>
+    <li>
+      <a href="/payroll">
+        <%- include("./icons/reports-svg.ejs"); -%>
+        <span class="link-name"> Payroll </span>
       </a>
     </li>
     <% } %>
@@ -33,12 +40,16 @@
         <span class="link-name"> Reports </span>
       </a>
     </li>
+
+    <%if(profile.user_role==='user'){ %>
+
     <li>
       <a href="/productivity">
         <%- include("./icons/reports-svg.ejs"); -%>
         <span class="link-name"> Productivity </span>
       </a>
     </li>
+    <% } %>
 
     <li id="options-btn">
       <a href="/options">

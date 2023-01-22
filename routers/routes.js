@@ -15,6 +15,7 @@ const landingPage = require('./landingPageRoute')
 const dashboardRoute = require('./dashboardRoute')
 
 const productivity = require('./productivityRoute')
+const payroll = require('./payrollRoute')
 
 // all routers use
 router.use(
@@ -29,6 +30,7 @@ router.use(
   attendanceRoute,
   holidayRouter,
   productivity,
+  payroll,
 )
 router.use('/options', optionsRoute)
 router.use('/options', holidayRouter)

@@ -131,29 +131,18 @@ function formValidation() {
   });
 }
 
-// delete function
 function deleteData(deleteUrl) {
-  const deleteData = document.querySelectorAll('.delete-data');
+  const getDeleteData = document.querySelectorAll('.delete-data');
   const deleteModal = document.querySelector('.delete-modal');
   const deleteId = document.querySelectorAll('.delete-id');
   const deleteBtn = document.querySelectorAll('.modal-delete-btn');
   const cancelBtn = document.querySelectorAll('.modal-cancel-btn');
-  for (let i = 0; i < deleteData.length; i++) {
-    deleteData[i].addEventListener('click', () => {
+  for (let i = 0; i < getDeleteData.length; i++) {
+    getDeleteData[i].addEventListener('click', () => {
       // alert("delete");
       deleteModal.style.display = 'block';
       deleteBtn[0].addEventListener('click', () => {
-        fetch(`${deleteUrl}${deleteId[i].value}`, {
-          method: 'POST',
-        }).then((res) => res.json()).then((result) => {
-          if (result.response === 'success') {
-            deleteModal.style.display = 'none';
-            window.location.reload();
-          } else {
-            deleteModal.style.display = 'none';
-            alert('error')
-          }
-        })
+        window.location.href = `${deleteUrl}${deleteId[i].value}`;
       });
       cancelBtn[0].addEventListener('click', () => {
         deleteModal.style.display = 'none';

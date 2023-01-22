@@ -1,5 +1,5 @@
 import {
-  aJAXPostRequest, deleteData, formValidation
+    aJAXPostRequest, deleteData, formValidation
 } from './helper.js';
 
 const actionBtn = document.querySelectorAll('.action-btn');
@@ -27,9 +27,8 @@ for (let i = 0; i < updateBtn.length; i++) {
     saveBtn[i].style.display = 'block';
     optCancelBtn[i].style.display = 'block';
 
-    projectName[i].setAttribute('contenteditable', 'true');
     projectDetails[i].setAttribute('contenteditable', 'true');
-    projectName[i].focus();
+    projectDetails[i].focus();
   });
 }
 // when click on save button
@@ -48,9 +47,8 @@ for (let i = 0; i < saveBtn.length; i++) {
       pDetails,
       pId,
     };
-    console.log({ data })
 
-    aJAXPostRequest('/options/projects/update-project', data);
+    aJAXPostRequest('/payroll/update', data);
 
     projectName[i].textContent = data.pName;
     projectDetails[i].textContent = data.pDetails;
@@ -73,4 +71,4 @@ for (let i = 0; i < optCancelBtn.length; i++) {
 }
 formValidation()
 // delete project
-deleteData('/options/projects/delete/');
+deleteData('/payroll/delete/');
