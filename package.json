@@ -2,9 +2,6 @@
   "name": "mvc",
   "version": "1.0.0",
   "description": "A brief description of what this project does and who it's for",
-  "engines": {
-    "node": "16.x"
-  },
   "main": "index.js",
   "scripts": {
     "clean": "rimraf node_modules package.json",
