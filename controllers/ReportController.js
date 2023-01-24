@@ -379,6 +379,9 @@ const ReportController = {
 
         const lastTendayData = await LogModel.lastTendaysData(userId)
         const loggedInuser = res.locals.loggedInUser
+
+        console.log({ loggedInuser });
+
         /* ======================================================== */
         /* ==========FIXME:  report for this year  END ========== */
         /* ======================================================== */
@@ -428,6 +431,7 @@ const ReportController = {
             lateCountRatioYear,
             missingDateArr,
             userRole,
+            loggedInuser,
 
           })
         }
