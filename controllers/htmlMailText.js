@@ -47,7 +47,7 @@ const htmlTextMessage = {
           font-size: 20px;
           line-height: 26px;">
             Hello, ${name} <br>
-            Your leave request Accepcted <br>
+            Your leave request accepted <br>
             Leave type : ${type} <br>
             Date : ${start} to ${end} <br>
             Duration : ${duration} days

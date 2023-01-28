@@ -241,10 +241,12 @@ const LeaveController = {
     const email = process.env.ADMIN_MAIL
     try {
       const sendRequestLeave = await LeaveModel.sendRequestLeave(user.id, typeId, start, end)
+      // console.log({ sendRequestLeave })
       const subject = 'Request For leave'
       const textMessage = `${user.user_name} request for leave`
       const htmlMessage = htmlTextMessage.sendRequestLeave(user.user_name, leaveTypeName.name, start, end, totalLeaveDay)
       const mailsend = await sendMail(email, subject, textMessage, htmlMessage)
+
       return res.redirect('/options/leavedays')
     } catch (error) {
       console.log(error)
