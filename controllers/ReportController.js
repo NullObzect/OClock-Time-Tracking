@@ -39,8 +39,7 @@ const ReportController = {
       const checkUserReportEmptyOrNot = await LogModel.isUserIdInLog(userId)
       const platformUser = await ProfileModel.userConnectionDetailsUniqueInfo(userId)
       const userInfo = await AttendanceModel.getEmployeeInfo(userId)
-
-      const userRole = await AttendanceModel.getEmployeeInfo(user.id)
+      const userRole = await AttendanceModel.getEmployeeInfo(userId)
 
       if (checkUserReportEmptyOrNot.length !== 0) {
         const [{ avgStartTime }] = await AttendanceModel.avgStartTime(userId)
@@ -379,6 +378,9 @@ const ReportController = {
         // TODO: new feature  for missing date  generate  automated
 
         const lastTendayData = await LogModel.lastTendaysData(userId)
+        const loggedInuser = res.locals.loggedInUser
+
+        console.log({ loggedInuser });
 
         /* ======================================================== */
         /* ==========FIXME:  report for this year  END ========== */
@@ -404,6 +406,7 @@ const ReportController = {
             lateCountRatioMonth,
             lateCountThisYear,
             lateCountRatioYear,
+            loggedInuser,
 
           })
         } else {
@@ -428,6 +431,7 @@ const ReportController = {
             lateCountRatioYear,
             missingDateArr,
             userRole,
+            loggedInuser,
 
           })
         }

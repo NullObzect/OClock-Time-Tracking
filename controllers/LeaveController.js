@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 /* eslint-disable prefer-const */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable max-len */
@@ -59,7 +60,8 @@ const LeaveController = {
       const selectEmployee = await LeaveModel.selectEmployee();
       const leaveTypeList = await LeaveModel.leaveTypeList();
       anEmployeeLeavedaysLists = await LeaveModel.anEmployeeLeaveList(userId)
-      let anEmployeeRequestLeaveList = await LeaveModel.anEmployeeRequestLeaveList(userId)
+      const anEmployeeRequestLeaveList = await LeaveModel.anEmployeeRequestLeaveList(userId)
+
       const userInfo = await AttendanceModel.getEmployeeInfo(userId)
       const [{ joinThisYearOrNot }] = await LeaveModel.checkUserJoinThisYearOrNot(userId)
 
@@ -79,7 +81,6 @@ const LeaveController = {
       } else {
         [userReport, numberOfPage, page, pageNumber, limit] = paginationCountPage(req, anEmployeeLeavedaysLists)
       }
-      console.log(userReport)
       const pathUrl = req._parsedOriginalUrl.pathname
 
       if (joinThisYearOrNot === 0) {
@@ -90,7 +91,7 @@ const LeaveController = {
         const [{ countUnpaidLeave }] = await LeaveModel.countUnpaidLeave(userId)
 
         const getTotalLeave = Number(countLeave - countUnpaidLeave || 0)
-        console.log('admin', { userReport })
+        //  console.log('admin', { userReport })
         res.render('pages/leavedays', {
           userReport,
           numberOfPage,
@@ -108,6 +109,8 @@ const LeaveController = {
           searchID,
           startDate,
           endDate,
+          anEmployeeRequestLeaveList,
+
         })
       } else {
         const [{ totalLeaveDay }] = await OptionsModel.getTotalLeaveDay(userId)
@@ -169,7 +172,7 @@ const LeaveController = {
       if (isDelete.errno) {
         return res.json({ response: 'error' })
       }
-      return res.json({ response: 'success' })
+      return res.redirect('/options/leavedays')
     } catch (err) {
       console.log('====>Error form  LeaveController/getDeleteLeaveday', err);
     }
@@ -238,10 +241,12 @@ const LeaveController = {
     const email = process.env.ADMIN_MAIL
     try {
       const sendRequestLeave = await LeaveModel.sendRequestLeave(user.id, typeId, start, end)
+      // console.log({ sendRequestLeave })
       const subject = 'Request For leave'
       const textMessage = `${user.user_name} request for leave`
       const htmlMessage = htmlTextMessage.sendRequestLeave(user.user_name, leaveTypeName.name, start, end, totalLeaveDay)
       const mailsend = await sendMail(email, subject, textMessage, htmlMessage)
+
       return res.redirect('/options/leavedays')
     } catch (error) {
       console.log(error)
@@ -293,6 +298,30 @@ const LeaveController = {
       await LeaveModel.editLeaveType(value, id)
     }
     res.redirect('/options/option-values')
+  },
+  acceptEachRequest: async (req, res) => {
+    const requestLeaveList = await LeaveModel.requestLeaveList()
+    for (let i = 0; i < requestLeaveList.length; i += 1) {
+      const [requestLeave] = await LeaveModel.requestLeaveFind(requestLeaveList[i].id)
+      const {
+        userId, userName, userMail, typeId, typeName, start, end, duration,
+      } = requestLeave
+
+      const addUserLeave = await LeaveModel.addLeaveday(userId, typeId, start, end)
+      try {
+        const subject = 'Accept leave request'
+        const textMessage = `${userName} leave request accepted`
+        const htmlMessage = htmlTextMessage.acceptRequestLeave(userName, typeName, start, end, duration)
+        if (addUserLeave.affectedRows) {
+          await LeaveModel.requestLeaveDelete(requestLeaveList[i].id)
+          sendMail(userMail, subject, textMessage, htmlMessage)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    res.redirect('/options/request-leave')
   },
 
 }

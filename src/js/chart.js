@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+/* eslint-disable no-new */
 const { data } = require('autoprefixer');
 
 const bar = document.getElementById('myBar').getContext('2d');
@@ -59,13 +61,16 @@ const pieConfig = {
   },
 
 };
-setTimeout(() => {
-  pieConfig.data.datasets[0].data = [arr[0][0], arr[0][1], arr[0][2]]
-}, 500)
 
-setTimeout(() => {
-  const pieChart = new Chart(pie, pieConfig)
-}, 1000)
+// track employees
+
+const todayEmployeesArr = []
+fetch(`${process.env.BASE_URL}/dashboard/employees-today`)
+  .then((res) => res.json())
+  .then((getData) => {
+    todayEmployeesArr.push(getData)
+  })
+console.log(todayEmployeesArr)
 
 const doughnutConfig = {
   type: 'doughnut',
@@ -74,7 +79,7 @@ const doughnutConfig = {
     datasets: [
       {
         label: '# of Votes',
-        data: [40, 30, 10],
+        data: [],
         backgroundColor: [
           'rgba(16, 48, 71, 1)',
           'rgba(123, 129, 161, 1)',
@@ -85,4 +90,17 @@ const doughnutConfig = {
   },
   options: {},
 };
-const doughnutChart = new Chart(doughnut, doughnutConfig)
+// const doughnutChart = new Chart(doughnut, doughnutConfig)
+
+// set time out
+
+setTimeout(() => {
+  pieConfig.data.datasets[0].data = [arr[0][0], arr[0][1], arr[0][2]];
+  console.log('yy', [todayEmployeesArr]);
+  doughnutConfig.data.datasets[0].data = [todayEmployeesArr[0][0], todayEmployeesArr[0][1], todayEmployeesArr[0][2]]
+}, 500)
+
+setTimeout(() => {
+  new Chart(pie, pieConfig);
+  new Chart(doughnut, doughnutConfig)
+}, 1000)

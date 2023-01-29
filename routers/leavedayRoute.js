@@ -11,7 +11,7 @@ router.get('/leavedays', decorateHtmlResponse('Leavedays'), checkLogin, LeaveCon
 router.get('/leavedays/:id', requireRole(['admin']), decorateHtmlResponse('Leavedays'), checkLogin, LeaveController.employeeLeavedaysList)
 
 router.post('/leavedays/update', LeaveController.setLeaveData)
-router.post('/leavedays/delete/:id', LeaveController.getDeleteLeaveday)
+router.get('/leavedays/delete/:id', LeaveController.getDeleteLeaveday)
 router.get('/leavedays/between-two-date', LeaveController.getLeavedayListBetweenTwoDate)
 router.get('/leavedays/:id/between-two-date', LeaveController.getLeavedayListBetweenTwoDate)
 
@@ -24,5 +24,7 @@ router.post('/add-leave-type', LeaveController.addLeaveType)
 router.get('/accept-leave-request/:id', LeaveController.acceptRequestLeave)
 router.get('/reject-leave-request/:id', LeaveController.rejectRequestLeave)
 router.post('/edit-leave-type', LeaveController.editLeaveType)
+
+router.get('/accept-each-request', LeaveController.acceptEachRequest)
 
 module.exports = router

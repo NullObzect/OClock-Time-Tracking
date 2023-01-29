@@ -4,6 +4,7 @@ const AttendanceModel = require('../models/AttendanceModel')
 const LeaveModel = require('../models/LeaveModel')
 const LogModel = require('../models/LogModel')
 const { time24HrTo12Hr } = require('../utilities/formater')
+const PayrollModel = require('../models/PayrollModel')
 
 const DashboardController = {
   getDashboard: async (req, res) => {
@@ -18,6 +19,8 @@ const DashboardController = {
     const [{ totalLeaveToDay }] = await LeaveModel.todayLeaveUser()
     const todayEmployeesRecord = await LogModel.todayEmployeesRecord()
 
+    const { sumPayroll } = await PayrollModel.sumPayroll()
+
     res.render('pages/dashboard', {
       totalUsers,
       totalActive,
@@ -28,6 +31,7 @@ const DashboardController = {
       outTime: time24HrTo12Hr(outTime),
       totalLeaveToDay,
       todayEmployeesRecord,
+      sumPayroll,
     });
   },
   userTodayDetailsForAdmin: async (req, res) => {
@@ -55,6 +59,16 @@ const DashboardController = {
     console.log({ todayTotalHr, todayWorkedHr, needHr });
 
     res.json([todayTotalHr, todayWorkedHr, needHr]);
+  },
+  trackingEmployeesToday: async (req, res) => {
+    const users = await UserModel.getAllUsersList()
+    const totalEmployees = users.length
+    const [{ totalLeaveToDay }] = await LeaveModel.todayLeaveUser()
+    const { todayWorkingEmployee } = await LogModel.todayWorkingEmployees()
+
+    console.log(totalEmployees, totalLeaveToDay, todayWorkingEmployee);
+    const trackingTodayEmployeeArr = [totalEmployees, todayWorkingEmployee, totalLeaveToDay]
+    res.json(trackingTodayEmployeeArr)
   },
 
 }

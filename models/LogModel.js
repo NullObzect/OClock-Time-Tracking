@@ -250,6 +250,16 @@ const LogModel = {
     const [rows] = await dbConnect.promise().execute(query)
     return rows.affectedRows
   },
+  lastThirtydaysData: async (userId) => {
+    const query = `SELECT  DATE_FORMAT(L.start,'%d-%b-%y') AS date, TIME_FORMAT(work_time, '%H') workTime  FROM log AS L  WHERE  user_id = ${userId} AND L.start >  now() - INTERVAL 30 DAY ORDER BY L.start ASC;`
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows
+  },
+  todayWorkingEmployees: async () => {
+    const query = 'SELECT count(user_id) todayWorkingEmployee FROM log WHERE Date(start) = Date(CURRENT_DATE)'
+    const [rows] = await dbConnect.promise().execute(query)
+    return rows[0]
+  },
 
 }
 module.exports = LogModel

@@ -66,45 +66,45 @@
     display: flex;
     align-items: center;
   }
-  .user-info{
+  .user-info {
     text-align: left;
     font-size: 14px;
   }
-  .user-details-head{
+  .user-details-head {
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
-  .report-btn a{
-  text-decoration: none;
-  color: var(--white);
-  padding: 5px 8px;
-  font-size: 14px;
-  background-color: var(--deep);
-  border-radius: 5px;
-}
-.report-btn:hover{
-  opacity: 0.8;
-}
-.user-today-info{
-  padding: 14px 10px;
-}
-.user-today-info  tr td {
-  line-height: 18px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #3d4e5e;
-}
-.user-today-info tr td:nth-child(1) {
+  .report-btn a {
+    text-decoration: none;
+    color: var(--white);
+    padding: 5px 8px;
+    font-size: 14px;
+    background-color: var(--deep);
+    border-radius: 5px;
+  }
+  .report-btn:hover {
+    opacity: 0.8;
+  }
+  .user-today-info {
+    padding: 14px 10px;
+  }
+  .user-today-info tr td {
+    line-height: 18px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #3d4e5e;
+  }
+  .user-today-info tr td:nth-child(1) {
     padding-right: 10px;
-}
-.user-work-details .working-user{
-  height: 320px;
-  overflow: auto;
-}
-.user-work-details .card-header{
-  font-size: 12px;
-}
+  }
+  .user-work-details .working-user {
+    height: 320px;
+    overflow: auto;
+  }
+  .user-work-details .card-header {
+    font-size: 12px;
+  }
 
   @media only screen and (max-width: 1200px) {
   }
@@ -139,15 +139,13 @@
 <div id="userDetails" class="user-modal-container">
   <div class="user-modal">
     <div class="user-modal-head">
-      <div class="user-modal-title">User today report</div>
+      <div class="user-modal-title">Employee today report</div>
       <div class="user-modal-close">
         <%- include("../partials/icons/close-svg"); -%>
       </div>
     </div>
     <div class="user-modal-content">
-      <div class="user-user-container">
-        
-      </div>
+      <div class="user-user-container"></div>
     </div>
   </div>
 </div>

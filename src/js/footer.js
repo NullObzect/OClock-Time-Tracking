@@ -1,9 +1,9 @@
 const loader = document.getElementById('pageLoad')
 
 window.onload = () => {
-  setTimeout(() => {
-    loader.style.display = 'none'
-  }, 1000)
+  loader.style.display = 'none'
+  // setTimeout(() => {
+  // }, 1000)
 }
 const pageSelect = document.querySelector('#pageLimitSelect')
 if (pageSelect) {
